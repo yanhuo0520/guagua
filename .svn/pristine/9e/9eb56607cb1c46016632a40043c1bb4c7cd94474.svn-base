@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<!-- <script type="text/javascript" src="js/myscroll.js"></script> -->
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+		  display: none;
+		}		
+		html,body { font-size: 16px; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		/* 导航栏 */
+		.van-nav-bar { background: transparent }
+		.van-nav-bar .van-icon { color: #fff; font-size: 1.1rem; }
+		.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+		.van-nav-bar .van-nav-bar__right img { display: block; }
+		.van-nav-bar .van-nav-bar__title { font-weight: bold; color: #fff; }
+
+		/* 订单状态 */
+		.nav-bg {  background: linear-gradient(#03da6b, #00ba59); }
+		.order-type { height: 6.5rem; display: flex; align-items: center; justify-content: space-between; padding-left:2rem; padding-right: 3rem;color: #ffffff; font-weight: bold; font-size: 1.125rem; }
+		.order-type img { height: 3.8rem; }
+		/* 选择地址 */
+		.van-contact-card::before { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: -webkit-repeating-linear-gradient(135deg,#FFC3C3 0,#FFC3C3 20%,transparent 0,transparent 25%,#B3DCFA 0,#B3DCFA 45%,transparent 0,transparent 50%); background-size: 80px; content: ''; }
+		.contact .van-cell__title { padding-left: 0.75rem; }
+		.contact .van-cell__title .contact-con { display: flex; align-items: center; }
+		.contact .van-cell__title .contact-con .name { font-size:1rem; font-weight:500; color:rgba(53,53,53,1); padding-right: 0.75rem; }
+		.contact .van-cell__title .contact-con .tel { font-size:0.875rem; font-weight:400; color:rgba(136,136,136,1); padding-right: 2rem; }
+		.contact .van-cell__title .contact-con .tag { font-size:0.625rem; font-weight:400; color:rgba(0,181,120,1);}
+		.contact .van-cell__title .addr { padding: 0; margin: 0; font-size:0.8rem; font-weight:400; color:rgba(53,53,53,1); }
+		.contact .van-cell__title::before { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: -webkit-repeating-linear-gradient(135deg,#FFC3C3 0,#FFC3C3 20%,transparent 0,transparent 25%,#B3DCFA 0,#B3DCFA 45%,transparent 0,transparent 50%); background-size: 80px; content: ''; }
+		/* 选择的商品列表 */
+		.goods-card { background:rgba(255,255,255,1); margin-top: 0.75rem; }
+		.goods-card .shop-name {  padding: 0.5rem  0.75rem 0 0.75rem; display: flex; align-items: center; }
+		.goods-card .shop-name img { width: 1.5rem; height: 1.5rem; border-radius: 50% }
+		.goods-card .shop-name span { font-size: 0.9rem; font-weight: 400; color:rgba(51,51,51,1);padding-left: 0.5rem; }
+		.goods-card .van-card { padding-left: 0.75rem; padding-right: 0.75rem; margin-top: 0; background:rgba(255,255,255,1); }
+		.goods-card .van-card .van-card__header { align-content: center; }		
+		.goods-card .van-card .van-card__thumb { width: auto; height: auto; display: flex; align-items: center; margin-right: 0.5rem;}
+		/* .goods-card .van-card .van-card__content { width: 150px; flex: none; -webkit-box-flex: none; -webkit-box-flex: none } */
+		.goods-card .van-card .van-card__title { width: calc(100% - 5rem); font-size:0.9rem; font-weight:600; color:rgba(53,53,53,1); padding-bottom: 0.375rem; }
+		.goods-card .van-card .desc { width: calc(100% - 2.5rem); font-size:0.75rem; font-weight:400; color:rgba(136,136,136,1); }
+	  	.goods-card .van-card .desc p{ padding: 0; margin: 0; word-break:break-all;word-wrap:break-word; }
+	  	.goods-card .van-card .van-card__price { font-size:0.9rem; font-weight:400; color:#353535;}
+		.goods-card .van-card .van-card__price .price { position: absolute; top: 0; right: 0; width: 5rem; text-align: right;text-overflow: ellipsis; overflow: hidden; }
+		.goods-card .van-card .van-card__price .price1 { position: absolute; bottom: 1.25rem; right: 0; width: 5rem; text-align: right;text-overflow: ellipsis; overflow: hidden; font-size:0.75rem; font-weight:400; color:#888888 }
+		.goods-card .van-card .van-card__num { font-size:0.75rem; font-weight:400; color:#888888 }
+		.goods-card .van-card .van-card__num .num { position: absolute; top: 1.25rem; right: 0; width: 2.5rem;text-align: right;text-overflow: ellipsis; overflow: hidden; }
+		.goods-card .van-card .van-card__num .price2 { position: absolute; bottom: 0; right: 0; width: 5rem; text-align: right;text-overflow: ellipsis; overflow: hidden; font-size:0.75rem; font-weight:400; color:#888888 }
+		.goods-card .delivery .van-cell_title,.goods-card .delivery .van-cell__value { font-size:0.9rem; font-weight:400; color:rgba(51,51,51,1);}
+		.goods-card .ship-date { font-size:0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0 0.75rem 0 0.75rem }
+	  	.goods-card .ship-date .ship-date-bg { display: flex; justify-content: space-between; align-items: center; background:rgba(245,245,245,1); padding: 0 0.75rem; }
+		.goods-card .deal-way .van-cell__title { font-size:0.9rem; font-weight:400; color:rgba(136,136,136,1);}
+	  	.goods-card .deal-way .van-cell__value { font-size:0.9rem; font-weight:400; color:rgba(51,51,51,1); }
+		.goods-card .goods_total_price .van-cell { font-size: 0.9rem; color: #333; }
+		.goods-card .goods_total_price .van-cell__value { color: #333; }
+		.goods-card .other-mark .van-cell { font-size: 0.9rem; color: #888888; }
+		.goods-card .other-mark .van-cell .van-cell__value { color: #888888;  }
+		.goods-card .other-mark .van-cell .price { color: #ff2814; font-weight: 400; }
+		/* 需付款 */
+		.need-pay-con  { margin-top: 0.75rem; }
+		.need-pay-con .van-cell { font-size: 0.9rem; color: #333; }
+		.need-pay-con .van-cell .van-cell__value { font-size: 1.125rem; color: #ff2814; font-weight: 400; }
+		/* 订单号等标注信息 */
+		.order-desc { padding: 10px 16px; background: #fff; margin-top: 0.75rem; margin-bottom: 0.75rem; }
+		.order-desc p{ font-size: 0.8rem; color: #888; margin-bottom: 2px; }
+		/* 底部button */
+		.footer-btn { position: fixed; bottom: 0; left: 0; width: 100%; display: flex; align-items: center; justify-content: flex-end; padding: 10px 16px; background-color: #fff; box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.1)}
+		/* loading */
+		.full-loading { position: fixed; left: 0; top: 46px; right: 0; bottom: 0; background-color: #fff; z-index: 9999; }
+		.full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+		/* 定时器 */
+		.count-down-con { display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; }
+		.count-down-con .van-count-down { color: #ff2814; line-height: inherit; }
+		.count-down-con+.order-type { height: 6rem; }
+
+		/* 邀请拼单弹窗 */
+		.cur-group-popup  { overflow: inherit; border-radius: 8px; width: 80%; }
+		.cur-group-popup .tit { font-size: 1rem; font-weight: bold; text-align: center; padding: 0.75rem; padding-top: 1.5rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+		.cur-group-popup .desc { padding: 0 0.75rem; font-size: 0.875rem; color: #888; display: flex; align-items: center; justify-content: center; }
+		.cur-group-popup .desc .num { color: #FF4465; }
+		.cur-group-popup .desc .time { display: flex; align-items: center; }
+		.cur-group-popup .desc .time .colon,.cur-group-popup .desc .time .block { color: #888; }
+		.cur-group-popup .avatar-con { display: flex; align-items: center; justify-content: center; padding-top: 0.75rem;}
+		.cur-group-popup .avatar-con .avatar-item { width: 2rem; height: 2rem; overflow: hidden; border-radius: 50%; border: 1px solid #00be34; margin-right: 0.3rem; }
+		.cur-group-popup .avatar-con .avatar-item img { width: 100%; height: 100%; }
+		.cur-group-popup .avatar-con .no-avatar { border: 1px dashed #979797; }
+		.cur-group-popup .btn-con { padding: 1.5rem 0.75rem; width: 90%; margin: 0 auto; }
+		.cur-group-popup .btn-con .van-button { width: 100%; color: #fff; background: #ff1919; border-radius: 8px; }
+		.cur-group-popup .close-icon { position: absolute; right: 0; top: 0; width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; background: #c9c9c9; transform: translate(50%,-50%); border-radius: 50%; }
+
+		.share-mask { height: 100%; width: 100%; z-index: 20000; top: 0; left: 0; color: #fff; position: fixed; background: rgba(0, 0, 0, 0.8); }
+		.share-mask-content p { padding-left: 20px; font-size: 28px; color: #fff }
+	</style>
+</head>
+<body>
+	<div id="app" v-cloak>
+		<div class="nav-bg">
+			<van-nav-bar :border="false"  :title="title" left-arrow @click-left="returnLast()" @click-right="JumpIndex" >
+				<template #right>
+					<img src="images/icon/shouye2.png" alt="" width="20"  @click="JumpIndex">
+				</template>
+			</van-nav-bar>
+			<template v-if="orderInfo.prom_type == 6">
+				<div class="count-down-con" v-if="orderInfo.order_status == 1 || orderInfo.order_status == 2">
+					<template v-if="pintuanOver">
+						<span>拼团已结束</span>
+					</template>
+					<template v-else>
+						<template v-if="teamInfo.status == 0 || teamInfo.status == 1">
+							<span>请在</span>
+							<van-count-down :time="teamInfo.s_end_time*1000" @finish="countDownFinish">
+								<template #default="timeData">
+									<template v-if="timeData.days > 0">
+										<span class="block">{{ timeData.days }}</span>
+										<span class="colon">:</span>
+									</template>
+									<span class="block">{{ timeData.hours < 10 ?  ('0'+timeData.hours) : timeData.hours }}</span>
+									<span class="colon">:</span>
+									<span class="block">{{ timeData.minutes < 10 ? ('0'+timeData.minutes) : timeData.minutes }}</span>
+									<span class="colon">:</span>
+									<span class="block">{{ timeData.seconds < 10 ? ('0'+timeData.seconds) : timeData.seconds }}</span>
+								</template>
+							</van-count-down>
+							<span>内{{teamInfo.status == 0 ? '支付' : '邀请成功'}},逾期订单将自动取消</span>
+						</template>
+						<template v-if="teamInfo.status == 2">
+							<span>拼团成功</span>
+						</template>
+					</template>
+				</div>
+				<div class="count-down-con" v-if="orderInfo.order_status == 3 || orderInfo.order_status == 5">
+					<span>拼团失败</span>
+				</div>
+				<div class="count-down-con" v-if="orderInfo.order_status == 6 || orderInfo.order_status == 8">
+					<span>拼团已取消</span>
+				</div>
+				<div class="count-down-con" v-if="orderInfo.order_status == 7 || orderInfo.order_status == 10">
+					<span>拼团成功</span>
+				</div>
+			</template>
+			<div class="order-type" :style="(orderInfo.order_status == 7) ? 'padding-right:3rem' : 'padding-right:2rem'">
+				<span>{{title}}</span>
+				<img  :src="orderInfo.order_status == 7 ? './images/icon/fahuo.png' : ((orderInfo.order_status == 5 || orderInfo.order_status == 3) ? './images/icon/order-close.png' : './images/icon/order-success.png' )" alt="">
+			</div>
+		</div>
+		<template v-if="orderInfo.order_id">
+			<template v-if="addressInfo">
+				<van-cell class="contact" center :border="false" >
+					<template #title>
+						<div class="contact-con">
+							<span class="name">{{ addressInfo.name }}</span>
+							<span class="tel">{{ addressInfo.mobile }}</span>
+							<div class="tag" v-if="addressInfo.is_default">
+								<van-tag color="#e9f8ee" text-color="#13ba82">默认</van-tag>
+							</div>
+						</div>
+						<p class="addr">{{ addressInfo.full_region + (addressInfo.street ? ' '+ addressInfo.street : '') + (addressInfo.village ? ' ' + addressInfo.village : '') + ' '+ addressInfo.address }}</p>
+					</template>
+					<template #icon>
+						<img style="width: 28px; height: 28px" src="images/receipt.png" alt="">
+					</template>
+					<!-- <template #right-icon>
+						<van-icon name="arrow" color="#CCCCCC" size="20" style="line-height: inherit;" />
+					</template> -->
+				</van-cell>
+			</template>
+			<template v-if="orderGoods && orderGoods.length > 0">
+				<div class="goods-card">
+					<!-- <div class="shop-name" >
+						<img src="images/speedBuy/sd.png" alt="">
+						<span>{{ shop_name }}</span>
+					</div> -->
+					<div v-for="(subItem, subIndex) in orderGoods" :key="subIndex">
+						<van-card :title="subItem.goods_name" :centered="true" >
+							<template #thumb>
+								<div>
+									<van-image width="6.25rem" height="6.25rem" fit="contain" :src="subItem.thumb" />
+								</div>
+							</template>
+							<template #desc>
+								<div class="desc" :style="subItem.two==1 ? 'width:calc(100% - 5rem)' : ''">
+									<p v-if="subItem.oneStylesName">{{ subItem.oneStylesTitle }}: {{ subItem.oneStylesName }}</p>
+									<p v-if="subItem.twoStylesName">{{ subItem.twoStylesTitle }}: {{ subItem.twoStylesName }}</p>
+									<p v-if="subItem.threeStylesName">{{ subItem.threeStylesTitle }}: {{ subItem.threeStylesName }}</p>
+								</div>
+							</template>
+							<template #price>
+								<div class="price" v-if="!subItem.pro_price">
+									<span style="font-size: 0.7rem;">￥</span>{{subItem.retail_price}}
+								</div>
+								<div v-else>
+									<div class="price" style="color: #ff2814;" >
+										<span style="font-size: 0.7rem;">￥</span>{{subItem.pro_price}}
+									</div>
+									<div class="price" style="top:1.25rem;color: #888888;text-decoration:line-through" >
+										<span style="font-size: 0.7rem;">￥</span>{{subItem.retail_price}}
+									</div>
+								</div>
+							</template>
+							<template #num>
+								<div class="num" v-if="!subItem.pro_price">
+									<span style="font-size: 0.5rem;">X</span>{{subItem.goods_num}}
+								</div>
+								<div class="num" v-else style="top:2.5rem">
+									<span style="font-size: 0.5rem;">X</span>{{subItem.goods_num}}
+								</div>
+							</template>
+							<template #bottom>
+								<div class="bottom">
+									<!-- <van-tag color="#f5f5f5" text-color="#888888">24小时内发货</van-tag> -->
+								</div>
+							</template>
+						</van-card>
+					</div>
+					<div class="goods_total_price">
+						<van-cell title="商品总价" :value="'￥'+orderInfo.total_price" />
+					</div>
+					<div class="other-mark">
+						<template v-if="post_fee > 0">
+							<van-cell title="运费/快递" value-class="price" :value="'￥'+post_fee"/>
+						</template>
+						<template v-else>
+							<van-cell title="运费/快递" value="免邮" />
+						</template>
+					</div>
+					<div class="other-mark">
+						<template v-if="coupon_price > 0">
+							<van-cell title="优惠券/红包" value-class="price" :value="'-￥'+ coupon_price" />
+						</template>
+						<template v-else>
+							<van-cell title="优惠券/红包" value="无" />
+						</template>
+					</div>
+					<div class="other-mark" v-if="jbc_dikou > 0">
+						<van-cell title="聚农宝抵扣" value-class="price" :value="'-￥'+ jbc_dikou" />
+					</div>
+				</div>
+			</template>
+			<van-cell-group class="need-pay-con" :border="false">
+				<van-cell :title="orderInfo.order_status == 1 ? '需付款' : '已付款'" :value="'￥'+orderInfo.real_price" />
+			</van-cell-group>
+			<div class="order-desc">
+				<p>订单编号: {{orderInfo.order_id}}</p>
+				<p>下单时间: {{orderInfo.add_time}}</p>
+				<p>支付方式: {{(orderInfo.pay_type == 2 || orderInfo.pay_type == null)? '微信支付' : '银联支付'}}</p>
+			</div>
+			<template v-if="flag">
+				<div class="footer-btn">
+					<van-button type="default" plain hairline round color="#676767" size="small" style="margin-right: 1rem;" @click="cancelOrder()">取消</van-button>
+					<van-button type="primary" plain hairline round color="#00b578" size="small" @click="confirmOrder()">付款</van-button>
+				</div>
+				<div style="height: 60px;"></div>
+			</template>
+		</template>
+		<div class="full-loading" v-if="isFullLoading">
+			<van-loading  color="#1989fa" /> 
+		</div>
+
+		<van-popup v-model="isInvitePopup" class="cur-group-popup" >
+			<template v-if="groupInfo && groupInfo.need_list">
+				<div class="tit">{{teamInfo.status == 0 ? '待支付' : '邀请拼单'}}</div>
+				<div class="desc">
+					<div class="diff-people">
+						{{teamInfo.status == 0 ? '还需' : '仅剩'}}<span class="num">{{groupInfo.needer -  groupInfo.need_list.length}}</span>个名额，
+					</div>
+					<div class="time">
+						<van-count-down :time="groupInfo.s_end_time*1000">
+							<template #default="timeData">
+								<template v-if="timeData.days > 0">
+									<span class="block">{{ timeData.days }}</span>
+									<span class="colon">:</span>
+								</template>
+								<span class="block">{{ timeData.hours < 10 ? ('0'+timeData.hours) : timeData.hours }}</span>
+								<span class="colon">:</span>
+								<span class="block">{{ timeData.minutes < 10 ? ('0'+timeData.minutes) : timeData.minutes }}</span>
+								<span class="colon">:</span>
+								<span class="block">{{ timeData.seconds < 10 ? ('0'+timeData.seconds) : timeData.seconds }}</span>
+							</template>
+						</van-count-down>
+						<span>后结束</span>
+					</div>
+				</div>
+				<div class="avatar-con">
+					<div class="avatar-item" :class="{'no-avatar': (item > groupInfo.need_list.length)}" v-for="(item,index) in groupInfo.needer">
+						<img :src="item > groupInfo.need_list.length ? 'images/icon/no-avatar-icon.png' : groupInfo.need_list[index].follow_user_head_pic" alt="">
+					</div>
+				</div>
+				<div class="btn-con">
+					<van-button @click="inviteFriend">{{teamInfo.status == 0 ? '去支付' : '邀请好友'}}</van-button>
+				</div>
+				<div class="close-icon"  @click="hideInvitePopup">
+					<van-icon name="cross" color="#000" ></van-icon>
+				</div>
+			</template>
+		</van-popup>
+		<div class="share-mask" v-show="isShare" @click="isShare = false">
+			<div style="width:100%;height:80px;">
+				<img style="display:block;position:fixed;right:10px;top:0px;width:80px;height:80px;"  src="images/icon/share.png" alt="">
+			</div>
+			<div class="share-mask-content">
+                <p>点击右上角</p>
+                <p>通过【发送给朋友】</p>
+                <p>邀请好友</p>
+			</div>
+		</div>
+	</div>
+
+	<script>
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				title: '订单详情',
+				flag:false,
+				JumpUrl:{
+					detail: baseUrl('/wx/order/new_coupon_detail'),
+					cancel: baseUrl('/wx/order/new_cance'),
+					my_team_detail: baseUrl('/wx/team/my_team_detail'),
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+				},
+				order:{
+					order_id:'',
+					token:localStorage.getItem("token"),
+				},
+				addressInfo:{},				//地址信息
+				orderGoods:[],						//商品信息
+				orderInfo:{},					//价格
+				shop_name:'',					//店铺名称
+				post_fee:0,
+				coupon_price: 0,
+				jbc_dikou: 0,
+				token:localStorage.getItem('token'),
+				isFullLoading: true,
+				pintuanOver: false,
+				showInvitePopup: false,
+				isInvitePopup:false,
+				isShare: false,
+				groupInfo: ''
+			},
+			methods: {
+				//跳转首页
+				JumpIndex(){
+					window.location.href = "index.html?v=11";
+				},
+				//返回上一页
+				returnLast(){
+					// window.history.go(-1);
+					let href = window.location.href;
+					if(href.indexOf("status") > -1){
+						window.location.href = "orderMy.html?status=" +getQueryString('status')
+					}else{
+						window.location.href = "orderMy.html";
+					}	
+				},
+				// 倒计时结束
+				countDownFinish() {
+					this.pintuanOver = true
+					this.detail()
+				},
+				 //立即支付
+			    confirmOrder(){
+					if(this.orderInfo.prom_type == 6) {
+						if(this.pintuanOver) {
+							this.$toast('拼团已结束')
+							return
+						}
+						var status = localStorage.getItem('status');
+						if(status){
+							window.location.href = "pay.html" +'?order_id='+ this.orderInfo.order_id + '&orderDetails=1&payType=1&status=' + status;
+						}else{
+							window.location.href = "pay.html" +'?order_id='+ this.orderInfo.order_id + '&orderDetails=1&payType=1';
+						}
+					} else {
+						var status = localStorage.getItem('status');
+						if(status){
+							window.location.href = "pay.html" +'?order_id='+ this.orderInfo.order_id + '&orderDetails=1&status=' + status;
+						}else{
+							window.location.href = "pay.html" +'?order_id='+ this.orderInfo.order_id + '&orderDetails=1';
+						}
+					}
+					
+			    	
+			    },
+			    //取消订单
+			    cancelOrder(){
+					var that = this;
+					that.$dialog.confirm({
+						title: '提示',
+						message: '确认取消订单吗?',
+					}).then(() => {
+						axios({
+			    		method: 'post',
+			    		url: that.JumpUrl.cancel,
+			    		data: that.order
+			    	}).then(function (resp) {
+							if(resp.data.errno == 0){
+								that.$toast.success('取消成功')
+								setTimeout(function(){
+									var status = localStorage.getItem('status')
+									if(status){
+										window.location.href = "orderMy.html?status=" + status
+									}else{
+										window.location.href = "orderMy.html";
+									}
+									// window.history.go(-1);
+								}, 1000)
+								
+							}
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+					})
+			    	
+			    },
+				//订单详情
+				detail(){
+					var that = this;
+					that.isFullLoading = true;
+			    	axios({
+			    		method: 'post',
+			    		url: that.JumpUrl.detail,
+			    		data: that.order
+			    	})
+			    	.then(function (resp) {
+						that.isFullLoading = false;
+			    		that.addressInfo = resp.data.data.addressInfo;
+			    		that.orderGoods = resp.data.data.orderGoods;
+			    		that.orderInfo = resp.data.data.orderInfo;
+						that.teamInfo = resp.data.data.team;
+			    		that.shop_name = resp.data.data.shop_name;
+			    		that.post_fee = resp.data.data.post_fee;
+						that.coupon_price = parseFloat(resp.data.data.coupon_price);
+						that.jbc_dikou = Number(resp.data.data.orderInfo.jbc_dikou)
+			    		if (that.orderInfo.order_status == 1) {
+			    			that.flag = true;
+						}
+						if(that.orderInfo.order_status == 1) {
+							that.title = '待付款'
+						} else if(that.orderInfo.order_status == 2) {
+							that.title = '待发货'
+						} else if(that.orderInfo.order_status == 3) {
+							that.title = '支付失败'
+						} else if(that.orderInfo.order_status == 5) {
+							that.title = '已取消'
+						} else if(that.orderInfo.order_status == 6) {
+							that.title = '已退款'
+						} else if(that.orderInfo.order_status == 7) {
+							that.title = '待收货'
+						} else if(that.orderInfo.order_status == 8) {
+							that.title = '退换货'
+						} else if(that.orderInfo.order_status == 10) {
+							that.title = '已完成'
+						}
+
+						if(that.orderInfo.prom_type == 6) {
+							if(that.teamInfo.status == 0 || that.teamInfo.status == 1) {
+								that.getDetailById(that.teamInfo.follow_id)
+								that.isInvitePopup = true
+							} else {
+								that.isInvitePopup = false
+							}
+						}
+
+			    	}).catch(function (error) {
+						that.isFullLoading = false;
+						//请求失败
+						console.log('error', error);
+
+					})
+				},
+				
+				// 获取拼团详情
+				getDetailById(id) {
+                    let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.my_team_detail,
+						data: {
+							token: localStorage.getItem("token"),
+							follow_id: id
+						}
+					}).then(function (resp) {
+						if(resp.data.code == 1) {
+							let data = resp.data.data.data
+							if(data.status == 0) {
+								let tmpObj = {
+									follow_user_head_pic: data.head_pic	
+								}
+								data.need_list.push(tmpObj)
+								that.groupInfo = data
+							} else {
+								that.groupInfo = data
+							}
+                        } else {
+							that.isInvitePopup = false
+                        }
+					}).catch(err =>{
+                        that.isInvitePopup = false
+                    })
+                },
+				// 隐藏全部拼团列表弹窗
+				hideInvitePopup() {
+					this.isInvitePopup = false
+				},
+				// 邀请好友
+				inviteFriend() {
+                    let info = this.groupInfo;
+					let nowTime = new Date().getTime()
+					if(nowTime >= info.found_end_time*1000) {
+						this.$toast('该商品拼团已结束')
+						this.isInvitePopup = false
+						this.detail()
+						return
+					}
+					if(this.orderInfo.order_status == 1) {
+						if(this.pintuanOver) {
+							this.$toast('拼团已结束')
+							return
+						}
+						let status = localStorage.getItem('status');
+						if(status){
+							window.location.href = "pay.html" +'?order_id='+ this.orderInfo.order_id + '&orderDetails=1&payType=1&status=' + status;
+						}else{
+							window.location.href = "pay.html" +'?order_id='+ this.orderInfo.order_id + '&orderDetails=1&payType=1';
+						}
+						return
+					}
+					if(info.status == 0) {
+						this.$dialog.confirm({
+							title: '提示',
+							message: '订单还未支付，是否继续支付?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							if(this.pintuanOver) {
+								this.$toast('拼团已结束')
+								return
+							}
+							let status = localStorage.getItem('status');
+							if(status){
+								window.location.href = "pay.html" +'?order_id='+ this.orderInfo.order_id + '&orderDetails=1&payType=1&status=' + status;
+							}else{
+								window.location.href = "pay.html" +'?order_id='+ this.orderInfo.order_id + '&orderDetails=1&payType=1';
+							}
+						})
+						return
+					}
+					if(info.status == 1) {
+						this.isShare = true
+						if(this.groupInfo) {
+							this.shareGroup(this.groupInfo)
+						}
+						return
+					}
+					if(info.status == 2) {
+						this.$dialog.confirm({
+							title: '提示',
+							message: '已经拼团成功，是否继续拼一单?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							window.location.href='groupGoodsDetails.html?id='+info.goods_id+'&team_id='+info.team_id+'&v=1'
+						})
+						return
+					}
+					if(info.status == 3) {
+						this.$dialog.confirm({
+							title: '提示',
+							message: '拼团失败，是否继续拼一单?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							window.location.href='groupGoodsDetails.html?id='+info.goods_id+'&team_id='+info.team_id+'&v=1'
+						})
+						return
+					}
+
+					
+				},
+				// 分享拼团
+				shareGroup(item) {
+					let shop_id = localStorage.getItem('shop_id')
+					wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: item.share_title, // 分享标题
+							desc: item.share_desc, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/groupGoodsDetails.html?id=' + item.goods_id + '&team_id='+item.team_id + '&found_id='+item.found_id + '&shop_id=' + shop_id+'&from=share&v=1', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: item.share_img, // 分享图标
+							success: function() {
+				
+							}
+						})
+						wx.updateTimelineShareData({
+							title: item.share_title, // 分享标题
+							desc: item.share_desc, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/groupGoodsDetails.html?id=' + item.goods_id + '&team_id='+item.team_id + '&found_id='+item.found_id + '&shop_id=' + shop_id+'&from=share&v=1', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: item.share_img, // 分享图标
+							success: function() {
+							}
+						})
+					});
+				},
+				setWx() {
+					let that = this;
+					let shopInfo = JSON.parse(localStorage.getItem('shopInfo'))
+					// let shopInfo = that.shopInfo;
+					let share_title = shopInfo.share_title ? shopInfo.share_title : shopInfo.shop_name
+					let share_introduction = shopInfo.share_introduction
+					let shop_id = shopInfo.id
+					let logo = shopInfo.share_pic ? shopInfo.share_pic : shopInfo.logo
+					let lock_user_id = localStorage.getItem('lock_user_id')
+					wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {
+				
+							}
+						})
+				
+						wx.updateTimelineShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {},
+						})
+					});
+				},
+				getJssdk: function() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function(resp) {
+						let data = resp.data
+					
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.share_url = sdkData.url;
+						that.setWx();
+					})
+				},
+
+
+
+			},
+			created:function(){
+				this.getJssdk();
+				var url =location.href;
+				// this.order.order_id = url.split("?")[1];
+				this.order.order_id = getQueryString('order_id');
+				this.paySource = getQueryString('paySource')
+				if(this.paySource == 1) {
+					this.showInvitePopup = true
+				}
+				this.detail();
+
+			},
+		})
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>微商超</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="./js/elindex.js"></script>
+	<script src="./js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js"></script>
+	<style>
+		[v-cloak] {
+		  display: none;
+		}
+		img {
+			vertical-align: top;
+		}
+		.xz{
+			font-size:0.7rem;
+			margin-right:5px;
+		}
+		.save-btn{
+			width:100%;
+			height:50px;
+			position:fixed;
+			bottom:0;
+			color:#fff;
+			line-height:50px;
+			font-size:20px;
+			text-align:center;
+			border: none;
+			 background:-webkit-linear-gradient(left,#f76162,#fdc08a);/*for safari5.1-6.0*/
+			 background:-o-linear-gradient(left,#f76162,#fdc08a);/*Opera 11.1-12.0*/
+			 background:-moz-linear-gradient(left,#f76162,#fdc08a);/*firefox 3.6-15*/
+			 background:linear-gradient(left,#f76162,#fdc08a);/*标准语法，必须放在最后*/
+
+
+		}
+	</style>
+
+</head>
+<body>
+	<div id="app" v-cloak>
+		<!-- 头部 -->
+		<el-row class="clearfix header">
+			<el-col :span="8"><div class="el-icon-arrow-left" @click="returnLast()"></div></el-col>
+			<el-col :span="8" v-if="modifyAdd" style="text-align: center"><div>添加地址</div></el-col>
+			<el-col :span="8" v-if="!modifyAdd" style="text-align: center"><div>修改地址</div></el-col>
+		<!-- 	<el-col :span="8"><div class="fr xz" >保存</div></el-col> -->
+		</el-row>
+		<div>
+			<el-image src="images/speedBuy/br.png"></el-image>
+		</div>
+		<ul class="aui-list aui-form-list">
+			<li class="aui-list-item">
+				<div class="aui-list-item-inner">
+					<div class="aui-list-item-label">
+						收货人
+					</div>
+					<div class="aui-list-item-input">
+						<input type="text" placeholder="收货人姓名" style="text-align: right;" v-model="parameter.name">
+					</div>
+				</div>
+			</li>
+			<li class="aui-list-item">
+				<div class="aui-list-item-inner">
+					<div class="aui-list-item-label">
+						联系电话
+					</div>
+					<div class="aui-list-item-input">
+						<input type="number" placeholder="手机号码" style="text-align: right;" v-model="parameter.mobile">
+					</div>
+				</div>
+			</li>
+			<li class="aui-list-item">
+				<div class="aui-list-item-inner">
+					<div class="aui-list-item-label">
+						所在地区
+					</div>
+					<div class="aui-list-item-input" >
+						<input type="text" placeholder="" style="text-align: right;" v-model="location" readonly>
+					</div>
+				</div>
+			</li>
+			<li class="aui-list-item">
+				<div class="aui-list-item-inner">
+					<div class="aui-list-item-label">
+						详细地址
+					</div>
+					<div class="aui-list-item-input" >
+						<input type="text" placeholder="详细地址" style="text-align: right;" v-model="parameter.address">
+					</div>
+				</div>
+			</li>
+			<li class="aui-list-item">
+				<div class="aui-list-item-inner">
+					<div class="aui-list-item-label">
+						设置默认地址
+					</div>
+					<div class="aui-list-item-input" style="text-align: right;">
+						<input type="checkbox" class="aui-switch" :checked="flag" @click="switchTab()">
+					</div>
+				</div>
+			</li>
+
+
+
+
+
+		</ul>
+		<!-- 新增地址 -->
+			<div style="padding-left: 0.75rem;margin-top: 0.75rem">
+				<img src="images/icon/jingshi.png" alt="" width="20" class="fl">
+				<span class="fl" style="margin-left: 0.5rem;color: #999">配送范围：{{extent}}</span>
+			</div>
+
+
+
+
+	<button class="save-btn" v-if="canSave" @click="keepGoods()">
+		保存
+
+	</button>
+	<button class="save-btn" v-else disabled>保存</button>
+
+		<div class="message-page-mask" v-show="message.show==1">
+			<div class="message-page-mask-content">
+				<div class="el-loading-spinner">
+					<i v-show="message.type=='success' " class="el-icon-success"></i>
+					<i v-show="message.type=='error' " class="el-icon-error"></i>
+
+					<p class="el-loading-text">{{message.text}}</p>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				extent:'',		//配送范围
+				modifyAdd:true,		//判断添加或者修改地址表头
+				message:{
+					show:0,
+					type:'success',
+					text:'成功',
+				},
+				flag:0,
+				JumpUrl:{
+					save:'http://sy.xfd365.com/wx/address/save',
+					get_region:'http://sy.xfd365.com/wx/region/get_region',
+					detail:'http://sy.xfd365.com/wx/address/detail',
+					getDistributionScope:'http://sy.xfd365.com/wx/address/getDistributionScope',
+
+				},
+				location:'',
+				parameter:{
+					id:'',
+					address:'',
+					mobile:'',
+					is_default:0,
+					name:'',
+					token:localStorage.getItem("token"),
+				},
+				token_:{
+					token:localStorage.getItem("token"),
+				},
+				form:'',
+				canSave: true
+			},
+
+
+			methods: {
+				//返回上一页
+				returnLast(){
+					window.history.go(-1);
+				},
+
+				switchTab(){
+					this.flag = !this.flag
+					if (this.flag == true) {
+						this.parameter.is_default = 1;
+					}else{
+						this.parameter.is_default = 0;
+					}
+				},
+				//获取配送范围
+				rangeDelivery(){
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.getDistributionScope,
+						data:that.token_
+					})
+					.then(function (resp) {
+						that.extent = resp.data.data
+
+					}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+
+				//获取所在地区
+				region(){
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.get_region,
+						data:that.token_
+					})
+					.then(function (resp) {
+
+						var box;
+						box = resp.data.data;
+
+						that.location = box.province.name + '/' + box.city.name + '/' + box.county.name ;
+
+
+					}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				//保存收货地址
+				keepGoods(){
+					let that = this;
+					if(that.flag==true){
+						that.parameter.is_default = 1;
+					}else{
+						that.parameter.is_default = 0;
+					}
+					if(!that.canSave){
+						return;
+					}
+					that.canSave = false
+
+					axios({
+						method: 'post',
+						url: that.JumpUrl.save,
+						data:that.parameter
+					})
+					.then(function (resp) {
+							if (resp.data.errno == 0) {
+								that.message={
+									show:1,
+									text:'保存成功',
+									type:'success'
+								}
+								setTimeout(function(){
+
+									if(that.from=='order'){
+										 window.location.href = "collectAddress.html?from=order"
+											that.canSave = true
+									}else{
+
+										 window.location.href = "collectAddress.html"
+										that.canSave = true
+									}
+								}, 1000)
+							}else{
+								that.message={
+									show:1,
+									text:resp.data.msg,
+									type:'error'
+								}
+								setTimeout(function() {
+									that.message.show = 0;
+									that.canSave = true
+								}, 1000)
+							}
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+					},
+					//获取单个地址
+					singleAddress(){
+						let that = this;
+
+						axios({
+							method: 'post',
+							url: that.JumpUrl.detail,
+							data:that.parameter
+						})
+						.then(function (resp) {
+							that.parameter.address = resp.data.data.address;
+							that.parameter.mobile = resp.data.data.mobile;
+							that.parameter.name = resp.data.data.name;
+							that.flag = resp.data.data.is_default;
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+					},
+				},
+
+				created:function(){
+					this.from=getQueryString('from');
+					if (this.from == 1) {
+						this.modifyAdd = true;
+					}else{
+						this.modifyAdd = false;;
+					};
+					this.region();
+					this.rangeDelivery();		//配送范围
+					this.parameter.id = getQueryString('address_id'); //获取a的值
+					if(this.parameter.id){
+						this.singleAddress();
+					}
+
+				}
+			})
+		</script>
+	</body>
+
+	</html>

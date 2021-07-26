@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>聚农优享</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+		<!-- <link rel="stylesheet" href="css//index.css"> -->
+		<link rel="stylesheet" href="css/index.css" />
+		<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js?v=3"></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5/lib/index.css">
+
+		<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+		<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script> -->
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant.min.js"></script>
+
+		<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.4/dist/html2canvas.min.js"></script>
+
+		<style>
+			[v-cloak] {
+				display: none;
+			}
+
+			img {
+				vertical-align: top;
+			}
+
+			.xz {
+				font-size: 0.7rem;
+				margin-right: 5px;
+			}
+
+			.el-tabs__nav-wrap::after {
+				height: 0px;
+			}
+
+			.el-tabs__item {
+				color: #fff;
+				font-size: 16px;
+			}
+
+			.textTitle {
+				width: 80%;
+				height: auto;
+				word-wrap: break-word;
+				word-break: break-all;
+				overflow: hidden;
+				font-size: 1.18rem;
+				font-weight: bold;
+			}
+
+			.goodspp {
+				padding: 10px;
+				font-size: 14px;
+			}
+
+			.goodsyj p {
+				margin-left: 10px;
+				color: #999;
+				font-size: 0.6rem;
+
+			}
+
+			.aui-list-item-arrow {
+				color: #212121;
+				font: 14px/1.5 "微软雅黑", tahoma, arial, \5b8b\4f53;
+			}
+
+			.wholeSee {
+				color: #f36065 !important;
+			}
+
+			.pj .aui-list-item-arrow:before {
+				width: 0;
+				height: 0;
+			}
+
+			.aui-margin-b-15 {
+				margin-bottom: 0 !important;
+			}
+
+			.aui-bar {
+				position: fixed;
+				bottom: 0;
+				right: 0;
+				left: 0;
+				z-index: 10;
+				width: 100%;
+				min-height: 2.25rem;
+				font-size: 14px;
+				text-align: center;
+				display: table;
+			}
+
+			.el-dialog__header {
+				padding: 0;
+			}
+
+			.el-dialog__body {
+				padding: 0px 0px;
+				position: relative;
+			}
+
+			.el-dialog {
+				position: fixed;
+				bottom: 0px;
+				margin: 0 auto;
+			}
+
+			.aui-btn-danger {
+				background-color: #fa8972 !important;
+			}
+
+			.aui-btn-danger.aui-active,
+			.aui-btn-danger:active {
+				color: #ffffff !important;
+				background-color: #fa8972 !important;
+			}
+
+			.el-row {
+				position: fixed;
+			}
+			
+
+			.share-mask {
+				height: 100%;
+				width: 100%;
+				z-index: 20000;
+				top: 0;
+				left: 0;
+				color: #fff;
+				position: fixed;
+				background: rgba(0, 0, 0, 0.8);
+			}
+
+			.share-mask-content p {
+				padding-left: 20px;
+				font-size: 28px;
+				color: #fff
+			}
+
+			.specsDiv {
+				margin-top: 15px;
+			}
+
+			.specsDiv li {
+				margin-right: 10px;
+				margin-top: 10px;
+				padding: 0 5px;
+				border-radius: 5px;
+				background-color: #EEEEEE
+			}
+
+			.specsDiv li.active {
+				color: #fa8972;
+				background: rgba(250, 137, 114, 0.16);
+			}
+
+			.specsDiv li.unable {
+				color: #d0d0d0;
+			}
+
+			.selectCont {
+				color: #333333;
+				padding: 10px 0 0 50px;
+				position: relative;
+			}
+
+			.selectCont span {
+				position: absolute;
+				left: 0;
+				top: 10px;
+			}
+
+
+			
+
+			.price {
+				font-size: 30px;
+				height: 60px;
+				line-height: 60px;
+			}
+
+			.share-mask-img .el-dialog {
+				position: static;
+				border-radius: 10px;
+				background: transparent;
+				box-shadow: none;
+			}
+
+			.share-mask-img .el-dialog__body {
+				padding: 0;
+			}
+
+			.share-mask-img .el-dialog__body img {
+				margin: 0 auto;
+				background: transparent;
+				border-bottom-left-radius: 5px;
+				border-bottom-right-radius: 5px;
+			}
+
+			.share-mask-img .shareBtn {
+				color: #FFFFFF;
+				width: 100%;
+				text-align: center;
+				margin: 10px auto 0 auto;
+				border-radius: 30px;
+				line-height: 40px;
+				background: linear-gradient(#51d35e, #00c859);
+			}
+
+			.share-mask-img .shareBtn img {
+				display: inline-flex;
+				margin: 11px 2px 0 0;
+				width: 18px;
+			}
+			.share-mask-img .shareInfo{
+				margin-top: 5px;
+				color: #ffffff;
+				text-align: center;
+			}
+
+			.share-close {
+				position: fixed;
+				right: 8%;
+				top: 8%;
+				color: #EEEEEE;
+			}
+			.share-close.el-icon-circle-close:before{
+				font-size: 26px;
+			}
+
+			.share-cont {
+				background: #FFFFFF;
+				position: relative;
+				width: 90%;
+				margin: 0 5%;
+				border-top-left-radius: 10px;
+				border-top-right-radius: 10px;
+				text-align: center;
+			}
+
+			.share-cont .top {
+				margin: 0 auto;
+				padding: 10px 0 5px 0;
+			}
+
+			.share-cont .main-title {
+				font-size: 20px;
+				text-align: center;
+				font-weight: bold;
+				color: #4a4a4a;
+				letter-spacing: 2px;
+			}
+
+			.share-cont .child-title {
+				font-size: 15px;
+				text-align: center;
+				color: #8e8e8e;
+				letter-spacing: 2px;
+			}
+
+			.share-cont .goodImg {
+				margin: 0 auto;
+				padding: 10px 20px 0 20px;
+				border-radius: 5px;
+				max-height: 200px;
+			}
+
+			.bottom-cont {
+				position: relative;
+				background: url(images/share_bottom.png) no-repeat top center;
+				background-size: 100% auto;
+				display: flex;
+				align-items: center;
+				width: 100%;
+				padding: 30px 20px 0 20px;
+				margin-top: -10px;
+			}
+
+			.bottom-cont .left {
+				flex: 1;
+			}
+
+			.bottom-cont img {
+				width: 80px;
+				height: 80px;
+			}
+
+			.bottom-cont .left .title {
+				font-size: 15px;
+				color: #353535;
+				font-weight: bold;
+			}
+
+			.bottom-cont .left .price {
+				height: 32px;
+				line-height: 32px;
+			}
+
+			.bottom-cont .left .price .tip {
+				font-size: 11px;
+				color: #FFFFFF;
+				padding: 2px 3px;
+				border-radius: 5px;
+				background: linear-gradient(90deg, #FF1A1A 0%, #FF5E00 100%);
+			}
+
+			.bottom-cont .left .price .price {
+				color: #ff2814;
+				font-size: 22px;
+				font-weight: bold;
+			}
+
+			.bottom-cont .left .price .unit-money {
+				color: #FF2814;
+				font-size: 13px;
+				font-weight: bold;
+			}
+
+			.bottom-cont .left .price .unit {
+				color: #6D6D6D;
+				font-size: 13px;
+			}
+
+			.bottom-cont .left .price .old-price {
+				font-size: 10px;
+				color: #9B9B9B;
+				text-decoration: line-through;
+			}
+			/* .bottom-cont .left .keyword-con {
+				margin-top: 10px;
+			} */
+
+			.bottom-cont .left .keyword {
+				font-size: 11px;
+				border-radius: 15px;
+				padding: 0 5px;
+				margin-top: 8px;
+				display: inline-block;
+			}
+
+			.bottom-cont .left .keyword:first-child {
+				color: #FF4465;
+				border: 1px solid #FF4465;
+			}
+
+			.bottom-cont .left .keyword:last-child {
+				color: #888888;
+				border: 1px solid #dfdfdf;
+			}
+			html,body { font-size: 16px; }
+			@media all and (max-width:375px) {
+				body,html{
+					font-size: 14px;
+				}
+			}
+			@media only screen and (min-width: 414px) {
+				body,html {
+					font-size: 16px !important;
+				}
+			}
+			@media only screen and (min-width: 480px) {
+				body,html {
+					font-size: 22px !important;
+				}
+			}
+			/* 导航栏 */
+			.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+			.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+			.van-nav-bar .van-nav-bar__right img { display: block; }
+			.van-nav-bar .van-nav-bar__title { font-weight: bold; }
+			.bg-white { background: #fff; }
+			/* 视频封面 */
+			.cover-con { width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); }
+			.player-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 20%; }
+			/* 商品介绍 */
+			.goodspp .share-poster { display: flex; width: 2.5rem; height: 2.5rem; border-radius: 50%; text-align: center;font-size: 0.625rem; flex-direction: column;align-items: center;justify-content: center;box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.24); }
+			.goodspp .el-icon-share { font-size: 0.875rem; }
+			.choose-spec { margin: 0 0.625rem; background: #fff; border-radius: 10px; height: 46px; line-height: 46px; padding: 0 10px; padding-right: 30px; align-items: center; font-size: 0.875rem; position: relative; overflow: hidden;  }
+			.choose-spec .title { color: #888; margin-right: 0.3rem }
+			.choose-spec .value { margin-right: 0.3rem; }
+			.choose-spec .van-icon-arrow { position: absolute; top: 50%; right: 16px; transform: translateY(-50%); color: #888; }
+
+			.notify-yhq-con { margin: 0 0.625rem;   margin-top: 0.625rem; border-radius: 10px; box-sizing: border-box;}
+			.notify-yhq { background: #fff8f7; border-radius: 10px; }
+			.notify-yhq .van-cell__title { margin-left: 0.5rem; font-size: 0.875rem; color: #333; }
+			.notify-yhq .van-cell__value { font-size: 0.65rem; color: #888888; }
+			.notify-yhq .van-icon { font-size: 0.875rem; color: #999999; }
+			/* 商品详情 */
+			.goods-info { margin: 0.625rem; border-radius: 10px; overflow: hidden;}
+			.goods-info >p:first-of-type { height: 2.2rem; font-size: 0.875rem; color: #4b4b4b; font-weight: bold; display: flex; justify-content: center; align-items: center; background: #fff; }
+			.goods-info >p:first-of-type img { width: 15px; height: 15px; margin: 0 10px; }
+			.goods-info >p:first-of-type img:last-of-type { transform: rotate(180deg); }
+			.goods-info .goods_content { background: #fff; padding: 0 0.75rem; word-break: break-word; font-size: 0.875rem; }
+			.goods-info .goods_content p { font-size: 0.875rem;  }
+			.goods-info .goods_content img { padding: 10px; display: block; margin: 0 auto; max-width: 100%;height: auto!important;  }
+			.goods-info .goods_content p video { width: 100%; }
+			.goods-info .goods_content p video::-webkit-media-controls-mute-button { display: none !important;}
+			.goods-info .goods_content p video::-internal-media-controls-overflow-button{ display: none !important;}
+			/* .goods-info .goods_content p video::-webkit-media-controls-timeline { display: none !important; } */
+			.goods-info .goods_content p video::-webkit-media-controls-current-time-display{ display: none !important; }
+			.goods-info .goods_content p video::-webkit-media-controls-time-remaining-display { display: none !important; }
+			.goods-info .goods_content p video::-webkit-media-controls-toggle-closed-captions-button { display: none !important; }
+			.goods-info .goods_content p video::-webkit-media-controls-volume-slider { display: none !important; }
+
+			/* 拼团样式	 */
+			.group-active-con { display: flex; align-items: center; overflow: hidden; height: 3.75rem; }
+			.group-active-con .group-info-con { width: 70%; background: linear-gradient(90deg,#02cf0a, #00be34); color: #fff; display: flex; align-items: center; height: 100%; }
+			.group-active-con .group-info-con .group-price { padding: 0 0.75rem; display: flex; align-items: center; }
+			.group-active-con .group-info-con .group-price .price { font-weight: bold; font-size: 1.5rem;  }
+			.group-active-con .group-info-con .group-people { display: flex; flex-direction: column;}
+			.group-active-con .group-info-con .group-people .real-price { text-decoration:  line-through; font-size: 0.8rem; }
+			.group-active-con .group-info-con .group-people .number { background: #fff; border-radius: 4px; padding: 0 0.6rem; color: #01c329; font-size: 0.8rem; text-align: center; max-width: 4rem; }
+			.group-active-con .group-time-con { width: 30%; background: #e3ffe6; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;}
+			.group-active-con .group-time-con .time-desc { font-size: 0.8rem; margin-bottom: 0.3rem; }
+			.group-active-con .group-time-con .time .colon { display: inline-block; color: #888888; }
+			.group-active-con .group-time-con .time .block { display: inline-block; width: 1.375rem; color: #fff; font-size: 0.75rem; text-align: center; background-color: #3A3939;}
+			.goods-name-con { display: flex; align-items: center; justify-content: center; }
+			.goods-name-con .group-goods-name { flex: 1; word-wrap: break-word; word-break: break-all; font-size: 1.18rem; font-weight: bold; padding: 0.75rem; }
+			.goods-name-con .sale-num { background: #f9f9f9; padding: 0.1rem 0.5rem; max-width: 8rem; border-radius: 100px; text-align: center; font-size: 0.8rem; }
+			.group-share-con { padding: 0 0.75rem; }
+			.group-share-con .group-share-bg { background: #f9f9f9; border-radius: 0.625rem; overflow: hidden; }
+			.group-share-con .group-share-bg .swiper-con { position: relative; padding-bottom: 30%; }
+			.group-share-con .group-share-bg .tit { padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; color: #888; font-size: 0.85rem; }
+			.group-share-con .share-list .share-item { position: relative; padding-bottom: 15.15%;}
+			.group-share-con .share-list .share-item .share-item-absolute { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; overflow: hidden; padding: 0 0.625rem; }
+			.group-share-con .share-list .share-item .avatar-con { display: flex; }
+			.group-share-con .share-list .share-item .avatar-con .avatar-item { width: 1.9rem; height: 1.9rem; border-radius: 50%; border: 1px solid #00c859; overflow: hidden; margin-right: 0.2rem; }
+			.group-share-con .share-list .share-item .avatar-con .avatar-item img { width: 100%; height: 100%; }
+			.group-share-con .share-list .share-item .avatar-con .no-avatar { border: 1px dashed #979797; }
+			.group-share-con .share-list .share-item .diff-people { font-size: 0.8rem; margin-left: 0.2rem; }
+			.group-share-con .share-list .share-item .diff-people .num { color: #00c859; }
+			.group-share-con .share-list .share-item .btn-con .van-button { padding: 0.3rem 0.6rem; background: linear-gradient(90deg,#02cf0a, #00be34); font-size: 0.8rem; height: auto; line-height: inherit; border-color: #00be34; }
+			
+			.group-rule-con { padding: 0 0.75rem; margin-top: 0.75rem; }
+			.group-rule-con .group-rule-bg { background: #f9f9f9; border-radius: 0.625rem; overflow: hidden; }
+			.group-rule-con .group-rule-bg .tit { padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; color: #888888; font-size: 0.85rem; }
+			.group-rule-con .group-rule-bg .tit .right { display: flex; align-items: center; }
+			.group-rule-con .group-rule-bg .tit .right .van-icon-arrow { margin-left: 0.3rem; }
+			.group-rule-con .group-rule-bg .rule-info { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; }
+			.group-rule-con .group-rule-bg .rule-info .step-rule { display: flex; align-items: center; }
+			.group-rule-con .group-rule-bg .rule-info .step-rule .step-bg { width: 1rem; height: 1rem; background: #bcbcbc; color: #fff; font-size: 0.75rem; line-height: 1rem; text-align: center; border-radius: 50%; overflow: hidden; }
+			.group-rule-con .group-rule-bg .rule-info .step-rule .rule-con { display: flex; flex-direction: column; }
+			.group-rule-con .group-rule-bg .rule-info .step-rule .rule-con .rule-tit { font-size: 0.8rem; font-weight: bold; margin-left: 0.3rem; }
+			.group-rule-con .group-rule-bg .rule-info .step-rule .rule-con .desc { font-size: 0.75rem; color: #888; margin-left: 0.3rem; }
+			/* 选择规格弹窗 */
+			.choose-spec-popup .van-card { background: #fff; padding-top: 16px; }
+			.choose-spec-popup .van-card .van-card__header .van-card__thumb { width: 5.6rem; height: 5.6rem; }
+			.choose-spec-popup .van-card .van-card__header .van-card__content .price { font-size: 1.125rem; color: #ff2814; font-weight:bold;height: auto; line-height: initial; }
+			.choose-spec-popup .van-card .van-card__header .van-card__content .line-price { font-size: 0.75rem; color: #b2b2b2; text-decoration: line-through; }
+			.choose-spec-popup .van-card .van-card__header .van-card__content .desc { display: flex; flex-direction: column; font-size: 0.75rem; color: #b2b2b2; padding: 0.5rem 0; }
+			.choose-spec-popup .van-card .van-card__header .van-card__content .desc .xian-gou { font-size: 0.875rem; color: #ff2814; font-weight: bold; }
+			.choose-spec-popup .product-content { padding: 8px 16px }
+			.choose-spec-popup .product-content .product-delcom { margin-bottom: 10px; }
+			.choose-spec-popup .product-content .product-delcom p { font-size: 0.875rem; color: #353535; }
+			.choose-spec-popup .product-content .product-delcom .product-footerlist li {  border-radius: 4px; color: #333; text-align: center; padding: 5px 10px; float: left; margin-top: 10px; margin-right: 20px; cursor: pointer; background: #f9f9f9; font-size: 0.75rem; }
+			.choose-spec-popup .product-content .product-delcom .product-footerlist li.productActive { background-color: #1A1A29; color: #fff; }
+			.choose-spec-popup .product-content .product-delcom .product-footerlist li.noneActive { background-color: #ccc; opacity: 0.4; color: #000; pointer-events: none; }
+			.choose-spec-popup .spec-no { padding: 16px; display: flex; align-items: center }
+			.choose-spec-popup .spec-no .title { font-size: 1rem; margin-right: 0.3rem; }
+			.choose-spec-popup .spec-no .value { font-size: 0.875rem; color: #999; }
+			.choose-spec-popup .pay-num-con { display: flex; padding: 8px 16px; align-items: center; justify-content: space-between; }
+			.choose-spec-popup .pay-num-con span { flex: 1 }
+			.choose-spec-popup .pay-num-con .step-con { display:flex; align-items: center; justify-content: center; }
+			.choose-spec-popup .footer-btn { position: fixed; bottom: 16px; left: 0; width: 100%; height: 3rem; padding: 0 16px}
+			.choose-spec-popup .footer-btn .btn { width: 100%; height: 100%; color: #fff; background: linear-gradient(#02cf0a, #00be34); border-radius: 1000px; font-size: 1rem; line-height: 3rem; text-align: center; }
+			/* 底部 */
+			.van-goods-action .van-icon { font-weight: bold; }
+			.van-goods-action .van-goods-action-button--first { margin-left: 2rem; } 
+			.van-goods-action .van-button { height: 2.5rem; line-height: 2.5rem; }
+
+			.group-goods-action .van-button__text { display: flex; flex-direction: column; height: 2.5rem; margin: 0; padding: 0.3rem 0; }
+			.group-goods-action .van-button__text .price-con { display: flex; align-items: center; font-size: 0.75rem; height: 0.95rem; padding: 0; align-items: center; justify-content: center; overflow: hidden; }
+			.group-goods-action .van-button__text .price-con .price { font-size: 0.875rem; font-weight: bold; }
+			.group-goods-action .van-button__text .price-con .price-icon { font-size: 0.75rem; }
+			.group-goods-action .van-button__text .buy-type { display: flex;height: 0.95rem; align-items: center;font-size: 0.75rem; justify-content: center; overflow: hidden; }
+
+			/* 参与拼单弹窗 */
+			.cur-group-popup  { overflow: inherit; border-radius: 8px; width: 80%; }
+			.cur-group-popup .tit { font-size: 1rem; font-weight: bold; text-align: center; padding: 0.75rem; padding-top: 1.5rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+			.cur-group-popup .desc { padding: 0 0.75rem; font-size: 0.875rem; color: #888; display: flex; align-items: center; justify-content: center; }
+			.cur-group-popup .desc .num { color: #FF4465; }
+			.cur-group-popup .desc .time { display: flex; align-items: center; }
+			.cur-group-popup .desc .time .colon,.cur-group-popup .desc .time .block { color: #888; }
+			.cur-group-popup .avatar-con { display: flex; align-items: center; justify-content: center; padding-top: 0.75rem;}
+			.cur-group-popup .avatar-con .avatar-item { width: 2rem; height: 2rem; overflow: hidden; border-radius: 50%; border: 1px solid #00be34; margin-right: 0.3rem; }
+			.cur-group-popup .avatar-con .avatar-item img { width: 100%; height: 100%; }
+			.cur-group-popup .avatar-con .no-avatar { border: 1px dashed #979797; }
+			.cur-group-popup .btn-con { padding: 1.5rem 0.75rem; width: 90%; margin: 0 auto; }
+			.cur-group-popup .btn-con .van-button { width: 100%; color: #fff; background: #ff1919; border-radius: 8px; }
+			.cur-group-popup .close-icon { position: absolute; right: 0; top: 0; width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; background: #c9c9c9; transform: translate(50%,-50%); border-radius: 50%; }
+
+			/* 拼单列表弹窗 */
+			.all-group-popup { overflow: inherit; border-radius: 8px; width: 80%; }
+			.all-group-popup .tit { font-size: 1rem; font-weight: bold; text-align: center; padding: 0.75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+			.all-group-popup .list-con { padding: 0.75rem; padding-top: 0; height: 20rem; overflow: auto; }
+			.all-group-popup .list-con .list-item { padding: 0.75rem 0; display: flex; align-items: center; justify-content: space-between; }
+			.all-group-popup .list-con .list-item .avatar { width: 2rem; height: 2rem; border-radius: 50%; overflow: hidden; border: 1px solid #00be34; }
+			.all-group-popup .list-con .list-item .avata img { width: 100%; height: 100%; }
+			.all-group-popup .list-con .list-item .group-info { width: calc(100% - 6rem); display: flex; flex-direction: column; padding: 0 0.3rem; font-size: 0.875rem; }
+			.all-group-popup .list-con .list-item .group-info .diff-people { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+			.all-group-popup .list-con .list-item .group-info .diff-people .name { width: calc(100% - 4rem); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: bold; }
+			.all-group-popup .list-con .list-item .group-info .diff-people .num { width: 4rem; overflow: hidden; text-align: right; color: #999; font-size: 0.8rem;}
+			.all-group-popup .list-con .list-item .group-info .time { display: flex; align-items: center; color: #999; font-size: 0.8rem; }
+			.all-group-popup .list-con .list-item .group-info .time .van-count-down { color: #999; font-size: 0.8rem; }
+			.all-group-popup .list-con .list-item .btn-con { width: 4rem; height: 2rem; }
+			.all-group-popup .list-con .list-item .btn-con .van-button { background: #ff1919; color: #fff; font-size: 0.8rem; border-radius: 8px; width: 100%; height: 100%; line-height: inherit; padding: 0; margin: 0; }
+			.all-group-popup .close-icon { position: absolute; right: 0; top: 0; width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; background: #c9c9c9; transform: translate(50%,-50%); border-radius: 50%; }
+			
+			.picLunbo img{object-fit: cover;}
+		</style>
+
+	</head>
+	<body>
+		<div id="app" class="bg-white"  v-cloak>
+			<van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="商品详情" left-arrow @click-left="returnLast()">
+				<template #right>
+					<img src="images/icon/shouye.png" alt="" width="20"  @click="JumpIndex">
+				</template>
+			</van-nav-bar>
+			<!-- 图片轮播 -->
+			<van-swipe style="height: 18.75rem;" class="picLunbo">
+				<van-swipe-item  v-if="info.thumb && videoUrl">
+					<div class="cover-con" @click.stop="playVideo">
+						<img :src="info.thumb" style="width:100%;height: 100%;" onerror="this.src='http://sy.xfd365.com/public/uploads/exp.jpg';this.onerror='null'">
+					</div>
+					<img class="player-icon" @click.stop="playVideo" src="images/player-icon.png" alt="">
+				</van-swipe-item>
+				<van-swipe-item v-if="info.thumb && !videoUrl">
+					<a href="javascript:;">
+						<img :src="info.thumb" style="width:100%;height: 100%;" onerror="this.src='http://sy.xfd365.com/public/uploads/exp.jpg';this.onerror='null'">
+					</a>
+				</van-swipe-item>
+				<van-swipe-item v-for="(item, index) in info.album" v-if="info.album && info.album.length>0" onerror="this.src='http://sy.xfd365.com/public/uploads/exp.jpg';this.onerror='null'" :key="index">
+					<a href="javascript:;">
+						<img :src="item" style="width:100%;height: 100%;">
+					</a>
+				</van-swipe-item>
+			</van-swipe>
+			<!-- 拼团 -->
+            <div class="group-active-con">
+                <div class="group-info-con" :style="info.found_end_time ? 'width:70%' : 'width:100%'">
+                    <div class="group-price">
+                        <span class="price-icon">￥</span>
+                        <span class="price">{{info.team_price}}</span>
+                    </div>
+                    <div class="group-people">
+                        <div class="real-price">原价{{info.price}}</div>
+                        <div class="number">{{info.needer}}人团</div>
+                    </div>
+                </div>
+                <div class="group-time-con" :style="info.s_end_time > 86400 ? 'width:40%': ''" v-if="info.found_end_time">
+                    <template v-if="info.status == 2 || info.status == 3">
+						<span style="font-weight: bold;">拼团已结束</span>
+					</template>
+					<template v-else>
+						<div class="time-desc" >距离结束还剩</div>
+						<div class="time">
+							<van-count-down :time="info.s_end_time*1000" @finish="countDownFinish">
+								<template #default="timeData">
+									<template v-if="timeData.days > 0">
+										<span class="block">{{ timeData.days }}</span>
+										<span class="colon">:</span>
+									</template>
+									<span class="block">{{ timeData.hours }}</span>
+									<span class="colon">:</span>
+									<span class="block">{{ timeData.minutes }}</span>
+									<span class="colon">:</span>
+									<span class="block">{{ timeData.seconds }}</span>
+								</template>
+							</van-count-down>
+						</div>
+					</template>
+                </div>
+			</div>
+			<div class="goods-name-con">
+				<div class="group-goods-name">{{info.goods_name}}</div>
+				<div class="sale-num">已拼{{info.xusales_sum}}件</div>
+			</div>
+            <div class="group-share-con" v-if="swiperData && swiperData.length > 0">
+                <div class="group-share-bg">
+                    <div class="tit" @click="showAllGroupPopup">
+						<span>参加以下网友拼团,组团成功立即发货</span>
+						查看全部
+                        <van-icon name="arrow" ></van-icon>
+                    </div>
+                    <div class="swiper-con" :style="swiperData.length == 1 && swiperData[0].length == 1 ? 'padding-bottom:15%' : 'padding-bottom:30%'">
+                        <van-swipe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"  :autoplay="3000" vertical :touchable="false" indicator-color="transparent">
+                            <van-swipe-item v-for="(item,index) in swiperData">
+                                <div class="share-list" >
+                                    <div class="share-item van-hairline--top" v-for="(subItem,subIndex) in item">
+                                        <div class="share-item-absolute">
+                                            <div style="flex: 1; display: flex; align-items: center;">
+                                                <div class="avatar-con">
+                                                    <div class="avatar-item" :class="{'no-avatar': (avatarItem > subItem.list.length)}" v-for="(avatarItem,avatarIndex) in subItem.need">
+                                                        <img :src="avatarItem > subItem.list.length ? 'images/icon/no-avatar-icon.png' : subItem.list[avatarIndex].follow_user_head_pic" alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="diff-people">还差<span class="num">{{subItem.need - subItem.list.length}}人</span>成团</div>
+                                            </div>
+                                            <div class="btn-con">
+                                                <van-button type="info" @click="showJoinGroupPopup(subItem)">立即参团</van-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </van-swipe-item>
+                        </van-swipe>
+                    </div>
+                </div>
+            </div>
+            <div class="group-rule-con">
+                <div class="group-rule-bg">
+                    <div class="tit">
+                        <div class="left">拼团玩法</div>
+                        <div class="right">
+                            <span>规则</span>
+                            <van-icon name="arrow" ></van-icon>
+                        </div>
+                    </div>
+                    <div class="rule-info van-hairline--top">
+                        <div class="step-rule">
+                            <div class="step-bg">1</div>
+                            <div class="rule-con">
+                                <span class="rule-tit">开团/参团</span>
+                            </div>
+                        </div>
+                        <van-icon name="arrow" ></van-icon>
+                        <div class="step-rule">
+                            <div class="step-bg">2</div>
+                            <div class="rule-con">
+                                <span class="rule-tit">邀请好友</span>
+                            </div>
+                        </div>
+                        <van-icon name="arrow" ></van-icon>
+                        <div class="step-rule">
+                            <div class="step-bg">3</div>
+                            <div class="rule-con">
+                                <span class="rule-tit">满员发货</span>
+                                <span class="desc">不满自动退款</span>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+			<!-- 商品详情 -->
+			<div class="goods-info">
+				<p> <img src="./images/spxx_left.png" alt=""> 商品信息 <img src="./images/spxx_left.png" alt=""></p>
+				<div class="goods_content" v-html="info.content"></div>
+			</div>
+			<!-- 底部 -->
+			<div style="height: 60px;"></div>
+            <van-goods-action class="group-goods-action">
+                <van-goods-action-icon style="font-weight: bold;"  color="#333" text="店铺"  @click="jump('index.html?v=11')" >
+                    <template #icon>
+                        <img src="./images/icon/shop.png" alt="">
+                    </template>
+                </van-goods-action-icon>
+                <van-goods-action-icon style="font-weight: bold;"  color="#333" icon="shopping-cart" text="客服" >
+                    <template #icon>
+                        <img src="./images/icon/kefu.png" alt="">
+                    </template>
+                </van-goods-action-icon>
+                <van-goods-action-button color="linear-gradient(#e5f9e7, #d9f7e7)" style="color: #09c959;font-size: 0.875rem;" type="warning"  @click="atOnce">
+                    <template #default>
+                        <div class="price-con">
+                            <div class="price-icon">￥</div>
+                            <div class="price">{{info.price}}</div>
+                        </div>
+                        <div class="buy-type" >直接购买</div>
+                    </template>
+                </van-goods-action-button>
+                <van-goods-action-button color="linear-gradient(#00be34, #02cf0a)"  style="font-size: 0.875rem;" type="danger"  @click="atOnce('pintuan')">
+                    <template #default>
+                        <div class="price-con">
+                            <div class="price-icon">￥</div>
+                            <div class="price">{{info.team_price}}</div>
+                        </div>
+                        <div class="buy-type" >我要{{ firstFoundId && firstFoundId != 0 ? '参' : '开'}}团</div>
+                    </template>
+                </van-goods-action-button>
+            </van-goods-action>
+			<div class="message-page-mask" v-show="message.show==1">
+				<div class="message-page-mask-content">
+					<div class="el-loading-spinner">
+						<i v-show="message.type=='success' " class="el-icon-success"></i>
+						<i v-show="message.type=='error' " class="el-icon-error"></i>
+						<p class="el-loading-text">{{message.text}}</p>
+					</div>
+				</div>
+			</div>
+
+			<div @click="shareGoods()" class="share-mask" v-show="isShare">
+				<div style="width:100%;height:80px;">
+					<img style="display:block;position:fixed;right:10px;top:0px;width:80px;height:80px;" src="images/icon/share.png"
+					 alt="">
+				</div>
+				<div class="share-mask-content">
+					<p>点击右上角</p>
+					<p>通过【发送给朋友】</p>
+					<p>邀请好友购买</p>
+				</div>
+            </div>
+            
+			<!-- 必须设置成fixed，不然滚动的时候生成的海报图片是记录有滚动高度，始终有偏移距离 -->
+			<div id="newImg" style="position: fixed;width: 100%;top: -1000px;background:transparent">
+				<div class="share-cont">
+					<img src="images/share_top%208.png" class="top" />
+					<p class="main-title">好物分享</p>
+					<p class="child-title">美好事物,都分享给你!</p>
+					<img :src="thumbImgBase"  class="goodImg"  />
+				</div>
+				<div style="background: #ffffff;">
+					<div class="bottom-cont">
+						<div class="left">
+							<p class="title">{{info.goods_name}}</p>
+							<p class="price">
+									<span class="tip">惊爆价</span>
+									<span class="unit-money">¥</span><span class="price">{{teamPrice}}</span><span class="unit" v-if="info.unit">/{{info.unit}}</span>
+									<span class="old-price">¥{{price}}</span></p>
+							<p class="keyword-con"><span class="keyword">限时促销</span>
+									<!-- <span class="keyword">24小时发货</span></p> -->
+						</div>
+						<img :src="qrcode" />
+					</div>
+					<p style="width: 100%;height: 20px;"></p> 
+				</div>
+			</div>
+			<van-popup v-model="dialogFormVisible" @close="closeSpcifiPopup" position="bottom" closeable close-icon="close" round :style="simulatedDATA.specifications.length == 3 ? { height: '75%' } : (simulatedDATA.specifications.length == 2 ? { height: '65%' } : { height: '55%' })" class="choose-spec-popup" >
+				<van-card :thumb="showImg ? showImg : 'http://sy.xfd365.com/public/uploads/exp.jpg'" class="van-hairline--bottom" >
+					<template #title>
+						<div class="price">
+							<template v-if="gouwu == '拼团购买'">
+								<span>￥{{teamPrice}}</span>
+								<span class="line-price">￥{{price}}</span>
+							</template>
+							<template v-else>
+								<span>￥{{price}}</span>
+							</template>
+						</div>
+					</template>
+					<template #desc>
+						<div class="desc">
+							<span class="xian-gou" v-if="info.buy_limit && info.buy_limit > 0">每人限购{{info.buy_limit}}件</span>
+							<span>库存 {{storage}}</span>
+						</div>
+					</template>
+					<template #price>
+						<div class="choose-info">
+							<span  v-if="simulatedDATA.difference.length > 0">选择规格</span>
+							<span v-if="simulatedDATA.difference.length == 0">{{info.spec}}</span>
+						</div>
+					</template>
+				</van-card>
+				<div class="product-content" v-if="simulatedDATA.difference.length > 0">
+					<div class="product-delcom" v-for="(ProductItem,n) in simulatedDATA.specifications">
+						<p>{{ProductItem.name}}</p>
+						<ul class="product-footerlist clearfix">
+							<li v-for="(oItem,index) in ProductItem.item" v-on:click="specificationBtn(oItem.name,n,$event,index)"
+								v-bind:class="[oItem.isShow?'':'noneActive',subIndex[n] == index?'productActive':'']">
+								{{oItem.name}}
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div  v-if="simulatedDATA.difference.length == 0" class="spec-no">
+					<span class="title">规格</span>
+					<span class="value">{{info.spec}}</span>
+				</div>
+				<div class="pay-num-con">
+					<span>购买数量</span>
+					<div class="step-con">
+						<img src="./images/speedBuy/jian.png" alt="" class="fl" width="22px" @click="reduceChange()">
+						<div class="fl" style="margin-left: 20px;margin-right: 20px;height:22px;line-height: 22px;">{{amount}}</div>
+						<img src="./images/speedBuy/jia.png" alt="" class="fl" width="22px" @click="addChange(goods_id, spcifi_id)">
+					</div>
+				</div>
+
+				<div class="footer-btn">
+					<div class="btn" @click="joinCart(goods_id)">{{gouwu}}</div>
+				</div>
+				<div style="height: 4rem;"></div>
+			</van-popup>
+			<el-dialog title="" :visible.sync="dialogShareVisible" center width="90%" :show-close="false" class="share-mask-img">
+				<i class="el-icon-circle-close share-close" @click="dialogShareVisible = false"></i>
+				<img :src="testsrn" />
+				<div class="shareBtn" @click="shareGoods()"><img src="images/friend.png">分享至朋友圈</div>
+				<p class="shareInfo">长按图片发送好友或保存</p>
+			</el-dialog>
+			<div class="page-mask" v-show="loading">
+				<div class="page-mask-content">
+					<div class="el-loading-spinner"><i class="el-icon-loading"></i>
+						<p class="el-loading-text">拼命加载中</p>
+					</div>
+				</div>
+			</div>
+			<van-popup v-model="isShowCurGroup" class="cur-group-popup" >
+				<div class="tit">参与{{curItemInfo.nickname}}的拼单</div>
+				<div class="desc">
+					<div class="diff-people">
+						仅剩<span class="num">{{curItemInfo.lastNum}}</span>个名额，
+					</div>
+					<div class="time">
+						<van-count-down :time="curItemInfo.s_end_time">
+							<template #default="timeData">
+								<template v-if="timeData.days > 0">
+									<span class="block">{{ timeData.days }}</span>
+									<span class="colon">:</span>
+								</template>
+								<span class="block">{{ timeData.hours < 10 ? ('0'+timeData.hours) : timeData.hours }}</span>
+								<span class="colon">:</span>
+								<span class="block">{{ timeData.minutes < 10 ? ('0'+timeData.minutes) : timeData.minutes }}</span>
+								<span class="colon">:</span>
+								<span class="block">{{ timeData.seconds < 10 ? ('0'+timeData.seconds) : timeData.seconds }}</span>
+							</template>
+						</van-count-down>
+						<span>后结束</span>
+					</div>
+				</div>
+				<div class="avatar-con">
+					<div class="avatar-item" :class="{'no-avatar': (item > curItemInfo.list.length)}" v-for="(item,index) in curItemInfo.need">
+						<img :src="item > curItemInfo.list.length ? 'images/icon/no-avatar-icon.png' : curItemInfo.list[index].follow_user_head_pic" alt="">
+					</div>
+				</div>
+				<div class="btn-con">
+					<van-button @click="joinGroup(1)">参与拼单</van-button>
+				</div>
+				<div class="close-icon" @click="hideJoinGroupPopup">
+					<van-icon name="cross" color="#000" ></van-icon>
+				</div>
+			</van-popup>
+
+			<van-popup v-model="isShowAllGroup" class="all-group-popup" >
+				<div class="tit van-hairline--bottom">可参与的拼单</div>
+				<div class="list-con">
+					<van-list v-model="groupLoading" :immediate-check="false" :finished="groupFinished" @load="getGoodsGroupList()" finished-text="没有更多了"   >
+						<div class="list-item van-hairline--bottom" v-for="(item,index) in groupList">
+							<div class="avatar">
+								<img :src="item.list[0].follow_user_head_pic" alt="">
+							</div>
+							<div class="group-info">
+								<div class="diff-people">
+									<div class="name">{{item.nickname}}</div>
+									<div class="num">还差<span style="color: #FF4465;">{{item.need - item.list.length}}</span>人</div>
+								</div>
+								<div class="time">
+									<span>剩余</span>
+									<van-count-down :time="item.s_end_time*1000">
+										<template #default="timeData">
+											<template v-if="timeData.days > 0">
+												<span class="block">{{ timeData.days }}</span>
+												<span class="colon">:</span>
+											</template>
+											<span class="block">{{ timeData.hours < 10 ? ('0'+timeData.hours) : timeData.hours }}</span>
+											<span class="colon">:</span>
+											<span class="block">{{ timeData.minutes < 10 ? ('0'+timeData.minutes) : timeData.minutes }}</span>
+											<span class="colon">:</span>
+											<span class="block">{{ timeData.seconds < 10 ? ('0'+timeData.seconds) : timeData.seconds }}</span>
+										</template>
+									</van-count-down>
+								</div>
+							</div>
+							<div class="btn-con">
+								<van-button @click="joinGroup(2,item)">去拼单</van-button>
+							</div>
+						</div>
+					</vant-list>
+					
+				</div>
+				<div class="close-icon" @click="hideAllGroupPopup">
+					<van-icon name="cross" color="#000" ></van-icon>
+				</div>
+			</van-popup>
+			<van-popup v-model="isFollowAccount" class="cur-group-popup" >
+				<div class="tit">拼团提示</div>
+				<div class="desc">
+					接收拼团是否成功提示，需关注公众号
+				</div>
+				<div class="desc">
+					<img style="width: 80%;" src="./images/wx-qrcode.jpg" width="100%" alt="">
+				</div>
+				<div class="desc" style="padding-bottom: 2rem;">
+					长按二维码 前往【聚农优享】关注公众号
+				</div>
+				<div class="close-icon" @click="hideFollowPopup">
+					<van-icon name="cross" color="#000" ></van-icon>
+				</div>
+			</van-popup>
+		</div>
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					isFollowAccount: false, // 是否显示关注公众号
+					isShowAllGroup: false, // 是否显示全部可参团列表
+					isShowCurGroup: false, // 是否显示当前参团信息
+					loading: 0,
+					message: {
+						show: 0,
+						type: 'success',
+						text: '成功',
+					},
+					dialogFormVisible: false, //拼团选规格
+					gouwu: '立即购买',
+					amount: 1,
+					JumpUrl: {
+                        detail:  baseUrl('/wx/team/team_goods_detail'),
+                        shopInfoUrl: baseUrl('/wx/shop/shop_info'),
+                        add: baseUrl('/wx/cart/new_add'),
+						goods_team_lists: baseUrl('/wx/team/goods_team_lists'),
+						if_follow: baseUrl('/wx/coupon/if_follow'),
+						jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+						checkToken: 'http://sy.xfd365.com/wx/base/checkToken',
+						loginUrl: 'http://sy.xfd365.com/wx/wechat/login',
+					},
+                    goods_id: '',
+                    team_id: '',
+					curItemInfo: '',
+					info: {
+
+					}, //获取商品信息
+					groupLoading: false,
+					groupFinished: false,
+					curFoundId: '',
+					firstFoundId: '',
+					groupPage: 0,
+					groupList: [],
+					swiperData: [],
+					shopInfo: {},
+					isShare: false,
+					token: '',
+					goodsName: '',
+					goodId: '',
+					count: 0,
+					isAble: true,
+					isActive: true,
+					simulatedDATA: { //模拟后台返回的数据 多规格
+						"difference": [],
+						"specifications": []
+					},
+					selectArr: [], //存放被选中的值
+					shopItemInfo: {}, //存放要和选中的值进行匹配的数据
+					subIndex: [], //是否选中 因为不确定是多规格还是单规格，所以这里定义数组来判断
+					price: '', //选中规格的价钱
+					teamPrice: '', // 促销价格
+					decSavePrce: '', // 保存促销价格（无规格）
+					storage: 0, // 库存
+					showImg: '', //图片
+					spcifi_id: 0,
+					buy_limit: '',
+					dialogShareVisible: false,
+					qrcode: '',
+					thumbImg: '',
+					thumbImgBase: '',
+					testsrn: '',
+					spcifiList: [],
+					couponList: [],
+					isPlay: false,
+					playUrl: '',
+					videoUrl: '',
+					pintuanOver: false,
+					fromShare: '',
+					chooseTeam: false,
+					isNoData: false
+				},
+				methods: {
+					// 播放视频
+					playVideo() {
+						this.isPlay = true
+						this.playUrl = window.location.href
+						window.location.href = this.videoUrl
+					},
+					specificationBtn(item, n, event, index) {
+						var self = this;
+						self.amount = 1 // 重置数量
+						if (self.selectArr[n] != item) {
+							self.selectArr[n] = item;
+							self.subIndex[n] = index;
+						} else {
+							self.selectArr[n] = "";
+							self.subIndex[n] = -1; //去掉选中的颜色
+						}
+						self.checkItem();
+					},
+					checkItem() {
+						var self = this;
+						var option = self.simulatedDATA.specifications;
+
+						var result = []; //定义数组储存被选中的值
+						for (var i in option) {
+							result[i] = self.selectArr[i] ? self.selectArr[i] : '';
+						}
+						for (var i in option) {
+							var last = result[i]; //把选中的值存放到字符串last去
+							for (var k in option[i].item) {
+								result[i] = option[i].item[k].name; //赋值，存在直接覆盖，不存在往里面添加name值
+								option[i].item[k].isShow = self.isMay(result); //在数据里面添加字段isShow来判断是否可以选择
+							}
+							result[i] = last; //还原，目的是记录点下去那个值，避免下一次执行循环时被覆盖
+						}
+						if (this.shopItemInfo[result]) {
+							this.price = this.shopItemInfo[result].price
+							this.teamPrice = this.shopItemInfo[result].team_price
+							this.spcifi_id = this.shopItemInfo[result].spcifi_id
+							// this.storage = this.shopItemInfo[result].storage || ''
+							this.storage = this.shopItemInfo[result].storage
+							this.showImg = this.shopItemInfo[result].pic
+							this.buy_limit = this.shopItemInfo[result].buy_limit
+						}
+						self.$forceUpdate(); //重绘
+
+					},
+					// 页面跳转
+					jump(url) {
+						window.location.href = url;
+					},
+					isMay: function(result) {
+						for (var i in result) {
+							if (result[i] == '') {
+								return true; //如果数组里有为空的值，那直接返回true
+							}
+						}
+						if (this.shopItemInfo[result]) {
+							return this.shopItemInfo[result].storage == 0 ? false : true; //匹配选中的数据的库存，若不为空返回true反之返回false
+						} else {
+							return false
+						}
+
+					},
+
+
+					//检查token是否过期
+					checkToken: function() {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.checkToken,
+								data: {
+									token: that.token
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								if (resp.data.errno == 1) {
+									//token过期调用跳转页面方法
+									localStorage.removeItem('token')
+									that.wxSign();
+								} else {
+									that.initPage();
+								}
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					getShopInfo: function() {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.JumpUrl.shopInfoUrl,
+							//data: form_data
+							data: {
+								token: localStorage.getItem('token')
+							}
+						}).then(function(resp) {
+							let data = resp.data
+							if (data.errno == 0) {
+								// console.log(data)
+								localStorage.setItem('shop_id', data.data.id);
+								localStorage.setItem('shopInfo', JSON.stringify(data.data));
+								that.shopInfo = data.data
+								that.getJssdk();
+							}
+							//返回数据
+							// console.log(resp)
+						}).catch(function(error) {
+							//请求失败
+							console.log('error', error);
+						})
+					},
+					// 显示所有可参团列表
+					showAllGroupPopup() {
+						this.isShowAllGroup = true
+					},
+					// 显示立即参团弹窗
+					showJoinGroupPopup(item) {
+						let nowTime = new Date().getTime()
+						let tmpObj = {
+							need: item.need,
+							list: item.list,
+							s_end_time: item.s_end_time*1000,
+							lastNum: item.need - item.list.length,
+							found_end_time: item.found_end_time,
+							nickname: item.nickname,
+							found_id: item.found_id
+						}
+						this.curItemInfo = tmpObj
+						this.isShowCurGroup = true
+					},
+					// 隐藏立即参团弹窗
+					hideJoinGroupPopup() {
+						this.isShowCurGroup = false
+					},
+					// 隐藏全部拼团列表弹窗
+					hideAllGroupPopup() {
+						this.isShowAllGroup = false
+					},
+					// 倒计时结束
+					countDownFinish() {
+						this.pintuanOver = true
+					},
+					// 参与拼单按钮 type 1-参与拼团弹窗进入 2-查看全部拼团列表弹窗进入
+					joinGroup(type,item) {
+						let that = this;
+						let nowTime = new Date().getTime()
+						if(type == 1) {
+							if(nowTime >= that.curItemInfo.found_end_time*1000) {
+								that.$dialog.confirm({
+									title: '提示',
+									message: '该拼团已结束，是否重新获取此商品团购列表?',
+									confirmButtonText: '重新获取'
+								}).then(() => {
+									that.groupPage = 0;
+									that.groupFinished = false;
+									that.groupLoading = true;
+									that.groupList = [];
+									that.swiperData = [];
+									that.isShowAllGroup = false;
+									that.getGoodsGroupList();
+								})
+								return
+							}
+							that.curFoundId = that.curItemInfo.found_id
+							that.isShowCurGroup = false
+						}
+						if(type == 2) {
+							if(nowTime >= item.found_end_time*1000) {
+								that.$dialog.confirm({
+									title: '提示',
+									message: '该拼团已结束，是否重新获取此商品团购列表?',
+									confirmButtonText: '重新获取'
+								}).then(() => {
+									that.groupPage = 0;
+									that.groupFinished = false;
+									that.groupLoading = true;
+									that.groupList = [];
+									that.swiperData = [];
+									that.getGoodsGroupList();
+								})
+								return
+							}
+							that.curFoundId = item.found_id
+							that.isShowAllGroup = false
+						}
+						that.chooseTeam = true
+						that.atOnce('pintuan')
+						
+					},
+					// 获取当前商品开团列表
+					getGoodsGroupList() {
+						let that = this;
+						that.groupFinished = false
+						let groupPage = that.groupPage + 1
+						if (groupPage !== 1) {
+							that.groupLoading = true
+						}
+						axios({
+							method: 'post',
+							url: that.JumpUrl.goods_team_lists,
+							//data: form_data
+							data: {
+								token: localStorage.getItem('token'),
+								goods_id: that.goods_id,
+								page: groupPage,
+								size: 10
+							}
+						}).then(function(resp) {
+							that.groupLoading = false
+							if(resp.data.code == 1) {
+								let allData = resp.data.data.data
+								// allData = allData.concat(allData)
+								// allData = allData.concat(allData)
+								// allData = allData.concat(allData)
+								// allData = allData.concat(allData)
+								// allData = allData.concat(allData)
+								// allData = allData.concat(allData)
+								if(allData && allData.length > 0) {
+									that.groupList = that.groupList.concat(allData)
+									if(groupPage == 1) {
+										if(that.groupList.length > 2) {
+											that.swiperData = that.group(allData,2)
+										} 
+										else {
+											let tmpArr = []
+											that.groupList.forEach(item =>{
+												tmpArr.push(item)
+											})
+											that.swiperData[0] = tmpArr
+										}
+									}
+								}
+
+								that.groupPage = groupPage
+								resp.data.data.totalPage = Math.ceil(resp.data.data.count/Number(resp.data.data.size))
+								if (that.groupPage >= resp.data.data.totalPage) {
+									that.groupFinished = true
+								} else {
+									that.groupFinished = false
+								}
+							} else {
+								that.groupLoading = false
+								that.groupFinished = true
+								that.groupPage = 0
+							}
+						}).catch(function(error) {
+							that.groupLoading = false
+							that.groupFinished = true
+							that.groupPage = 0
+							//请求失败
+							console.log('error', error);
+
+
+						})
+					},
+					// 将一个数组拆分n个一组 arr-要拆分的数组  len-要被拆分几个一组
+					group(arr, len) {
+						let index = 0;
+						let newArr = [];
+						while(index < arr.length) {
+							newArr.push(arr.slice(index, index += len));
+						}
+						return newArr;
+					},
+					setWx() {
+						let that = this;
+						let shopInfo = JSON.parse(localStorage.getItem('shopInfo'))
+						// let shopInfo = that.shopInfo;
+						let share_title = shopInfo.share_title ? shopInfo.share_title : shopInfo.shop_name
+						let share_introduction = shopInfo.share_introduction
+						let shop_id = shopInfo.id
+						let logo = shopInfo.share_pic ? shopInfo.share_pic : shopInfo.logo
+						let lock_user_id = localStorage.getItem('lock_user_id')
+						wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+							wx.updateAppMessageShareData({
+								title: share_title, // 分享标题
+								desc: share_introduction, // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function () {
+					
+								}
+							})
+					
+							wx.updateTimelineShareData({
+								title: share_title, // 分享标题
+								desc: share_introduction, // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function () {},
+							})
+						});
+					},
+					getJssdk() {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.JumpUrl.jssdkUrl,
+							//data: form_data
+							data: {
+								token: localStorage.getItem('token'),
+								url: window.location.href
+							}
+						}).then(function(resp) {
+							// console.log(resp)
+							let data = resp.data
+
+							let sdkData = resp.data
+							// console.log(sdkData, 'sdkData')
+							// console.log(sdkData.signature, 'sig')
+							wx.config({
+								debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+								appId: sdkData.appId, // 必填，公众号的唯一标识
+								timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+								nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+								signature: sdkData.signature, // 必填，签名
+								jsApiList: [
+									'showMenuItems',
+									'updateAppMessageShareData',
+									'updateTimelineShareData',
+								] // 必填，需要使用的JS接口列表
+							});
+							that.share_url = sdkData.url;
+							that.getDetail(); //获取详情
+
+							//返回数据
+							// console.log(resp)
+						})
+					},
+					shareImg() {
+						this.$toast.loading({
+							message: '正在生成海报...',
+							forbidClick: true,
+							duration: 0,
+						});
+						let that = this;
+						let htmlDom = document.getElementById('newImg');
+						that.$nextTick(() =>{
+							try {
+								html2canvas(htmlDom, {
+									logging: false, //日志开关，便于查看html2canvas的内部执行流程
+									backgroundColor: 'transparent',
+									allowTaint: true,
+									taintTest: false,
+									useCORS: true,
+									width: htmlDom.clientWidth, //dom 原始宽度
+									height: htmlDom.clientHeight,
+									scrollY: 0, 
+									scrollX: 0,
+								}).then(function(canvas) {
+									// let imgUri = canvas.toDataURL("image/png", 2); // 获取生成的图片的url
+									let imgUri = canvas.toDataURL();//图片地址
+									that.testsrn = imgUri;
+									that.dialogShareVisible = true
+									that.$toast.clear()
+								})
+							}
+							catch (err) {
+								// that.$toast.clear()
+								that.$toast(err.message ? err.message : '生成海报失败,请稍后重试')
+							}
+						})
+							
+					},
+					shareGoods() {
+						this.isShare = !this.isShare;
+						let that = this;
+						let shopInfo = JSON.parse(localStorage.getItem('shopInfo'));
+						let goodsInfo = this.info
+						let shop_name = shopInfo.shop_name
+						let shop_id = shopInfo.id
+						let logo = shopInfo.logo
+
+						wx.updateTimelineShareData({
+							title: goodsInfo.goods_name, // 分享标题
+							desc: '我正在看' + goodsInfo.goods_name + ',快来看看吧!', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/groupGoodsDetails.html?id=' + that.goods_id + '&shop_id=' + shop_id +'&team_id=' + team_id+'&v=1', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: goodsInfo.thumb, // 分享图标
+							success: function() {
+								console.log('good')
+							}
+						})
+						wx.updateAppMessageShareData({
+							title: goodsInfo.goods_name, // 分享标题
+							desc: '我正在看' + goodsInfo.goods_name + ',快来看看吧!', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/groupGoodsDetails.html?id=' + that.goods_id + '&shop_id=' + shop_id+'&team_id=' + team_id +'&v=1', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: goodsInfo.thumb, // 分享图标
+							success: function() {
+								console.log('good')
+							}
+						})
+					},
+					closePop() {
+						this.dialogFormVisible = false;
+					},
+					//跳转首页
+					JumpIndex() {
+						localStorage.removeItem('dataPromotion')
+						window.location.href = "index.html?v=11";
+					},
+					//返回上一页
+					returnLast() {
+						if(this.isPlay) {
+							window.location.href = this.playUrl
+							this.isPlay = false
+							return
+						}
+						
+						if(document.referrer == '') {
+							window.location.href = 'index.html?v=11&shop_id='+this.shopInfo.id
+							return
+                        }
+						let source = getQueryString('source')
+
+						if(source == 'list') {
+							window.location.href = 'groupActivityList.html'
+						} else {
+						    window.location.href = 'index.html?v=11'
+						}
+						localStorage.removeItem('dataPromotion')
+					},
+					cancel() {
+						sessionStorage.clear();
+						this.returnLast();
+					},
+					// 关闭购物车
+					closeSpcifiPopup() {
+						this.dialogFormVisible = false
+						this.curFoundId = this.firstFoundId
+					},
+					// 立即购买
+					atOnce(val) {
+						var that = this;
+						if(val == 'pintuan') {
+							that.gouwu = '拼团购买';
+							if(!that.chooseTeam) {
+								that.chooseTeam = false
+								if(that.pintuanOver) {
+									that.$toast('当前拼团已结束')
+									return
+								}
+								if(that.info.status == 2 || that.info.status == 3) {
+									that.$toast('当前拼团已结束')
+									return
+								}
+							}
+							that.chooseTeam = false
+						} else {
+                            that.gouwu = '立即购买'
+                        }
+						that.dialogFormVisible = true;
+					},
+					reduceChange() {
+						let that = this;
+						that.amount = that.amount - 1;
+						if (that.amount < 1) {
+                            that.amount = 1;
+                            return
+						}
+						
+					},
+					addChange() {
+                        let that = this;
+						if (that.amount >= that.storage) {
+							that.message = {
+								show: 1,
+								text: '库存不足',
+								type: 'error'
+							}
+
+							setTimeout(function() {
+								that.message.show = 0;
+							}, 2000)
+							return;
+						} else {
+							if(that.info.buy_limit > 0) {
+								if (that.amount >= that.info.buy_limit) {
+									that.$toast('每人限购' + that.info.buy_limit + '件')
+									return
+								}
+							}
+							
+                            that.amount+=1
+						}
+
+					},
+					// 在合成海报时，本地图片可以，网络图片报错，需要转换图片格式为base64才可以
+					getImage() {
+						let that = this;
+						let img = new Image();
+						// img.setAttribute('crossOrigin', 'anonymous');
+						img.src = this.thumbImg;  
+						// console.log(this.thumbImg)
+						img.onload =function() {
+							let data = that.getBase64Image(img);
+							let url = URL.createObjectURL(that.base64ToBlob(data))
+							that.thumbImgBase = url
+							// console.log(that.thumbImgBase)
+						}
+					},
+					// 图片转base64地址
+					getBase64Image(img) {
+						let canvas = document.createElement("canvas");
+						canvas.width = img.width;
+						canvas.height = img.height;
+						let ctx = canvas.getContext("2d");
+						ctx.drawImage(img, 0, 0, img.width, img.height);
+						let dataURL = canvas.toDataURL("image/png");
+						return dataURL
+					},
+					// base64转blob  勿删!!! 防止base64内容过大
+					base64ToBlob(base64) {
+						let parts = base64.split(';base64,');
+						let contentType = parts[0].split(':')[1];
+						let raw = window.atob(parts[1]);
+						let rawLength = raw.length;
+						let uInt8Array = new Uint8Array(rawLength);
+
+						for (let i = 0; i < rawLength; ++i) {
+							uInt8Array[i] = raw.charCodeAt(i);
+						}
+						return new Blob([uInt8Array], {type: contentType});
+					},
+					// 去除相同obj
+					deteleObject(obj) {
+						var uniques = [];
+						var stringify = {};
+						for (var i = 0; i < obj.length; i++) {
+							var keys = Object.keys(obj[i]);
+							keys.sort(function(a, b) {
+								return (Number(a) - Number(b));
+							});
+							var str = '';
+							for (var j = 0; j < keys.length; j++) {
+								str += JSON.stringify(keys[j]);
+								str += JSON.stringify(obj[i][keys[j]]);
+							}
+							if (!stringify.hasOwnProperty(str)) {
+								uniques.push(obj[i]);
+								stringify[str] = true;
+							}
+						}
+						uniques = uniques;
+						return uniques;
+					},
+					// 获取信息
+					getDetail() {
+						var that = this;
+						that.isNoData = false;
+						that.$toast.loading({
+							message: '加载中...',
+							forbidClick: true,
+						});
+						axios({
+								method: 'post',
+								url: that.JumpUrl.detail,
+								data: {
+                                    goods_id: that.goods_id,
+                                    team_id: that.team_id,
+									found_id: that.curFoundId,
+									token: that.token
+								}
+							})
+							.then(function(resp) {
+								that.$toast.clear();
+								that.loading = 0;
+								if(resp.data.code == 0) {
+									that.isNoData = true;
+									that.$dialog.alert({
+										title: '提示',
+										message: '该商品暂无拼团数据',
+										confirmButtonText:'返回拼团列表'
+										}).then(() => {
+											window.location.href = 'groupActivityList.html'
+										// on close
+										});
+									return
+								}
+								
+                                that.info = resp.data.data.info;
+								let thumb = resp.data.data.info.thumb
+								that.thumbImg = thumb ? thumb : 'http://sy.xfd365.com/public/uploads/exp.jpg';
+								that.videoUrl = resp.data.data.info.video_url
+								that.getImage()
+                                that.qrcode = resp.data.data.qrcode;
+                                if(resp.data.data.attribute && resp.data.data.attribute.length > 0) {
+									resp.data.data.attribute.forEach(ele => {
+										if (ele.difference.charAt(ele.difference.length - 1) == ",") { // 一个属性最后两个逗号，两个属性最后一个逗号，三个属性最后没有逗号
+											ele.difference = ele.difference.substr(0, ele.difference.length - 1);
+											if (ele.difference.charAt(ele.difference.length - 1) == ",") {
+												ele.difference = ele.difference.substr(0, ele.difference.length - 1);
+											}
+										}
+									})
+								}
+								resp.data.data.spcifi.forEach(spcItem =>{
+									if(spcItem.length != 0) {
+										spcItem.item = that.deteleObject(spcItem.item)
+									}
+								})
+								resp.data.data.spcifi.forEach(ele => {
+									if (ele != '') {
+										that.simulatedDATA.specifications.push(ele)
+									}
+								})
+								that.simulatedDATA.difference = resp.data.data.attribute
+								that.spcifiList = resp.data.data.spcifi
+                                // that.simulatedDATA.specifications = resp.data.data.spcifi
+
+								that.showImg = resp.data.data.info.thumb
+								that.price = resp.data.data.info.price
+								that.teamPrice = resp.data.data.info.team_price
+								that.decSavePrce = resp.data.data.info.promotion_price
+								that.buy_limit = resp.data.data.info.buy_limit
+								that.storage = resp.data.data.info.storage
+								let dataPromotion = localStorage.getItem('dataPromotion');
+								if (dataPromotion) {
+									dataPromotion = JSON.parse(dataPromotion)
+									// console.log(dataPromotion.spcifi_name)
+									if (dataPromotion.spcifi_name) {
+										let array1 = [];
+										let array2 = [];
+										let array3 = []
+										if (that.simulatedDATA.specifications.length == 1) {
+											that.simulatedDATA.specifications[0].item.forEach(ele => {
+												array1.push(ele.name)
+											})
+											that.selectArr = dataPromotion.spcifi_name.substr(0, dataPromotion.spcifi_name.length - 2).split(",");
+										}
+										if (that.simulatedDATA.specifications.length == 2) {
+											that.simulatedDATA.specifications[0].item.forEach(ele => {
+												array1.push(ele.name)
+											})
+											that.simulatedDATA.specifications[1].item.forEach(ele => {
+												array2.push(ele.name)
+											})
+											that.selectArr = dataPromotion.spcifi_name.substr(0, dataPromotion.spcifi_name.length - 1).split(",");
+										}
+										if (that.simulatedDATA.specifications.length == 3) {
+											that.simulatedDATA.specifications[0].item.forEach(ele => {
+												array1.push(ele.name)
+											})
+											that.simulatedDATA.specifications[1].item.forEach(ele => {
+												array2.push(ele.name)
+											})
+											that.simulatedDATA.specifications[2].item.forEach(ele => {
+												array3.push(ele.name)
+											})
+											that.selectArr = dataPromotion.spcifi_name.substr(0, dataPromotion.spcifi_name.length).split(",");
+										}
+										if (that.selectArr.length == 1) {
+											that.subIndex = [array1.indexOf(that.selectArr[0]), 0, 0]
+										} else if (that.selectArr.length == 2) {
+											that.subIndex = [array1.indexOf(that.selectArr[0]), array2.indexOf(that.selectArr[1]), 0]
+										} else {
+											that.subIndex = [array1.indexOf(that.selectArr[0]), array2.indexOf(that.selectArr[1]), array3.indexOf(
+												that.selectArr[2])]
+										}
+										// console.log(that.subIndex)
+									}
+								} else {
+									that.subIndex = [0, 0, 0]
+									if (resp.data.data.attribute && resp.data.data.attribute.length > 0) {
+										if (resp.data.data.attribute[0].threeStylesName) {
+											that.selectArr = [resp.data.data.attribute[0].oneStylesName, resp.data.data.attribute[0].twoStylesName,
+												resp.data.data.attribute[0].threeStylesName
+											]
+										} else if (resp.data.data.attribute[0].twoStylesName && !resp.data.data.attribute[0].threeStylesName) {
+											that.selectArr = [resp.data.data.attribute[0].oneStylesName, resp.data.data.attribute[0].twoStylesName]
+										} else if (!resp.data.data.attribute[0].twoStylesName) {
+											that.selectArr = [resp.data.data.attribute[0].oneStylesName]
+										}
+									}
+								}
+								for (var i in that.simulatedDATA.difference) {
+									that.shopItemInfo[that.simulatedDATA.difference[i].difference] = that.simulatedDATA.difference[i]; //修改数据结构格式，改成键值对的方式，以方便和选中之后的值进行匹配
+								}
+								that.checkItem();
+								that.setWx();
+								that.getGoodsGroupList()
+							}).catch(function(error) {
+								that.$toast.clear();
+								//请求失败
+								console.log('error', error);
+
+							})
+                    },
+                    joinCart(goods_id) {
+						var that = this;
+						var message = [];
+						var length = 0;
+						that.simulatedDATA.specifications.forEach(ele => {
+							if (ele.length != 0) {
+								length += 1
+								message.push(ele.name)
+							}
+						})
+						for (var i = 0; i < length; i++) {
+							if (that.selectArr[i] == '') {
+								this.$toast('请选择' + message[i])
+								return
+							}
+						}
+
+						let canBuyName = that.promotion_num - that.has_buy;
+						if (that.amount >= that.storage) {
+							that.message = {
+								show: 1,
+								text: '库存不足',
+								type: 'error'
+							}
+							setTimeout(function() {
+								that.message.show = 0;
+							}, 2000)
+							return
+						} else {
+							if(that.info.buy_limit > 0) {
+								if (that.amount > that.info.buy_limit) {
+									that.$toast('每人限购' + that.info.buy_limit + '件')
+									return
+								}
+							}
+							
+							// that.goodsXq.number = that.amount;
+							// that.goodsXq.spcifi_id = that.spcifi_id
+
+                            that.dialogFormVisible = false;
+                            let params = {}
+                            if(that.gouwu == '立即购买') {
+                                params = {
+                                    goods_id: goods_id,
+                                    spcifi_id: that.spcifi_id, // 商品规格id,没有规格可为0
+                                    token: localStorage.getItem("token"),
+                                    number: that.amount,
+                                    is_now: 1,
+                                }
+								axios({
+									method: 'post',
+									url: that.JumpUrl.add,
+									data: params
+								})
+								.then(function(resp) {
+									if (resp.data.errno === 1) {
+										that.message = {
+											show: 1,
+											text: resp.data.errmsg,
+											type: 'error'
+										}
+										setTimeout(function() {
+											that.message.show = 0;
+										}, 2000)
+										return;
+									}
+                                    that.message.show = 0;
+                                    window.location.href = "confirmOrder.html" + '?is_now=' + 1 + '&id=' + that.goodId+ '&team_id=' + (that.team_id ? that.team_id : 0);
+
+								}).catch(function(error) {
+									//请求失败
+									console.log('error', error);
+
+								})
+                            }
+							if(that.gouwu == '拼团购买') {
+								window.location.href = "groupConfirmOrder.html" + '?team_id=' + (that.team_id ? that.team_id : 0) + '&id=' + goods_id+ '&found_id=' + (that.curFoundId ? that.curFoundId : 0)+ '&spcifi_id=' + that.spcifi_id+ '&number=' + that.amount+ '&source=detail'
+							}
+						
+						}
+					},
+					wechatLogin: function() {
+						var that = this;
+						// if (!that.code || !that.shop_id || !that.goods_id) {
+						// 	console.log('参数错误');
+						// 	return;
+						// }
+						axios({
+								method: 'post',
+								url: that.JumpUrl.loginUrl,
+								data: {
+									code: that.code,
+									shop_id: that.shop_id
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								that.token = resp.data.token;
+								localStorage.setItem('token', that.token);
+								window.history.pushState(null, null, 'http://sy.xfd365.com/mobile/goodsDetails.html?id=' + that.goods_id+'&v=1');
+								if (that.token) {
+									that.initPage()
+								}
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					initPage() {
+						this.getShopInfo();
+					},
+					wxSign: function() {
+						var that = this;
+						let back_url = ''
+						if (!that.shop_id || !that.goods_id) {
+							alert('参数错误');
+							return;
+						}
+						if(getQueryString('found')) {
+							back_url = 'http://sy.xfd365.com/mobile/groupGoodsDetails.html?id=' + that.goods_id + '&shop_id=' + that.shop_id+'&team_id=' + that.team_id+'&found_id=' + that.firstFoundId+'&v=1';
+						} else if(getQueryString('from') == 'share') {
+							back_url = 'http://sy.xfd365.com/mobile/groupGoodsDetails.html?id=' + that.goods_id + '&shop_id=' + that.shop_id+ '&team_id=' + that.team_id+ '&from=share&v=1';
+						} else {
+							back_url = 'http://sy.xfd365.com/mobile/groupGoodsDetails.html?id=' + that.goods_id + '&shop_id=' + that.shop_id+ '&team_id=' + that.team_id+'&v=1';
+						}
+						axios({
+								method: 'post',
+								url: 'http://sy.xfd365.com/wx/wechat/get_jump_url',
+								// url: 'https://api.xfd365.com/wx/wechat/get_jump_url',
+								data: {
+									back_url: back_url,
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								window.location.href = resp.data.url;
+							})
+					},
+					// 判断是否关注公众号
+					getFollow() {
+						let that = this
+						that.isFollowAccount = false
+						axios({
+							method: 'post',
+							url: that.JumpUrl.if_follow,
+							//data: form_data
+							data: {
+								token: that.token,
+							}
+						}).then(function (resp) {
+							if(resp.data.errno == 0){
+								if(resp.data.data == 0) {
+									that.isFollowAccount = true
+								}
+							}
+						}).catch(err =>{
+							console.log(err)
+						})
+					},
+					// 隐藏关注公众号弹窗
+					hideFollowPopup() {
+						this.isFollowAccount = false
+					}
+
+				},
+				created: function() {
+					// this.loading = 1;
+					//判断登录
+					let shop_id = getQueryString('shop_id');
+					var goodsName = getQueryString('goodsName')
+					this.goodsName = decodeURIComponent(goodsName)
+					this.goodId = getQueryString('id')
+
+					if (!shop_id) {
+						shop_id = localStorage.getItem('shop_id');
+					} else if (shop_id) {
+						this.shop_id = shop_id;
+						localStorage.setItem('shop_id', shop_id);
+					}
+
+					let code = getQueryString('code');
+					if (code) {
+						this.code = code;
+					}
+
+					var token = localStorage.getItem("token");
+					if (token) {
+						this.token = token;
+					}
+
+                    let goods_id = getQueryString('id');
+                    let team_id = getQueryString('team_id');
+                    this.goods_id = goods_id
+                    this.team_id = team_id
+					this.firstFoundId = getQueryString('found_id')
+					this.fromShare = getQueryString('from')
+					this.curFoundId = this.firstFoundId
+
+					if (this.code) {
+						this.wechatLogin()
+					} else {
+						if (token) {
+							this.checkToken()
+						} else {
+							this.wxSign()
+						}
+					}
+					if(this.fromShare == 'share') {
+						this.getFollow()
+					}
+				},
+				mounted() {
+					if (window.history && window.history.pushState) {
+						// 向历史记录中插入了当前页
+						history.pushState(null, null, document.URL);
+						window.addEventListener('popstate', this.cancel, false);
+					}
+				},
+				destroyed() {
+					window.removeEventListener('popstate', this.cancel, false);
+				},
+
+			})
+		</script>
+	</body>
+
+</html>

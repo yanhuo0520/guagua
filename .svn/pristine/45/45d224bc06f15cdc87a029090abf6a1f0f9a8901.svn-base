@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
+	<title>聚农优享</title>
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<!-- 	<link rel="stylesheet" type="text/css" href="./css/aui.css" /> -->
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="css/index.css">
+
+	<script src="./js/rem.js"></script>
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/vue-resource.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="./js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		/* 搜索框 */
+		.search-con { background: #fff; }
+		.search-con .van-search__action { color: #999; }
+		.search-con .van-field__control { caret-color: #2CCF75; }
+		/* 历史记录 */
+		.search-history { background: #fff; padding: 12px; }
+		.search-history .tit { font-size: 0.28rem; font-weight: bold; color: #000; padding-bottom: 12px; display: flex; align-items: center; justify-content: space-between;  }
+		.search-history .tit img { width: 15px; }
+		.search-history .item { display: inline-block; padding: 6px 12px; margin-right: 10px; margin-bottom: 12px; background: #f5f5f5; color: #333;font-size: 0.24rem; border-radius: 100px; }
+		/* 商品列表 */
+		.goods-con  {  background: transparent; position: relative; min-height: 4.5rem;padding-top: 10px; padding-bottom: 10px; }
+		.goods-con .van-grid-item .van-grid-item__content { border-radius: 8px; height: auto!important; justify-content: inherit;box-shadow:0 0 8px rgba(0,0,0,.1) }
+		.goods-con .van-grid-item__icon-wrapper { width: 100%; height: calc(50vw - 31px); }
+		.goods-con .no-sale { position: absolute; top: 50%; left: 50%;background: rgba(0,0,0,0.6); transform: translate(-50%,-50%);width: 1rem; height: 0.48rem; border-radius: 4px; color: #fff; font-size: 0.24rem; text-align: center; line-height: 0.48rem; }
+		.goods-con .goods-title { font-size: 0.26rem; font-weight: bold; width: calc(50vw - 31px); height: 20px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap; margin-top: 6px;}
+		.goods-con .goods-spec { width: 100%; font-size: 0.24rem;margin-top: 6px;color: #888;width: calc(50vw - 31px); height: 20px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap; }
+		.goods-con .price-con { width: calc(50vw - 31px); display: flex; align-items: center; justify-content: space-between; overflow: hidden; }
+		.goods-con .price-con .left-con { width: calc(50vw - 31px); overflow: hidden;  }
+		.goods-con .price-con .left-con .price-cell { width: 100%; display: flex; align-items: center;flex-direction: column; }
+		.goods-con .price-con .left-con .price-cell .price { font-size: 0.32rem; font-weight: bold; color: #fa193f;height: 30px;line-height: 30px; overflow: hidden; text-overflow: ellipsis; width: 100%;white-space: nowrap; }
+		.goods-con .price-con .left-con .price-cell .price .price-icon { font-size: 0.28rem; }
+		.goods-con .price-con .left-con .price-cell .price .unit { color: #888; font-size: 0.26rem; font-weight: 400; }
+		.goods-con .price-con .left-con .price-cell .price2 { font-size: 0.28rem; color: #888; text-decoration: line-through; overflow: hidden; text-overflow: ellipsis; width: 100%;white-space: nowrap;}
+		/* 无数据 */
+		.no-data { position: fixed; top: 90px; left: 0; right: 0; bottom: 0; }
+		.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+		.no-data .no-data-con img { width: 100%; }
+		.no-data .no-data-con .no-title{ font-size: 0.32rem; font-weight:600;  color:rgba(0,0,0,1);  }
+		.no-data .no-data-con .no-desc { font-size: 0.24rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<van-sticky>
+			<form action="/" class="search-con">
+				<van-search v-model="goods_name" shape="round" show-action placeholder="请输入搜索关键词" @search="goodslookup" @focus="isSearch = false" @blur="inputBlur"  @cancel="onCancel" ></van-search>
+			</form>
+		</van-sticky>
+		<div class="search-history" v-if="!isSearch">
+			<div class="tit" @click="clearHistory">
+				<span>历史记录</span>
+				<img v-if="historyWord.length > 0" src="./images/del.png" alt="">
+			</div>
+			<div class="item" v-for="item in historyWord" @click="clickItem(item)">{{item}}</div>
+		</div>
+		<van-list v-model="loading" :immediate-check="false" :finished="finished" @load="goodsList" :finished-text="goods_list.length > 0 ? '没有更多了' : ''" v-if="isSearch">
+			<van-grid :column-num="2" :gutter="10" class="goods-con">
+				<van-grid-item  v-for="(item, index) in goods_list">
+					<template #icon>
+						<van-image @click="details(item.goods_id, item.spcifi_name)" width="100%" height="100%" fit="contain" :style="item.storage <= 0 ? 'opacity:0.4': ''" :src="item.thumb ? item.thumb : 'http://sy.xfd365.com/public/uploads/exp.jpg'"></van-image>
+						<div class="no-sale" v-if="item.storage <= 0">已售罄</div>
+					</template>
+					<template #text>
+						<div class="goods-title" :style="item.storage <= 0 ? 'opacity:0.6': ''">{{item.goods_name}}</div>
+						<div class="goods-spec" :style="item.storage <= 0 ? 'opacity:0.6': ''">{{item.spcifi_name_new}}</div>
+						<div class="price-con">
+							<div class="left-con" :style="item.storage <= 0 ? 'opacity:0.6': ''">
+								<div class="price-cell" v-if="item.promotion_price && item.num <=(item.promotion_num-item.has_buy)">
+									<span class="price" v-if="item.unit"><span class="price-icon">￥</span>{{item.promotion_price}}<span class="unit">/{{item.unit}}</span></span>
+									<span class="price" v-else><span class="price-icon">￥</span>{{item.promotion_price}}</span>
+									<span class="price2" v-if="item.unit"><span class="price-icon"></span>{{item.promotion_price}}<span class="unit">/{{item.unit}}</span></span>
+									<span class="price2" v-else><span class="price-icon">￥</span>{{item.promotion_price}}</span>
+								</div>
+								<div class="price-cell" v-else>
+									<span  class="price" v-if="item.unit"><span class="price-icon">￥</span>{{item.retail_price}}<span class="unit">/{{item.unit}}</span></span>
+									<span class="price"	 v-else><span class="price-icon">￥</span>{{item.retail_price}}</span>
+								</div>
+							</div>
+							<div class="right-con">
+								<span v-if="item.storage <= 0" style="display: block; border: none;font-size: 0.24rem;width: 0.42rem;height: 0.42rem; background-image: url(images/icon/shouqin.png);background-size: 100% 100%;margin-bottom: 5px;"></span>
+								<div v-if="item.num == 0 && item.storage!=0 "
+									style="display: flex;justify-content: flex-end;margin-bottom: 5px;">
+									<img src="images/jiagou.png" alt="" style="width: 0.42rem;height: 0.42rem;"
+										@click="addG(index,item.goods_id,item.spcifi_id, item.promotion_num, item.has_buy, item.storage)">
+								</div>
+								
+							</div>
+						</div>
+					</template>
+				</van-grid-item>
+			</van-grid>
+		</van-list>
+		<van-tabbar v-model="tabbarIndex" active-color="#04C03A">
+			<van-tabbar-item  @click="indexJump()">
+				<template #icon>
+					<img src="images/icon/sy.png" width="18px" alt="">
+				</template>
+				首页
+			</van-tabbar-item>
+			<van-tabbar-item @click="speed()">
+				<template #icon>
+					<img src="images/icon/jsgm.png" width="18px" alt="">
+				</template>
+				分类
+			</van-tabbar-item>
+			<van-tabbar-item :badge="count > 0 ? count : null" @click="shoppingCart()">
+				<template #icon>
+					<img src="images/icon/gwc1.png" width="18px" alt="">
+				</template>
+				购物车
+			</van-tabbar-item>
+			<van-tabbar-item @click="personal()">
+				<template #icon>
+					<img src="images/icon/grzx.png" width="18px" alt="">
+				</template>
+				我的
+			</van-tabbar-item>
+		</van-tabbar>
+		<div class="no-data" v-if="isErr || (goods_list.length == 0 && goods_name && !loading && isSearch)">
+			<div class="no-data-con">
+				<img src="./images/no-search.png" alt="">
+				<p class="no-title">{{isErr ? '' : '实在找不到您要的东西'}}</p>
+				<p class="no-desc">{{isErr ? '' : '换个词再给我次机会吧T T'}}</p>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				tabbarIndex: -1,
+				goods_name: '',
+				goods_list: [],
+				JumpUrl: {
+					list: baseUrl('/wx/goods/goodsListsTest'),
+					index: baseUrl('/wx/cart/new_cart'),
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+				},
+				page: 0,
+				loading: false,
+				finished: false,
+				isErr: false,
+				isSearch: false,
+
+				historyWord: [],
+				token: localStorage.getItem('token'),
+				count: 0,
+				cartList: [], //获取购物车数据,
+			
+
+
+			},
+
+			methods: {
+				// 极速购买跳转
+				speed: function () {
+					window.location.href = "speedBuy.html?v=1";
+				},
+				//个人中心跳转
+				personal: function () {
+					window.location.href = "personal.html";
+				},
+				//购物车跳转
+				shoppingCart: function () {
+					window.location.href = "shoppingCart.html";
+				},
+
+				//商品详情
+				details(id) {
+					window.location.href = "goodsDetails.html" + '?' + 'id=' + id+'&v=1'
+				},
+				//首页
+				indexJump: function () {
+					window.location.href = "index.html?v=11";
+				},
+				// 取消搜索事件
+				onCancel() {
+					window.history.go(-1)
+				},
+				inputBlur() {
+					
+				},
+				// 搜索事件
+				goodslookup() {
+					this.page = 0;
+					this.goods_list = []
+					this.goodsList();
+					var that = this
+					let searchWord = localStorage.getItem('searchWord');
+
+					if (searchWord == null) {
+						localStorage.setItem('searchWord', that.goods_name);
+						if (that.goods_name != '') {
+							that.historyWord.push(that.goods_name)
+						}
+					} else {
+						let arr = localStorage.getItem('searchWord')
+						arr = arr.split(',')
+						if (arr.indexOf(that.goods_name) != -1) {
+							arr = arr
+						} else if (that.goods_name != '') {
+							arr.unshift(that.goods_name);
+						}
+						that.historyWord = arr
+						if (that.historyWord.length > 10) {
+							that.historyWord.pop()
+						}
+						localStorage.setItem('searchWord', that.historyWord)
+					}
+				},
+				// 点击历史记录搜素
+				clickItem(item) {
+					this.page = 0;
+					this.goods_name = item;
+					this.goods_list = []
+					this.goodsList();	
+				},
+				clearHistory() {
+					localStorage.removeItem('searchWord')
+					this.historyWord = []
+				},
+				//获取购物车内容
+				myCart() {
+					let that = this;
+					let form_data = new FormData();
+					// console.log(form_data);
+					makeFormData(that.addGoods, form_data);
+					axios({
+							method: 'post',
+							url: that.JumpUrl.index,
+							data: form_data
+						})
+						.then(function (resp) {
+							that.cartList = resp.data.data.cartList;
+							that.count = resp.data.data.cartTotal.checkedGoodsCount;
+							// console.log(that.cartList)
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+
+				//首页获取商品列表
+				goodsList() {
+					var that = this;
+					let page = this.page + 1
+					that.isErr = false 
+					that.isSearch = true
+					if (page !== 1) {
+						that.loading = true
+					}
+					axios({
+							method: 'post',
+							url: that.JumpUrl.list,
+							data: {
+								token: localStorage.getItem('token'),
+								page: page,
+								goods_name: that.goods_name,
+							}
+						})
+						.then(function(resp) {
+							that.isErr = false 
+							that.loading = false
+							if (resp.data.errno == 0) {
+								let resultData = resp.data.data.data;
+								if(resultData.length == 0) {
+									that.finished = true
+								}
+								if (resultData) {
+									that.goods_list = that.goods_list.concat(resultData)
+								}
+								that.page = page
+							} else {
+								that.loading = false
+								that.finished = true
+							}
+							
+						}).catch(function(error) {
+							that.isErr = true
+							that.loading = false
+							//请求失败
+							console.log('error', error);
+						})
+
+				},
+				setWx() {
+					let that = this;
+					let shopInfo = JSON.parse(localStorage.getItem('shopInfo'))
+					// let shopInfo = that.shopInfo;
+					let share_title = shopInfo.share_title ? shopInfo.share_title : shopInfo.shop_name
+					let share_introduction = shopInfo.share_introduction
+					let shop_id = shopInfo.id
+					let logo = shopInfo.share_pic ? shopInfo.share_pic : shopInfo.logo
+					let lock_user_id = localStorage.getItem('lock_user_id')
+					wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {
+				
+							}
+						})
+				
+						wx.updateTimelineShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {},
+						})
+					});
+				},
+				getJssdk: function () {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function (resp) {
+						let data = resp.data
+
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.share_url = sdkData.url;
+						that.setWx();
+
+					})
+				},
+
+
+
+
+			},
+			mounted: function () {
+				this.getJssdk();
+				this.myCart()
+				var searchWord = localStorage.getItem('searchWord')
+				if (searchWord) {
+					this.historyWord = searchWord.split(',')
+				}
+				this.$nextTick(function () {
+					this.$refs.searchInput.focus()
+				})
+			}
+		})
+	</script>
+</body>
+
+</html>

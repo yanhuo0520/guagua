@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
+	<title>微商超</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<!-- <script type="text/javascript" src="js/myscroll.js"></script> -->
+	<script type="text/javascript" src="js/publick.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+	<style>
+		[v-cloak] {
+		  display: none;
+		}
+		.header{
+			font-size: 0.8rem;
+			padding: 0.5rem;
+			color: #fff;
+			background-image:url(./images/headerBg.png);
+			background-repeat:no-repeat;
+			background-size:100% auto;
+			height: 10rem;
+
+		}
+
+		img {
+			vertical-align: top;
+		}
+
+		.clearfix::after {
+			content: "";
+			display: table;
+			clear: both;
+
+		}
+
+		ul li {
+			list-style: none;
+			/*position:absolute;*/
+		}
+		.aui-icon-my:before{
+			font-weight:900;
+		}
+		.el-divider--horizontal{
+			margin:10px 0px;
+		}
+		.aui-bar{
+			font-size:0.7rem;
+		}
+		.aui-margin-b-15{
+			margin-bottom:0!important;
+		}
+		.mgf{
+			padding: 10px;
+
+		}
+		.item-line{
+			height:30px;
+			line-height:30px;
+		}
+		body{
+			padding-bottom:50px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app" v-cloak>
+		<!-- <el-row class="clearfix header white">
+			<el-col :span="8"><div class="el-icon-arrow-left" @click="returnLast()"></div></el-col>
+			<el-col :span="8"><div style="text-align: center">订单详情</div></el-col>
+		</el-row> -->
+
+		<el-row class="clearfix header" style="font-size: 18px;">
+		
+				<el-col :span="8">
+					<i  style="font-size:26px" class="el-icon-arrow-left" @click="returnLast()"></i>
+				</el-col>
+				<el-col :span="8" style="text-align: center">
+					<h2>订单详情</h2>
+				</el-col>
+				<el-col  :span="8" style="position:relative;height: 100%">
+					<img src="images/icon/sy2.png" alt="" width="20"  style="margin-top:auto;margin-bottom:auto;top:0.5rem;right: 5px;position:absolute" @click="JumpIndex"> 
+				</el-col>
+			
+			
+		</el-row>
+		<!-- 付款状态 -->
+		<div style="text-align: center;position:absolute;top: 4rem;left: 42%;z-index:1001;" v-if="orderInfo.order_status == 1  ">
+			<img src="images/gr/bdfk.png" alt="" style="display:inline-block;">
+			<p style="color: #fff;margin-top: 0.2rem">等待付款</p>
+		</div>
+
+		<!-- 付款状态 -->
+		<div style="text-align: center;position:absolute;top: 4rem;left: 42%;z-index:1001;" v-if="orderInfo.order_status == 2  ">
+			<img src="images/gr/bdfh.png" alt="" style="display:inline-block;">
+			<p style="color: #fff;margin-top: 0.2rem">等待发货</p>
+		</div>
+
+		<!-- 付款状态 -->
+		<div style="text-align: center;position:absolute;top: 4rem;left: 42%;z-index:1001;" v-if="orderInfo.order_status == 5  ">
+			<img src="images/gr/bdfk.png" alt="" style="display:inline-block;">
+			<p style="color: #fff;margin-top: 0.2rem">已取消</p>
+		</div>
+
+		<!-- 付款状态 -->
+		<div style="text-align: center;position:absolute;top: 4rem;left: 42%;z-index:1001;" v-if="orderInfo.order_status == 7  ">
+			<img src="images/gr/bdsh.png" alt="" style="display:inline-block;">
+			<p style="color: #fff;margin-top: 0.2rem">等待收货</p>
+		</div>
+
+		<!-- 付款状态 -->
+		<div style="text-align: center;position:absolute;top: 4rem;left: 42%" v-if="orderInfo.order_status == 10 ? true :false ">
+			<img src="images/gr/bqb.png" alt="" style="display:inline-block;">
+			<p style="color: #fff;margin-top: 0.2rem">已完成</p>
+		</div>
+
+		<!-- 收货信息 -->
+		<div style="padding:10px 20px" class="white" v-if="addressInfo">
+			<div>
+				<i class="aui-iconfont aui-icon-my"></i>
+				<span>{{addressInfo.name}}</span>
+				<span>{{addressInfo.mobile}}</span>
+			</div>
+
+			<div>
+				<i class="aui-iconfont aui-icon-location"></i>
+				<span style="color: #999">{{addressInfo.full_region}}{{addressInfo.address}}</span>
+			</div>
+		</div>
+		<!-- 分割线 -->
+
+		<div style="margin-top: 10px;" class="white">
+			<div>
+				<div class="spacing clearfix">
+					<span class="fl">
+						<img src="images/speedBuy/sd.png" alt="" width="25">
+					</span>
+					<span style="padding-left: 10px" class="fl">
+						{{shop_name}}
+					</span>
+
+				</div>
+
+				<el-divider></el-divider>
+
+				<div class="mgf" >
+					<div class="clearfix" v-for="x in orderGoods" style="padding:10px 0;border-bottom:1px solid #eee;">
+						<div class="clearfix">
+							<div class="fl ">
+								<img :src="x.thumb" width="100" height="70" alt="">
+							</div>
+							<div class="fl" style="width: 58vw;margin-left: 10px" >
+								<p style="color: #000">{{x.goods_name}}</p>
+
+								<div class="clearfix" style="margin-top: 20px;">
+									<!-- 限时抢购 -->
+									<span class="fl" style="color: #f36065;line-height: 28px" v-if="x.pro_price">￥{{x.pro_price}}</span>
+									<span class="fl" style="color: gray;line-height: 28px;text-decoration: line-through;font-size: 13px;padding-left: 5px;" v-if="x.pro_price">￥{{x.retail_price}}</span>
+									<!-- 非限时抢购 -->
+									<span class="fl" style="color: #f36065;line-height: 28px" v-if="!x.pro_price">￥{{x.retail_price}}</span>
+									
+									<p style="color: #999" class="fr">X{{x.goods_num}}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 分割线 -->
+		<!-- <div style="background-color: #ccc;height: 10px;margin: 10px 0px"></div> -->
+
+		<!-- 费用 -->
+		<div  class="white divide pd">
+			<div class="clearfix item-line">
+				<span class="fl">
+					商品小计
+				</span>
+				<span class="fr">
+					￥{{orderInfo.total_price}}
+				</span>
+			</div>
+
+			<div class="clearfix item-line">
+				<span class="fl">
+					配送费
+				</span>
+				<span class="fr">
+					￥{{post_fee}}
+				</span>
+			</div>
+
+			<div class="clearfix item-line">
+				<span class="fl">
+					实付款
+				</span>
+				<span class="fr" style="color: #f36468">
+					￥{{orderInfo.real_price}}
+				</span>
+			</div>
+
+
+		</div>
+		<!-- 分割线 -->
+
+		<!-- 订单 -->
+		<div  class="white divide pd">
+			<div class="clearfix item-line">
+				<span class="fl">
+					订单编号
+				</span>
+				<span class="fr" >
+					{{orderInfo.order_id}}
+				</span>
+			</div>
+
+			<div class="clearfix item-line">
+				<span class="fl">
+					创建日期
+				</span>
+				<span class="fr">
+					{{orderInfo.add_time}}
+				</span>
+			</div>
+		</div>
+
+		<!-- 分割线 -->
+
+		<!-- 底部 -->
+		<footer class="aui-bar aui-bar-tab aui-margin-t-15 aui-margin-b-15 divide white" v-if="flag">
+			<div class="aui-bar-tab-item" tapmode style="width: 3rem;">
+
+			</div>
+			<div class="aui-bar-tab-item" tapmode style="width: 3rem;">
+
+			</div>
+			<div class="aui-bar-tab-item" tapmode style="width: 3rem;">
+
+			</div>
+
+			<div class="aui-bar-tab-item aui-bg-warning aui-text-white" tapmode style="width: auto;" @click="cancelOrder()">取消订单</div>
+			<div class="aui-bar-tab-item aui-bg-danger aui-text-white" tapmode style="width: auto;" @click="confirmOrder()">立即支付</div>
+		</footer>
+		
+		<div class="message-page-mask" v-show="message.show==1">
+			<div class="message-page-mask-content">
+				<div class="el-loading-spinner">
+					<i v-show="message.type=='success' " class="el-icon-success"></i>
+					<i v-show="message.type=='error' " class="el-icon-error"></i>
+		
+					<p class="el-loading-text">{{message.text}}</p>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script>
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				flag:false,
+				JumpUrl:{
+					detail:'http://sy.xfd365.com/wx/order/detail',
+					cancel:'http://sy.xfd365.com/wx/order/cancel',
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+
+				},
+				order:{
+					order_id:'',
+					token:localStorage.getItem("token"),
+				},
+				addressInfo:{},				//地址信息
+				orderGoods:[],						//商品信息
+				orderInfo:{},					//价格
+				shop_name:'',					//店铺名称
+				post_fee:0,
+				token:localStorage.getItem('token'),
+				message: {
+					show: 0,
+					type: 'success',
+					text: '成功',
+				},
+			},
+			methods: {
+				//跳转首页
+				JumpIndex(){
+					window.location.href = "index.html";
+				},
+				//返回上一页
+				returnLast(){
+					// window.history.go(-1);
+					let href = window.location.href;
+					if(href.indexOf("status") > -1){
+						window.location.href = "orderMy.html?status=" +getQueryString('status')
+					}else{
+						window.location.href = "orderMy.html";
+					}	
+					
+				},
+				 //立即支付
+			    confirmOrder(){
+					var status = localStorage.getItem('status');
+					if(status){
+						window.location.href = "pay.html" +'?order_id='+ this.orderInfo.order_id + '&orderDetails=1&status=' + status;
+					}else{
+						window.location.href = "pay.html" +'?order_id='+ this.orderInfo.order_id + '&orderDetails=1';
+					}
+			    	
+			    },
+			    //取消订单
+			    cancelOrder(){
+			    	var that = this;
+			    	axios({
+			    		method: 'post',
+			    		url: that.JumpUrl.cancel,
+			    		data: that.order
+			    	})
+			    	.then(function (resp) {
+						// console.log(resp)
+						if(resp.data.errno == 0){
+							that.message = {
+								show: 1,
+								type: 'success',
+								text: '取消成功',
+							},
+							setTimeout(function(){
+								that.message.show=0;
+							}, 2000)
+							setTimeout(function(){
+								var status = localStorage.getItem('status')
+								if(status){
+									window.location.href = "orderMy.html?status=" + status
+								}else{
+									window.location.href = "orderMy.html";
+								}
+								// window.history.go(-1);
+							}, 1000)
+							
+						}
+			    		
+
+			    	}).catch(function (error) {
+						//请求失败
+						console.log('error', error);
+
+					})
+			    },
+				//订单详情
+				detail(){
+					var that = this;
+			    	axios({
+			    		method: 'post',
+			    		url: that.JumpUrl.detail,
+			    		data: that.order
+			    	})
+			    	.then(function (resp) {
+			    		that.addressInfo = resp.data.data.addressInfo;
+			    		that.orderGoods = resp.data.data.orderGoods;
+			    		that.orderInfo = resp.data.data.orderInfo;
+			    		that.shop_name = resp.data.data.shop_name;
+			    		that.post_fee = resp.data.data.post_fee;
+			    		if (that.orderInfo.order_status == 1) {
+			    			that.flag = true;
+			    		}
+
+			    	}).catch(function (error) {
+						//请求失败
+						console.log('error', error);
+
+					})
+				},
+				
+				setWx() {
+					let that = this;
+					let shopInfo=JSON.parse(localStorage.getItem('shopInfo'));
+					// console.log(shopInfo)
+					let shop_name = shopInfo.shop_name
+					let shop_id = shopInfo.id
+					let logo = shopInfo.logo
+					wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+						wx.onMenuShareTimeline({
+							title: shop_name, // 分享标题
+							desc: '村里面的超市', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function() {
+				
+							}
+						})
+				
+						wx.onMenuShareAppMessage({
+							title: shop_name, // 分享标题
+							desc: '村里面的超市', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function() {
+							}
+						})
+				
+				
+					});
+				},
+				getJssdk: function() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function(resp) {
+						let data = resp.data
+					
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'onMenuShareTimeline',
+								'onMenuShareAppMessage',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.share_url = sdkData.url;
+						that.setWx();
+				
+					})
+				},
+
+
+
+			},
+			created:function(){
+				this.getJssdk();
+				var url =location.href;
+				// this.order.order_id = url.split("?")[1];
+				this.order.order_id = getQueryString('order_id');
+				this.detail();
+
+			},
+		})
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
+	<title>微商超</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<!-- <script type="text/javascript" src="js/myscroll.js"></script> -->
+	<script type="text/javascript" src="js/publick.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+		  display: none;
+		}		
+		html,body { font-size: 16px; height: 100%;}
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+        #app { height: 100%; display: flex; flex-direction: column; }
+		/* 导航栏 */
+		.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+		.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+		.van-nav-bar .van-nav-bar__right img { display: block; }
+		.van-nav-bar .van-nav-bar__title { font-weight: bold; }
+        /* 详情 */
+        .detail-con { flex: 1; padding: 0.75rem; background: linear-gradient(#fd534a, #a70e08);}
+        .detail-con .detail-info { min-height: 100%; background: #fff; }
+        .detail-con .detail-info .img-con { height: 50px;position: relative; padding: 10px;margin-bottom: 0.75rem; }
+        .detail-con .detail-info .img-con img { position: absolute; top: 50%; transform: translateY(-50%); height: 30px; }
+        .detail-con .detail-info .img-con .left { left: 10px; }
+        .detail-con .detail-info .img-con .right { right: 10px; }
+        .detail-con .detail-desc { padding: 0 20px; margin-bottom: 0.75rem; }
+        .detail-con .detail-desc .mark { background: url('img/mark_bg.png') no-repeat; background-size: 100% 100%; width: 6.5rem; height: 2.1rem; line-height: 2.1rem; text-align: center; font-size: 1rem; font-weight: bold; color: #fff; margin-bottom: 0.75rem; }
+        .detail-con .detail-desc p { font-size: 1rem; color: #333; padding-bottom: 0.75rem; }
+        /* loading */
+        .full-loading { position: fixed; left: 0; top: 46px; right: 0; bottom: 0; background-color: #fff; z-index: 9999; }
+        .full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+	</style>
+</head>
+<body>
+	<div id="app" v-cloak>
+		<van-nav-bar :border="false" z-index="9999" title="优惠券详情" left-arrow @click-left="returnLast()" @click-right="JumpIndex" >
+			<template #right>
+				<img src="images/icon/shouye.png" alt="" width="20"  @click="JumpIndex">
+			</template>
+        </van-nav-bar>
+        <div class="detail-con">
+            <div class="detail-info">
+                <div class="img-con">
+                    <img class="left" src="img/coupon_detail_left.png"  alt="">
+                    <img class="right"  src="img/coupon_detail_right.png"alt="">
+                </div>
+                <div class="detail-desc">
+                    <div class="mark">活动对象</div>
+                    <p>{{couponDetail.get_type_str}}</p>
+                </div>
+                <div class="detail-desc">
+                    <div class="mark">限领次数</div>
+                    <p>{{couponDetail.get_limit_str}}</p>
+                </div>
+                <div class="detail-desc">
+                    <div class="mark">用券时间</div>
+                    <p>{{couponDetail.use_coupon_age}}</p>
+                </div>
+                <div class="detail-desc">
+                    <div class="mark">使用规则</div>
+					<p>{{couponDetail.goods_type_str}}</p>
+					<p>{{couponDetail.is_overlying == 1 ? '可否叠加:可叠加使用' : '可否叠加:不可叠加使用'}}</p>
+					<p v-if="couponDetail.goods_type == 1">指定商品券仅限单个商品使用</p>
+                    <p>{{couponDetail.desc}}</p>
+                </div>
+            </div>
+        </div>
+		<div class="full-loading" v-if="isFullLoading">
+            <van-loading  color="#1989fa" /> 
+        </div>
+	</div>
+
+	<script>
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+                isFullLoading:true,
+				JumpUrl:{
+					detail:'http://sy.xfd365.com/wx/coupon/coupon_detail',
+					// detail:'http://172.168.0.50/wx/coupon/coupon_detail',
+				},
+				couponDetail: '',
+				token:localStorage.getItem('token'),
+			},
+			methods: {
+				//跳转首页
+				JumpIndex(){
+					window.location.href = "index.html";
+				},
+				//返回上一页
+				returnLast(){
+					// window.history.go(-1);
+					window.history.go(-1)
+					
+				},
+				//订单详情
+				detail(){
+					var that = this;
+                    that.isFullLoading = true;
+			    	axios({
+			    		method: 'post',
+			    		url: that.JumpUrl.detail,
+			    		data: { coupon_id: that.coupon_id, token: that.token }			    	})
+			    	.then(function (resp) {
+                        that.isFullLoading = false;
+                        if(resp.data.code == 1) {
+                            that.couponDetail = resp.data.data
+                        } else {
+                            that.$toast.fail(resp.data.msg ? resp.data.msg : '获取失败!')
+                        }   
+
+			    	}).catch(function (error) {
+						//请求失败
+                        that.isFullLoading = false;
+                        that.$toast.fail('服务异常,请稍后重试!')
+						console.log('error', error);
+
+					})
+				},
+
+			},
+			created:function(){
+				this.coupon_id = getQueryString('id');
+				this.detail();
+			},
+		})
+	</script>
+</body>
+
+</html>

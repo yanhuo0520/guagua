@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>聚农优享</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<!-- <script src="js/vue.js" type="text/javascript" charset="utf-8"></script> -->
+		<script src="js/axios.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5/lib/index.css">
+
+		<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant.min.js"></script>
+		<link rel="stylesheet" href="css/public.css">
+		<style>
+			body,html,#app{
+				width: 100%;
+				height: 100%;
+			}
+			input,button{
+				border: none;
+			}
+			
+			#app{
+				position: relative;
+				background: linear-gradient(to right,#E8D09C, #E2BE76);
+			}
+			#app>img:first-of-type{
+				width: 100%;
+				min-height: 100%;
+				display: block;
+				position: absolute;
+				top: -44px;
+			}
+			/* #app>img:nth-of-type(2){
+				width: 100%;
+				display: block;
+				position: absolute;
+				top: 210px;
+			}
+			#app>img:nth-of-type(3){
+				width: 100%;
+				display: block;
+				position: absolute;
+				top: 540px;
+			} */
+			.main{
+				background: url(img/vip.png) no-repeat;
+				width: 100%;
+				height: 100%;
+				background-size: 100% 100%;
+			}
+			p.title{
+				color: #fff;
+				text-align: center;
+				height: 44px;
+				line-height: 44px;
+				position: absolute;
+				top: 0;
+				z-index: 2;
+				left: 50%;
+				margin-left: -80px;
+			}
+			.inputs{
+				width: 75%;
+				position: absolute;
+				left: 12%;
+				top: 55%;
+			}
+			/* @media all and (min-width: 768px) and (max-width: 1024px) {
+			            .inputs{
+							width: 75%;
+							position: absolute;
+							left: 12%;
+							top: 48%;
+			            }
+			        }
+			        @media screen and (min-width: 320px)and (max-width: 750px){
+			            .inputs{
+							width: 75%;
+							position: absolute;
+							left: 12%;
+							top: 52%;
+			            }
+			        } */
+
+			.inputs input,.inputs button{
+				display: block;
+				width: 100%;
+				text-align: center;
+				height: 48px;
+			}
+			.inputs input{
+				background: #f5f5f5;
+				border-radius: 4px;
+				margin-bottom: 12px;
+			}
+			.inputs button{
+				background: linear-gradient(#34333a, #28243f);
+				border-radius: 4px;
+				color: #fff;
+				margin-top: 16px;
+			}
+			
+			.van-popup{
+				width: 100%;
+				background: transparent;
+			}
+			.van-popup div{
+				width: 100%;
+				height: 50vh;
+				background: url(img/tankuang.png) no-repeat;
+				background-size: 100% 50vh;
+				text-align: center;
+			}
+			.van-popup div p:first-of-type{
+				padding-top: 100px;
+			}
+			.van-popup div p:nth-of-type(2){
+				color: #888888;
+				margin-top: 22px;
+				margin-bottom: 33px;
+			}
+			.van-popup div button{
+				width: 204px;
+				height: 36px;
+				background: linear-gradient(#34333a, #28243f);
+				border-radius: 4px;
+				color: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div class="main">
+				<p class="title">绑定益农联名卡领取会员</p>
+				<!-- <img src="img/topBg.png">
+				<img src="img/middleBg.png"> -->
+				<!-- <img src="img/vip.png"> -->
+
+				<div class="inputs">
+					<input type="text" v-model="name" :placeholder="msgName" @focus="delName" />
+					<input type="text" v-model="mobile" :placeholder="msgMobile" @focus="delMobile" maxlength="11" />
+					<input type="text" v-model="card_no" :placeholder="msgCard" @focus="delCard" />
+					<button @click="submit">提交</button>
+				</div>
+				<!-- <img src="img/bottomBg.png"> -->
+
+			</div>
+
+			<van-popup v-model="show" :close-on-click-overlay="false">
+				<div>
+					<p>{{msg}}</p>
+					<p>会员权益将在第一时间通知您!</p>
+					<button @click="show = false">知道了</button>
+				</div>
+			</van-popup>
+		</div>
+
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					baseUrl: 'http://sy.xfd365.com',
+					name: '',
+					mobile: '',
+					card_no: '',
+					show: false,
+					msg: '恭喜您成为益农会员!',
+					msgName: '请输入姓名',
+					msgMobile: '请输入手机号',
+					msgCard: '请输入益农联名卡卡号',
+
+					docmHeight: '0', //默认屏幕高度
+					showHeight: '0', //实时屏幕高度
+					hidshowFooter: true, //显示或者隐藏footer,
+					isResize: false, //默认屏幕高度是否已获取
+					curShopId: '',
+				},
+				watch: {
+					showHeight: function() {
+						if (this.docmHeight >= this.showHeight) {
+							this.hidshowFooter = false
+						} else {
+							this.hidshowFooter = true
+						}
+					}
+				},
+				mounted() {
+					let code = this.getUrlParam('code')
+					if (code) {
+						this.weChatLogin(code)
+					} else {
+						this.weSign()
+					}
+					this.getShopUser()
+					axios({
+						method: 'post',
+						url: this.baseUrl + '/wx/shop/user_info',
+						data: {
+							token: localStorage.getItem('token')
+						}
+					}).then(res => {
+						if (res.data.data.is_yn == 1) {
+							this.show = true;
+							this.msg = '您已经成为益农联盟的一份子了'
+							window.location.href = "index.html?shopId="+this.curShopId+'&v=11';
+						}
+					})
+
+					// window.onresize监听页面高度的变化
+					window.onresize = () => {
+						return (() => {
+							if (!this.isResize) {
+								//默认屏幕高度
+								this.docmHeight = document.documentElement.clientHeight
+								this.isResize = true
+							}
+							//实时屏幕高度
+							this.showHeight = document.body.clientHeight
+
+						})()
+					}
+				},
+				methods: {
+					// 判断是否为商家
+					getShopUser() {
+						let that = this;
+						that.curShopId = '';
+						axios({
+							method: 'post',
+							url: that.baseUrl + '/wx/coupon/if_shop_owner',
+							data: { token: localStorage.getItem("token") }
+						})
+						.then(function (resp) { //返回数据
+							// resp.data = JSON.parse(resp.data)
+							if(resp.data.code == 1) {
+								that.curShopId = Number(resp.data.data)
+							}
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+					},
+					getUrlParam(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if (r != null) return unescape(r[2]);
+						return null;
+					},
+					weChatLogin(code) {
+						axios({
+								method: 'post',
+								url: this.baseUrl + '/wx/wechat/login',
+								data: {
+									code: code,
+									shop_id: 1,
+								}
+							})
+							.then(function(resp) { //返回数据
+								localStorage.setItem('token', resp.data.token);
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					weSign() {
+						let back_url = 'http://sy.xfd365.com/mobile/vipMember.html'
+						axios({
+								method: 'post',
+								url: this.baseUrl + '/wx/wechat/get_jump_url',
+								data: {
+									back_url: encodeURIComponent(back_url),
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								window.location.href = decodeURIComponent(resp.data.url);
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+							})
+					},
+
+					submit() {
+						let that = this;
+						let reg = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/;
+						let reg1 = /^([1-9]{1})(\d{15}|\d{18})$/
+						if (this.name == '') {
+							this.$toast('请输入姓名')
+						} else if (this.mobile == '') {
+							this.$toast('请输入手机号')
+						} else if (!reg.test(this.mobile)) {
+							this.$toast('请输入正确手机号')
+						} else if (this.card_no == '') {
+							this.$toast('请输入益农联名卡卡号')
+						} else if (!reg1.test(this.card_no)) {
+							this.$toast('请输入正确益农联名卡卡号')
+						} else {
+							axios({
+								method: 'post',
+								url: this.baseUrl + '/wx/user/card_add',
+								data: {
+									name: this.name,
+									mobile: this.mobile,
+									card_no: this.card_no,
+									token: localStorage.getItem('token')
+								}
+							}).then(function(res) {
+								that.show = true;
+								if (res.data.errno == 0) {
+									that.msg = '恭喜您成为益农会员！'
+								} else {
+									// this.$toast(res.data.errmsg)
+									that.msg = res.data.errmsg
+								}
+							}).catch(function(error) {
+								console.log('error', error)
+							})
+						}
+					},
+
+					delName() {
+						this.msgName = '';
+						this.msgMobile = '请输入手机号';
+						this.msgCard = '请输入益农联名卡卡号'
+					},
+					delMobile() {
+						this.msgName = '请输入姓名';
+						this.msgMobile = '';
+						this.msgCard = '请输入益农联名卡卡号'
+					},
+					delCard() {
+						this.msgName = '请输入姓名';
+						this.msgMobile = '请输入手机号';
+						this.msgCard = ''
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

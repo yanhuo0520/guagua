@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<title>聚农优享</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+		<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+		<!-- <script src="./js/rem.js"></script> -->
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js?v=3"></script>
+		<script type="text/javascript" src="js/api.js"></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+		<script type="text/javascript" src="js/aui-actionsheet.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+	</head>
+	<body>
+	</body>
+</html>

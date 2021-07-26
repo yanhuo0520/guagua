@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<script type="text/javascript" src="js/aui-actionsheet.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		.van-nav-bar .van-icon{
+			color: #333;
+		}
+		.van-nav-bar .van-nav-bar__text{
+			color: #00BE34;
+		}
+		
+		.list{
+			background: #fff;
+			border-radius: 10px;
+			width: 90%;
+			margin: 10px auto;
+			padding: 10px;
+		}
+		.list p{
+			font-size: 14px;
+			margin: 5px 0;
+		}
+		.list img{
+			width: 100px;
+			height: 100px;
+			object-fit: cover;
+		}
+		
+		.van-list__finished-text{
+			margin-bottom: 50px;
+		}
+	</style> 
+
+</head>
+
+<body>
+	<div id="app" class="ucenter" v-cloak>
+		<van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="业务" @click-right="clickRight">
+			<template #right>
+				<span v-if="is_add==1" class="van-nav-bar__text">添加</span>
+			</template>
+		</van-nav-bar>
+		<van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+			<div class="list" v-for="(item,index) in list">
+				<h2>{{item.title}}</h2>
+				<p>{{item.brief}}</p>
+				<img :src="item.pic_url" alt="">
+				<video width="320" height="240" :src="item.video_url" controls></video>
+			</div>
+		</van-list>
+		<van-tabbar v-model="tabbarIndex" active-color="#04C03A">
+			<van-tabbar-item  @click="indexJump()">
+				<template #icon>
+					<img src="images/icon/sy.png" width="18px" alt="">
+				</template>
+				首页
+			</van-tabbar-item>
+			<van-tabbar-item @click="speed()">
+				<template #icon>
+					<img src="images/icon/jsgm.png" width="18px" alt="">
+				</template>
+				分类
+			</van-tabbar-item>
+			<van-tabbar-item @click="service()">
+				<template #icon>
+					<img src="images/icon/service1.png" width="18px" alt="">
+				</template>
+				业务
+			</van-tabbar-item>
+			<van-tabbar-item :badge="count > 0 ? count : null" @click="shoppingCart()">
+				<template #icon>
+					<img src="images/icon/gwc1.png" width="18px" alt="">
+				</template>
+				购物车
+			</van-tabbar-item>
+			<van-tabbar-item @click="personal()">
+				<template #icon>
+					<img src="images/icon/grzx.png" width="18px" alt="">
+				</template>
+				我的
+			</van-tabbar-item>
+		</van-tabbar>
+
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				tabbarIndex: 2,
+				count:0,
+				token:localStorage.getItem('token'),
+				jumpUrl:{
+					list: baseUrl('/wx/Business/serviceLists'),//增值业务列表
+					user_info: baseUrl('/wx/shop/user_info'),
+					jssdkUrl: baseUrl('/wx/jssdk/getSignPackage'),
+				},
+				list:[],
+				page: 1,
+				loading: false,
+				finished: false,
+				is_add:0
+			},
+			mounted(){
+				axios.post(this.jumpUrl.user_info,{
+					token: this.token
+				}).then(res=>{
+					if(res.data.errno == 0) {
+						this.is_add = res.data.data.is_add
+					}
+				}).catch(function (error) {
+					//请求失败
+					console.log('error', error);
+			
+				})
+				this.getJssdk()
+				
+			},
+			methods: {
+				setWx() {
+					let that = this;
+					let shopInfo = JSON.parse(localStorage.getItem('shopInfo'))
+					// let shopInfo = that.shopInfo;
+					let share_title = shopInfo.share_title ? shopInfo.share_title : shopInfo.shop_name
+					let share_introduction = shopInfo.share_introduction
+					let shop_id = shopInfo.id
+					let logo = shopInfo.share_pic ? shopInfo.share_pic : shopInfo.logo
+					let lock_user_id = localStorage.getItem('lock_user_id')
+					wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {
+				
+							}
+						})
+				
+						wx.updateTimelineShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {},
+						})
+					});
+				},
+				getJssdk: function () {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.jumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: encodeURIComponent(location.href.split('#')[0])
+						}
+					}).then(function (resp) {
+						let data = resp.data
+				
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.setWx();
+				
+					})
+				},
+				// 首页跳转
+				indexJump: function () {
+					window.location.href = "index.html?v=11";
+				},
+				// 极速购买跳转
+				speed: function () {
+					window.location.href = "speedBuy.html?v=1";
+				},
+				// 购物车跳转
+				shoppingCart: function () {
+					window.location.href = "shoppingCart.html";
+				},
+				//个人中心跳转
+				personal: function () {
+					window.location.href = "personal.html";
+				},
+				
+				
+				clickRight(){
+					window.location.href = "addService.html"
+				},
+				
+				onLoad(){
+					axios.post(this.jumpUrl.list,{
+						token: this.token,
+						page:this.page
+					}).then(res=>{
+						if(res.data.errno == 0){
+							if (res.data.data.data.length != 0) {
+							  var data = res.data.data.data;
+							  if (res.data.data.total == 1) {
+								this.list = data;
+							  } else {
+								this.list = this.list.concat(data);
+							  }
+							  if (this.page < res.data.data.total) {
+								this.page++;
+							  }
+							  this.loading = false;
+							} else {
+							  // this.$toast("暂无记录");
+							  // this.list = [];
+							  this.loading = false;
+							  this.finished = true;
+							}
+							// 数据全部加载完成
+							if (this.list.length == res.data.data.count) {
+							  this.finished = true;
+							}
+						}else{
+							this.$toast(res.data.errmsg)
+							this.loading = false
+							this.finished = true
+						}
+					})
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>

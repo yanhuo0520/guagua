@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+    <script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=smZPCVTuah1zIemCZPgjrNvOlx074Ca0"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		html,body { font-size: 16px; height: 100%; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		#app { height: 100%; background: #f5f5f5; display: flex; flex-direction: column;  }
+		div { box-sizing: border-box; }
+        /* 导航栏 */
+        .van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+        .van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+        .van-nav-bar .van-nav-bar__right img { display: block; }
+        .van-nav-bar .van-nav-bar__title { font-weight: bold; }
+        /* 百度地图 */
+        .map-con { height: 40%; }
+        .map-con .map { height: 100%; }
+        /* 地址列表 */
+        .address-list { flex: 1; display: flex; align-items: center; overflow-y: auto; position: relative; }
+        .address-list .van-radio-group { width: 100%; height: 100%; }
+        /* loading */ 
+		.full-loading { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.1); z-index: 9999; }
+		.full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+        /* 无数据 */
+		.no-data { position: absolute; top: 0; left: 0; bottom: 0; right: 0; z-index: 99;}
+		.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+		.no-data .no-data-con img { width: 100%; }
+		.no-data .no-data-con .no-title{ font-size: 1rem; font-weight:600;  color:rgba(0,0,0,1);  }
+		.no-data .no-data-con .no-desc { font-size: 0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+		.no-data .no-data-con .van-button { font-size: 0.75rem; font-weight:400; color:rgba(1,195,39,1); }
+	</style> 
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+        <van-nav-bar :border="false"  title="地址选择" left-arrow @click-left="toRouter()" ></van-nav-bar>	
+        <!-- form仅为在ios上显示搜索按钮 -->
+        <form action=""> 
+            <van-search v-model="searchVal" shape="round" background="#4fc08d" placeholder="请输入搜索关键词" @search="onSearch" ></van-search>
+        </form>
+        <div class="map-con">
+            <div class="map" id="l-map"></div>
+        </div>
+        <div class="address-list">
+            <van-radio-group v-model="curAddrIndex" v-if="lists && lists.length > 0">
+                <van-cell-group>
+                    <van-cell :title="item.title" :label="item.address" clickable @click="selectItem(item,index)" v-for="(item,index) in lists">
+                        <template #right-icon>
+                            <van-radio :name="index" checked-color="#0abd72"/>
+                        </template>
+                    </van-cell>
+                </van-cell-group>
+            </van-radio-group>
+            <div class="full-loading" v-if="isFullLoading">
+                <van-loading  color="#1989fa" /> 
+            </div>
+            <div class="no-data"  v-if="(lists.length === 0 || isErr) && !isFullLoading">
+                <div class="no-data-con">
+                    <img :src="isErr ? errImg : noDataImg" alt="">
+                    <p class="no-title">{{ isErr ? '网络竟然崩溃了' : searchVal ? '暂未搜索到数据' : '请先输入关键词搜索' }}</p>
+                    <p class="no-desc">{{ isErr ? '别紧张,试试看刷新页面' : '换个词再给我次机会吧T T' }}</p>
+                </div>
+            </div>
+            
+        </div>
+	</div>
+
+	<script>
+		
+		var app = new Vue({
+			el: '#app',
+			data: {
+                searchVal: '',
+                lng: '', // 地图初始化经度 
+                lat: '', // 地图初始化纬度 
+                map:null,
+                lists: [],
+                noDataImg: './images/icon/no-goods.png',
+				errImg: './images/err.png',
+                curAddrIndex: 0,
+                isFullLoading: false,
+                isErr: false,
+                searchNum: 0
+               
+			},
+			mounted() {
+                let lng = getQueryString('lng')
+                let lat = getQueryString('lat')
+                this.lng = lng
+                this.lat = lat
+                setTimeout(() =>{
+                    this.initMap()
+                })
+			},
+			methods: {	
+                toRouter() {
+                    localStorage.setItem('locationName',this.lists[0].title)
+                    window.location.href = 'getShopCoupon.html?lng='+this.lng+'&lat='+this.lat+'&source=map'
+                },
+                // 初始化百度地图
+                initMap() {
+                    let that = this;
+                    let map = new BMap.Map("l-map");
+                    let point = new BMap.Point(this.lng,this.lat);
+                    let marker = new BMap.Marker(point);// 创建标注
+	                map.centerAndZoom(point,12);     
+                    map.addOverlay(marker);             // 将标注添加到地图中
+                    marker.disableDragging();           // 不可拖拽
+                    // map.addEventListener("click", function(e){        
+                    //     let pt = e.point;
+                            
+                    // });
+                    let geoc = new BMap.Geocoder();    
+					geoc.getLocation(point, function(res){
+                        let tmpObj = {
+                            title: localStorage.getItem('search'),
+                            address:  res.address,
+                            point: {
+                                lng: that.lng,
+                                lat: that.lat,
+                            }
+                        }
+                        let tmpData = []
+                        tmpData.push(tmpObj)
+						that.lists = tmpData
+					});    
+                    that.map = map
+
+                },
+                // 搜索
+                onSearch(val) {
+                    let that = this;
+                    let map = that.map;
+                    that.curAddrIndex = -1;
+                    map.clearOverlays();
+                    if(val == '') {
+                        that.lists = []
+                        setTimeout(() =>{
+                            that.isFullLoading = false
+                        },500)
+                        return
+                    }
+                    that.isFullLoading = true;
+                    that.isErr = false;
+                    let local = new BMap.LocalSearch(map, {
+                        renderOptions:{
+                            map: map,
+                            autoViewport: false //自动结果标注
+                        },
+                        onMarkersSet: function(pois) {
+                            that.lists = pois;
+                        }
+                    });
+                    local.search(val);
+                    setTimeout(() =>{
+                        that.isFullLoading = false
+                    },500)
+                   
+                },
+                // 选择地点
+                selectItem(item,index) {
+                    localStorage.setItem('locationName',item.title)
+                    window.location.href = 'getShopCoupon.html?lng='+item.point.lng+'&lat='+item.point.lat+'&source=map'
+                },
+			},
+		
+		})
+	</script>
+</body>
+
+</html>

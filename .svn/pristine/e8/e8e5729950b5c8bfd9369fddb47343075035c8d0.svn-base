@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		html,body { font-size: 16px; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		.ucenter { min-height: 100%; background: #f5f5f5; }
+		/* top */
+		.top { display: flex; background: #04d368; width: 100%; height: 200px; background-size: 100% 100%; position: relative; }
+		.top h1 { width: 100%; font-size: 1.12rem; font-weight: bold; color: rgba(255,255,255,1); line-height: 46px; text-align: center; }
+		.top .avatar { display: flex; justify-content: space-between; align-items: center; width: 100%; height: 60px; position: absolute; top: 45%; transform: translateY(-50%); padding: 0 12px; }
+		.top .avatar .avatar-img { width: 3.75rem; height: 3.75rem; border-radius: 50%; }
+		.top .avatar .username { padding-left: 20px; }
+		.top .avatar .username h1 { padding: 0; }
+		.top .btn-con { position: relative; width: 86.5px; height: 33px; border-radius: 4px; overflow: hidden; }
+		.top .btn-con .van-button { width: 100%; height: 100%; opacity: 0.7; }
+		.top .btn-con span { width: 100%; height: 100%; position: absolute; top: 0; left: 0; font-size: 1rem; font-weight: 500; color: rgba(255,255,255,1); text-align: center; line-height: 33px; }
+		.top .arrow-icon { flex: 1; text-align: right; }
+		.top .arrow-icon .van-icon { color: #fff; font-size: 1rem; }
+		.top .role-con { position: absolute; bottom: 0; width: calc(100% - 24px); left: 12px; height: 50px; border-radius: 8px 8px 0px 0px; background: url('./images/open_card.png') no-repeat; background-size: 100% 100%; overflow: hidden; }
+		.top .role-con .van-cell { background: transparent; }
+		.top .role-con .van-cell .van-cell__title { flex: none; padding-left: 1.5rem; }
+		.top .role-con .van-cell .van-cell__value { flex: 1; color: #856001; font-size: 0.875rem;  }
+		.top .role-con .van-cell .van-icon { color: #856001; }
+		.top .role-con .van-cell .title { font-size: 0.875rem; color: #856001; }
+		.top .role-con .van-cell .title.title-blod { font-size: 1rem; font-weight: bold; } 
+		/* 订单 */
+		.order-group { margin: 12px; border-radius: 8px; box-shadow: 0px 2px 9px 0px rgba(153,153,153,0.15); overflow: hidden; }
+		.order-group .van-cell__title { font-weight: bold; font-size: 0.9rem; }
+		.order-group .van-cell__value { font-size: 0.8rem; }
+		.order-group .van-grid-item  .van-grid-item__icon-wrapper img { height: 3rem; margin-bottom: 0.5rem; }
+		.order-group .van-grid-item .van-grid-item__text { font-size: 0.875rem; color: #333333; }
+		/* 我的常用 */
+		.my-group .van-grid-item .van-grid-item__icon-wrapper img { height: 2rem; margin-bottom: 0.5rem; }
+		.my-group .van-grid-item .van-grid-item__content  .desc { font-size: 0.75rem; color: #999999; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 4rem; text-align: center; } 
+		.my-group .van-grid-item  .van-grid-item__content .title { font-size: 0.8rem; color: #333333; }
+		/* 登陆提示 */
+		.no-login-desc { position: fixed; width: 100%; height: 46px; bottom: 50px; background-color: #616161; display: flex; align-items: center; justify-content: space-between; color: #fff; font-size: 0.8rem; padding: 0 12px; }
+		/* 底部导航栏 */
+		.bottom-nav { box-sizing:content-box; width: 100%; height: 50px; border-bottom: 1px solid #e6e6e6; position: fixed; bottom: 0; display: flex; background-color: #fff; padding-bottom: 4px; font-size: 12px; }
+		.bottom-nav .box1 { text-align: center; padding-top: 10px; width: 25%; }
+		.bottom-nav .box1 img { width: 24px; height: 24px; vertical-align: top ;}
+		.font-color { color: #04C03A; }
+		/* 店铺弹出框 */
+		.van-popup { display: flex; flex-direction: column; }
+		.van-popup .tit-con { height: 2.875rem; display: flex; align-items: center; text-align: center; }
+		.van-popup .tit-con .text { flex: 1; font-size: 0.875rem; font-weight: bold;}
+		.van-popup .tit-con .type { width: 4.6rem; font-size: 0.875rem; font-weight: bold;}
+		.van-popup .shop-con { flex: 1; overflow-y: scroll;  }
+		.van-popup .shop-con .shop-item {  font-size: 0.875rem; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0.75rem; }
+		.van-popup .shop-con .shop-item .title { flex: 1; display: flex;align-items: center; justify-content: center; position: relative; min-height: 30px;}
+		.van-popup .shop-con .shop-item .del-icon { position:absolute; right: 10px; top: 50%; width: 70px; height:30px; transform: translateY(-50%); background: #fef0f0; border: 1px solid #fbc4c4; color: #f56c6c; border-radius: 100px; text-align: center; line-height: 30px;  }
+		.van-popup .btn-con { padding: 0.75rem; }
+	</style> 
+
+</head>
+
+<body>
+	<div id="app" class="ucenter" v-cloak>
+		<!-- top -->
+		<div class="top">
+			<div style="width: 100%">
+				<h1>我的</h1>
+				<div class="avatar">
+					<img class="avatar-img" :src="headimgurl ? headimgurl : './images/gr/weidl.png'" alt="">
+					<div class="username"> 
+						<h1 v-if="nickname">{{ nickname }}</h1>
+						<div class="btn-con"  v-else @click.stop="toLogin()">
+							<van-button  color="#626262" style="opacity: 0.4;"> </van-button>
+							<span>登录/注册</span>
+						</div>
+					</div>
+					<div class="arrow-icon" >
+						<van-icon name="arrow" />
+					</div>
+				</div> 
+				<div class="role-con">  
+					<template v-if="is_yn == 0">
+						<van-cell  is-link value="加入会员" size="large" @click="jumpOpenVip()" >
+							<template #title>
+								<span class="title title-blod">开通会员.</span>
+								<span class="title">享受更多权益</span>
+							</template>	
+						</van-cell>
+					</template>
+					<template v-if="is_yn == 1">
+						<van-cell  size="large">
+							<template #title>
+								<span class="title title-blod">益农卡会员</span>
+							</template>	
+						</van-cell>
+					</template>
+				</div>
+			</div>
+		</div>
+		<!-- 订单 -->
+		<van-cell-group class="order-group" >
+			<van-cell title="我的订单" value="全部订单" is-link @click="orderState(0)"></van-cell>
+			<van-grid :border="false">
+				<van-grid-item text="全部"  @click="orderState(0)" >
+					<template #icon>
+						<img src="./images/gr/dfk.png" alt="">
+					</template>
+				</van-grid-item>
+				<van-grid-item  text="待付款":badge="wait_pay > 0 ? wait_pay : null"  @click="orderState(1)" >
+					<template #icon>
+						<img src="./images/gr/dfh.png" alt="">
+					</template>
+				</van-grid-item>
+				<van-grid-item text="待发货" :badge="wait_send > 0 ? wait_send : null" @click="orderState(2)">
+					<template #icon>
+						<img src="./images/gr/dsh.png" alt="">
+					</template>
+				</van-grid-item>
+				<van-grid-item  text="待收货" :badge="wait_receive > 0 ? wait_receive : null" @click="orderState(7)">
+					<template #icon>
+						<img src="./images/gr/ywc.png" alt="">
+					</template>
+				</van-grid-item>
+			</van-grid>
+		</van-cell-group>
+		<!-- 我的常用 -->
+		<van-cell-group class="order-group my-group" >
+			<van-cell title="我的常用" ></van-cell>
+			<van-grid :border="false">
+				<van-grid-item  @click="jumpAddrList()">
+					<template #icon>
+						<img src="./images/my-adress.png" alt="">
+					</template>
+					<template #text>
+						<p class="title">地址管理</p>
+					</template>
+				</van-grid-item>
+			</van-grid>
+		</van-cell-group>
+		<div style="height: 50px;"></div>
+		<van-tabbar v-model="tabbarIndex" active-color="#04C03A">
+			<van-tabbar-item  @click="indexJump()">
+				<template #icon>
+					<img src="images/icon/sy.png" width="18px" alt="">
+				</template>
+				首页
+			</van-tabbar-item>
+			<van-tabbar-item :badge="count > 0 ? count : null" @click="shoppingCart()">
+				<template #icon>
+					<img src="images/icon/gwc1.png" width="18px" alt="">
+				</template>
+				购物车
+			</van-tabbar-item>
+			<van-tabbar-item >
+				<template #icon>
+					<img src="images/icon/grzx1.png" width="18px" alt="">
+				</template>
+				我的
+			</van-tabbar-item>
+		</van-tabbar>
+		<!-- 登录领取礼包 -->
+		<template v-if="!nickname">
+			<div style="height: 46px;"></div>
+			<div class="no-login-desc">
+				<span>登录可领取优惠大礼包哦</span>
+				<van-button type="primary"  round size="small" color="linear-gradient(#02cf0a, #00be34);border-radius: 29px;"  @click="toLogin()">马上登陆</van-button>
+			</div>
+		</template>
+		<div class="message-page-mask" v-show="message.show==1">
+			<div class="message-page-mask-content">
+				<div class="el-loading-spinner">
+					<i v-show="message.type=='success' " class="el-icon-success"></i>
+					<i v-show="message.type=='error' " class="el-icon-error"></i>
+
+					<p class="el-loading-text">{{message.text}}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				tabbarIndex: 2,
+				message: {
+					show: 0,
+					type: 'success',
+					text: '成功',
+				},
+				buttons: [],
+				buttonTitle: '',
+
+				JumpUrl: {
+					my_shops: baseUrl('/wx/shop/my_shops'),
+					user_info: baseUrl('/wx/distribution/user_distribution_order'),
+					changeShop: baseUrl('/wx/shop/changeShop'),
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+					delShop: baseUrl('/wx/shop/delShop'),
+					index: baseUrl('/wx/cart/new_cart'),
+					platform_coupon: baseUrl('/wx/coupon/get_shop_platform_coupon'),
+					scan_offline_coupon: baseUrl('/wx/coupon/scan_offline_coupon'),
+					if_shop_owner: baseUrl('/wx/coupon/if_shop_owner'),
+					shopInfoUrl: baseUrl('/wx/shop/shop_info'), //获取店铺信息
+					coupon_detail: baseUrl('/wx/coupon/coupon_detail'),
+				},
+				message: {
+					token: localStorage.getItem("token"),
+				},
+				headimgurl: '',
+				nickname: '',
+				wait_pay: 0,
+				wait_send: 0,
+				wait_receive: 0,
+				is_yn: 0,
+				token: localStorage.getItem("token"),
+				count: 0,
+				addGoods: {
+					goods_id: '',
+					spcifi_id: 0,
+					number: 0,
+					token: localStorage.getItem("token"),
+				},
+				coupon_id: '',
+				user_coupon_id: '',
+				couponDetail: '',
+			},
+			methods: {
+				//订单状态
+				orderState(val) {
+					if(!this.nickname) {
+						this.$toast('请先登录！')
+						return
+					}
+					window.location.href = 'disOrderMy.html?status=' + val+'&coupon_id='+this.coupon_id+'&user_coupon_id='+this.user_coupon_id;
+				},
+				//获取用户信息
+				userMessage() {
+					var that = this;
+					axios({
+							method: 'post',
+							url: that.JumpUrl.user_info,
+							data: that.message
+						})
+						.then(function (resp) {
+							// console.log(resp);
+							if(resp.data.errno == 0) {
+								that.headimgurl = resp.data.data.headimgurl;
+								that.nickname = resp.data.data.nickname;
+								that.wait_pay = resp.data.data.wait_pay;
+								that.wait_send = resp.data.data.wait_send;
+								that.wait_receive = resp.data.data.wait_receive;
+								that.is_yn = resp.data.data.is_yn;
+
+							}
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+
+				},
+				// 首页跳转
+				indexJump() {
+					window.location.href = 'disCouponGoods.html?coupon_id='+this.coupon_id+'&user_coupon_id='+this.user_coupon_id +'&v=1';
+				},
+				//购物车跳转
+				shoppingCart() {
+					window.location.href = 'disShoppingCart.html?coupon_id='+this.coupon_id+'&user_coupon_id='+this.user_coupon_id;
+				},
+				// 跳转开通会员
+				jumpOpenVip() {
+					window.location.href = 'openVip.html?source=dishome&coupon_id='+this.coupon_id+'&user_coupon_id='+this.user_coupon_id
+				},
+				toLogin() {
+					this.$toast('请先登录')
+				},
+				// 跳转地址列表
+				jumpAddrList() {
+					window.location.href = 'disCollectAddress.html?isMy=1&coupon_id='+this.coupon_id+'&user_coupon_id='+this.user_coupon_id+'&v=1'
+				},
+				//获取购物车内容
+				myCart() {
+					let that = this;
+					let form_data = new FormData();
+					that.addGoods.coupon_id = that.coupon_id
+					that.addGoods.user_coupon_id = that.user_coupon_id
+					makeFormData(that.addGoods, form_data);
+					axios({
+							method: 'post',
+							url: that.JumpUrl.index,
+							data: form_data
+						})
+						.then(function (resp) {
+							that.cartList = resp.data.data.cartList;
+							that.count = resp.data.data.cartTotal.checkedGoodsCount;
+							// console.log(that.cartList)
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				setWx() {
+					let that = this;
+					let share_title = that.couponDetail.name
+					let share_introduction = '前往领券中心领取优惠券'
+					let logo = that.couponDetail.share_img
+					wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/getShopCoupon.html',  // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {
+
+							}
+						})
+						wx.updateTimelineShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/getShopCoupon.html',  // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {}
+						})
+					});
+				},
+				getJssdk() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						data: {
+							token: that.token,
+							url: encodeURIComponent(location.href.split('#')[0])
+						}
+					}).then(function (resp) {
+						let data = resp.data
+
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						if(localStorage.getItem('disCouponDetail')) {
+							that.couponDetail = JSON.parse(localStorage.getItem('disCouponDetail'))
+						}
+						that.setWx(); 
+					})
+				},
+				// 删除上个页面存储数据
+				removeLocal() {
+                    localStorage.removeItem('getCouponData')
+                    localStorage.removeItem('myCouponToDetail')
+                    localStorage.removeItem('myCouponList')
+                },
+				checkPhone() {
+					var _this = this
+					var agent = (navigator.userAgent || navigator.vendor || window.opera)
+					if (agent != null) {
+						var agentName = agent.toLowerCase()
+						if (/android/i.test(agentName)) {
+							return 'android'
+						} else if (/iphone/i.test(agentName)) {
+							return 'ios'
+						}
+					}
+				},
+			},
+			created() {
+				this.coupon_id = getQueryString('coupon_id')
+				this.user_coupon_id = getQueryString('user_coupon_id')
+				let phoneType = this.checkPhone()
+				// 监听页面关闭事件
+				if(phoneType == 'android'){
+					window.onunload = function () {
+						this.removeLocal()
+					}
+				} else if(phoneType == 'ios') {
+					window.addEventListener('pagehide', function () {
+						this.removeLocal()
+					});
+				}
+				this.$nextTick(() => {
+					this.myCart()
+
+				})
+				this.userMessage();
+				this.getJssdk();
+			}
+		})
+	</script>
+</body>
+
+</html>

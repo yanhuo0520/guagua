@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.8.0/dist/JsBarcode.all.min.js" ></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		html,body { font-size: 16px; height: 100%; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		#app { min-height: 100%; background: #f5f5f5; }
+		div { box-sizing: border-box; }
+		/* 无数据 */
+		.no-data { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99;}
+		.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+		.no-data .no-data-con img { width: 100%; }
+		.no-data .no-data-con .no-title{ font-size: 1.2rem; font-weight:600;  color:rgba(0,0,0,1);  }
+		.no-data .no-data-con .no-desc { font-size: 0.9rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+		.no-data .no-data-con .van-button { font-size: 0.9rem; font-weight:400; color:rgba(1,195,39,1); }
+
+		
+		/* 去使用弹窗 */
+		.share-popup-con { width: 90%; background: transparent; }
+		.share-popup-con .tit { position: absolute; top: 2.81%; left: 0; width: 100%; height: 16.6%; color: #c85002; font-size: 1.375rem; font-weight: bold;display: flex; align-items: center; justify-content: center; }
+		.share-popup-con .imgcode-con { position: absolute;top: 22%; left: 0; width: 100%; height: 30%; display: flex; align-items: center; justify-content: center; }
+		.share-popup-con .imgcode-con #imgcode { width: 70%; height: 100%; background: #000; }
+		.share-popup-con .desc { position: absolute; top: 50%; left: 0; width: 100%; text-align: center; color:  rgba(75,75,75,0.5); font-size: 0.875rem;}
+		.share-popup-con .btn-con { position: absolute; bottom: 14.45%;left: 6%; width: 88%; height: 10.71%; display: flex; align-items: center; justify-content: space-between; }
+		.share-popup-con .btn-con .van-button { width: 46%; background: #fff; border: none; box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.14); padding: 0; }
+		.share-popup-con .btn-con .van-button .van-button__text{ color: #c85002; font-weight: bold;font-size: 1rem; }
+	
+		.share-mask { height: 100%; width: 100%; z-index: 20000; top: 0; left: 0; color: #fff; position: fixed; background: rgba(0, 0, 0, 0.8); }
+		.share-mask-content p { padding-left: 20px; font-size: 28px; color: #fff }
+		
+		.img-show-con { width: 100%; height: 100%; background: transparent; }
+		.img-show-con .img-con { position: absolute; top: 50%; width: 100%; transform: translateY(-50%); }
+
+		/* 公众号 */
+		.public { position: relative; top: 0; left: 0; width: 100%; background-color: #fff; z-index: 2002; display: flex; align-items: center; padding: 0.75rem; }
+		.public .desc-con { flex: 1; }
+		.public .desc-con .text { font-weight: bold; }
+		.public .pointer { width: 30px; transform: rotate(90deg); margin-right: 10px; }
+		.public .btn-con { border-radius: 100px; overflow: hidden; width: 6rem; height: 2rem; }
+		.public .btn-con .van-button { width: 100%; height: 100%; padding: 0;  }
+		/* 会员券弹窗 */
+		.share-popup-con2 { width: 90%; background: transparent; }
+		.share-popup-con2 .tit { position: absolute; top: 19%; left: 15%; width: 100%; color: #c85002; font-size: 1.375rem; font-weight: bold;display: flex; align-items: flex-start }
+		.share-popup-con2 .tit img { width: 1.5rem; }
+		.share-popup-con2 .tit .desc { display: flex; flex-direction: column; margin-left: 10px; }
+		.share-popup-con2 .tit .desc .top { font-size: 1.25rem; color: #856001; padding-bottom: 3px; }
+		.share-popup-con2 .tit .desc .bot { font-size: 0.875rem; font-weight: 400; color: #856001; }
+		.share-popup-con2 .btn-con { position: absolute; top: 58%;left: 6%; width: 88%; height: 10.71%; display: flex; align-items: center; justify-content: space-between; }
+		.share-popup-con2 .btn-con .van-button { width: 46%; background: #fff; border: none; box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.14); padding: 0; }
+		.share-popup-con2 .btn-con .van-button .van-button__text{ color: #c85002; font-weight: bold;font-size: 1rem; }
+		.share-popup-con2 .bottom { position: absolute;bottom: 8%; left: 6%; width: 88%; height: 10%; padding: 0 10px; display: flex; align-items: center;justify-content: space-between; }
+		.share-popup-con2 .bottom .item { display: flex; align-items: center; }
+		.share-popup-con2 .bottom .item img { width: 21px; }
+		.share-popup-con2 .bottom .item span { color: #fbf5dc; font-size: 0.9rem; margin-left: 10px; }
+		.share-popup-con2 .bottom .shu { width: 1px; height: 100%; opacity: 0.59; border: 1px solid; border-image: linear-gradient(180deg, rgba(253,251,240,0), #fbf5dd 52%, rgba(251,245,220,0) 104%) 2 2; }
+
+	</style> 
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<div class="no-data" v-if="!isSuccess && !isErr">
+			<div class="no-data-con">
+				<img src="./images/no-search.png" alt="">
+				<p class="no-title">刷新领券</p>
+				<p class="no-desc">点击刷新,领取优惠券</p>
+				<van-button size="small" plain round color="#01C327" @click="getPlatCoupon()" >刷新</van-button>
+			</div>
+		</div>
+		<div class="no-data" id="noData1" v-if="isSuccess || isVipDialogShow">
+			<div class="no-data-con">
+				<img src="./images/no-search.png" alt="">
+				<p class="no-title">领取成功</p>
+				<p class="no-desc">点击跳转</p>
+				<van-button size="small" plain round color="#01C327" @click="jumpMyCoupon" >我的优惠券</van-button>
+				<van-button size="small" plain round color="#01C327" @click="jumpIndex" >领券中心</van-button>
+			</div>
+		</div>
+		<div class="no-data" id="noData1" v-if="isErr">
+			<div class="no-data-con">
+				<img :src="errImg" alt="">
+				<p class="no-title">{{ errText ? errText : '领取失败' }}</p>
+				<p class="no-desc">重新领券请刷新页面</p>
+                <van-button size="small" plain round color="#01C327" @click="handleErr" >刷新</van-button>
+                <van-button size="small" plain round color="#1989fa" @click="jumpIndex" style="margin-left: 1rem;" >领券中心</van-button>
+			</div>
+		</div>
+
+		<van-popup v-model="isSuccess" class="share-popup-con" @click.stop :close-on-click-overlay="false">
+			<img src="./images/share-yhq-bg.png" width="100%" alt="">
+			<div class="tit">
+				优惠券条形码
+			</div>
+			<div class="imgcode-con" @click.stop="imgShow = true" >
+				<img :src="qrcodeImg" id="imgcode"/>
+			</div>
+			<div class="desc">
+				请向店员出示
+			</div>
+			<div class="btn-con">
+				<van-button type="primary" round @click.stop="jumpMyCoupon()">我的优惠券</van-button>
+				<van-button type="primary" round  @click.stop="toShare()">分享优惠券</van-button>
+			</div>
+		</van-popup>
+		<van-popup v-model="imgShow" class="img-show-con" @click="imgShow = false">
+			<div class="img-con">
+				<img :src="qrcodeImg" width="100%" alt="">
+			</div>
+		</van-popup>
+		<div class="share-mask" v-show="isShare" @click="isShare = false">
+			<div style="width:100%;height:80px;">
+				<img style="display:block;position:fixed;right:10px;top:0px;width:80px;height:80px;"  src="images/icon/share.png" alt="">
+			</div>
+			<div class="share-mask-content">
+			<p>点击右上角</p>
+			<p>通过【发送给朋友】</p>
+			<p>分享优惠券</p>
+			</div>
+		</div>
+		<div class="public" @click="showQrcode">
+			<div class="desc-con">
+				<div class="text">
+					优惠券哪里多,尽在聚农优享
+				</div>
+			</div>
+			<img class="pointer" src="./images/click.png" alt="">
+			<div class="btn-con">
+				<van-button type="primary">{{isFollow == 1 ? '查看公众号' : '关注公众号'}}</van-button>
+			</div>
+		</div>
+		<van-popup v-model="qrcodeShow" class="img-show-con" @click="qrcodeShow = false">
+			<div class="img-con" style="text-align: center;" @click.stop>
+				<img style="width: 80%;" src="./images/wx-qrcode.jpg" width="100%" alt="">
+				<div style="color: #fff;">长按二维码 前往【聚农优享】</div>
+			</div>
+		</van-popup>
+
+		<van-popup v-model="isVipDialogShow" class="share-popup-con2">
+			<img src="./images/share-yhq-bg3.png" width="100%" alt="">
+			<div class="tit">
+				<img  src="./images/share-vip-icon.png" alt="">
+				<div class="desc">
+					<div class="top">仅限益农卡会员使用</div>
+					<div class="bot">开通益农卡会员，享受更多权益</div>
+				</div>
+			</div>
+			<div class="btn-con">
+				<van-button type="primary" round @click="jumpMyCoupon()">我的优惠券</van-button>
+				<van-button type="primary" round  @click="openVip()">加入会员</van-button>
+			</div>
+			<div class="bottom">
+				<div class="item share" @click="toShare()">
+					<img src="./images/share-yhq-icon2.png" alt="">
+					<span>分享优惠券</span>
+				</div>
+				<div class="shu"></div>
+				<div class="item" @click="jump('getShopCoupon.html')">
+					<img src="./images/share-yhq-icon.png" alt="">
+					<span>前往领券中心</span>
+				</div>
+			</div>	
+		</van-popup>
+		
+	</div>
+
+	<script>
+		
+		var app = new Vue({
+			el: '#app',
+			data: {
+				JumpUrl: {
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk2/getSignPackage',
+					checkToken: 'http://sy.xfd365.com/wx/base/checkToken', //检查token
+					token: 'http://sy.xfd365.com/wx/wechat/login', //微信登录
+					platform_coupon: baseUrl('/wx/coupon/get_shop_platform_coupon'),
+                    get_coupon: baseUrl('/wx/coupon/get_coupon'),
+					shopInfo: baseUrl('/wx/shop/shop_info'),
+					user_info: baseUrl('/wx/shop/user_info'),
+					if_follow: baseUrl('/wx/coupon/if_follow')
+				},
+				token: localStorage.getItem("token"),
+				curShopId: '',
+				noDataImg: './images/icon/no-goods.png',
+				errImg: './images/err.png',
+				isSuccess: false,
+				isErr: false,
+				errText: '',
+                lock_id: '',
+                coupon_id: '',
+				shop_id: '',
+				imgShow: false,
+				qrcodeImg: '',
+				isShare: false,
+				curShopInfo: '',
+				share_title: '',
+				share_img: '',
+				share_content: '',
+				myAllCouponList: [],
+				qrcodeShow: false,
+				can_barcode: 1,
+				is_yn: 0,
+				isVipDialogShow: false,
+				wxUrl: 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzU5NTYxMjM0OQ==&scene=110#wechat_redirect',
+				isFollow: 0,
+				is_distribution: null
+
+			},
+			methods: {	
+				wxSign: function () {
+					var that = this;
+					let back_url = window.location.href
+					axios({
+							method: 'post',
+							// url: 'https://api.xfd365.com/wx/wechat/get_jump_url',
+							url: 'http://sy.xfd365.com/wx/wechat/get_jump_url',
+							data: {
+								back_url: encodeURIComponent(back_url),
+							}
+						})
+						.then(function (resp) {
+							//返回数据
+							window.location.href = decodeURIComponent(resp.data.url);
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+						})
+				},
+				wechatLogin: function () {
+					var that = this;
+					axios({
+							method: 'post',
+							url: that.JumpUrl.token,
+							//data: form_data
+							data: {
+								code: that.code
+							}
+						})
+						.then(function (resp) { //返回数据
+							that.token = resp.data.token;
+							localStorage.setItem('token', that.token);
+							if (that.token) {
+								that.getJssdk();
+							}
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+
+				},
+				//检查token是否过期
+				checkToken: function () {
+					var that = this;
+					axios({
+							method: 'post',
+							url: that.JumpUrl.checkToken,
+							data: {
+								token: this.token,
+							}
+
+						})
+						.then(function (resp) {
+							// console.log(resp.data)
+							//返回数据
+							if (resp.data.errno == 1) {
+								//token过期调用跳转页面方法
+								localStorage.removeItem('token')
+								localStorage.removeItem('shoper_token')
+								that.wxSign();
+							} else {
+								that.getJssdk();
+							}
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				// 获取用户信息
+				getUserInfo() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.user_info,
+						data: {
+							token: localStorage.getItem('token')
+						}
+					}).then(res => {
+						that.is_yn = res.data.data.is_yn
+					})
+				},
+				// 显示公众号二维码
+				showQrcode() {
+					if(this.isFollow == 1) {
+						window.location.href = this.wxUrl
+					} else {
+						this.qrcodeShow = true
+					}
+				},
+				// 判断是否关注公众号
+				getFollow() {
+					let that = this
+					that.isFollow = 0
+					axios({
+						method: 'post',
+						url: that.JumpUrl.if_follow,
+						//data: form_data
+						data: {
+							token: that.token,
+						}
+					}).then(function (resp) {
+						if(resp.data.errno == 0){
+							that.isFollow = resp.data.data
+						}
+					}).catch(err =>{
+						console.log(err)
+					})
+				},
+				getJssdk: function () {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: encodeURIComponent(location.href.split('#')[0])
+						}
+					}).then(function (resp) {
+						let data = resp.data
+
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+                                // 'scanQRCode',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.getFollow()
+						that.getUserInfo()
+                        that.coupon_id = localStorage.getItem('coupon_id')
+                        that.shop_id = localStorage.getItem('shop_id')
+                        localStorage.removeItem('coupon_id')
+                        localStorage.removeItem('shop_id')
+                        that.getPlatCoupon()
+					})
+				},
+				// 分享优惠券
+				toShare() {
+						let that = this;
+						let shopInfo = that.curShopInfo
+						let share_title = that.share_title ? that.share_title : '恭喜您！获得一张优惠券~'
+						let share_introduction = that.share_content ? that.share_content : '众多商品种类和优惠活动等你来拿  炎炎夏日送温情，优惠活动享不停!'
+						let shop_id = that.curShopId ? that.curShopId : shopInfo.id
+						let logo = that.share_img ? that.share_img : shopInfo.logo
+						that.isShare = true
+						wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+							wx.updateTimelineShareData({
+								title: share_title, // 分享标题
+								desc: share_introduction, // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/shareGetcoupon.html?shop_id='+shop_id +'&coupon_id=' + that.coupon_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function () {
+
+								}
+							})
+
+							wx.updateAppMessageShareData({
+								title: share_title, // 分享标题
+								desc: share_introduction, // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/shareGetcoupon.html?shop_id='+shop_id +'&coupon_id=' + that.coupon_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function () {}
+							})
+
+
+						});
+					},
+				handleErr() {
+					window.location.reload();
+				},
+				jump(path) {
+					window.location.href = path
+				},
+				jumpMyCoupon() {
+                    window.location.href = 'myCoupon.html?source=share'
+				},
+                jumpIndex() {
+                    window.location.href = 'getShopCoupon.html'
+                },
+				 // 获取店铺信息
+				 getShopInfo(id) {
+                    var that = this;
+                    axios({
+                        method: 'post',
+                        url: that.JumpUrl.shopInfo,
+                        data: {token: that.token, shop_id: id }			    	
+                    }).then(function (resp) {
+                            if(resp.data.errno == 0) {
+                                that.curShopInfo = resp.data.data
+                            }
+                        }).catch(function (error) {
+                            //请求失败
+
+                        })
+                },
+				// 加入会员
+				openVip() {
+					window.location.href = 'openVip.html'
+				},
+				getPlatCoupon() {
+					var that = this;
+					that.isSuccess = false;
+					that.isVipDialogShow = false;
+					that.isErr = false;
+					that.errText = '';
+					axios({
+						method: 'post',
+						url: that.JumpUrl.get_coupon,
+						data: {
+							token: that.token,
+							coupon_id: that.coupon_id,
+                            shop_id: that.shop_id
+						}
+
+					})
+					.then(function (resp) {
+						if (resp.data.code == 1) {
+							that.$toast(resp.data.msg)
+							that.curShopId = resp.data.shopId
+							that.share_content = resp.data.data.share_content
+							that.share_title = resp.data.data.share_title
+							that.share_img = resp.data.data.share_img
+							that.is_distribution = resp.data.data.is_distribution
+							that.getShopInfo(that.curShopId)
+							that.can_barcode = resp.data.data.can_barcode
+							let newCouponIds = localStorage.getItem('newCouponIds') ? JSON.parse(localStorage.getItem('newCouponIds')) : []
+							newCouponIds.push(resp.data.data.user_coupon_id)
+							localStorage.setItem('newCouponIds', JSON.stringify(newCouponIds)) // 领取的最新的优惠券id
+							localStorage.setItem('getCouponByShare', true)
+							if(that.is_yn == 0 && that.can_barcode != 1) {
+								that.isVipDialogShow = true;
+								return
+							} else {
+								that.isSuccess = true;
+							}
+							
+							setTimeout(() =>{
+								JsBarcode("#imgcode", resp.data.data.uc_code.split('-')[1], {
+										text: ' ',
+										margin:10,
+								});
+								setTimeout(() => {
+									that.qrcodeImg = document.getElementById('imgcode').src
+									
+								});
+							})
+							document.querySelector('.public').style.zIndex = document.querySelector('.van-overlay').style.zIndex + 5
+						} else if(resp.data.code == 2){
+							that.$dialog.alert({
+								title: '提示',
+								message: '只有益农卡会员才可以领取',
+								showCancelButton: true,
+								confirmButtonText: '加入会员'
+							}).then(() =>{
+								window.location.href = 'openVip.html'
+							}) .catch(() => {});
+							that.isErr = true
+							that.errText = resp.data.msg;
+							
+						} else {
+							that.$toast(resp.data.msg)
+							that.isErr = true
+							that.errText = resp.data.msg;
+						}
+					}).catch(function (error) {
+						that.isErr = true
+						console.log('error', error);
+					})
+				},
+			},
+			created: function () {
+				let code = getQueryString('code');
+                localStorage.setItem('coupon_id',getQueryString('coupon_id'))
+                localStorage.setItem('shop_id',getQueryString('shop_id'))
+                localStorage.removeItem('getCouponData')
+				let lastGetCouponIds = localStorage.getItem('lastGetCouponIds') ? JSON.parse(localStorage.getItem('lastGetCouponIds')) : []
+				let newCouponIds = localStorage.getItem('newCouponIds') ? JSON.parse(localStorage.getItem('newCouponIds')) : []
+				if(JSON.stringify(lastGetCouponIds) == JSON.stringify(newCouponIds)) {
+					localStorage.removeItem('newCouponIds')
+					localStorage.removeItem('lastGetCouponIds')
+				}
+				if (code) {
+					this.code = code;
+				}
+				let token = localStorage.getItem('token')
+				if (this.code) {
+					this.wechatLogin()
+				} else {
+					if (token) {
+						this.checkToken()
+					} else {
+						this.wxSign()
+					}
+				}
+
+			}
+		})
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.8.0/dist/JsBarcode.all.min.js" ></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		html,body { font-size: 16px; height: 100%; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		#app { min-height: 100%; background: #f5f5f5; }
+		div { box-sizing: border-box; }
+		/* 导航栏 */
+        .van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+        .van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+        .van-nav-bar .van-nav-bar__right img { display: block; }
+        .van-nav-bar .van-nav-bar__title { font-weight: bold; }
+		.no-data-nav .van-nav-bar { background: #02d066; }
+		.no-data-nav .van-nav-bar .van-icon { color: #fff; }
+		.no-data-nav .van-nav-bar .van-nav-bar__title { color: #fff; }
+		/* 列表 */
+		.list-item { position: relative; padding-bottom: 0.75rem; }
+        .list-item .van-card { padding-left: 0; padding-right: 0; width: 100%; background: #fff; }
+        .list-item .van-card .top-con { display: flex; align-items: center; justify-content: space-between; overflow: hidden; }
+        .list-item .van-card .top-con .time-con { font-size: 0.9rem; font-weight: bold; display: flex; align-items: center; }
+        .list-item .van-card .top-con .time-con .colon { display: inline-block; color: #000; }
+        .list-item .van-card .top-con .time-con .block { display: inline-block; color: #00c859; font-size: 0.9rem; font-weight: bold; text-align: center; }
+        .list-item .van-card .top-con .remain-con { border: 1px solid #ff1a1a; border-radius: 100px; color: #ff1a1a; font-size: 0.75rem; padding: 0 0.3rem; }
+        .list-item .van-card .goods-name { font-size: 0.9rem; font-weight: bold; padding: 0.3rem 0; }
+        .list-item .van-card .van-card__price { width: 100%; }
+        .list-item .van-card .price-con { display: flex; align-items: center; width: 100%; }
+        .list-item .van-card .price-type {  background: #ff3310; color: #fff; padding: 0.1rem 0.3rem; font-size: 0.6rem; border-radius: 4px; line-height: normal; }
+		.list-item .van-card .price-icon { font-weight: bold; color: #ff2814; margin-left: 0.3rem; }
+        .list-item .van-card .price { font-weight: bold; color: #ff2814; font-size: 1rem; }
+        .list-item .van-card .retail-price { color: #888888; font-size: 0.75rem; text-decoration: line-through; margin-left: 0.3rem;  }
+        .list-item .progress-con { display: flex; align-items: center; justify-content: space-between; background: #f9f9f9; padding: 0.75rem; }
+        .list-item .progress-con .left-con { display: flex; align-items: center; }
+        .list-item .progress-con .left-con .tit { font-size: 0.9rem; font-weight: bold; color: #333; }
+        .list-item .progress-con .left-con .diff-people { font-size: 0.9rem; font-weight: bold; color: #888; margin-left: 0.3rem; }
+        .list-item .progress-con .left-con .diff-people .num { color: #00c859; }
+        .list-item .progress-con .left-con .van-icon { color: #888; margin-left: 0.2rem; }
+        .list-item .progress-con .btn-con { height: 1.8rem; }
+        .list-item .progress-con .btn-con .van-button { height: 100%; background: #00c859;}
+        .list-item .people-con { display: flex; align-items: center; justify-content: center; background: #fafafa; padding: 0.75rem; padding-top: 0; }
+        .list-item .people-con .people-item { display: flex; align-items: center; justify-content: center; }
+        .list-item .people-con .avatar { width: 2rem; height: 2rem; border-radius: 50%; overflow: hidden; border: 1px solid #00c859;}
+        .list-item .people-con .avatar.dashed-border { border: 1px dashed #979797;  }
+        .list-item .people-con .avatar img { width: 100%; height: 100%; }
+        .list-item .people-con .dashed { height: 2px; margin: 0 0.3rem; }
+        .list-item .people-con .three-group .dashed { width: 4.5rem; }
+
+        /* 无数据 */
+		.no-data { display: flex; align-items: center; justify-content: space-between; background: #02d066; color: #fff; padding: 1rem; }
+		.no-data .text-con { display: flex; flex-direction: column; }
+		.no-data .text-con .text { font-size: 1rem; font-weight: bold; padding-bottom: 0.5rem; }
+		.no-data .text-con .btn-con {  height: 1.8rem; }
+		.no-data .text-con .btn-con .van-button { height: 100%; border-color: #fff; color: #fff; background: transparent; }
+		.no-data .no-data-img { width: 34%; }
+		.goods-info { font-size: 0.875rem; color: #4b4b4b; font-weight: bold; display: flex; justify-content: center; align-items: center; background: #fff; padding: 0.6rem 0; }
+		.goods-info img { width: 15px; height: 15px; margin: 0 10px; }
+		.goods-info img:last-of-type { transform: rotate(180deg); }
+
+		.share-mask { height: 100%; width: 100%; z-index: 20000; top: 0; left: 0; color: #fff; position: fixed; background: rgba(0, 0, 0, 0.8); }
+		.share-mask-content p { padding-left: 20px; font-size: 28px; color: #fff }
+		
+	</style> 
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+        <van-nav-bar class="no-data-nav" :border="false" :fixed="true" :placeholder="true" z-index="9999" title="我的团购" left-arrow @click-left="toRouter()" >
+			<template #right>
+				<img src="images/icon/shouye2.png" alt="" width="20"  @click="JumpIndex">
+			</template>
+		</van-nav-bar>
+		<div style="padding: 0 0.75rem; background: #fff;">
+			<van-list v-model="loading" :immediate-check="false" :finished="finished" @load="getMyGroupList()" :finished-text="myGroupList.length > 0 ? '没有更多了' : ''"   >
+				<div class="list-item van-hairline--bottom" v-for="(item,index) in myGroupList">
+					<van-card centered @click="groupDetail(item.follow_id)">
+						<template #thumb>
+							<img :src="item.thumb" width="100%" height="100%" onerror="this.src='http://sy.xfd365.com/public/uploads/exp.jpg';this.onerror='null'" alt="">
+						</template>
+						<template #title>
+							<div class="top-con">
+								<div class="time-con">
+									<template v-if="item.status == 2 || item.status == 3">
+										<span>拼团已结束</span>
+									</template>
+									<template v-else>
+										<span>剩余</span>
+										<van-count-down :time="item.s_end_time*1000" >
+											<template #default="timeData">
+												<template v-if="timeData.days > 0">
+													<span class="block">{{ timeData.days }}</span>
+													<span class="colon">:</span>
+												</template>
+												<span class="block">{{ timeData.hours < 10 ? ('0'+timeData.hours) : timeData.hours }}</span>
+												<span class="colon">:</span>
+												<span class="block">{{ timeData.minutes < 10 ? ('0'+timeData.minutes) : timeData.minutes }}</span>
+												<span class="colon">:</span>
+												<span class="block">{{ timeData.seconds < 10 ? ('0'+timeData.seconds) : timeData.seconds }}</span>
+											</template>
+										</van-count-down>
+									</template>
+								</div>
+								<div class="remain-con">
+									剩余{{item.storage}}件
+								</div>
+							</div>
+							<div class="goods-name">{{item.goods_name}}</div>
+						</template>
+						<template #price>
+							<div class="price-con">
+								<div class="price-type">拼团价</div>
+								<div class="price-icon">￥</div>
+								<div class="price">{{item.team_price}}</div>
+								<div class="retail-price">￥{{item.price }}</div>
+							</div>
+						</template>
+					</van-card>
+					<div class="progress-con">
+						<div class="left-con">
+							<div class="tit">拼团进度:</div>
+							<template v-if="item.status == 0 || item.status == 1">
+								<div class="diff-people" @click="showCurCollapse(item)">还差<span class="num">{{item.s_need}}人</span>成团</div>
+							</template>
+							<template v-if="item.status == 2">
+								<div class="diff-people" @click="showCurCollapse(item)">拼团<span class="num">成功</span></div>
+							</template>
+							<template v-if="item.status == 3">
+								<div class="diff-people" @click="showCurCollapse(item)">拼团<span class="num" style="color: #ff2814;">失败</span></div>
+							</template>
+							<van-icon :name="item.isShow ? 'arrow-up' : 'arrow-down'" @click="showCurCollapse(item)"></van-icon>
+						</div>
+						<div class="btn-con">
+							<van-button type="primary" round @click="inviteFriends(item)">{{(item.status == 0 || item.status == 1) ? '邀请好友' : '再次开团'}}</van-button>
+						</div>
+					</div>
+					<div class="people-con" v-if="item.isShow">
+						<div class="people-item"  v-for="(subItem,subIndex) in item.need">
+							<div class="avatar" :class="{'dashed-border': (subItem > item.need_list.length)}">
+								<img v-if="subItem <= item.need_list.length" :src="item.need_list[subIndex].follow_user_head_pic" alt="">
+								<img v-else src="images/icon/no-avatar-icon.png" alt="">
+							</div>
+							<img class="dashed" v-if="subIndex!=(item.need-1)" src="images/icon/dashed-icon.png" alt="">
+						</div>
+					</div>
+				</div>
+			</van-list>
+		</div>
+		<div class="share-mask" v-show="isShare" @click="isShare = false">
+			<div style="width:100%;height:80px;">
+				<img style="display:block;position:fixed;right:10px;top:0px;width:80px;height:80px;"  src="images/icon/share.png" alt="">
+			</div>
+			<div class="share-mask-content">
+                <p>点击右上角</p>
+                <p>通过【发送给朋友】</p>
+                <p>邀请好友</p>
+			</div>
+		</div>
+
+		<div class="no-data" v-if="myGroupList && myGroupList.length == 0 && !isErr && !loading">
+			<div class="text-con">
+				<div class="text">空空如也,您还尚未拼团</div>
+				<div class="btn-con">
+					<van-button round @click="jump('groupActivityList.html?source=groupList')">去拼团</van-button>
+				</div>
+			</div>
+			<img class="no-data-img" src="images/group-list-null.png" alt="">
+		</div>
+		<div class="goods-info" v-if="noDataGroupList && noDataGroupList.length > 0">
+			<p> <img src="./images/spxx_left.png" alt=""> 参与拼团 <img src="./images/spxx_left.png" alt=""></p>
+		</div>
+		<div style="padding: 0 0.75rem; background: #fff;" v-if="noDataGroupList && noDataGroupList.length > 0">
+			<van-list v-model="noDataLoading" :immediate-check="false" :finished="noDataFinished" @load="getNoDataGroupList()" :finished-text="noDataGroupList.length > 0 ? '没有更多了' : ''"  v-if="noDataGroupList && noDataGroupList.length > 0" >
+				<div class="list-item van-hairline--bottom" v-for="(item,index) in noDataGroupList">
+					<van-card centered >
+						<template #thumb>
+							<img :src="item.thumb" width="100%" height="100%" onerror="this.src='http://sy.xfd365.com/public/uploads/exp.jpg';this.onerror='null'" alt="">
+						</template>
+						<template #title>
+							<div class="top-con">
+								<div class="time-con">
+									<span>剩余</span>
+									<van-count-down :time="item.s_end_time*1000" >
+										<template #default="timeData">
+											<template v-if="timeData.days > 0">
+												<span class="block">{{ timeData.days }}</span>
+												<span class="colon">:</span>
+											</template>
+											<span class="block">{{ timeData.hours < 10 ? ('0'+timeData.hours) : timeData.hours }}</span>
+											<span class="colon">:</span>
+											<span class="block">{{ timeData.minutes < 10 ? ('0'+timeData.minutes) : timeData.minutes }}</span>
+											<span class="colon">:</span>
+											<span class="block">{{ timeData.seconds < 10 ? ('0'+timeData.seconds) : timeData.seconds }}</span>
+										</template>
+									</van-count-down>
+								</div>
+								<div class="remain-con">
+									剩余{{item.storage}}件
+								</div>
+							</div>
+							<div class="goods-name">{{item.goods_name}}</div>
+						</template>
+						<template #price>
+							<div class="price-con">
+								<div class="price-type">拼团价</div>
+								<div class="price-icon">￥</div>
+								<div class="price">{{item.team_price}}</div>
+								<div class="retail-price">￥{{item.price }}</div>
+							</div>
+						</template>
+					</van-card>
+					<div class="progress-con">
+						<div class="left-con">
+							<div class="tit">拼团进度:</div>
+							<template v-if="item.status == 0 || item.status == 1">
+								<div class="diff-people" >还差<span class="num">{{item.s_need}}人</span>成团</div>
+							</template>
+							<template v-if="item.status == 2">
+								<div class="diff-people" >拼团<span class="num">成功</span></div>
+							</template>
+							<template v-if="item.status == 3">
+								<div class="diff-people" >拼团<span class="num" style="color: #ff2814;">失败</span></div>
+							</template>
+						</div>
+						<div class="btn-con">
+							<van-button type="primary" round @click="toGoodsDetail(item)">去拼团</van-button>
+						</div>
+					</div>
+				</div>
+			</van-list>
+		</div>
+	</div>
+
+	<script>
+		
+		var app = new Vue({
+			el: '#app',
+			data: {
+				JumpUrl: {
+					my_team_lists: baseUrl('/wx/team/my_team_lists'),
+					no_team_lists: baseUrl('/wx/team/no_team_lists'),
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+				},
+                orderList: [{
+                    isShow: false
+                },{
+                    isShow: false
+                },{
+                    isShow: false
+				}],
+				page: 0,
+				loading: true, // 列表请求loading
+				finished: false, // 列表是否请求完成
+				myGroupList: [],
+				noDataGroupList: [],
+				noDataPage: 0,
+				noDataLoading: true, // 列表请求loading
+				noDataFinished: false, // 列表是否请求完成
+				token: localStorage.getItem("token"),
+                isShare: false,
+				isErr: false
+			},
+			methods: {	
+				//跳转首页
+                JumpIndex(){
+                    window.location.href = "index.html?v=1";
+                },	
+				jump(path){
+					window.location.href = path;
+				},
+				toRouter() {
+					window.location.href = 'personal.html'
+				},
+                // 展开当前折叠面板
+                showCurCollapse(item) {
+                    item.isShow = !item.isShow
+				},
+				// 获取我的拼团列表
+				getMyGroupList() {
+					let that = this;
+					that.finished = false
+					that.isErr = false 
+					let page = that.page + 1
+					if (page !== 1) {
+						that.loading = true
+					}
+					axios({
+						method: 'post',
+						url: that.JumpUrl.my_team_lists,
+						data: {
+							token: localStorage.getItem('token'),
+							page: page,
+							size: 10
+						}
+					})
+					.then(function(resp) {
+						that.isErr = false 
+						that.loading = false
+						if (resp.data.code == 1) {
+							let resultData = resp.data.data.data;
+							let tmpData = [];
+							if (resultData) {
+								resultData.forEach(item =>{
+									item.isShow = false
+									// if(item.status != 3) {
+										tmpData.push(item)
+									// }
+								})
+								that.myGroupList = that.myGroupList.concat(tmpData)
+							}
+							that.page = page
+							resp.data.data.totalPage = Math.ceil(resp.data.data.count/Number(resp.data.data.size))
+							if (that.page >= resp.data.data.totalPage) {
+								that.finished = true
+							} else {
+								that.finished = false
+							}
+						} else {
+							if(resp.data.msg == '暂无数据') {
+								if(that.page == 1) {
+									that.getNoDataGroupList()
+								}
+								that.loading = false
+								that.finished = true
+								that.page = 0
+								
+							} else {
+								that.$toast(resp.data.msg ? resp.data.msg : '获取团购列表失败')
+								that.loading = false
+								that.finished = true
+								that.page = 0
+								that.isErr = true
+							}
+							
+						}
+					}).catch(function(error) {
+						that.isErr = true
+						that.loading = false
+						that.finished = true
+						that.myGroupList = []
+						that.page = 0
+						//请求失败
+						console.log('error', error);
+					})
+				},
+				// 获取无数据列表
+				getNoDataGroupList() {
+					let that = this;
+					that.nodataFinished = false
+					let noDataPage = that.noDataPage + 1
+					if (noDataPage !== 1) {
+						that.noDataLoading = true
+					}
+					axios({
+						method: 'post',
+						url: that.JumpUrl.no_team_lists,
+						data: {
+							token: localStorage.getItem('token'),
+							page: noDataPage,
+							size: 10
+						}
+					})
+					.then(function(resp) {
+						that.nodataLoading = false
+						if (resp.data.code == 1) {
+							let resultData = resp.data.data.data;
+							let tmpData = [];
+							if (resultData) {
+								resultData.forEach(item =>{
+									if(item.status != 3) {
+										tmpData.push(item)
+									}
+								})
+								that.noDataGroupList = that.noDataGroupList.concat(tmpData)
+							}
+							that.noDataPage = noDataPage
+							resp.data.data.totalPage = Math.ceil(resp.data.data.count/Number(resp.data.data.size))
+							if (that.noDataPage >= resp.data.data.totalPage) {
+								that.noDataFinished = true
+							} else {
+								that.noDataFinished = false
+							}
+						} else {
+							if(resp.data.msg == '暂无商品拼团数据') {
+								that.noDataLoading = false
+								that.noDataFinished = true
+								that.noDataPage = 0
+							} else {
+								that.$toast(resp.data.msg ? resp.data.msg : '获取失败')
+								that.noDataLoading = false
+								that.noDataFinished = true
+								that.noDataPage = 0
+							}
+						}
+					}).catch(function(error) {
+						that.noDataLoading = false
+						that.noDataFinished = true
+						that.noDataGroupList = []
+						that.noDataPage = 0
+						//请求失败
+						console.log('error', error);
+					})
+				},
+				// 跳转拼团详情
+				groupDetail(id) {
+					window.location.href = 'myGroup.html?id='+id
+				},
+				// 邀请好友
+				inviteFriends(item) {
+					let that = this;
+					let nowTime = new Date().getTime()
+					if(nowTime >= item.found_end_time*1000) {
+						that.$dialog.confirm({
+							title: '提示',
+							message: '该商品拼团已结束，是否继续拼一单?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							window.location.href='groupGoodsDetails.html?id='+item.goods_id+'&team_id='+item.team_id+'&v=1'
+						})
+						return
+					}
+					if(item.status == 0) {
+						that.$dialog.confirm({
+							title: '提示',
+							message: '订单还未支付，是否继续支付?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							// that.promptlyPay();
+						})
+						return
+					}
+					if(item.status == 1) {
+						that.setWx(item)
+						that.isShare = true
+						return
+					}
+					if(item.status == 2) {
+						that.$dialog.confirm({
+							title: '提示',
+							message: '已经拼团成功，是否继续拼一单?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							window.location.href='groupGoodsDetails.html?id='+item.goods_id+'&team_id='+item.team_id+'&v=1'
+						})
+						return
+					}
+					if(item.status == 3) {
+						that.$dialog.confirm({
+							title: '提示',
+							message: '拼团失败，是否继续拼一单?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							window.location.href='groupGoodsDetails.html?id='+item.goods_id+'&team_id='+item.team_id+'&v=1'
+						})
+						return
+					}
+				},
+				// 去拼团 跳转
+				toGoodsDetail(item) {
+					window.location.href = 'groupGoodsDetails.html?id='+item.goods_id+ '&team_id='+item.team_id+'&found_id='+item.found_id+'&v=1'
+				},
+				// 获取微信jssdk的配置
+				getJssdk(isShare) {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: localStorage.getItem("token"),
+							url: window.location.href
+						}
+					}).then(function (resp) {
+						// console.log(JSON.stringify(resp))
+						let data = resp.data
+
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.getMyGroupList()
+					})
+				},
+				setWx(item) {
+					let shop_id = localStorage.getItem('shop_id')
+					wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: item.share_title, // 分享标题
+							desc: item.share_desc, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/groupGoodsDetails.html?id=' + item.goods_id + '&team_id='+item.team_id + '&found_id='+item.found_id + '&shop_id=' + shop_id+'&from=share&v=1', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: item.share_img, // 分享图标
+							success: function() {
+				
+							}
+						})
+						wx.updateTimelineShareData({
+							title: item.share_title, // 分享标题
+							desc: item.share_desc, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/groupGoodsDetails.html?id=' + item.goods_id + '&team_id='+item.team_id + '&found_id='+item.found_id + '&shop_id=' + shop_id+'&from=share&v=1', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: item.share_img, // 分享图标
+							success: function() {
+							}
+						})
+					});
+				},
+			
+			},
+			created() {
+                this.getJssdk()
+			}
+		})
+	</script>
+</body>
+
+</html>

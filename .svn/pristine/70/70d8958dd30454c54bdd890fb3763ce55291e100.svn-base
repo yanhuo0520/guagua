@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>聚农优享</title>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="css/index.css">
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js?v=1"></script>
+		<script type="text/javascript" src="./js/api.js"></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+		<script src="js/vconsole.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+		<style>
+			/* 导航栏 */
+			.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+			.inputValue{background: #fff;height: 65px;display: flex;align-items: center;justify-content: center;position: relative;}
+			.inputValue input{width: 80%;height: 35px;border: none;border-radius: 20px;padding-left: 15px;}
+			.inputValue button{position: absolute;right: 10%;border: none;background: linear-gradient(#02CF0A,#00BE34);color: #fff;height: 29px;padding: 0 15px;border-radius: 20px;font-size: 14px;}
+			
+			.update{background: #fff;height: 65px;position: relative;display: flex;justify-content: center;}
+			.update p{height: 65px;display: flex;align-items: center;justify-content: space-between;width: 80%;}
+			.update p>span.change{background: linear-gradient(#02CF0A,#00BE34);border-radius: 20px;color:#fff;height:29px;padding: 0 15px;line-height:29px;font-size:14px;}
+			.update p>span:first-of-type{display: flex;align-items: center;}
+			.update img{width: 25px;height:25px;}
+			
+			.info{color: #28BD5C;margin:15px;}
+			.guize{color: #28BD5C;margin:15px;}
+			
+			.van-cell-group{margin-bottom: 10px;}
+			.van-cell-group input::placeholder,.van-cell-group textarea::placeholder{color: #999;}
+			
+			.saveBtn{background: linear-gradient(#02CF0A,#00BE34);border: none;color: #fff;height: 44px;border-radius: 20px;font-size: 16px;width: 80%;margin: 20px auto;display: block;}
+			
+			.shiyong h2{font-size: 18px;font-weight: bold;text-align: center;padding: 10px 0;}
+			.shiyong .btns{position: absolute;bottom: 30px;left:10%;width: 80%;display: flex;}
+			.shiyong .btns button:first-of-type{width: 50%;background: linear-gradient(rgba(2,207,10,0.2),rgba(0,190,52,0.2)); color: #28BD5C;border-top-left-radius: 20px;border-bottom-left-radius: 20px;border: none;height: 44px;}
+			.shiyong .btns button:last-of-type{width: 50%;background: linear-gradient(#02CF0A,#00BE34);color: #FFFFFF;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border: none;height: 44px;}
+			
+			.inputColor input{color: #28BD5C;}
+			
+			.van-cell__title{width: 120px;}
+			
+			.searchIndex{
+				z-index: 9999;
+				position: fixed;
+				width: 100%;
+				top: 0;
+			}
+			.searchList{
+				top:110px;
+				min-height: 10%;
+			}
+			
+			.upload{padding: 15px;}
+			.upload img{width:50px;height:50px;}
+			
+			.success{background: url(img/infoSuccess.png) no-repeat;width: 80%;height: 500px;background-size: 100%;position: relative;}
+			.success p{height: 100%;}
+			.success span{background: linear-gradient(#02CF0A,#00BE34);position: absolute;bottom: 150px;left: 10%;width: 80%;height: 35px;text-align: center;color: #fff;line-height: 35px;font-size: 16px;border-radius: 20px;}
+			
+			
+			/* 搜索框 */
+			.sousuo{
+				position: fixed;
+				top: 50px;left: 0;
+				width: 100%;
+				padding: 1.6vh 10px;
+				background: #FFFFFF;
+			}
+			.sousuo input{
+				border: none;
+				width: 95%;
+				height:6vh;
+				background:rgba(243,243,243,1);
+				border-radius:35px;
+				padding-left: 10px;
+				font-size: 14px;
+				text-align: center;
+			}
+			.sousuo img{
+				position: absolute;
+				left: 31%;
+				top: 3.2vh;
+				width: 15px;
+				height: 15px;
+			}
+			
+			.el-tabs__nav {
+				background-color: #f5f5f5;
+				height: calc(100vh - 220px);
+				overflow-y: scroll;
+				width: 5.3rem;
+			
+			}
+			
+			.xixuan {
+				width: 3rem;
+				height: 3rem;
+			}
+			
+			.xixuan img {
+				width: 3rem;
+				height: 3rem;
+			}
+			.xixuan .van-image { width: 100%!important; height: 100%!important; }
+			
+			.rContent {
+				background-color: #fff;
+				display: flex;
+			}
+			
+			.item {
+				margin: 0.25rem;
+			}
+			.el-tab-pane {
+				height: calc(100vh - 220px);
+				overflow-y: scroll;
+				padding-bottom: 1.5rem;
+			}
+			.el-tabs__item { 
+				padding: 0 0.75rem;
+			}
+			.el-tabs__item.is-active {
+				background: #fff;
+				color: #333;
+				font-weight: bold;
+			}
+			.el-tabs__item:hover {
+				cursor: #333;
+			}
+			
+			
+			.el-tabs__active-bar {
+				background-color: #f36065;
+			}
+			.paddingTitle{
+				padding-right: 50px;
+			}
+			/* 导航栏 */
+			.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+			.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+			.van-nav-bar .van-nav-bar__right img { display: block; }
+			.van-nav-bar .van-nav-bar__title { font-weight: bold; }
+			/* 商品列表 */
+			.el-tabs--left .el-tabs__header.is-left { margin-right: 0; }
+			.el-tabs--left .el-tabs__active-bar.is-left{ right: auto; left: 0; }
+			.el-tabs--left .el-tabs__active-bar.is-left { width: 3px; }
+			.el-tabs__active-bar { background: linear-gradient(#51d35e, #00c859); }
+			
+			/* 底部操作按钮 */
+			.footer-btn{position: absolute;bottom: 30px;left:10%;width: 80%;display: flex;}
+			.footer-btn button{width: 100%;background: linear-gradient(#02CF0A,#00BE34);color: #FFFFFF;border-radius: 20px;border: none;height: 44px;}
+			.font-color { color: #04C03A; }
+			.font-color { color: #04C03A; }
+			/* loading */
+			.full-loading { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: #fff; z-index: 9999; }
+			.full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+			/* 无数据 */
+			.no-data { position: fixed; top: 90px; left: 0; right: 0; bottom: 55px; z-index: 99;}
+			.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+			.no-data .no-data-con img { width: 100%; }
+			.no-data .no-data-con .no-title{ font-size: 1rem; font-weight:600;  color:rgba(0,0,0,1);  }
+			.no-data .no-data-con .no-desc { font-size: 0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+			.no-data .no-data-con .van-button { font-size: 0.75rem; font-weight:400; color:rgba(1,195,39,1); }
+			
+			.inputValue{background: #fff;height: 65px;display: flex;align-items: center;justify-content: center;position: relative;}
+			.inputValue input{width: 80%;height: 35px;border: none;border-radius: 20px;padding-left: 15px;}
+			.inputValue button{position: absolute;right: 10%;border: none;background: linear-gradient(#02CF0A,#00BE34);color: #fff;height: 29px;padding: 0 15px;border-radius: 20px;font-size: 14px;}
+			
+			.van-nav-bar__placeholder{height:0 !important;}
+		</style>
+	</head>
+	<body>
+		<div id="main">
+
+			<div v-show="isStep1">
+				<van-sticky :class="isSearch?'searchIndex':''">
+					<van-nav-bar :border="false" title="我要发券" left-arrow @click-left="returnLast()"></van-nav-bar>
+					<p class="inputValue" v-if="isInput">
+						<input type="text" v-model="searchText" placeholder="请输入您合作的主办方名称" @input="zhubanf">
+						<button @click="zhubanf">搜索</button>
+					</p>
+					<div class="update" v-else>
+						<p>
+							<span>
+								<img src="img/logo.png" alt="">
+								<span>{{selectText}}</span>
+							</span>
+							<span @click="isInput=true" v-if="!isDetail" class="change">修改</span>
+						</p>
+
+					</div>
+				</van-sticky>
+				<p class="info">填写优惠券信息</p>
+				<van-cell-group>
+					<van-field v-model="name" placeholder="优惠券名称" :readonly="isDetail"></van-field>
+					<van-field v-model="num" placeholder="发放总量" :readonly="isDetail" type="digit"></van-field>
+				</van-cell-group>
+
+				<van-tabs v-model="active" color="#02CF0A" line-height="1px">
+					<van-tab title="线上场景">
+						<van-cell-group v-if="isDetail">
+							<van-cell :title="shiyongText" is-link :style="{color:(shiyongText!='适用商品'?'#323233':'#999')}"></van-cell>
+							<van-cell is-link v-if="shiyongRadio==2">
+								已选择 <span style="color:#28BD5C">{{selNum}}件</span> 商品
+							</van-cell>
+						</van-cell-group>
+						<van-cell-group v-else>
+							<van-cell :title="shiyongText" is-link :style="{color:(shiyongText!='适用商品'?'#323233':'#999')}" @click="isShiyong=true"></van-cell>
+							<van-cell is-link v-if="shiyongRadio==2" @click="showSelGoods">
+								已选择 <span style="color:#28BD5C">{{selNum}}件</span> 商品
+							</van-cell>
+						</van-cell-group>
+					</van-tab>
+					<van-tab title="线下场景">
+						<p style="margin: 10px;">商品信息</p>
+						<van-cell-group>
+							<van-field placeholder="请输入商品名称" v-model="goodName"></van-field>
+							<van-cell title="上传商品图片" is-link style="color:#999"></van-cell>
+							<van-uploader :after-read="afterRead" class="upload">
+								<img src="img/uploadPic2.png" alt="" v-if="goodPic == ''">
+								<img :src="goodPic" alt="" v-else>
+							</van-uploader>
+						</van-cell-group>
+						<p style="margin: 10px;">加盟方信息</p>
+						<van-cell-group>
+							<van-field v-model="jiamengInfo.joiner_shop_name" placeholder="店铺名称" readonly></van-field>
+							<van-field v-model="jiamengInfo.joiner_name" placeholder="店铺联系人" readonly></van-field>
+							<van-field v-model="jiamengInfo.joiner_phone" placeholder="联系电话" maxlength="11" readonly></van-field>
+							<van-field v-model="jiamengAddress" placeholder="详细地址" readonly></van-field>
+							<van-field v-model="jiamengInfo.business_scope" placeholder="经营范围" readonly></van-field>
+							<van-cell title="店铺照片" is-link style="color:#999"></van-cell>
+							<img :src="jiamengInfo.joiner_shop_img" alt="" style="width: 50%;display: block;margin: 5px auto;">
+						</van-cell-group>
+					</van-tab>
+				</van-tabs>
+
+
+
+				<van-cell-group>
+					<!-- <van-cell :title="menkanText" is-link :style="{color:(menkanText!='使用门槛'?'#323233':'#999')}" v-if="isDetail"></van-cell> -->
+					<!-- <van-cell :title="menkanText" is-link :style="{color:(menkanText!='使用门槛'?'#323233':'#999')}" @click="isMenkan=true" v-else></van-cell> -->
+					<van-cell title="有使用门槛" :style="{color:(menkanText!='使用门槛'?'#323233':'#999')}"></van-cell>
+					<van-field v-model="menkan" label="订单满/元" placeholder="优惠金额" v-if="menkanRadio==2" class="inputColor" :readonly="isDetail"
+					 type="number" @input="changeMenkan"></van-field>
+				</van-cell-group>
+
+				<van-cell-group>
+					<van-cell :title="youhuiText" is-link :style="{color:(youhuiText!='优惠类型'?'#323233':'#999')}" v-if="isDetail"></van-cell>
+					<van-cell :title="youhuiText" is-link :style="{color:(youhuiText!='优惠类型'?'#323233':'#999')}" @click="isYouhui=true"
+					 v-else></van-cell>
+					<van-field v-model="youhui" :label="youhuiRadio==1?'满减金额/元':'优惠券折扣/百分比'" placeholder="优惠金额" v-if="youhuiText!='优惠类型'"
+					 class="inputColor" :readonly="isDetail" type="number" @input="changeYouhui"></van-field>
+				</van-cell-group>
+
+				<van-cell-group v-if="isDetail">
+					<van-cell :title="startText" is-link :style="{color:(startText!='优惠券开始时间'?'#323233':'#999')}"></van-cell>
+					<van-cell :title="endText" is-link :style="{color:(endText!='优惠券结束时间'?'#323233':'#999')}"></van-cell>
+				</van-cell-group>
+				<van-cell-group v-else>
+					<van-cell :title="startText" is-link :style="{color:(startText!='优惠券开始时间'?'#323233':'#999')}" @click="isShowStart=true"></van-cell>
+					<van-cell :title="endText" is-link :style="{color:(endText!='优惠券结束时间'?'#323233':'#999')}" @click="isShowEnd=true"></van-cell>
+				</van-cell-group>
+
+				<button class="saveBtn" @click="getNext('step2')">保存并转至下一步</button>
+			</div>
+
+			<div v-show="isStep2">
+				<van-sticky>
+					<van-nav-bar title="我要发券" left-arrow @click-left="getNext('step1')"></van-nav-bar>
+				</van-sticky>
+				<p class="guize">领取和使用规则</p>
+				<van-cell-group>
+					<van-cell :title="xianzhiText" is-link :style="{color:(xianzhiText!='使用限制'?'#323233':'#999')}" @click="isXianzhi=true"></van-cell>
+					<van-checkbox-group v-model="huiyuanResult" v-if="xianzhiRadio==2">
+						<van-cell-group>
+							<van-cell v-for="(item, index) in huiyuanList" clickable :key="item.id" :title="item.title">
+								<template #right-icon>
+									<van-checkbox :name="item.id" ref="checkboxes" checked-color="#28BD5C" :disabled="isDetail" />
+								</template>
+							</van-cell>
+						</van-cell-group>
+					</van-checkbox-group>
+				</van-cell-group>
+
+				<van-cell-group>
+					<van-cell :title="xianlingText" is-link :style="{color:(xianlingText!='每人限领次数'?'#323233':'#999')}" v-if="isDetail"></van-cell>
+					<van-cell :title="xianlingText" is-link :style="{color:(xianlingText!='每人限领次数'?'#323233':'#999')}" @click="isXianling=true"
+					 v-else></van-cell>
+					<van-field v-model="xianling" placeholder="限领次数" type="digit" v-if="xianlingRadio==2" class="inputColor" :readonly="isDetail"></van-field>
+				</van-cell-group>
+
+				<van-cell-group v-if="isDetail">
+					<van-cell :title="timeText" is-link :style="{color:(timeText!='用券时间'?'#323233':'#999')}"></van-cell>
+					<van-field v-model="time" placeholder="用券时间" type="digit" v-if="timeRadio==2 || timeRadio == 3" class="inputColor"
+					 :readonly="isDetail"></van-field>
+					<van-cell :title="timeRange" is-link :style="{color:(timeText!='用券时间'?'#323233':'#999')}" v-if="timeRadio==1 && timeText!='用券时间'"></van-cell>
+				</van-cell-group>
+				<van-cell-group v-else>
+					<van-cell :title="timeText" is-link :style="{color:(timeText!='用券时间'?'#323233':'#999')}" @click="isTime=true"></van-cell>
+					<van-field v-model="time" placeholder="用券时间" type="digit" v-if="timeRadio==2 || timeRadio == 3" class="inputColor"></van-field>
+					<van-cell :title="timeRange" is-link :style="{color:(timeText!='用券时间'?'#323233':'#999')}" @click="isTimeCalendar=true"
+					 v-if="timeRadio==1 && timeText!='用券时间'"></van-cell>
+				</van-cell-group>
+
+				<van-cell-group>
+					<van-cell :title="fenxiaoText" is-link :style="{color:(fenxiaoText!='分销提成类型'?'#323233':'#999')}" v-if="isDetail"></van-cell>
+					<van-cell :title="fenxiaoText" is-link :style="{color:(fenxiaoText!='分销提成类型'?'#323233':'#999')}" @click="isFenxiao=true"
+					 v-else></van-cell>
+					<van-field v-model="fenxiao" placeholder="分销提成金额" type="number" v-if="fenxiaoText!='分销提成类型'" class="inputColor"
+					 @input="changeFenxiao"></van-field>
+				</van-cell-group>
+				<!-- <van-cell-group>
+					<van-cell :title="diejiaText" is-link :style="{color:(diejiaText!='可否叠加'?'#323233':'#999')}" @click="isDiejia=true"></van-cell>
+				</van-cell-group> -->
+
+				<van-cell-group>
+					<!-- <van-cell :title="changjingText" is-link :style="{color:(changjingText!='使用场景'?'#323233':'#999')}" @click="isChangjing=true"></van-cell> -->
+					<van-field v-model="changjing" placeholder="使用说明" rows="1" autosize type="textarea" :readonly="isDetail"></van-field>
+				</van-cell-group>
+
+				<button class="saveBtn" @click="getNext('step3')">保存并转至下一步</button>
+			</div>
+
+			<div v-show="isStep3">
+				<van-sticky>
+					<van-nav-bar title="我要发券" left-arrow @click-left="getNext('step2')"></van-nav-bar>
+				</van-sticky>
+				<p class="guize">分享设置</p>
+				<van-cell-group>
+					<van-field v-model="shareTitle" placeholder="分享标题" :readonly="isDetail"></van-field>
+					<van-field v-model="shareContent" placeholder="分享内容" rows="3" autosize type="textarea" :readonly="isDetail"></van-field>
+				</van-cell-group>
+				<van-cell-group>
+					<van-cell title="图片" is-link style="color:#999"></van-cell>
+					<img :src="sharePic" alt="" v-if="isDetail" style="width: 50px;height: 50px;padding:15px">
+					<van-uploader :after-read="afterRead" class="upload" v-else>
+						<img :src="commonPic" alt="" v-if="sharePic == ''">
+						<img :src="sharePic" alt="" v-else>
+					</van-uploader>
+				</van-cell-group>
+
+
+				<button class="saveBtn" @click="updateMoney" v-if="isDetail">提交</button>
+				<button class="saveBtn" @click="submit" v-else>提交</button>
+			</div>
+
+			<van-popup v-model="isSearch" position="top" class="searchList">
+				<van-cell :title="item.shop_name" is-link @click="selSearch(item.shop_name,item.sj_id)" v-for="(item,index) in searchList"
+				 :key="index"></van-cell>
+			</van-popup>
+
+			<van-popup v-model="isShiyong" position="bottom" :style="{ height: '40%' }" class="shiyong">
+				<h2>适用商品</h2>
+				<van-radio-group v-model="shiyongRadio">
+					<van-cell-group>
+						<van-cell :title="item" clickable @click="shiyongRadio = index+1" v-for="(item,index) in shiyongList" :key="index">
+							<template #right-icon>
+								<van-radio :name="index+1" checked-color="#28BD5C" />
+							</template>
+						</van-cell>
+					</van-cell-group>
+				</van-radio-group>
+				<div class="btns">
+					<button @click="isShiyong=false">取消</button>
+					<button @click="confirmShiyong">确定</button>
+				</div>
+			</van-popup>
+
+			<!--<van-popup v-model="isMenkan" position="bottom" :style="{ height: '40%' }" class="shiyong">
+				<h2>使用门槛</h2>
+				<van-radio-group v-model="menkanRadio">
+					<van-cell-group>
+						<van-cell :title="item" clickable @click="menkanRadio = index+1" v-for="(item,index) in menkanList" :key="index">
+							<template #right-icon>
+								<van-radio :name="index+1" checked-color="#28BD5C" />
+							</template>
+						</van-cell>
+					</van-cell-group>
+				</van-radio-group>
+				<div class="btns">
+					<button @click="isMenkan=false">取消</button>
+					<button @click="confirmMenkan">确定</button>
+				</div>
+			</van-popup> -->
+
+			<van-popup v-model="isYouhui" position="bottom" :style="{ height: '40%' }" class="shiyong">
+				<h2>优惠类型</h2>
+				<van-radio-group v-model="youhuiRadio">
+					<van-cell-group>
+						<van-cell :title="item" clickable @click="youhuiRadio = index+1" v-for="(item,index) in youhuiList" :key="index">
+							<template #right-icon>
+								<van-radio :name="index+1" checked-color="#28BD5C" />
+							</template>
+						</van-cell>
+					</van-cell-group>
+				</van-radio-group>
+				<div class="btns">
+					<button @click="isYouhui=false">取消</button>
+					<button @click="confirmYouhui">确定</button>
+				</div>
+			</van-popup>
+
+			<van-popup v-model="isXianzhi" position="bottom" :style="{ height: '40%' }" class="shiyong">
+				<h2>使用限制</h2>
+				<van-radio-group v-model="xianzhiRadio">
+					<van-cell-group>
+						<van-cell :title="item" clickable @click="xianzhiRadio = index+1" v-for="(item,index) in xianzhiList" :key="index">
+							<template #right-icon>
+								<van-radio :name="index+1" checked-color="#28BD5C" />
+							</template>
+						</van-cell>
+					</van-cell-group>
+				</van-radio-group>
+				<div class="btns">
+					<button @click="isXianzhi=false">取消</button>
+					<button @click="confirmXianzhi">确定</button>
+				</div>
+			</van-popup>
+
+			<van-popup v-model="isXianling" position="bottom" :style="{ height: '40%' }" class="shiyong">
+				<h2>每人限领次数</h2>
+				<van-radio-group v-model="xianlingRadio">
+					<van-cell-group>
+						<van-cell :title="item" clickable @click="xianlingRadio = index+1" v-for="(item,index) in xianlingList" :key="index">
+							<template #right-icon>
+								<van-radio :name="index+1" checked-color="#28BD5C" />
+							</template>
+						</van-cell>
+					</van-cell-group>
+				</van-radio-group>
+				<div class="btns">
+					<button @click="isXianling=false">取消</button>
+					<button @click="confirmXianling">确定</button>
+				</div>
+			</van-popup>
+
+			<van-popup v-model="isTime" position="bottom" :style="{ height: '40%' }" class="shiyong">
+				<h2>用券时间</h2>
+				<van-radio-group v-model="timeRadio">
+					<van-cell-group>
+						<van-cell :title="item" clickable @click="timeRadio = index+1" v-for="(item,index) in timeList" :key="index">
+							<template #right-icon>
+								<van-radio :name="index+1" checked-color="#28BD5C" />
+							</template>
+						</van-cell>
+					</van-cell-group>
+				</van-radio-group>
+				<div class="btns">
+					<button @click="isTime=false">取消</button>
+					<button @click="confirmTime">确定</button>
+				</div>
+			</van-popup>
+
+			<van-popup v-model="isFenxiao" position="bottom" :style="{ height: '40%' }" class="shiyong">
+				<h2>分销提成类型</h2>
+				<van-radio-group v-model="fenxiaoRadio">
+					<van-cell-group>
+						<van-cell :title="item" clickable @click="fenxiaoRadio = index+1" v-for="(item,index) in fenxiaoList" :key="index">
+							<template #right-icon>
+								<van-radio :name="index+1" checked-color="#28BD5C" />
+							</template>
+						</van-cell>
+					</van-cell-group>
+				</van-radio-group>
+				<div class="btns">
+					<button @click="isFenxiao=false">取消</button>
+					<button @click="confirmFenxiao">确定</button>
+				</div>
+			</van-popup>
+
+			<!-- <van-popup v-model="isDiejia" position="bottom" :style="{ height: '40%' }" class="shiyong">
+				<h2>可否叠加</h2>
+				<van-radio-group v-model="diejiaRadio">
+					<van-cell-group>
+						<van-cell :title="item" clickable @click="diejiaRadio = index+1" v-for="(item,index) in diejiaList" :key="index">
+							<template #right-icon>
+								<van-radio :name="index+1" checked-color="#28BD5C" />
+							</template>
+						</van-cell>
+					</van-cell-group>
+				</van-radio-group>
+				<div class="btns">
+					<button @click="isDiejia=false">取消</button>
+					<button @click="confirmDiejia">确定</button>
+				</div>
+			</van-popup>
+
+			<van-popup v-model="isChangjing" position="bottom" :style="{ height: '40%' }" class="shiyong">
+				<h2>使用场景</h2>
+				<van-radio-group v-model="changjingRadio">
+					<van-cell-group>
+						<van-cell :title="item" clickable @click="changjingRadio = index+1" v-for="(item,index) in changjingList" :key="index">
+							<template #right-icon>
+								<van-radio :name="index+1" checked-color="#28BD5C" />
+							</template>
+						</van-cell>
+					</van-cell-group>
+				</van-radio-group>
+				<div class="btns">
+					<button @click="isChangjing=false">取消</button>
+					<button @click="confirmChangjing">确定</button>
+				</div>
+			</van-popup>-->
+
+			<van-calendar v-model="isShowStart" :show-confirm="false" color="#28BD5C" :max-date="maxDate" @confirm="confirmStart"></van-calendar>
+			<van-calendar v-model="isShowEnd" :show-confirm="false" color="#28BD5C" :max-date="maxDate" @confirm="confirmEnd"></van-calendar>
+
+			<van-calendar v-model="isTimeCalendar" type="range" :show-confirm="false" color="#28BD5C" :max-date="maxDate"
+			 @confirm="confirmRange"></van-calendar>
+
+			<van-popup v-model="isSuccess" class="success">
+				<p @click="refresh"><span>我知道了</span></p>
+			</van-popup>
+
+			<van-popup v-model="isSelGoods" style="width: 100%;height: 100%;">
+				<div id="speed">
+					<van-sticky>
+						<van-nav-bar title="选择商品" left-arrow @click-left="isSelGoods = false"></van-nav-bar>
+						<p class="inputValue">
+							<input type="text" v-model="searchGood" placeholder="请输入商品名称">
+							<button @click="sortGoods">搜索</button>
+						</p>
+					</van-sticky>
+
+					<el-row style="background-color: #fff;position: fixed;width: 100%;bottom: 0; top: 115px">
+						<el-col>
+							<el-tabs :tab-position="tabPosition" v-model="cate_name" @tab-click="handleClick" style="font-size: 1rem;">
+								<el-tab-pane :label="item.cate_name" v-for="item in LeftNav" :name="item.cate_name" :key="item.cate_id"
+								 :cate_id="item.cate_id">
+									<van-checkbox-group v-model="result">
+										<van-cell-group>
+											<van-cell v-for="(x, index) in allGoods" clickable :key="x.goods_id">
+												<template #right-icon>
+													<van-checkbox :name="x.goods_id" ref="checkboxes" checked-color="#28BD5C" v-if="x.storage!=0" />
+												</template>
+												<template #default>
+													<div class="rContent">
+														<div class="xixuan">
+															<van-image width="329" height="300" :src="x.thumb"></van-image>
+														</div>
+														<div style="width: 50vw;margin-left: 0.6rem;height: 3rem;position: relative;">
+															<p style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size: 0.875rem">{{x.goods_name}}</p>
+															<p>
+																<span>ID: <span style="color: #28BD5C;">{{x.goods_id}}</span></span>
+																<span>库存:<span style="color: #28BD5C;">{{x.storage}}</span></span>
+															</p>
+														</div>
+													</div>
+												</template>
+											</van-cell>
+										</van-cell-group>
+									</van-checkbox-group>
+									<div class="no-data" style="position: fixed; top: 18vh; bottom: 0; left: 5.3rem; right: 0;" v-if="allGoods.length === 0 && !isGoodsLoading">
+										<div class="no-data-con">
+											<img src="./images/icon/no-goods.png" alt="">
+											<p class="no-title">该分类下商品为空</p>
+											<p class="no-desc">赶紧去其他分类逛逛吧</p>
+										</div>
+									</div>
+
+								</el-tab-pane>
+
+
+							</el-tabs>
+						</el-col>
+					</el-row>
+					<!-- 底部操作按钮 -->
+					<div class="footer-btn">
+						<button @click="toFill">确定</button>
+					</div>
+
+					<div class="page-mask" v-show="loading">
+						<div class="page-mask-content">
+							<div class="el-loading-spinner"><i class="el-icon-loading"></i>
+								<p class="el-loading-text">拼命加载中</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="page-mask" v-show="addgoods">
+						<div class="page-mask-content">
+							<div class="el-loading-spinner"><i class="el-icon-s-goods"></i>
+								<p class="el-loading-text">请添加商品</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="message-page-mask" v-show="message.show==1">
+					<div class="message-page-mask-content">
+						<div class="el-loading-spinner">
+							<i v-show="message.type=='success' " class="el-icon-success"></i>
+							<i v-show="message.type=='error' " class="el-icon-error"></i>
+
+							<p class="el-loading-text">{{message.text}}</p>
+						</div>
+					</div>
+				</div>
+			</van-popup>
+
+		</div>
+		<script>
+			var app = new Vue({
+				el: '#main',
+				data: {
+					isStep1: true,
+					isStep2: false,
+					isStep3: false,
+					isInput: true,
+					isSearch: false,
+					searchText: '', //搜索
+					name: '', //优惠券名称
+					num: '', //发放总量
+					selNum: 0,
+					isSelGoods: false,
+
+					isShiyong: false,
+					shiyongRadio: 1,
+					shiyongText: '适用商品',
+					shiyong: '',
+					shiyongList: ['全部商品可用', '指定商品可用'],
+
+					isMenkan: false,
+					menkanRadio: 2,
+					menkanText: '使用门槛',
+					menkan: '',
+					menkanList: ['无使用门槛', '有使用门槛'],
+
+					isYouhui: false,
+					youhuiRadio: 1,
+					youhuiText: '优惠类型',
+					youhui: '',
+					youhuiList: ['满减券', '折扣券'],
+
+					isShowStart: false,
+					isShowEnd: false,
+					startText: '优惠券开始时间',
+					endText: '优惠券结束时间',
+					maxDate: new Date(2050, 0, 31),
+
+					isXianzhi: false,
+					xianzhiRadio: 1,
+					xianzhiText: '使用限制',
+					xianzhi: '',
+					xianzhiList: ['不限制，所有人可使用', '指定会员等级可使用'],
+					huiyuanResult: [],
+					huiyuanList: [{
+						id: 0,
+						title: '普通会员'
+					}, {
+						id: 1,
+						title: '益农卡会员'
+					}],
+
+
+					isXianling: false,
+					xianlingRadio: 1,
+					xianlingText: '每人限领次数',
+					xianling: '1',
+					xianlingList: ['不限次数', '限制次数'],
+
+					isTime: false,
+					timeRadio: 1,
+					timeText: '用券时间',
+					time: '',
+					timeList: ['指定时间范围', '领券当日起/天', '领券次日起/天'],
+					isTimeCalendar: false,
+					timeRange: '',
+					yxq_start: '',
+					yxq_end: '',
+
+					isFenxiao: false,
+					fenxiaoRadio: 1,
+					fenxiaoText: '分销提成类型',
+					fenxiao: '',
+					fenxiaoList: ['按券固定金额', '按每笔固定金额'],
+
+					// isDiejia: false,
+					// diejiaRadio: 1,
+					// diejiaText: '可否叠加',
+					// diejia: '',
+					// diejiaList: ['不可叠加使用', '可叠加使用'],
+
+					// isChangjing: false,
+					// changjingRadio: 1,
+					// changjingText: '使用场景',
+					changjing: '',
+					// changjingList: ['线上商城或益农管家使用', '线下门店核销使用', '线上、线下通用'],
+
+					shareTitle: '恭喜您！获得一张优惠券~',
+					shareContent: '国庆中秋同框假，聚农优惠不放假。聚农全民购，优享欢乐“送”。国庆中秋同框假，聚农优惠不放假聚农全民购，优享欢乐“送”！',
+					sharePic: '',
+					commonPic: baseUrl('/public/uploads/coupon.png'),
+					pic_id: '1',
+
+					searchList: [],
+					selectText: '',
+					sponsor_id: '',
+
+					isSuccess: false,
+
+
+					addgoods: 0,
+					tabPosition: 'left',
+					message: {
+						show: 0,
+						type: 'success',
+						text: '成功',
+					},
+					dialogFormVisible: false,
+					token: localStorage.getItem('token'),
+					// token:'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDMwOTUzMTYsImp0aSI6IlpEZzVOelJpWkRjM05XRXlZVFpsT0RFMU16WTFOemswT1RnMVlUazBZakU9IiwiaXNzIjoiMTI3LjAuMC4xIiwibmJmIjoxNjAzMDk1MzE2LCJleHAiOjE2MzQ2MzEzMTYsImRhdGEiOnsiYWRtaW5faWQiOjQxLCJ1bmNlcnRpZnkiOjB9fQ.-WfqZtMtZmmhnkuoND5tAo2ckUwyjYnysLE3mGhe60c',
+					JumpUrl: {
+						cate: baseUrl('/wx/distribution/category'),
+						list: baseUrl('/wx/distribution/goodsListsTest'),
+						promotion: baseUrl('/wx/index/promotion_goodsTest'),
+						// jssdkUrl: baseUrl('/wx/jssdk/getSignPackage'),
+
+						uploadShare: baseUrl('/wx/distribution/upload_coupon_share_img'),
+						searchZbf: baseUrl('/wx/distribution/sponsor_src'),
+						addCoupon: baseUrl('/wx/distribution/joiner_add_coupon_distribution'),
+
+						couponDetail: baseUrl('/wx/distribution/coupon_detail'),
+						updateM: baseUrl('/wx/distribution/joiner_update_coupon_distribution'),
+						joinerInfo: baseUrl('/wx/distribution/joiner_info')
+					},
+					LeftNav: [],
+					goods: {
+						token: localStorage.getItem("token"),
+						cate_id: '',
+					},
+					addGoods: {
+						goods_id: '',
+						spcifi_id: 0,
+						number: 0,
+						token: localStorage.getItem("token"),
+					},
+
+					allGoods: [], //分类下所有商品
+					goodsId: [],
+					count: 0, //共几件
+					amount: 0, //共多少钱
+					box: 1,
+					cartList: [], //获取购物车数据
+					page: 1,
+					loading: 0,
+					isDone: 0,
+					cate_id: '',
+					current_index: 1,
+					cate_name: '全部',
+					promotion_goods: [],
+					bodyHeight: '',
+					isGoodsLoading: true,
+					isShoppingLoading: true,
+					failGoods: [],
+
+					result: [],
+					searchGood: '',
+					isDetail: false,
+
+					active: 0,
+					jiamengInfo:{},
+					jiamengAddress:'',
+					goodPic:'',
+					goodName:''
+				},
+				watch: {
+					allGoods: {
+						handler: function(newVal, oldValue) {
+
+						},
+						deep: true
+					}
+				},
+				// created: function() {
+				// 	this.getJssdk();
+
+				// },
+				destroyed() {
+					window.removeEventListener('popstate', this.cancel, false);
+				},
+				mounted() {
+
+					this.timeRange = `${this.formatDate(new Date())} 至 ${this.formatDate(new Date())}`
+
+					this.yxq_start = `${this.formatDate(new Date())}`
+					this.yxq_end = `${this.formatDate(new Date())}`
+
+					if (getQueryString('tag') == 'edit') {
+						this.detail()
+					}
+					this.getInfo()
+				},
+				methods: {
+					formatDate(date) {
+						return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+					},
+					returnLast() {
+						if (getQueryString('tag') == 'edit') {
+							window.location.href = 'fenxiaoList.html'
+						} else if (getQueryString('tag') == 'isJoiner') {
+							window.location.href = 'sendCoupon.html'
+						} else {
+							window.location.href = 'jiamengInfo.html'
+						}
+						localStorage.clear()
+					},
+					// 获取加盟方信息
+					getInfo(){
+						axios.post(this.JumpUrl.joinerInfo,{
+							token: this.token
+						}).then(res => {
+							if(res.data.errno == 0){
+								this.jiamengInfo = res.data.data
+								this.jiamengAddress = res.data.data.province + res.data.data.city + res.data.data.county + res.data.data.street + res.data.data.village + res.data.data.addr
+							}else{
+								this.$toast(res.data.errmsg)
+							}
+						})
+					},
+					afterRead(file) {
+						this.upload(file)
+					},
+					upload(file) {
+						let formdata = new FormData();
+						formdata.token = this.token
+						// formdata.append("from", 'pc');
+						formdata.append("token", this.token);
+						//可以通过append()方法来追加数据
+						if (file.file) {
+							if (file.file.size > 500 * 1024) {
+								let canvas = document.createElement("canvas"); // 创建Canvas对象(画布)
+								let context = canvas.getContext("2d");
+								let img = new Image();
+								img.src = file.content; // 指定图片的DataURL(图片的base64编码数据)
+								img.onload = () => {
+									canvas.width = img.width * 0.5;
+									canvas.height = img.height * 0.5;
+									context.drawImage(img, 0, 0, img.width * 0.5, img.height * 0.5);
+									file.content = canvas.toDataURL(file.file.type, 0.92); // 0.92为默认压缩质量
+									let files = this.dataURLtoFile(file.content, file.file.name);
+									files.content = canvas.toDataURL(files.type, 0.92);
+									if (files.size > 600000) {
+										this.upload(files);
+									} else {
+										formdata.append("file",files);
+										this.uploadFile(formdata);
+									}
+								};
+							} else {
+								//小于500k直接上传
+								formdata.append("file",file.file);
+								this.uploadFile(formdata);
+							}
+						} else {
+							if (file.size > 500 * 1024) {
+								let canvas = document.createElement("canvas"); // 创建Canvas对象(画布)
+								let context = canvas.getContext("2d");
+								let img = new Image();
+								img.src = file.content; // 指定图片的DataURL(图片的base64编码数据)
+								img.onload = () => {
+									canvas.width = img.width * 0.5;
+									canvas.height = img.height * 0.5;
+									context.drawImage(img, 0, 0, img.width * 0.5, img.height * 0.5);
+									file.content = canvas.toDataURL(file.type, 0.92); // 0.92为默认压缩质量
+									let files = this.dataURLtoFile(file.content, file.name);
+									files.content = canvas.toDataURL(files.type, 0.92);
+									if (files.size > 600000) {
+										this.upload(files);
+									} else {
+										formdata.append("file",files);
+										this.uploadFile(formdata);
+									}
+								};
+							} else {
+								//小于500k直接上传
+								formdata.append("file",file);
+								this.uploadFile(formdata);
+							}
+						}
+					},
+					dataURLtoFile(dataurl, filename) {
+						// 将base64转换为file文件
+						let arr = dataurl.split(",");
+						let mime = arr[0].match(/:(.*?);/)[1];
+						let bstr = atob(arr[1]);
+						let n = bstr.length;
+						let u8arr = new Uint8Array(n);
+						while (n--) {
+							u8arr[n] = bstr.charCodeAt(n);
+						}
+						return new File([u8arr], filename, {
+							type: mime
+						});
+					},
+					uploadFile(formdata, tag) {
+						const instance = axios.create({
+							//withCredentials:true
+							// headers:{
+							//   'authToken': localStorage.getItem('token')
+							// }
+						});
+						instance
+							.post(this.baseUrl + "/wx/distribution/dis_upload_img", formdata)
+							.then(res => {
+								if (res.data.errno == 0) {
+									this.$toast.success("上传成功");
+									this.goodPic = res.data.data.url
+								} else {
+									this.$toast(res.data.message);
+								}
+							}).catch((e) => {
+								this.$toast(e)
+							});
+					},
+					
+					changeMenkan() {
+						// 通过正则过滤小数点后两位
+						this.menkan = (this.menkan.match(/^\d*(\.?\d{0,2})/g)[0]) || null
+					},
+					changeYouhui() {
+						// 通过正则过滤小数点后两位
+						this.youhui = (this.youhui.match(/^\d*(\.?\d{0,2})/g)[0]) || null
+					},
+					changeFenxiao() {
+						// 通过正则过滤小数点后两位
+						this.fenxiao = (this.fenxiao.match(/^\d*(\.?\d{0,2})/g)[0]) || null
+					},
+
+					detail() {
+						this.isDetail = true
+						this.isInput = false
+						this.selectText = decodeURI(getQueryString('name'))
+						axios.post(this.JumpUrl.couponDetail, {
+							coupon_id: getQueryString('id'),
+							token: this.token
+						}).then(res => {
+							if (res.data.errno == 0) {
+								let list = res.data.data
+								this.name = list.name
+								this.num = list.all
+								if (list.goods_type == 0) {
+									this.shiyongText = '全部商品可用'
+									this.shiyongRadio = 1
+								} else {
+									this.shiyongText = '指定商品可用'
+									this.shiyongRadio = 2
+									this.selNum = list.goods.length
+									this.goodsId = list.goods_id
+								}
+								if (list.target_limit == 0) {
+									this.menkanText = '无使用门槛'
+									this.menkanRadio = 1
+								} else {
+									this.menkanText = '有使用门槛'
+									this.menkanRadio = 2
+									this.menkan = list.target
+								}
+								if (list.type == 0) {
+									this.youhuiText = '满减券'
+									this.youhuiRadio = 1
+									this.youhui = list.money
+								} else {
+									this.youhuiText = '折扣券'
+									this.youhuiRadio = 2
+									this.youhui = list.discount
+								}
+								this.startText = this.format(new Date(list.start * 1000))
+								this.endText = this.format(new Date(list.end * 1000))
+								if (list.get_type == 0) {
+									this.xianzhiText = '不限制，所有人可使用'
+									this.xianzhiRadio = 1
+								} else {
+									this.xianzhiText = '指定会员等级可使用'
+									this.xianzhiRadio = 2
+									let rList = list.get_level.split(',')
+									let arr = []
+									rList.forEach(item => {
+										arr.push(item - 1)
+									})
+									this.huiyuanResult = arr
+
+								}
+								if (list.get_limit_radio == 0) {
+									this.xianlingText = '不限次数'
+									this.xianlingRadio = 1
+								} else {
+									this.xianlingText = '限制次数'
+									this.xianlingRadio = 2
+									this.xianling = list.get_limit
+								}
+								if (list.yxq_type == 0) {
+									this.timeText = '指定时间范围'
+									this.yxq_start = list.yxq_start
+									this.yxq_end = list.yxq_end
+									this.timeRange = this.format(new Date(this.yxq_start * 1000)) + '至' + this.format(new Date(this.yxq_end *
+										1000))
+									this.timeRadio = 1
+								} else if (list.yxq_type == 1) {
+									this.timeText = '领券当日起/天'
+									this.time = list.yxq_today
+									this.timeRadio = 2
+								} else {
+									this.timeText = '领券次日起/天'
+									this.time = list.yxq_tomorrow
+									this.timeRadio = 3
+								}
+								this.fenxiao = list.distribution
+								if (list.distribution_type == 0) {
+									this.fenxiaoText = '按券固定金额'
+									this.fenxiaoRadio = 1
+								} else {
+									this.fenxiaoText = '按每笔固定金额'
+									this.fenxiaoRadio = 2
+								}
+								this.changjing = list.desc
+								this.shareTitle = list.share_title
+								this.shareContent = list.share_content
+								this.sharePic = list.share_img
+							}
+						})
+					},
+					format(now) {
+						var year = now.getFullYear(); //取得4位数的年份
+						var month = now.getMonth() + 1; //取得日期中的月份，其中0表示1月，11表示12月
+						var date = now.getDate(); //返回日期月份中的天数（1到31）
+						return year + "-" + month + "-" + date;
+					},
+					updateMoney() {
+						axios.post(this.JumpUrl.updateM, {
+							coupon_id: getQueryString('id'),
+							c_code: getQueryString('code'),
+							distribution: this.fenxiao,
+							token: this.token
+						}).then(res => {
+							if (res.data.errno == 0) {
+								this.$toast(res.data.errmsg)
+								window.location.href = 'fenxiaoList.html'
+							} else if (res.data.errno == 1) {
+								this.$toast(res.data.errmsg)
+							}
+						})
+					},
+
+					// 下一步
+					getNext(i) {
+						if (i == 'step1') {
+							this.isStep1 = true
+							this.isStep2 = false
+							this.isStep3 = false
+						} else if (i == 'step2') {
+							this.isStep1 = false
+							this.isStep2 = true
+							this.isStep3 = false
+						} else if (i == 'step3') {
+							this.isStep1 = false
+							this.isStep2 = false
+							this.isStep3 = true
+						}
+					},
+
+					// 适用商品
+					confirmShiyong() {
+						this.isShiyong = false
+						this.shiyongText = this.shiyongList[this.shiyongRadio - 1]
+					},
+					// 使用门槛
+					confirmMenkan() {
+						this.isMenkan = false
+						this.menkanText = this.menkanList[this.menkanRadio - 1]
+					},
+					// 优惠类型
+					confirmYouhui() {
+						this.isYouhui = false
+						this.youhui = ''
+						this.youhuiText = this.youhuiList[this.youhuiRadio - 1]
+					},
+					// 优惠券开始时间
+					confirmStart(date) {
+						this.isShowStart = false;
+						this.startText = `${this.formatDate(date)}`
+					},
+					// 优惠券结束时间
+					confirmEnd(date) {
+						this.isShowEnd = false;
+						this.endText = `${this.formatDate(date)}`
+					},
+
+					// 选中合作店铺
+					selSearch(title, id) {
+						this.isSearch = false;
+						this.isInput = false
+						this.selectText = title;
+						this.sponsor_id = id
+					},
+					// 使用限制
+					confirmXianzhi() {
+						this.isXianzhi = false
+						this.xianzhiText = this.xianzhiList[this.xianzhiRadio - 1]
+					},
+					// 每人限领次数
+					confirmXianling() {
+						this.isXianling = false
+						this.xianlingText = this.xianlingList[this.xianlingRadio - 1]
+					},
+					// 用券时间
+					confirmTime() {
+						this.isTime = false;
+						this.time = ''
+						this.timeText = this.timeList[this.timeRadio - 1]
+					},
+					// 分销提成类型
+					confirmFenxiao() {
+						this.isFenxiao = false;
+						this.fenxiao = '';
+						this.fenxiaoText = this.fenxiaoList[this.fenxiaoRadio - 1]
+					},
+					// confirmDiejia(){
+					// 	this.isDiejia = false;
+					// 	this.diejiaText = this.diejiaList[this.diejiaRadio - 1]
+					// },
+					// 用券时间指定时间范围
+					confirmRange(date) {
+						const [start, end] = date;
+						this.isTimeCalendar = false;
+						this.timeRange = `${this.formatDate(start)} 至 ${this.formatDate(end)}`;
+
+
+						this.yxq_start = `${this.formatDate(start)}`
+						this.yxq_end = `${this.formatDate(end)}`
+					},
+
+					// confirmChangjing() {
+					// 	this.isChangjing = false;
+					// 	this.changjingText = this.changjingList[this.changjingRadio - 1]
+					// },
+
+					afterRead(file) {
+						this.upload(file)
+					},
+					upload(file) {
+						let formdata = new FormData();
+						// formdata.append("from", 'pc');
+						formdata.append("token", this.token);
+						//可以通过append()方法来追加数据
+						if (file.file) {
+							if (file.file.size > 500 * 1024) {
+								let canvas = document.createElement("canvas"); // 创建Canvas对象(画布)
+								let context = canvas.getContext("2d");
+								let img = new Image();
+								img.src = file.content; // 指定图片的DataURL(图片的base64编码数据)
+								img.onload = () => {
+									canvas.width = img.width * 0.5;
+									canvas.height = img.height * 0.5;
+									context.drawImage(img, 0, 0, img.width * 0.5, img.height * 0.5);
+									file.content = canvas.toDataURL(file.file.type, 0.92); // 0.92为默认压缩质量
+									let files = this.dataURLtoFile(file.content, file.file.name);
+									files.content = canvas.toDataURL(files.type, 0.92);
+									if (files.size > 600000) {
+										this.upload(files);
+									} else {
+										formdata.append("file", files);
+										this.uploadFile(formdata);
+									}
+								};
+							} else {
+								//小于500k直接上传
+								formdata.append("file", file.file);
+								this.uploadFile(formdata);
+							}
+						} else {
+							if (file.size > 500 * 1024) {
+								let canvas = document.createElement("canvas"); // 创建Canvas对象(画布)
+								let context = canvas.getContext("2d");
+								let img = new Image();
+								img.src = file.content; // 指定图片的DataURL(图片的base64编码数据)
+								img.onload = () => {
+									canvas.width = img.width * 0.5;
+									canvas.height = img.height * 0.5;
+									context.drawImage(img, 0, 0, img.width * 0.5, img.height * 0.5);
+									file.content = canvas.toDataURL(file.type, 0.92); // 0.92为默认压缩质量
+									let files = this.dataURLtoFile(file.content, file.name);
+									files.content = canvas.toDataURL(files.type, 0.92);
+									if (files.size > 600000) {
+										this.upload(files);
+									} else {
+										formdata.append("file", files);
+										this.uploadFile(formdata);
+									}
+								};
+							} else {
+								//小于500k直接上传
+								formdata.append("file", file);
+								this.uploadFile(formdata);
+							}
+						}
+					},
+					dataURLtoFile(dataurl, filename) {
+						// 将base64转换为file文件
+						let arr = dataurl.split(",");
+						let mime = arr[0].match(/:(.*?);/)[1];
+						let bstr = atob(arr[1]);
+						let n = bstr.length;
+						let u8arr = new Uint8Array(n);
+						while (n--) {
+							u8arr[n] = bstr.charCodeAt(n);
+						}
+						return new File([u8arr], filename, {
+							type: mime
+						});
+					},
+					uploadFile(formdata, tag) {
+						const instance = axios.create({
+							//withCredentials:true
+							// headers:{
+							//   'authToken': localStorage.getItem('token')
+							// }
+						});
+						formdata.append('sponsor_id', this.sponsor_id)
+						formdata.append('token', this.token)
+						instance
+							.post(this.JumpUrl.uploadShare, formdata)
+							.then(res => {
+								if (res.data.errno == 0) {
+									this.$toast.success("上传成功");
+									this.sharePic = res.data.data.url;
+									this.pic_id = res.data.data.pic_id;
+								} else {
+									this.$toast(res.data.message);
+								}
+							}).catch((e) => {
+								this.$toast(e)
+							});
+					},
+
+					zhubanf() {
+						// if(this.searchText != ''){
+
+						// }else{
+						// 	this.isSearch = false
+						// }
+						axios.post(this.JumpUrl.searchZbf, {
+							shop_name: this.searchText,
+							token: this.token
+						}).then(res => {
+							if (res.data.errno == 0) {
+								if (res.data.data.list.length != 0) {
+									this.isSearch = true
+									this.searchList = res.data.data.list
+								} else {
+									this.isSearch = false
+								}
+							}
+						})
+
+					},
+
+					showSelGoods() {
+						this.isSelGoods = true;
+						if (window.history && window.history.pushState) {
+							// 向历史记录中插入了当前页
+							history.pushState(null, null, document.URL);
+							window.addEventListener('popstate', this.cancel, false);
+						}
+
+						var that = this
+						that.LeftNav = []
+						that.allGoods = []
+						that.cate_id = ''
+						that.current_index = 1
+						that.cate_name = '全部'
+						that.page = 1
+						axios({
+								method: 'post',
+								url: that.JumpUrl.cate,
+								data: {
+									token: that.token,
+									sponsor_id: that.sponsor_id
+								}
+							})
+							.then(function(resp) {
+
+								for (let item of resp.data.data.categoryList) {
+									that.LeftNav.push(item);
+								}
+
+								if (resp.data.errno == 1) {
+									this.$toast(res.data.errmsg)
+								}
+
+								let index_scroll = localStorage.getItem('index_scroll');
+								let cate_name = localStorage.getItem('cate_name');
+								let allGoods = localStorage.getItem('allGoods');
+								let promotion_goods = localStorage.getItem('promotion_goods');
+
+								that.loading = 1;
+								that.$nextTick(function() {
+									var cate_id = getQueryString('cate_id')
+									var tabIndex = getQueryString('tabIndex')
+									var LeftNav = this.LeftNav
+									if (cate_id) {
+										this.cate_id = cate_id;
+										this.goods.cate_id = cate_id
+										this.current_index = tabIndex
+									} else {
+										this.cate_id = 0;
+									}
+									for (let c of that.LeftNav) {
+										if (c.cate_id == that.cate_id) {
+											that.cate_name = c.cate_name
+										}
+									}
+
+
+
+
+									if (index_scroll > 0) {
+										that.loading = 0;
+										that.allGoods = JSON.parse(allGoods);
+										that.promotion_goods = JSON.parse(promotion_goods);
+
+										setTimeout(function() {
+											document.getElementById("pane-" + cate_name).scrollTop = index_scroll;
+										}, 100)
+
+										localStorage.removeItem('index_scroll');
+										localStorage.removeItem('cate_name');
+										localStorage.removeItem('allGoods');
+										localStorage.removeItem('promotion_goods');
+
+									} else if (cate_id != 1) {
+										that.sortGoods()
+
+									} else {
+										that.promotionGoods()
+										that.loading = 0
+									}
+									// that.sortGoods()
+
+
+								})
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+
+
+					},
+					toFill() {
+						let arr = []
+						this.result.forEach(item => {
+							this.goodsId.push(item)
+						})
+						this.selNum = this.result.length
+						// window.location.href = 'fillCoupon.html'
+						this.isSelGoods = false
+					},
+					hideDialog() {
+						this.dialogFormVisible = !this.dialogFormVisible
+					},
+					onScroll() {
+						if (this.isDone) {
+							return;
+						}
+
+						let that = this;
+						let ele = document.getElementById('pane-' + that.cate_name);
+						/*页面高度*/
+						var scrollTop = 0;
+						if (ele && ele.scrollTop) {
+							scrollTop = ele.scrollTop;
+						}
+						/*当前可视高度*/
+						let clientHeight = document.documentElement.clientHeight;
+						/*文档完整的高度*/
+						// let  scrollHeight=Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+						let scrollHeight = Math.max(ele.scrollHeight, ele.scrollHeight);
+						// let  scrollHeight=document.getElementById('pane-'+that.cate_name);
+						if ((scrollHeight - clientHeight - scrollTop) <= 100) {
+
+							if (that.loading == 1) {
+								return;
+							}
+							this.page += 1;
+							that.loading = 1;
+							that.sortGoods();
+						}
+
+					},
+					cancel() {
+						// console.log("点击了浏览器的返回按钮");
+						sessionStorage.clear();
+						// window.history.back();
+						// this.returnLast();
+					},
+					timing() {
+						this.addgoods = 0;
+					},
+					//tab切换
+					handleClick(tab, event) {
+						let that = this;
+						that.goods.cate_id = tab.$attrs.cate_id; //获取分类下的商品左边导航的id
+						that.addGoods.goods_id = '';
+						that.allGoods = []
+						that.cate_id = tab.$attrs.cate_id
+						that.isDone = 0;
+						that.page = 1;
+						that.searchGood = '';
+						let index = tab.index
+						that.current_index = tab.index
+
+						localStorage.setItem('cate_id', tab.$attrs.cate_id)
+						localStorage.setItem('tabIndex', tab.index)
+
+						if (that.cate_id == 1) {
+							that.promotionGoods();
+						} else {
+							that.sortGoods();
+						}
+
+
+					},
+					//分类下的商品
+					sortGoods() {
+						let that = this;
+						let page = that.page;
+						that.isGoodsLoading = true;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.list,
+								data: {
+									token: that.token,
+									cate_id: that.cate_id,
+									page: that.page,
+									sponsor_id: that.sponsor_id,
+									goods_name: that.searchGood
+								},
+							})
+							.then(function(resp) {
+								that.loading = 0;
+								that.isGoodsLoading = false;
+								if (resp.data.data.data.length == 0) {
+									that.isDone = 1;
+								}
+								for (let c of that.LeftNav) {
+									if (c.cate_id == that.cate_id) {
+										that.cate_name = c.cate_name
+									}
+								}
+								let cartList = that.cartList
+								for (var i = 0; i < resp.data.data.data.length; i++) {
+									resp.data.data.data[i].num = 0;
+									for (var j = 0; j < cartList.length; j++) {
+										if (cartList[j].goods_id == resp.data.data.data[i].goods_id && cartList[j].spcifi_id == resp.data.data.data[
+												i].spcifi_id) {
+											resp.data.data.data[i].num = cartList[j].number;
+										}
+									}
+								};
+								if (that.page == 1) {
+									that.allGoods = resp.data.data.data;
+									setTimeout(function() {
+										document.getElementById("pane-" + that.cate_name).addEventListener('scroll', that.onScroll);
+									}, 1000)
+								} else {
+									for (let item of resp.data.data.data) {
+										that.allGoods.push(item);
+									}
+								}
+							}).catch(function(error) {
+								that.isGoodsLoading = false;
+								that.loading = 0;
+								//请求失败
+								console.log('error', error);
+
+							})
+
+					},
+					// 所有分类
+					classification() {
+						let that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.cate,
+								data: {
+									token: that.token
+								}
+							})
+							.then(function(resp) {
+								for (let item of resp.data.data) {
+									that.LeftNav.push(item);
+								}
+
+								that.loading = 1;
+								that.sortGoods()
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					promotionGoods() {
+						let that = this;
+						that.isGoodsLoading = true;
+						axios({
+							method: 'post',
+							url: this.JumpUrl.promotion,
+							data: {
+								token: this.token
+							}
+						}).then(res => {
+							that.isGoodsLoading = false;
+							if (res.data.errno === 0) {
+								var data = res.data.data
+								data.forEach(ele => {
+									// ele.num = 0
+									if (ele.spcifi_name.charAt(ele.spcifi_name.length - 1) == ",") { // 一个属性最后两个逗号，两个属性最后一个逗号，三个属性最后没有逗号
+										ele.spcifi_name_new = ele.spcifi_name.substr(0, ele.spcifi_name.length - 1);
+										if (ele.spcifi_name_new.charAt(ele.spcifi_name_new.length - 1) == ",") {
+											ele.spcifi_name_new = ele.spcifi_name_new.substr(0, ele.spcifi_name_new.length - 1);
+										}
+									} else {
+										ele.spcifi_name_new = ele.spcifi_name
+									}
+								})
+
+								let cartList = this.cartList
+								for (var i = 0; i < data.length; i++) {
+									data[i].num = 0;
+									cartList.forEach(function(ele) {
+										if (ele.goods_id == data[i].goods_id && ele.spcifi_id == data[i].spcifi_id) {
+											data[i].num = ele.number;
+										}
+									})
+								};
+								// console.log(JSON.stringify(data))
+								this.promotion_goods = data;
+
+							}
+						}).catch(function(error) {
+							that.isGoodsLoading = false;
+							//请求失败
+							console.log('error', error);
+
+						})
+					},
+
+					setWx() {
+						let that = this;
+						let shopInfo = JSON.parse(localStorage.getItem('shopInfo'));
+						// console.log(shopInfo)
+
+						let share_title = shopInfo.share_title ? shopInfo.share_title : shopInfo.shop_name
+						let share_introduction = shopInfo.share_introduction
+						let shop_id = shopInfo.id
+						let logo = shopInfo.share_pic ? shopInfo.share_pic : shopInfo.logo
+						wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+							wx.updateAppMessageShareData({
+								title: share_title, // 分享标题
+								desc: share_introduction, // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&v=1', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function() {
+
+								}
+							})
+
+							wx.updateTimelineShareData({
+								title: share_title, // 分享标题
+								desc: share_introduction, // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&v=1', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function() {}
+							})
+
+
+						});
+					},
+					// getJssdk: function() {
+					// 	let that = this;
+					// 	axios({
+					// 		method: 'post',
+					// 		url: that.JumpUrl.jssdkUrl,
+					// 		//data: form_data
+					// 		data: {
+					// 			token: that.token,
+					// 			url: window.location.href
+					// 		}
+					// 	}).then(function(resp) {
+					// 		let data = resp.data
+
+					// 		let sdkData = resp.data
+					// 		wx.config({
+					// 			debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+					// 			appId: sdkData.appId, // 必填，公众号的唯一标识
+					// 			timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+					// 			nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+					// 			signature: sdkData.signature, // 必填，签名
+					// 			jsApiList: [
+					// 				'updateAppMessageShareData',
+					// 				'updateTimelineShareData',
+					// 			] // 必填，需要使用的JS接口列表
+					// 		});
+					// 		that.share_url = sdkData.url;
+					// 		// that.setWx();
+
+					// 	})
+					// },
+
+
+					submit() {
+						// this.isSuccess = true
+						if (this.sponsor_id == '') {
+							this.$toast('请选择合作店铺的名称')
+							return
+						}
+						if (this.name == '') {
+							this.$toast('请输入优惠券名称')
+							return
+						}
+						if (this.num == '') {
+							this.$toast('请输入发放总量')
+							return
+						}
+						if(this.active + 1 == 1){
+							if (this.shiyongText == '适用商品') {
+								this.$toast('请选择适用商品')
+								return
+							}
+						}
+						if(this.active + 1 == 2){
+							if (this.goodName == '') {
+								this.$toast('请输入商品名称')
+								return
+							}
+							if (this.goodPic == '') {
+								this.$toast('请上传商品图片')
+								return
+							}
+						}
+						
+						// if (this.menkanText == '使用门槛') {
+						// 	this.$toast('请选择使用门槛')
+						// 	return
+						// }
+						if (this.youhuiText == '优惠类型') {
+							this.$toast('请选择优惠类型')
+							return
+						}
+						if (this.youhuiText == '满减券') {
+							if (this.youhui == '') {
+								this.$toast('请输入满减金额')
+								return
+							}
+						}
+						if (this.youhuiText == '折扣券') {
+							if (this.youhui == '') {
+								this.$toast('请输入优惠券折扣')
+								return
+							}
+						}
+						if (this.startText == '优惠券开始时间') {
+							this.$toast('请选择优惠券开始时间')
+							return
+						}
+						if (this.endText == '优惠券结束时间') {
+							this.$toast('请选择优惠券结束时间')
+							return
+						}
+						if (this.xianzhiText == '使用限制') {
+							this.$toast('请选择使用限制')
+							return
+						}
+						if (this.xianzhiText == '指定会员等级可使用') {
+							if (this.huiyuanResult.length == 0) {
+								this.$toast('请选择会员')
+								return
+							}
+						}
+						if (this.xianlingText == '每人限领次数') {
+							if (this.xianling == '') {
+								this.$toast('请输入限领次数')
+								return
+							}
+						}
+						if (this.timeText == '用券时间') {
+							this.$toast('请选择用券时间')
+							return
+						}
+						if (this.timeText == '领券当日起/天') {
+							if (this.time == '') {
+								this.$toast('请输入用券时间')
+								return
+							}
+						}
+						if (this.timeText == '领券次日起/天') {
+							if (this.time == '') {
+								this.$toast('请输入用券时间')
+								return
+							}
+						}
+						if (this.fenxiao == '分销提成类型') {
+							this.$toast('请选择分销提成类型')
+							return
+						}
+						if (this.shareTitle == '') {
+							this.$toast('请输入分享优惠券标题')
+							return
+						}
+						if (this.shareContent == '') {
+							this.$toast('请输入分享优惠券内容')
+							return
+						}
+						if (this.pic_id == '') {
+							this.$toast('请上传优惠券图片')
+							return
+						}
+
+						let param = {};
+						param.sponsor_id = this.sponsor_id
+						param.name = this.name;
+						param.all = this.num;
+						param.target_limit = this.menkanRadio - 1;
+						param.target = this.menkan;
+						param.type = this.youhuiRadio - 1;
+						if (param.type == 0) {
+							param.money = this.youhui;
+						} else {
+							param.discount = this.youhui
+						}
+						param.start = this.startText
+						param.end = this.endText
+						param.get_type = this.xianzhiRadio - 1
+						if (param.get_type == 1) {
+							let result = []
+							this.huiyuanResult.forEach(ele => {
+								result.push(ele + 1)
+							})
+							param.get_level = result
+						}
+						param.desc = this.changjing
+						param.yxq_type = this.timeRadio - 1
+						if (param.yxq_type == 0) {
+							param.yxq_start = this.yxq_start;
+							param.yxq_end = this.yxq_end;
+						} else if (param.yxq_type == 1) {
+							param.yxq_today = this.time
+						} else {
+							param.yxq_tomorrow = this.time
+						}
+						param.goods_type = this.shiyongRadio - 1
+						if (param.goods_type == 1) {
+							param.goods_id = this.goodsId
+						}
+						param.share_title = this.shareTitle
+						param.share_content = this.shareContent
+						param.share_img = this.sharePic ? this.sharePic : this.commonPic
+						param.pic_id = this.pic_id
+						param.distribution_type = this.fenxiaoRadio - 1
+						param.distribution = this.fenxiao
+						param.get_limit_radio = this.xianlingRadio - 1
+						param.get_limit = this.xianling
+						param.token = this.token
+						param.is_online = this.active + 1
+						param.offline_goods_name = this.goodName
+						param.offline_goods_img = this.goodPic
+						
+
+						axios.post(this.JumpUrl.addCoupon, param).then(res => {
+							if (res.data.errno == 0) {
+								this.isSuccess = true
+							} else if (res.data.errno == 1) {
+								this.$toast(res.data.errmsg)
+							}
+						})
+					},
+					refresh() {
+						this.isSuccess = false
+						location.reload();
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

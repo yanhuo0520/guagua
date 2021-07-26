@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<script src="./js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		html,body { font-size: 16px; height: 100%; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		#app { min-height: 100%; background: #f5f5f5; }
+		div { box-sizing: border-box; }
+		/* 导航栏 */
+        .van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+        .van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+        .van-nav-bar .van-nav-bar__right img { display: block; }
+        .van-nav-bar .van-nav-bar__title { font-weight: bold; }
+        /* 背景图 */
+        .reg-bg img { width: 100%; }
+        /* 注册信息 */
+        .shop-info { padding: 0.75rem; border-top-left-radius: 15px; border-top-right-radius: 15px; background: #f5f5f5; margin-top: -2rem; position: relative; }
+        .shop-info .tit { text-align: center; font-weight: bold; color: #333; font-size: 1.1rem; padding-top: 0.3rem;  }
+        .shop-info .van-cell { border-radius: 6px; margin-top: 1.25rem; padding: 12px;  }
+        .shop-info .van-cell .van-cell__title { font-weight:  bold; font-size: 1rem; width: 78px; }
+        .shop-info .van-cell  .van-field__left-icon { display: flex; align-items: center; }
+        .shop-info .van-cell .icon { width: 24px; }
+        .shop-info .van-cell .sms-text { display: block; min-width: 80px; color: #01C327; font-size: 0.9rem; text-align: center; }
+        /* 注册成功 */
+        .popup-success { width: 90%; background: transparent; }
+        .popup-success .success-toast { position: absolute; left: 0; top: 50%; width: 100%; text-align: center; transform: translateY(-10%); }
+        .popup-success .success-toast .tit { font-size: 1.4rem; font-weight: bold; color: #333;  }
+        .popup-success .success-toast .desc { font-size: 0.9rem; color: #888; padding-top: 10px; }
+        .popup-success .btn-con { position: absolute; bottom: 10%;  width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 12px;}
+        .popup-success .btn-con .van-button { width: calc(50% - 6px); }
+        /* 地址选择 */
+        /* .picker-con .van-picker { height: 100%; overflow-y:unset }
+        .picker-con .van-picker .van-picker__columns { height: 100%!important; } */
+	</style> 
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+        <!-- <van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="注册店铺" left-arrow @click-left="toRouter()" ></van-nav-bar> -->
+        <div class="reg-bg">
+            <img src="./images/reg-bg.png" alt="">
+        </div>
+        <div class="shop-info">
+            <div class="tit">填写店铺注册信息</div>
+            <van-field v-model="shopName"  :border="false" label="店铺名称" placeholder="请输店铺名称"  >
+                <template #left-icon>
+                    <img class="icon" src="./images/reg-shop-icon.png" alt="">
+                </template>
+            </van-field>
+            <van-field v-model="pwd" :border="false" label="密码" type="password"  placeholder="请输入密码"  >
+                <template #left-icon>
+                    <img class="icon" src="./images/reg-pwd-icon.png" alt="">
+                </template>
+            </van-field>
+            <van-field v-model="address" :border="false" label="地址"    placeholder="点击选择省市区" readonly is-link @click="showPickerDialog">
+                <template #left-icon>
+                    <img class="icon" src="./images/reg-addr-icon.png" alt="">
+                </template>
+            </van-field>
+            <van-field v-model="tel" :border="false" type="tel" label="手机号" placeholder="请输入您的手机号"  >
+                <template #left-icon>
+                    <img class="icon" src="./images/reg-tel-icon.png" alt="">
+                </template>
+            </van-field>
+            <van-field v-model="sms" :border="false"center clearable label="验证码" placeholder="请输入短信验证码" >
+                <template #left-icon>
+                    <img class="icon" src="./images/reg-sms-icon.png" alt="">
+                </template>
+                <template #button>
+                    <span @click="sendMsg" class="sms-text">{{time ? (time + '秒') : '获取验证码' }}</span>
+                </template>
+            </van-field>
+            <div style="margin-top: 1.5rem;">
+                <van-button block  color="linear-gradient(157deg,#28c582 9%, #03bb6f 85%)" @click="submit">注册</van-button>
+            </div>
+        </div>
+        <!-- 省市区弹出框 -->
+        <van-popup class="picker-con" v-model="showPicker" round position="bottom" :style="{ height: '50%' }">
+            <van-picker show-toolbar :columns="columns"  @confirm="onConfirm"  @cancel="onCancel" @change="onChange" value-key="name" :loading="pickerLoading" />
+        </van-popup>
+        <!-- 完成注册弹出框 -->
+        <van-popup v-model="isSuccess" class="popup-success" round  :close-on-click-overlay="false" >
+            <img src="./images/reg-success-bg.png" width="100%" alt="">
+            <div class="success-toast">
+                <div class="tit">恭喜您</div>
+                <div class="desc">您已完成店铺注册,请尽快进行商户认证</div>
+            </div>
+            <div class="btn-con">
+                <van-button  color="linear-gradient(157deg,#28c582 9%, #03bb6f 85%)" @click="jump(0)">我的店铺</van-button>
+                <van-button plain  color="#03BB6F" @click="jump(1)">商户认证</van-button>
+            </div>
+        </van-popup>
+        
+		
+	</div>
+
+	<script>
+		
+		var app = new Vue({
+			el: '#app',
+			data: {
+                shopName: '',
+                pwd: '',
+                tel: '',
+                sms: '', // 验证码
+                address: '', // 省市区选择文字 拼接
+                time: '', // 验证码计时
+                timeSetInterVal: '', // 验证码定时器
+                showPicker: false, // 判断省市区弹框
+                columns: [ { values: [] },{ values: [] },{ values: [] } ], // 省市区数据
+                isSuccess: false,
+                baseUrl: 'http://sy.xfd365.com',
+				JumpUrl: {
+					reg: baseUrl('/wx/register/reg'),
+                    get_code: baseUrl('/wx/register/get_code'),
+                    get_city: baseUrl('/wx/register/get_city'),
+				},
+                token: localStorage.getItem("token"),
+                shopId: '',
+                isSend: false,
+                pickerLoading: false, // 省市区弹框loading
+                province_id: '', //省id
+                city_id: '', //市id
+                county_id: '', //区id
+                code: '',
+			},
+			methods: {	
+                weChatLogin() {
+                    let that = this;
+                    axios({
+                            method: 'post',
+                            url: that.baseUrl + '/wx/wechat/login',
+                            data: {
+                                code: that.code,
+                            }
+                        })
+                        .then(function(resp) { //返回数据
+                            that.token = resp.data.token;
+                            localStorage.setItem('token', that.token);
+                            window.history.pushState(null, null,
+                                    'http://sy.xfd365.com/mobile/regShop.html');
+                            if(that.token) {
+                                that.getCity(0,0)
+                            }
+                        }).catch(function(error) {
+                            console.log('error', error);
+                        })
+                },
+                wxSign() {
+                    let back_url = window.location.href
+                    axios({
+                            method: 'post',
+                            url: this.baseUrl + '/wx/wechat/get_jump_url',
+                            data: {
+                                back_url: back_url,
+                            }
+                        })
+                        .then(function(resp) {
+                            //返回数据
+                            window.location.href = resp.data.url;
+
+                        }).catch(function(error) {
+                            //请求失败
+                            console.log('error', error);
+                        })
+					},
+					//检查token是否过期
+				checkToken: function () {
+					var that = this;
+					axios({
+							method: 'post',
+							url: that.baseUrl + '/wx/base/checkToken',
+							data: {
+								token: that.token,
+							}
+
+						})
+						.then(function (resp) {
+							//返回数据
+							if (resp.data.errno == 1) {
+								//token过期调用跳转页面方法
+								localStorage.removeItem('token')
+								that.wxSign();
+							} else {
+                                that.getCity(0,0)
+                            }
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				toRouter() {
+                    clearInterval(this.timeSetInterVal)
+					window.location.href = 'getShopCoupon.html'
+                },
+                // 跳转页面
+                jump(type) {
+                    if(type == 0) {
+                        window.location.href = 'index.html?shop_id='+this.shopId+'&v=11'
+                    } else {
+                        window.location.href = 'http://sc.xfd365.com/weixinAuth.html'
+                    }
+                },
+                // 发送验证码
+                sendMsg() {
+                    let that = this;
+                    let reg = /^1[3456789]\d{9}$/
+                    if(!reg.test(that.tel)) {
+                        that.$toast('请输入正确的手机号')
+                        return
+                    }
+                    if(that.time) return
+                    axios({
+                        method: 'post',
+                        url: that.JumpUrl.get_code,
+                        data:{
+                            token:localStorage.getItem("token"),
+                            phone:that.tel
+                        }
+                    })
+                    .then(function (resp) {
+                        if(resp.data.code == 1) {
+                            that.time = 60
+                            that.isSend = true
+                            that.timeSetInterVal = setInterval(() =>{
+                                that.time--
+                                if(that.time <= 0) {
+                                    clearInterval(that.timeSetInterVal)
+                                }
+                            },1000)
+                        } else {
+                            that.$toast(res.data.msg)
+                        }
+                    })
+                   
+                },
+                // 获取省市区
+                getCity(id,type) {
+                    let that = this
+                    that.pickerLoading = true
+                    axios({
+                        method: 'post',
+                        url: that.JumpUrl.get_city,
+                        data:{
+                            token:localStorage.getItem("token"),
+                            parent_id: id
+                        }
+                    })
+                    .then(function (resp) {
+                        that.pickerLoading = false
+                        if(resp.data.code == 1) {
+                            let list = JSON.parse(JSON.stringify(resp.data.data))
+                            that.columns[type].values = [{ name: "请选择", id: "" }, ...list];
+                            if(type == 0) {
+                                that.columns[1].values = [{ name: "请选择", id: "" }];
+                                that.columns[2].values = [{ name: "请选择", id: "" }];
+                            } else if(type == 1) {
+                                that.columns[2].values = [{ name: "请选择", id: "" }];
+                            }
+                        } else {
+                            that.$toast(res.data.msg)
+                        }
+                    }).catch(function (error) {
+						that.pickerLoading = false
+						console.log('error', error);
+					})
+                },
+                // 显示省市区弹框
+                showPickerDialog() {
+                    let that = this;
+                    that.showPicker = true
+                },
+                // 省市区确定按钮
+                onConfirm (value, index){
+                    if(value[0].id && value[1].id && value[2].id) {
+                        this.address = value[0].name + ' ' + value[1].name + ' ' +value[2].name
+                        this.province_id = value[0].id
+                        this.city_id = value[1].id
+                        this.county_id = value[2].id
+                        this.showPicker = false
+                    } else {
+                        if(value[0].id == '') {
+                            this.$toast('请选择省份!')
+                            return
+                        }
+                        if(value[1].id == '') {
+                            this.$toast('请选择市!')
+                            return
+                        }
+                        if(value[2].id == '') {
+                            this.$toast('请选择区!')
+                            return
+                        }
+                    }
+                },
+                // 省市区改变事件
+                onChange (picker, value, index){
+                    let that = this;
+                    if(index == 2) return
+                    if(index == 0) {
+                        if(value[index].id == '') {
+                            this.columns[1].values = [{ name: "请选择", id: "" }]
+                            this.columns[2].values = [{ name: "请选择", id: "" }]
+                            return
+                        }
+                    }
+                    if(index == 1) {
+                        if(value[index].id == '') {
+                            this.columns[2].values = [{ name: "请选择", id: "" }]
+                            return
+                        }
+                    }
+                    this.getCity(value[index].id,index+1)
+                },
+                // 省市区取消按钮
+                onCancel() {
+                    this.showPicker = false
+                },
+                // 提交按钮
+                submit() {
+                    let that = this;
+                    let reg = /^1[3456789]\d{9}$/
+                    let param = {}
+                    if(!that.shopName) {
+                        that.$toast('请输入店铺名称!')
+                        return
+                    }
+                    if(!that.pwd) {
+                        that.$toast('请输入密码!')
+                        return
+                    }
+                    if(!that.address) {
+                        that.$toast('请选择省市区!')
+                        return
+                    }
+                    if(!reg.test(that.tel)) {
+                        that.$toast('请输入正确的手机号!')
+                        return
+                    }
+                    if(!that.sms) {
+                        that.$toast('请输入验证码!')
+                        return
+                    }
+                    if(!that.isSend) {
+                        that.$toast('请先获取验证码!')
+                        return
+                    }
+                    param = {
+                        token:localStorage.getItem("token"),
+                        shop_name:that.shopName,
+                        phone: that.tel,
+                        code: that.sms,
+                        province_id: that.province_id,
+                        city_id: that.city_id,
+                        county_id: that.county_id,
+                        password: that.pwd
+                    }
+					axios({
+                        method: 'post',
+                        url: that.JumpUrl.reg,
+                        data:param
+                    })
+                    .then(function (resp) {
+                        if(resp.data.code == 1) {
+                            that.isSuccess = true;
+                            that.shopId = resp.data.shop_id
+                        } else {
+                            that.$toast(resp.data.msg)
+                        }
+                    }).catch(function (error) {
+                        //请求失败
+                        that.$toast('服务异常,请稍后重试')
+                        console.log('error', error);
+                    })
+                }
+			},
+			created() {
+                let code = getQueryString('code');
+					if (code) {
+						this.code = code;
+					}
+					let token = localStorage.getItem('token')		
+					if (this.code) {
+						this.weChatLogin()
+					} else {
+						if (token) {
+							this.checkToken()
+						} else {
+							this.wxSign()
+						}
+					}
+			},
+            destroyed() {
+                clearInterval(this.timeSetInterVal)
+            }
+		})
+	</script>
+</body>
+
+</html>

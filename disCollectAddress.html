@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>聚农优享</title>
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		#app {
+			background-color: #f5f5f5;
+		}
+		html,body { font-size: 16px; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		/* 导航栏 */
+		.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+		.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+		.van-nav-bar .van-nav-bar__right img { display: block; }
+		.van-nav-bar .van-nav-bar__title { font-weight: bold; }
+		/* 隐藏单选按钮 */
+		.no-radio .van-radio__icon { display: none; }
+		/* 地址列表 */
+		/* background-color: #e9f8ee; border-color: #13ba82; */
+		.van-address-list .van-address-item .van-radio__icon--checked .van-icon { background-color: #2ccf75; border-color: #2ccf75; }
+		.van-address-list .van-address-item .van-tag { background-color: #e9f8ee;  color: #13ba82; }
+		.van-address-list__bottom .van-button {	background: #02ca16; border-color:#02ca16; }
+		/* loading */
+		.full-loading { position: fixed; left: 0; top: 46px; right: 0; bottom: 0; background-color: #fff; z-index: 9999; }
+		.full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+		/* 无数据 */
+		.no-data { position: fixed; top: 46px; left: 0; right: 0; bottom: 0; z-index: 99;}
+		.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+		.no-data .no-data-con img { width: 100%; }
+		.no-data .no-data-con .no-title{ font-size: 1rem; font-weight:600;  color:rgba(0,0,0,1);  }
+		.no-data .no-data-con .no-desc { font-size: 0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+		.no-data .no-data-con .van-button { font-size: 0.75rem; font-weight:400; color:rgba(1,195,39,1); }
+	</style>
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="收货地址管理" left-arrow @click-left="returnLast()">
+			<template #right>
+				<img src="images/icon/shouye.png" alt="" width="20"  @click="JumpIndex">
+			</template>
+		</van-nav-bar>
+		<van-address-list v-if="allAddress && allAddress.length > 0" :class="isNoRadio ? 'no-radio' : ''" v-model="chosenAddressId" :list="allAddress" default-tag-text="默认" add-button-text="新建收货地址" @add="addAddress" @edit="editAddress" @select="selectAddress" ></van-address-list>				
+		<div class="full-loading" v-if="isFullLoading">
+			<van-loading  color="#1989fa" /> 
+		</div>
+
+		<div class="no-data" v-if="(allAddress.length === 0 || isErr) && !isFullLoading">
+			<div class="no-data-con">
+				<img :src="isErr ? errImg : noDataImg" alt="">
+				<p class="no-title">{{ isErr ? '网络竟然崩溃了' : '无地址' }}</p>
+				<p class="no-desc">{{ isErr ? '别紧张,试试看刷新页面' : '请先添加收货地址' }}</p>
+				<van-button size="small" plain round color="#01C327" @click="handleErr">{{ isErr ? '刷新' : '去添加' }}</van-button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				chosenAddressId: 0,
+				allAddress: [], //全部地址
+				collect: {
+					token: localStorage.getItem("token"),
+					shop_id: ''
+				},
+				JumpUrl: {
+					list: baseUrl('/wx/address/new_lists'),
+					coupon_detail: baseUrl('/wx/coupon/coupon_detail'),
+					delete: baseUrl('/wx/address/delete'),
+					setDefault: baseUrl('/wx/address/setDefault'),
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+				},
+				delete: {
+					id: '',
+					token: localStorage.getItem("token"),
+				},
+				from: '',
+				isNoRadio: '',
+				token: localStorage.getItem('token'),
+				noDataImg: './images/icon/no-address.png',
+				errImg: './images/err.png',
+				isErr: false,
+				isFullLoading: true,
+				coupon_id: '',
+				user_coupon_id: ''
+			},
+			methods: {
+				selectAddress(item) {
+					let that = this;
+					let href = window.location.href;
+					let address_id = item.id
+					if (href.indexOf("cart") > -1) {
+						window.location.href = 'disConfirmOrder.html?source=cart&address_id=' + address_id +'&coupon_id='+that.coupon_id+'&user_coupon_id='+that.user_coupon_id
+					} else if (href.indexOf("is_now") > -1) {
+						if (getQueryString('cate_id')) {
+							window.location.href = "disConfirmOrder.html?is_now=1&address_id=" + address_id + '&id=' +
+								getQueryString('id') + '&cate_id=' + getQueryString('cate_id') + '&tabIndex=' +
+								getQueryString('tabIndex')+'&coupon_id='+that.coupon_id+'&user_coupon_id='+that.user_coupon_id;
+						} else {
+							window.location.href = "disConfirmOrder.html?is_now=1&address_id=" + address_id + '&id=' +
+								getQueryString('id')+'&coupon_id='+that.coupon_id+'&user_coupon_id='+that.user_coupon_id;
+						}
+					} else {
+						window.location.href = 'disCouponGoods.htm?coupon_id='+that.coupon_id+'&user_coupon_id='+that.user_coupon_id
+					}
+				},
+				getParam(paramName) {
+					if (!paramName) {
+						return '';
+					}
+					let val = '';
+					var href = window.location.href;
+					if (href.indexOf(paramName) != -1) {
+						val = window.location.href.split(paramName + "=")[1];
+					}
+					return val;
+				},
+				//跳转首页
+				JumpIndex() {
+					window.location.href = "index.html?v=1";
+				},
+				//返回上一页
+				returnLast() {
+					let href = window.location.href;
+					if (href.indexOf("cart") > -1) {
+						window.location.href = 'disConfirmOrder.html?coupon_id='+this.coupon_id+'&user_coupon_id='+this.user_coupon_id+'source=cart'
+					}else if (href.indexOf("is_now") > -1) {
+						if (getQueryString('cate_id')) {
+							window.location.href = "disConfirmOrder.html?is_now=1&id=" + getQueryString('id') +
+								'&cate_id=' + getQueryString('cate_id') + '&tabIndex=' + getQueryString('tabIndex')+ '&coupon_id=' + this.coupon_id+ '&user_coupon_id=' + this.user_coupon_id;
+						} else {
+							window.location.href = "disConfirmOrder.html?is_now=1&id=" + getQueryString('id')+ '&coupon_id=' + this.coupon_id+ '&user_coupon_id=' + this.user_coupon_id;
+						}
+					} else {
+						window.location.href = 'disPersonal.html?coupon_id='+this.coupon_id+'&user_coupon_id='+this.user_coupon_id
+					}
+				},
+				goBack() {
+					this.returnLast();
+				},
+				//编辑地址
+				editAddress(item, i) {
+					id = item.id
+					localStorage.setItem('add_id',id);
+					localStorage.setItem('index', i)
+					let base_url = "disAddEditAddress.html?address_id=" + id+ '&coupon_id=' + this.coupon_id+ '&user_coupon_id=' + this.user_coupon_id +'&v=1';
+					let href = window.location.href;
+					if (href.indexOf("cart") > -1) {
+						window.location.href = base_url + "&from=cart&isMy=" + this.isNoRadio
+					} else if (href.indexOf("is_now") > -1) {
+						window.location.href = base_url + "&from=is_now&isMy=" + this.isNoRadio
+					} else {
+						window.location.href = base_url + "&isMy=" + this.isNoRadio
+					}
+				},
+				//删除地址
+				deleteAddress(index, id) {
+					let that = this;
+					if (that.allAddress.length > 1) {
+						let is_default = that.allAddress[index].is_default;
+						if (is_default == 1 && index > 0) {
+							that.setAddress(0, 1); // 删除非第一个默认地址
+						} else if (is_default == 1 && index == 0) {
+							that.setAddress(1, 1); // 删除第一个默认地址
+						}
+					}
+					that.delete.id = id;
+					that.delete.shop_id = that.couponDetail.shop_id;
+					let form_data = new FormData();
+					makeFormData(that.delete, form_data);
+					axios({
+							method: 'post',
+							url: that.JumpUrl.delete,
+							data: form_data
+						})
+						.then(function (resp) {
+							that.collectList();
+							that.$toast('删除成功!')
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+
+				},
+				handleErr() {
+					if(this.isErr) {
+						this.collectList()
+					}else {
+						this.addAddress()
+					}
+				},
+				
+				setAddress(index, del) {
+					let that = this;
+					let is_default = that.allAddress[index].is_default
+					let address_id = that.allAddress[index].id
+					if (is_default == 1) {
+						is_default = 0;
+					} else {
+						is_default = 1;
+					}
+					axios({
+						method: 'post',
+						url: that.JumpUrl.setDefault,
+						data: {
+							address_id: address_id,
+							is_default: is_default,
+							shop_id: that.couponDetail.shop_id,
+							token: that.token,
+						}
+					})
+					.then(function (resp) {
+						that.collectList();
+						if (del == 1) {
+							that.$toast('删除成功')
+						} else {
+							that.$toast('设置成功')
+						}
+						
+					}).catch(function (error) {
+
+					})
+				},
+				//新增地址
+				addAddress() {
+					localStorage.setItem('editAddress', 0);
+					let href = window.location.href;
+					if (href.indexOf("cart") > -1) {
+						window.location.href = "disAddEditAddress.html?from=cart&add=1&isMy=" + this.isNoRadio + '&coupon_id=' + this.coupon_id+ '&user_coupon_id=' + this.user_coupon_id+'&v=1';
+					} else if (href.indexOf("is_now") > -1) {
+						window.location.href = "disAddEditAddress.html?from=is_now&add=1&isMy=" + this.isNoRadio + '&coupon_id=' + this.coupon_id+ '&user_coupon_id=' + this.user_coupon_id+'&v=1';
+					} else {
+						window.location.href = "disAddEditAddress.html?from=1&add=1&isMy=" + this.isNoRadio + '&coupon_id=' + this.coupon_id+ '&user_coupon_id=' + this.user_coupon_id+'&v=1';
+					}
+				},
+				//获取收货地址
+				collectList() {
+					let that = this;
+					let form_data = new FormData();
+					that.isFullLoading = true;
+					that.isErr = false;
+					that.allAddress = [];
+					that.collect.shop_id = that.couponDetail.shop_id;
+					makeFormData(that.collect, form_data);
+					axios({
+							method: 'post',
+							url: that.JumpUrl.list,
+							data: form_data
+						})
+						.then(function (resp) {
+							that.isFullLoading = false;
+							that.isErr = false;
+							let tmpData = []
+							resp.data.data.forEach(item =>{
+								let tmpObj = {
+									id: item.id,
+									name: item.name,
+									tel: item.mobile,
+									address: item.full_region + (item.street ? ' ' + item.street : '') + (item.village ? ' ' + item.village : '') + ' ' +item.address,
+									isDefault: item.is_default ? true : false
+								}
+								tmpData.push(tmpObj)
+							})
+							that.allAddress = tmpData;
+						}).catch(function (error) {
+							that.isFullLoading = false;
+							that.isErr = false;
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				setWx() {
+					let that = this;
+					let share_title = that.couponDetail.name
+					let share_introduction = '前往领券中心领取优惠券'
+					let logo = that.couponDetail.share_img
+					wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/getShopCoupon.html',  // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {
+
+							}
+						})
+						wx.updateTimelineShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/getShopCoupon.html',  // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {}
+						})
+					});
+				},
+				getJssdk () {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: encodeURIComponent(location.href.split('#')[0])
+						}
+					}).then(function (resp) {
+						let data = resp.data
+
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						if(localStorage.getItem('disCouponDetail')) {
+							that.couponDetail = JSON.parse(localStorage.getItem('disCouponDetail'))
+						}
+						that.setWx();
+						that.collectList()
+					})
+				},
+				// 删除上个页面存储数据
+                removeLocal() {
+                    localStorage.removeItem('getCouponData')
+                    localStorage.removeItem('myCouponToDetail')
+                    localStorage.removeItem('myCouponList')
+                },
+				checkPhone() {
+					var _this = this
+					var agent = (navigator.userAgent || navigator.vendor || window.opera)
+					if (agent != null) {
+						var agentName = agent.toLowerCase()
+						if (/android/i.test(agentName)) {
+							return 'android'
+						} else if (/iphone/i.test(agentName)) {
+							return 'ios'
+						}
+					}
+				},
+
+
+			},
+			mounted() {
+				if (window.history && window.history.pushState) {
+					// 向历史记录中插入了当前页
+					history.pushState(null, null, document.URL);
+					window.addEventListener('popstate', this.goBack, false);
+				}
+			},
+			destroyed() {
+				window.removeEventListener('popstate', this.goBack, false);
+			},
+			created() {
+				let phoneType = this.checkPhone()
+				// 监听页面关闭事件
+				if(phoneType == 'android'){
+					window.onunload = function () {
+						this.removeLocal()
+					}
+				} else if(phoneType == 'ios') {
+					window.addEventListener('pagehide', function () {
+						this.removeLocal()
+					});
+				}
+				this.from = getQueryString('from')
+				this.chosenAddressId = getQueryString('addressid') ? Number(getQueryString('addressid')) : 0
+				this.isNoRadio = getQueryString('isMy')
+				this.coupon_id = getQueryString('coupon_id')
+				this.user_coupon_id = getQueryString('user_coupon_id')
+				this.getJssdk();
+				
+			}
+		})
+	</script>
+</body>
+
+</html>

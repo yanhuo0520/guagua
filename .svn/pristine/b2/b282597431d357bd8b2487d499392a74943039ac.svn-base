@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>微商超</title>
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="./js/elindex.js"></script>
+	<script src="./js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		html,body { font-size: 16px; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		/* 导航栏 */
+		.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+		.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+		.van-nav-bar .van-nav-bar__right img { display: block; }
+		.van-nav-bar .van-nav-bar__title { font-weight: bold; }
+	</style>
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" :title="(modifyAdd ? '添加' : '编辑') + '收货地址'" left-arrow @click-left="returnLast()">
+			<template #right>
+				<img src="images/icon/shouye.png" alt="" width="20"  @click="JumpIndex">
+			</template>
+		</van-nav-bar>
+		
+		<van-cell-group :border="false" style="margin-bottom:1rem">
+			<van-field v-model="parameter.name"  placeholder="收货人姓名" clearable >
+				<template #right-icon>
+					<img src="images/icon/user-icon.png" width="20" alt="">
+				</template>
+			</van-field>
+			<van-field v-model="parameter.mobile" placeholder="手机号码" is-link  clearable ></van-field>
+			<van-field v-model="location" placeholder="所在地区" readonly is-link ></van-field>
+			<van-field v-model="parameter.address" placeholder="详细地址: 如道路、门牌号、小区、楼栋号" rows="2" autosize type="textarea" clearable ></van-field>
+		</van-cell-group>
+		<van-cell center title="设置默认地址">
+			<template #right-icon>
+				<van-switch v-model="flag" size="24" active-color="#2CCF75" />
+			</template>
+		</van-cell>
+		<van-notice-bar :text="'配送范围：'+extent" >
+			<template #left-icon>
+				<img src="images/icon/jingshi.png" width="20" style="margin-right: 0.5rem;" alt="">
+			</template>
+		</van-notice-bar>
+		<van-tabbar>
+			<div style="flex: 1; padding: 5px 16px;" v-if="!modifyAdd">
+				<van-button style="width: 100%;height: 100%;line-height: 100%;" type="danger" block round  @click="deleteAddress()">删除地址</van-button>
+			</div>
+			<div style="flex: 1; padding: 5px 16px;">
+				<van-button style="width: 100%;height: 100%;line-height: 100%;background: #02ca16; border-color:#02ca16;" type="primary" block round @click="keepGoods()">保存地址</van-button>
+			</div>
+		</van-tabbar>
+		<div class="message-page-mask" v-show="message.show==1">
+			<div class="message-page-mask-content">
+				<div class="el-loading-spinner">
+					<i v-show="message.type=='success' " class="el-icon-success"></i>
+					<i v-show="message.type=='error' " class="el-icon-error"></i>
+
+					<p class="el-loading-text">{{message.text}}</p>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				extent: '', //配送范围
+				modifyAdd: true, //判断添加或者修改地址表头
+				message: {
+					show: 0,
+					type: 'success',
+					text: '成功',
+				},
+				flag: 0,
+				JumpUrl: {
+					save: 'http://sy.xfd365.com/wx/address/save',
+					// save: 'http://172.168.0.50/wx/address/save',
+					get_region: 'http://sy.xfd365.com/wx/region/get_region',
+					// get_region: 'http://172.168.0.50/wx/region/get_region',
+					detail: 'http://sy.xfd365.com/wx/address/detail',
+					// detail: 'http://172.168.0.50/wx/address/detail',
+					getDistributionScope: 'http://sy.xfd365.com/wx/address/getDistributionScope',
+					// getDistributionScope: 'http://172.168.0.50/wx/address/getDistributionScope',
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+					list: 'http://sy.xfd365.com/wx/address/lists',
+					// list: 'http://172.168.0.50/wx/address/lists',
+					delete: 'http://sy.xfd365.com/wx/address/delete',
+					// delete: 'http://172.168.0.50/wx/address/delete',
+					setDefault: 'http://sy.xfd365.com/wx/address/setDefault',
+					// setDefault: 'http://172.168.0.50/wx/address/setDefault',
+				},
+				location: '',
+				parameter: {
+					id: '',
+					address: '',
+					mobile: '',
+					is_default: 0,
+					name: '',
+					token: localStorage.getItem("token"),
+				},
+				token_: {
+					token: localStorage.getItem("token"),
+				},
+				form: '',
+				isNoRadio: '',
+				canSave: true,
+				token: localStorage.getItem('token'),
+				index: localStorage.getItem('index'),
+				add_id: localStorage.getItem('add_id'),
+				delete: {
+					id: '',
+					token: localStorage.getItem("token"),
+				},
+			},
+
+
+			methods: {
+				//返回上一页
+				returnLast() {
+					window.history.go(-1);
+					// window.location.href = "collectAddress.html"
+				},
+				//跳转首页
+				JumpIndex() {
+					window.location.href = "index.html";
+				},
+				goBack() {
+					this.returnLast();
+					console.log("点击了浏览器的返回按钮");
+					// sessionStorage.clear();
+					// window.history.back();
+				},
+				//获取收货地址
+				collectList() {
+				let that = this;
+				let form_data = new FormData();
+				makeFormData(that.collect, form_data);
+				axios({
+						method: 'post',
+						url: that.JumpUrl.list,
+						data: form_data
+					})
+					.then(function (resp) {
+						// console.log(resp.data.data);
+						// console.log(resp.data.data.is_default);
+						that.allAddress = resp.data.data;
+
+					}).catch(function (error) {
+						//请求失败
+						console.log('error', error);
+
+					})
+				},
+				//获取配送范围
+				rangeDelivery() {
+					let that = this;
+					axios({
+							method: 'post',
+							url: that.JumpUrl.getDistributionScope,
+							data: that.token_
+						})
+						.then(function (resp) {
+							that.extent = resp.data.data
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+					//删除地址
+					deleteAddress() {
+					let that = this;
+					let index = that.index
+					// if (that.allAddress.length > 1) {
+					// 	let is_default = that.allAddress[index].is_default;
+					// 	if (is_default == 1 && index > 0) {
+					// 		that.message.show = 0;
+					// 		that.setAddress(0, 1); // 删除非第一个默认地址
+					// 	} else if (is_default == 1 && index == 0) {
+					// 		that.message.show = 0;
+					// 		that.setAddress(1, 1); // 删除第一个默认地址
+					// 	}
+					// }
+					that.delete.id = that.add_id;
+					let form_data = new FormData();
+					makeFormData(that.delete, form_data);
+					axios({
+							method: 'post',
+							url: that.JumpUrl.delete,
+							data: form_data
+						})
+						.then(function (resp) {
+							that.collectList();
+							that.message = {
+								show: 1,
+								text: '删除成功',
+								type: 'success'
+							}
+								setTimeout(function () {
+									if (that.from == 'cart') {
+										console.log("cart")
+										window.location.href = "collectAddress.html?from=cart&isMy=" + that.isNoRadio
+									} else if (that.from == 'speedBuy') {
+										console.log("speedBuy")
+										window.location.href = "collectAddress.html?from=speedBuy&isMy=" + that.isNoRadio
+									} else if (that.from == 'is_now') {
+										console.log("is_now")
+										window.location.href = "collectAddress.html?from=is_now&isMy=" + that.isNoRadio
+									} else {
+										console.log("1111")
+										window.location.href = "collectAddress.html?isMy=" + that.isNoRadio
+									}
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+						})
+				},
+				//获取所在地区
+				region() {
+					let that = this;
+					axios({
+							method: 'post',
+							url: that.JumpUrl.get_region,
+							data: that.token_
+						})
+						.then(function (resp) {
+
+							var box;
+							box = resp.data.data;
+
+							that.location = box.province.name + box.city.name + box.county.name;
+
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				//保存收货地址
+				keepGoods() {
+					let that = this;
+
+					let reg = /^1[0-9]{10}$/;
+					if(!that.parameter.name) {
+						that.message = {
+							show: 1,
+							text: '请输入收货人姓名',
+							type: 'error'
+						}
+						setTimeout(function () {
+							that.message.show = 0;
+						}, 1000)
+						return false;
+					}
+					if (that.parameter.mobile.length == 0) {
+						that.message = {
+							show: 1,
+							text: '请输入手机号',
+							type: 'error'
+						}
+						setTimeout(function () {
+							that.message.show = 0;
+						}, 1000)
+						return false;
+					} else if (that.parameter.mobile.length <= 10 || !reg.test(that.parameter.mobile)) {
+						that.message = {
+							show: 1,
+							text: '请输入正确格式手机号',
+							type: 'error'
+						}
+						setTimeout(function () {
+							that.message.show = 0;
+						}, 1000)
+						return false;
+					}
+					if(!that.parameter.address) {
+						that.message = {
+							show: 1,
+							text: '请输入详细地址',
+							type: 'error'
+						}
+						setTimeout(function () {
+							that.message.show = 0;
+						}, 1000)
+						return false;
+					}
+					
+
+					if (that.flag == true) {
+						that.parameter.is_default = 1;
+					} else {
+						that.parameter.is_default = 0;
+					}
+					if (!that.canSave) {
+						return;
+					}
+					that.canSave = false
+					axios({
+							method: 'post',
+							url: that.JumpUrl.save,
+							data: that.parameter
+						})
+						.then(function (resp) {
+							if (resp.data.errno == 0) {
+								that.message = {
+									show: 1,
+									text: '保存成功',
+									type: 'success'
+								}
+								that.canSave = false;
+								setTimeout(function () {
+									that.canSave = true;
+									if (that.from == 'cart') {
+										window.location.href = "collectAddress.html?from=cart&isMy=" + that.isNoRadio
+									} else if (that.from == 'speedBuy') {
+										window.location.href = "collectAddress.html?from=speedBuy&isMy=" + that.isNoRadio
+									} else if (that.from == 'is_now') {
+										window.location.href = "collectAddress.html?from=is_now&isMy=" + that.isNoRadio
+									} else {
+										window.location.href = "collectAddress.html?isMy=1&isMy=" + that.isNoRadio
+									}
+
+									// if(that.from=='order'){
+									// 	console.log("order")
+									// 	 window.location.href = "collectAddress.html?from=order"
+									// 		that.canSave = true
+									// }else{
+									// 	console.log("1111")
+									// 	 window.location.href = "collectAddress.html"
+									// 	that.canSave = true
+									// }
+								}, 1000)
+							} else {
+								that.message = {
+									show: 1,
+									text: resp.data.msg,
+									type: 'error'
+								}
+								setTimeout(function () {
+									that.message.show = 0;
+									that.canSave = true
+								}, 1000)
+							}
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				//获取单个地址
+				singleAddress() {
+					let that = this;
+
+					axios({
+							method: 'post',
+							url: that.JumpUrl.detail,
+							data: that.parameter
+						})
+						.then(function (resp) {
+							that.parameter.address = resp.data.data.address;
+							that.parameter.mobile = resp.data.data.mobile;
+							that.parameter.name = resp.data.data.name;
+							that.flag = resp.data.data.is_default ? true : false;
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				setWx() {
+					let that = this;
+					let shopInfo = JSON.parse(localStorage.getItem('shopInfo'));
+					// console.log(shopInfo)
+					let share_title = shopInfo.share_title
+					let share_introduction = shopInfo.share_introduction
+					let shop_id = shopInfo.id
+					let logo = shopInfo.logo
+					wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+						wx.onMenuShareTimeline({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' +
+								shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {
+
+							}
+						})
+
+						wx.onMenuShareAppMessage({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' +
+								shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {}
+						})
+
+
+					});
+				},
+				getJssdk: function () {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function (resp) {
+						let data = resp.data
+
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'onMenuShareTimeline',
+								'onMenuShareAppMessage',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.share_url = sdkData.url;
+						that.setWx();
+
+					})
+				},
+
+			},
+			mounted() {
+				if (window.history && window.history.pushState) {
+					// 向历史记录中插入了当前页
+					history.pushState(null, null, document.URL);
+					window.addEventListener('popstate', this.goBack, false);
+				}
+			},
+			destroyed() {
+				window.removeEventListener('popstate', this.goBack, false);
+			},
+			created: function () {
+				this.getJssdk();
+				this.from = getQueryString('add');
+				if (this.from) {
+					this.modifyAdd = true;
+				} else {
+					this.modifyAdd = false;;
+				};
+				this.isNoRadio = getQueryString('isMy');
+				this.region();
+				this.rangeDelivery(); //配送范围
+				this.parameter.id = getQueryString('address_id'); //获取a的值
+				if (this.parameter.id) {
+					this.singleAddress();
+				}
+
+			}
+		})
+	</script>
+</body>
+
+</html>

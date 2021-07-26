@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+
+		<title>微商超</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<!-- 	<link rel="stylesheet" type="text/css" href="./css/aui.css" /> -->
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="css/index.css">
+
+		<script src="./js/rem.js"></script>
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/publick.js"></script>
+		<script type="text/javascript" src="./js/api.js" ></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+		<script type="text/javascript" src="js/aui-actionsheet.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5/lib/index.css">
+
+		<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant.min.js"></script>
+		<script src="js/vconsole.min.js"></script>
+		<script>
+			// var vConsole = new VConsole();
+		</script>
+		<style>
+			[v-cloak] {
+			display: none;
+		}
+
+
+		img {
+			vertical-align: top;
+		}
+
+		ul li {
+			list-style: none;
+		}
+
+		.headDiv{
+					font-size: 16px;
+					/* font-weight: bold; */
+					padding: 0  0.3rem;
+					width:calc(100% - 0.6rem);
+					overflow:hidden;
+					background: #fff;
+					border-radius: 0 0 15px 15px;
+				}
+				.headDiv .fl{
+					/* height:50px; */
+					overflow:hidden;
+				}
+				.headDiv .top{
+					height: 50px;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+				}
+				.headDiv .top .left{
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					width: 60%;
+				}
+				.headDiv .top .left img{
+					height: 24px;
+					margin-right: 10px;
+				}
+				.headDiv .top .right{
+					display: flex;
+					justify-content: flex-end;
+					align-items: center;
+					width: 20%;
+					padding-right: 10px;
+				}
+				.headDiv .top img{
+					width: 20px;
+					height: 20px;
+				}
+				/* 搜索框 */
+				.headDiv .sousuo{
+					position: relative;
+				}
+				.headDiv .sousuo input{
+					border: none;
+					width: 95%;
+					height:35px;
+					background:rgba(243,243,243,1);
+					border-radius:35px;
+					padding-left: 10px;
+					font-size: 14px;
+					text-align: center;
+				}
+				.headDiv .sousuo img{
+					position: absolute;
+					left: 31%;
+					top: 10px;
+					width: 15px;
+					height: 15px;
+				}
+				/* 轮播 */
+				.slide {
+					height: 140px;
+					margin-top: 10px;
+					overflow: hidden;
+					position: relative;
+				}
+				/* .slideshow {
+					height: 140px;
+					/* width: 100% !important; */
+				} */
+				.slide li {
+					position: absolute;
+				}
+				.slide img {
+					border-radius: 10px;
+				}
+				.bar {
+					position: absolute;
+					width: 100%;
+					bottom: 10px;
+					margin: 0 auto;
+					z-index: 10;
+					text-align: center;
+				}
+				.bar span {
+					width: 20px;
+					height: 5px;
+					/*    border: 1px solid ;  */
+					background: white;
+					display: inline-block;
+					margin-right: 10px;
+				}
+				.slide .active {
+					background: #bfd6b6 !important;
+				}
+
+				/*图标导航*/
+				.nav{
+					display:flex;
+					flex-wrap: nowrap;
+					justify-content: flex-start;
+					align-content: space-between;
+					padding-top: 0.24rem;
+					margin-top:10px;
+					padding:0 2%;
+					width: 95%;
+					overflow-x: auto;
+					overflow-y: hidden;
+					white-space: nowrap;
+				}
+				.nav img{
+					width: 1.2rem;
+					height: 1.2rem;
+					margin-bottom: 10px;
+					border: 2px solid transparent;
+				}
+				.nav li{
+					text-align: center;
+					font-size: 0.24rem;
+					color: #444;
+					margin:0.14rem;
+					width: 16%;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+				}
+				.nav li.active img{
+					border: 2px solid #02CF0A;
+					border-radius: 50%;
+				}
+				.nav li.active span{
+					color: #fff;
+					background: #00BE34;
+					border-radius: 20px;
+					padding: 4px;
+				}
+				.nav li a{
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+				}
+
+				.goods{
+					width: 100%;
+					margin-top: 10px;
+				}
+				.goods>img{
+					width: 25%;
+					display: block;
+					margin: 0 auto;
+				}
+
+				.xixuan{
+					width: 38%;
+					height: 210px;
+					padding: 10px;
+					margin-top: 0.3rem;
+					margin-left: 0.35rem;
+					border-radius: 5px;
+					background-color:#fff;
+				}
+				.jingT{
+					min-width: 7.5rem;
+					min-height: 4.2rem;
+					margin-bottom:1.56rem;
+					padding-bottom:0.3rem;
+					background-color: #f5f5f5;
+					display: flex;
+					justify-content: flex-start;
+					flex-wrap: wrap;
+				}
+				.xixuan img{
+					width: 100%;
+					height: 140px;
+				}
+				.xixuan .box1{
+					width: 100%;
+					margin:0.1rem;
+
+				}
+				.xixuan>p{
+					font-size: 14px;
+					margin-top: 10px;
+					width: 100%;
+					overflow: hidden;
+					text-overflow:ellipsis;
+					white-space:nowrap;
+				}
+
+				.xixuan span{
+					font-size: 0.22rem;
+					color: #989898;
+					line-height: 0.4rem;
+				}
+				.xixuan .price{
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					margin-top: 5px;
+				}
+				.xixuan .price p span:first-of-type{
+					color: #FF5E5B;
+					font-size: 14px;
+				}
+				/*.xixuan .price p span:last-of-type{
+					color: rgba(0,0,0,0.3);
+					font-size: 12px;
+					text-decoration: line-through;
+				}*/
+				.xixuan .price>span{
+					border: 2px solid #EDEDED;
+					width: 25px;
+					height: 25px;
+					text-align: center;
+					line-height: 25px;
+					border-radius: 50%;
+					font-size: 20px;
+					color: #5FC22A;
+				}
+
+		.bottom-nav{
+			/*margin-top: 0.2rem;*/
+
+			width: 100%;
+			height: calc(1rem + 10px);
+			border-bottom: 1px solid #e6e6e6;
+			position: fixed;
+			bottom: 0;
+			/*left: 50%;
+			margin-left: -3.75rem;*/
+			display:flex;
+			background-color: #fff;
+
+		}
+
+		.bottom-nav .box1{
+			text-align:center;
+			padding-top:10px;
+			width: 25%;
+		}
+		.bottom-nav .box1 img{
+			width: 0.46rem;
+			height: 0.46rem;
+			padding-bottom:5px;
+
+		}
+
+
+		.aui-mask {
+		    position: fixed;
+		    width: 100%;
+		    height: 100%;
+		    top: 0;
+		    left: 0;
+		    background: rgba(0, 0, 0, 0.3);
+		    opacity: 0;
+		    z-index: 8;
+		    visibility: hidden;
+		    -webkit-transition: opacity .3s,-webkit-transform .3s;
+		    transition: opacity .3s,transform .3s;
+		}
+		.aui-mask.aui-mask-in {
+			visibility: visible;
+		  	opacity: 1;
+		}
+		.aui-actionsheet {
+		    width: 100%;
+		    position: fixed;
+		    bottom: 0;
+		    left: 0;
+		    padding: 0 0.5rem;
+		    z-index: 999;
+		    opacity: 0;
+		    -webkit-transition: opacity .3s,-webkit-transform .3s;
+		    transition: opacity .3s,transform .3s;
+		    -webkit-transform: translate3d(0,100%,0);
+		    transform: translate3d(0,100%,0);
+		}
+		.aui-actionsheet-btn {
+		    background-color: #ffffff;
+		    border-radius: 6px;
+		    text-align: center;
+		    margin-bottom: 0.5rem;
+		}
+		.aui-actionsheet-title {
+		    font-size: 14px;
+		    color: #999999;
+		    line-height: 40px;
+		}
+		.aui-actionsheet-btn-item {
+		    height: 40px;
+		    line-height: 40px;
+		    color: #0075f0;
+		}
+		@media screen and (-webkit-min-device-pixel-ratio:1.5) {
+			.aui-border-b {
+				border: none;
+		        background-size: 100% 1px;
+				background-repeat: no-repeat;
+				background-position: bottom;
+		        background-image: linear-gradient(0,#dddddd,#dddddd 50%,transparent 50%);
+		        background-image: -webkit-linear-gradient(90deg,#dddddd,#dddddd 50%,transparent 50%);
+			}
+		}
+		.aui-actionsheet-btn {
+			max-height: 300px;
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+
+		.aui-actionsheet {
+			padding: 0;
+		}
+
+		.aui-actionsheet-btn {
+			margin-bottom: 0;
+		}
+
+		.share-mask {
+			height: 100%;
+			width: 100%;
+			z-index: 20000;
+			top: 0;
+			left: 0;
+			color: #fff;
+			position: fixed;
+			background: rgba(0, 0, 0, 0.8);
+		}
+
+		.share-mask-content p {
+			padding-left: 20px;
+			font-size: 28px;
+			color: #fff
+		}
+
+		.overlay{
+			background: rgba(0,0,0,.5);
+			width: 100%;
+			height: 100vh;
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 999;
+		}
+		.actionSheet{
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			z-index: 1000;
+			width: 100%;
+			height: 320px;
+			background: #fff;
+		}
+		.actionSheet h3{
+			line-height: 36px;
+			position: relative;
+			font-weight: bold;
+			text-align: center;
+			background: #EEEEEE;
+			font-size: 16px;
+		}
+		.actionSheet h3 span{
+			position: absolute;
+			right: 0;
+			top: 0;
+			font-size: 15px;
+			padding: 0 20px;
+		}
+		
+		.actionSheet ul {
+			height: 240px;
+			overflow-y: auto;
+		}
+		.actionSheet ul li{
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			border-bottom: 1px solid #ddd;
+			position: relative;
+		}
+		.actionSheet ul li span{
+			line-height: 40px;
+			display: block;
+		}
+		.actionSheet li .imgSpan{
+			position: absolute;
+			right: 0;
+			top: 0;
+			width: 16%;
+			height: 40px;
+			padding-left: 0;
+			z-index: 99999;
+		}
+		.actionSheet li .imgSpan img{
+			width: 16px;
+			margin-top: 10px;
+			display: inline-block;
+			
+		}
+		/* .actionSheet li img{
+			position: absolute;
+			right: 0;
+			top: 0;
+			width: 15px;
+			padding: 12px 25px;
+			z-index: 9999;
+		} */
+		.actionSheet p{
+			position: fixed;
+			bottom: 0;
+			height: 40px;
+			line-height: 40px;
+			width: 100%;
+			text-align: center;
+		}
+		
+		.van-swipe__track{
+			/* width: 100% !important; */
+		}
+		
+		
+		.resou{
+			color: #888;
+			font-size: 12px;
+			display: flex;
+			justify-content: flex-start;
+			line-height: 24px;
+			margin: 10px 0;
+		}
+		.resou ul{
+			display: flex;
+			justify-content: space-around;
+		}
+		.resou ul li{
+			padding: 0 6px;
+			background:rgba(245,245,245,1);
+			border-radius:19px;
+			margin-left: 12px;
+		}
+		.van-swipe{
+			height: 140px;
+			margin-top: 10px;
+		}
+		.gonggao{
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			height: 30px;
+			padding: 10px 0;
+		}
+		.gonggao p{
+			font-size: 14px;
+			margin-left: 10px;
+			padding-left: 10px;
+			border-left: 1px solid #D8D8D8;
+			line-height: 20px;
+			overflow: hidden;
+			white-space: nowrap;
+			width: 70%;
+			text-overflow: ellipsis;
+		}
+		
+		.qianggou{
+			background: #fff;
+			width: 90%;
+			margin: 20px auto 0;
+			border-radius: 10px;
+		}
+		.qianggou .van-tabs__nav{
+			display: flex;
+			justify-content: center;
+			width: 100%;
+		}
+		.qianggou .van-tab{
+			width: 100%;
+			text-align: center;
+			display: flex;
+			justify-content: center;
+			background:#E8F3EB;
+			color: #658B71;
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+		}
+		.qianggou .van-tab--active{
+			background: #fff;
+			color: #10BA47;
+		}
+		.qianggou .van-tab>span{
+			display: flex;
+			align-items: center;
+			height: 40px;
+		}
+		.qianggou .van-tab>span img{
+			width: 20px;
+			height: 20px;
+			margin-right: 10px;
+		}
+		.qianggou .pro{
+			width: 100%;
+			display: flex;
+			justify-content: flex-start;
+			overflow-x: auto;
+			overflow-y: hidden;
+			white-space: nowrap;
+		}
+		.qianggou .pro>div{
+			width: 30%;
+			padding: 10px;
+		}
+		.qianggou .pro>div>img{
+			/* width: 100%; */
+			width: 95px;
+			height: 95px;
+			object-fit: cover;
+			border-radius: 10px;
+		}
+		.qianggou .pro p{
+			color: #353535;
+			font-size: 14px;
+			width: 100%;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			margin-top: 5px;
+		}
+		.qianggou .pro div p span{
+			font-size: 12px;
+			color: #888888;
+		}
+		.qianggou .pro>div>div{
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-top: 5px;
+		}
+		.qianggou .pro div span{
+			color: #FF2814;
+			font-size: 14px;
+		}
+		.qianggou .pro>div>div>img{
+			width: 24px;
+			height: 24px;
+		}
+		.ball.drop-enter-active{ transition: all 0.8s cubic-bezier(0.49, -0.29, 0.75, 0.41);}
+	</style>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<!-- <div v-show="showPage"> -->
+
+				<!-- 隐藏表头 -->
+
+				<div class="headDiv">
+					<div class="top">
+						<div class="left">
+							<img src="images/icon/location.png">
+							<span>{{shopInfo.shop_name}}</span>
+							
+						</div>
+						<div class="right">
+							<!-- <img src="images/icon/fenxiang.png" alt="" @click="shareGoods"> -->
+							<img src="images/icon/shouye.png" alt="" @click="openActionsheet()">
+						</div>
+					</div>
+					<div class="sousuo">
+						<input type="text" placeholder="点击搜索商品" @click="search" readonly="readonly">
+						<img src="images/icon/sousuo.png" alt="" @click="search">
+					</div>
+					<!-- <div class="resou">
+						<p>热搜：</p>
+						<ul>
+							<li>奇异果</li>
+							<li>草莓</li>
+							<li>车厘子</li>
+							<li>荔枝</li>
+						</ul>
+					</div> -->
+					<van-swipe :autoplay="2500" v-if="bannerImg.length!=0">
+						<van-swipe-item v-for="(item, index) in bannerImg" :key="index">
+							<a :href=" 'goodsDetails.html?id='+item.link " v-if="item.link">
+								<img :src="item.url" style="width:100%;height:140px;object-fit:cover;border-radius: 5px;">
+							</a>
+							<a href="javascript:;">
+								<img :src="item.url" style="width:100%;height:140px;object-fit:cover;border-radius: 5px;">
+							</a>
+						</van-swipe-item>
+					</van-swipe>
+					<van-swipe v-else>
+						<van-swipe-item v-for="(item,index) in banner" :key="index">
+							<a href="javascript:;">
+								<img :src="item.url" style="width:100%;height:140px;object-fit:cover;border-radius: 5px;">
+							</a>
+						</van-swipe-item>
+					</van-swipe>
+					<div class="gonggao">
+						<img src="./images/icon/gonggao.png" alt="" width="20%" onerror="this.src='images/icon/gonggao.png'" />
+						<marquee behavior="scroll" direction="up" scrollamount="3" scrolldelay="300" style="font-size: 14px; height: 18px;position: relative;
+						left: 10px;font-weight: normal;">{{announcement?announcement:'欢迎光临本店铺！'}}</marquee>
+					</div>
+					<!-- <el-row>
+						<el-col>
+							<ul class="nav">
+								<li v-for="(item, index) in goods_sort">
+									<a :href=" 'speedBuy.html?cate_id='+item.cate_id">
+										<div style="width: 0.8rem;height: 0.8rem;margin-bottom: 10px;">
+											<img :src="item.icon?item.icon:'images/nav5.png' " alt="" width="20" onerror="this.src='images/nav5.png'" />
+										</div>
+
+										<p style="font-size: 14px;color:#000;">{{item.cate_name}}</p>
+									</a>
+								</li>
+								<li>
+									<a href="speedBuy.html">
+										<div style="width: 0.8rem;height: 0.8rem;margin-bottom: 10px;">
+											<img src="images/nav5.png" alt="" width="20" />
+										</div>
+
+										<p style="font-size: 14px;color:#000;">更多</p>
+									</a>
+								</li>
+
+							</ul>
+						</el-col>
+					</el-row> -->
+					<!-- 分类 -->
+				</div>
+				
+				<!-- <div class="goods">
+					<img src="images/jingtiaoxixuan.png" alt="">
+				</div>
+ -->
+				<div class="qianggou" v-if="promotion_goods.length!=0">
+					<van-tabs line-width="0">
+					  <van-tab>
+						<template slot="title">
+							<img src="images/gou.png" alt="">限时抢购
+						</template>
+						<div class="pro">
+							<div v-for="(item,index) in promotion_goods" style="position: relative;">
+								<!-- 抢购结束 -->
+								<div v-if="item.left==0" style="position: absolute;left: 10px;top: 5px;background: rgba(0, 0, 0, 0.15);width: 84%;height: 95px;border-radius: 15px;">
+									<img src="images/end.png" style="width: 70px;height: 48px;position: absolute;top: 0;left: 5px;" />
+								</div>
+								<img :src="item.thumb" alt="" v-if="item.left>0" @click="details(item.goods_id)">
+								<img :src="item.thumb" alt="" v-if="item.left==0">
+								<p>
+									{{item.goods_name}}<br>
+									<!-- <span>甘甜多汁</span> -->
+								</p>
+								<div>
+									<span>￥{{item.promotion_price}}</span>
+									<!-- 抢购中 -->
+									<img src="images/qianggou.png" alt="" v-if="item.left>0" @click="details(item.goods_id)">
+									<!-- 抢购结束 -->
+									<img src="images/qianggou.png" alt="" v-if="item.left==0">
+								</div>
+							</div>
+						</div>
+					  </van-tab>
+					  <van-tab>
+						  <template slot="title">
+							  <img src="images/hui.png" alt="">优惠拼团
+						  </template>
+						  <p style="line-height: 50px;text-align: center;font-size: 20px;">敬请期待...</p>
+					  </van-tab>
+					</van-tabs>
+				</div>
+				
+				<div class="fenlei">
+					<ul class="nav">
+						<li :class="{'active':curr==0}" @click="handleClick('',0)">
+							<img src="images/more.png" alt="" width="20" />
+							<span>全部</span>
+						</li>
+						<li :class="{'active':curr==index+1}" v-for="(item, index) in goods_sort" @click="handleClick(item.cate_id,index)">
+							<img :src="item.icon?item.icon:'images/nav5.png'" alt="">
+							<span>{{item.cate_name}}</span>
+						</li>
+					</ul>
+				</div>
+				<!-- 列表 -->
+				<div class="jingT" ref="content">
+					<div class="xixuan" v-for="(item, index) in goods_list">
+						<div  @click="details(item.goods_id)">
+							<img :src="item.thumb" height="220" width="320" alt="">
+						</div>
+						<p>{{item.goods_name}}</p>
+					
+						<div class="price">
+							<p v-if="item.promotion_price">
+								<span v-if="item.unit">￥{{item.promotion_price}}/{{item.unit}}</span>
+								<span v-else>￥{{item.promotion_price}}</span>
+								<br>
+								<span style="color: gray;text-decoration: line-through;font-size: 12px;margin-top: -5px;display: -webkit-box;" v-if="item.unit">￥{{item.retail_price}}/{{item.unit}} </span>
+								<span style="color: gray;text-decoration: line-through;font-size: 12px;margin-top: -5px;display: -webkit-box;" v-else>￥{{item.retail_price}}</span>
+							</p>
+							<p v-else>
+								<span v-if="item.unit">￥{{item.retail_price}}/{{item.unit}}</span>
+								<span v-else>￥{{item.retail_price}}</span>
+							</p>
+							<!-- <span>+</span> -->
+							<span v-if="item.storage <= 0" style="color: #f36065;border: none;font-size: 12px;width: 30px;line-height: 14px;">库存不足</span>
+							<!-- <img v-if="item.storage > 0"  src="images/jia.png" alt="" style="width: 25px !important;height: 25px !important;"  @click="addGood(item.goods_id, item.promotion_num, item.has_buy, item.storage)"> -->
+							
+							<div v-if="item.num == 0 && item.storage!=0 " style="display: flex;justify-content: flex-end;">
+								<img src="images/jiagou.png" alt=""  style="width: 20px;height: 20px;" @click="addG(index,item.goods_id, item.promotion_num, item.has_buy, item.storage)">
+							</div>
+							
+							<div v-if="item.num > 0 && item.storage>0" style="display: flex;justify-content: flex-end;">
+								<img src="./images/jian.png" alt="" class="fl" style="width: 20px;height: 20px;" @click="reduceChange(item.goods_id,item.num, index)">
+								<div class="fl" style="margin-left: 10px;margin-right: 10px">{{item.num}}</div>
+								<img src="./images/jiagou.png" alt="" class="fl" style="width: 20px;height: 20px;" @click="addChange(item.goods_id, item.promotion_num, item.has_buy, item.storage)">
+							</div>
+							
+							
+						</div>
+						
+					</div>
+
+				</div>
+
+
+				<!-- 底部导航 -->
+				<el-row class="bottom-nav">
+					<el-col :span="6" class="box1">
+						<img src="images/icon/sy.png" alt="">
+						<p>首页</p>
+					</el-col>
+					<el-col :span="6" class="box1">
+						<div @click="shoppingCart()" style="position: relative;">
+							<span v-if="count > 0" style="position: absolute;left: 55%;top: -5px; background: red;color: #fff;padding: 0 5px;border-radius: 10px;">{{count}}</span>
+							<img src="images/icon/gwc1.png" alt="">
+							<p>购物车</p>
+						
+						</div>
+					</el-col>
+					<el-col :span="6" class="box1">
+						<div @click="speed()">
+							<img src="images/icon/jsgm1.png" alt="">
+							<p>极速购买</p>
+						</div>
+
+					</el-col>
+					<el-col :span="6" class="box1">
+						<div @click="personal()">
+							<img src="images/icon/grzx1.png" alt="">
+							<p>个人中心</p>
+						</div>
+
+					</el-col>
+				</el-row>
+
+			<!-- </div> -->
+
+			<!-- <div @click="shareGoods()" class="share-mask" v-show="isShare">
+				<div style="width:100%;height:80px;">
+					<img style="display:block;position:fixed;right:10px;top:0px;width:80px;height:80px;"  src="images/icon/share.png" alt="">
+				</div>
+				<div class="share-mask-content">
+				<p>点击右上角</p>
+				<p>通过【发送给朋友】</p>
+				<p>分享自己的店铺</p>
+				</div>
+			</div> -->
+			
+			<div class="message-page-mask" v-show="message.show==1">
+				<div class="message-page-mask-content">
+					<div class="el-loading-spinner">
+						<i v-show="message.type=='success' " class="el-icon-success"></i>
+						<i v-show="message.type=='error' " class="el-icon-error"></i>
+			
+						<p class="el-loading-text">{{message.text}}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="page-mask" v-show="loading">
+				<div class="page-mask-content">
+					<div class="el-loading-spinner"><i class="el-icon-loading"></i>
+						<p class="el-loading-text">拼命加载中</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="overlay" v-show="isAction" @click="isAction=false"></div>
+			<div class="actionSheet" v-show="isAction">
+				<h3>请选择店铺<span @click="manageFlagFF()">{{manageText}}</span></h3>
+				<ul>
+					<li v-for="item in buttons"><span @click="currentShop(item.id)">{{item.shop_name}}</span><span class="imgSpan" v-if="deleteBtn&&item.show" @click="deleteShop(item.id)"><img src="images/del.png" /></span> </li>
+				</ul>
+				<p @click="isAction=false">取消</p>
+			</div>
+		</div>
+
+		<script>
+			apiready = function() {
+				api.parseTapmode();
+			}
+			var actionsheet = new auiActionsheet();
+
+			var app = new Vue({
+				el: '#app',
+				data: {
+					// lookup:0,
+					// goods_name:'',				//搜索的商品名称
+					showPage: 0,
+					mark: 0,
+					show: true,
+					code: '',
+					token: localStorage.getItem("token"),
+					announcement: '', //公告
+					bannerImg: [],
+					banner:[
+						{url:'http://sy.xfd365.com/mobile/images/banner1.png'},
+						{url:'http://sy.xfd365.com/mobile/images/banner2.png'},
+						{url:'http://sy.xfd365.com/mobile/images/banner3.png'},
+					],
+					goods_list: [], //商品列表
+					goods_sort: [], //所有商品分类
+					item: {
+						token: localStorage.getItem("token"),
+						page: 2,
+						size: 10,
+					},
+					JumpUrl: {
+						sort: 'http://sy.xfd365.com/wx/cate/index',
+						list: 'http://sy.xfd365.com/wx/goods/goodsLists',
+						homeData: 'http://sy.xfd365.com/wx/index/index',
+						token: 'http://sy.xfd365.com/wx/wechat/login', //微信登录
+						checkToken: 'http://sy.xfd365.com/wx/base/checkToken', //检查token
+						shopInfoUrl: 'http://sy.xfd365.com/wx/shop/shop_info', //获取店铺信息
+						jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+						my_shops: 'http://sy.xfd365.com/wx/shop/my_shops',
+						user_info: 'http://sy.xfd365.com/wx/shop/user_info',
+						changeShop: 'http://sy.xfd365.com/wx/shop/changeShop',
+						promotion: 'http://sy.xfd365.com/wx/index/promotion_goods',
+						add: 'http://sy.xfd365.com/wx/cart/add',
+						delShop: 'http://sy.xfd365.com/wx/shop/delShop',
+						index:'http://sy.xfd365.com/wx/cart/cart',
+
+					},
+					promotion_goods: [],
+					page: 1,
+					loading: 0,
+					isDone: 0,
+					shopInfo: [],
+					share_url: "",
+					code: '',
+					shop_id: '',
+					searchModel: '',
+					searchShow: false,
+					buttonTitle: '',
+					buttons:[],
+					isShare: false,
+					// current: 0,
+					gzh: '',
+					isAction:false,
+					curr: 0,
+					cate_id: '',
+					addGoodData: {
+						goods_id: '',
+						token: localStorage.getItem("token"),
+						number: 1,
+						is_now: 0,
+					},
+					message: {
+						show: 0,
+						type: 'success',
+						text: '成功',
+					},
+					manageText: '管理',
+					deleteBtn: false,
+					cartList: [],
+					addGoods:{
+						goods_id:'',
+						number:0,
+						token:localStorage.getItem("token"),
+					},
+					num: 1,
+					box: 1,
+					count: 0,
+				},
+				methods: {
+					onScroll() {
+						if (this.isDone) {
+							return;
+						}
+						/*页面高度*/
+						var scrollTop = 0;
+						if (document.documentElement && document.documentElement.scrollTop) {
+							scrollTop = document.documentElement.scrollTop;
+						} else if (document.body) {
+							scrollTop = document.body.scrollTop;
+						}
+						/*当前可视高度*/
+						let clientHeight = document.documentElement.clientHeight;
+						/*文档完整的高度*/
+						let scrollHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+
+						let that = this;
+						if ((scrollHeight - clientHeight - scrollTop) <= 200) {
+
+							if (that.loading == 1) {
+								return;
+							}
+							this.page += 1;
+							that.loading = 1;
+							that.goodsList();
+						}
+
+					},
+					// 极速购买跳转
+					speed: function() {
+						window.location.href = "speedBuy.html";
+					},
+					//个人中心跳转
+					personal: function() {
+						window.location.href = "personal.html";
+					},
+					//购物车跳转
+					shoppingCart: function() {
+						window.location.href = "shoppingCart.html";
+					},
+					//商品详情
+					details(id) {
+						/*页面高度*/
+						var scrollTop = 0;
+						if (document.documentElement && document.documentElement.scrollTop) {
+							scrollTop = document.documentElement.scrollTop;
+						} else if (document.body) {
+							scrollTop = document.body.scrollTop;
+						}
+					
+						// console.log(scrollTop)
+						localStorage.setItem('goods_list', JSON.stringify(this.goods_list))
+						localStorage.setItem('curr', this.curr)
+						localStorage.setItem('cateId', this.cate_id)
+						localStorage.setItem('index_scroll', scrollTop)
+						
+						window.location.href = "goodsDetails.html" + '?' + 'id=' + id;
+						
+					},
+					//搜索框
+					search: function() {
+						window.location.href = "lookupGoods.html";
+					},
+					//所有商品分类
+					goodsSort: function() {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.sort,
+								data: {
+									token: that.token,
+								}
+							})
+							.then(function(resp) {
+								// that.goods_sort = resp.data.data.slice(0, 4);
+								that.goods_sort = resp.data.data
+								// console.log(that.goods_sort)
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					// 切换分类
+					handleClick:function(id,index){
+						var that = this
+						// let page=that.page
+						that.page = 1;
+						that.isDone = 0
+						that.cate_id = id
+						
+						if(id == ''){
+							that.curr = 0
+							axios({
+								method: 'post',
+								url: that.JumpUrl.list,
+								data:{
+									token:that.token,
+									page:that.page,
+									cate_id: id
+								},
+							})
+							.then(function (resp) {
+								that.loading=0;
+								if(resp.data.errno == 0){
+									let cartList = that.cartList
+									for (var i = 0; i < resp.data.data.data.length; i++) {
+										resp.data.data.data[i].num = 0;
+										for(var j=0;j < cartList.length;j++){
+											if (cartList[j].goods_id == resp.data.data.data[i].goods_id) {
+												resp.data.data.data[i].num = cartList[j].number;
+											}
+										}
+									};
+									
+									that.goods_list = resp.data.data.data
+								}
+													
+							}).catch(function (error) {
+								that.loading=0;
+								//请求失败
+								console.log('error', error);
+													
+							})
+						}else{
+							that.curr = index+1
+							axios({
+								method: 'post',
+								url: that.JumpUrl.list,
+								data:{
+									token:that.token,
+									cate_id:id,
+									page:that.page,
+								},
+							})
+							.then(function (resp) {
+								that.loading=0;
+								if(resp.data.errno == 0){
+									let cartList = that.cartList
+									for (var i = 0; i < resp.data.data.data.length; i++) {
+										resp.data.data.data[i].num = 0;
+										for(var j=0;j < cartList.length;j++){
+											if (cartList[j].goods_id == resp.data.data.data[i].goods_id) {
+												resp.data.data.data[i].num = cartList[j].number;
+											}
+										}
+									};
+									
+									that.goods_list = resp.data.data.data
+								}
+						
+							}).catch(function (error) {
+								that.loading=0;
+								//请求失败
+								console.log('error', error);
+						
+							})
+						}
+					},
+					
+					addG(index, goods_id, promotion_num, has_buy, storage) {
+						let that = this;
+						let canBuyName = promotion_num - has_buy;
+						let carNum;
+						let cartList = that.cartList
+						cartList.forEach(function(ele) {
+							if (ele.goods_id == goods_id) {
+								carNum = ele.number;
+							}
+						})
+						if((promotion_num == has_buy || carNum == canBuyName) && has_buy != -1){
+							that.message={
+								show:1,
+								text:'每人限购' + promotion_num + '件',
+								type:'error'
+							}
+							setTimeout(function(){
+								that.message.show=0;
+							}, 2000)
+							return
+						}else if(carNum == storage){
+							that.message={
+								show:1,
+								text:'库存不足',
+								type:'error'
+							}
+							setTimeout(function(){
+								that.message.show=0;
+							}, 2000)
+							return
+						}else{
+							that.i = index;
+							that.addGoods.goods_id = goods_id;
+							that.addGoods.number = 1;
+							that.addCart(-1);
+						}
+						
+						// this.i = index;
+						// this.addGoods.goods_id = goods_id;
+						// this.addGoods.number = 1;
+						// this.addCart(-1);
+					},
+					
+					
+					//增加商品
+					addChange(goods_id, promotion_num, has_buy, storage) {
+						var that = this;
+						let canBuyName = promotion_num - has_buy;
+						let carNum;
+						let cartList = that.cartList
+						cartList.forEach(function(ele) {
+							if (ele.goods_id == goods_id) {
+								carNum = ele.number;
+							}
+						})
+						
+						if((promotion_num == has_buy || carNum >= canBuyName) && has_buy != -1){
+							console.log("1111")
+							that.message={
+								show:1,
+								text:'每人限购' + promotion_num + '件',
+								type:'error'
+							}
+							setTimeout(function(){
+								that.message.show=0;
+							}, 2000)
+							return;
+						}else if(carNum >= storage){
+							that.message={
+								show:1,
+								text:'库存不足',
+								type:'error'
+							}
+							setTimeout(function(){
+								that.message.show=0;
+							}, 2000)
+							return;
+						}else{
+							that.addGoods.goods_id = goods_id
+							that.addGoods.number = 1;
+							that.addCart();
+						}
+						
+					},
+					
+					//减去商品
+					reduceChange(goods_id, num, index) {
+						var that = this;
+						that.addGoods.goods_id = goods_id;
+						that.addGoods.number = -1;
+						
+						if (num < 1) {
+							return;
+							that.addGoods.number = 0
+						} else {
+							that.addCart(index);
+							that.addGoods.number = -1;
+						}
+						let goods_list = that.goods_list
+						if (that.cartList = []) {
+							that.flag = 1;
+							goods_list.forEach(function(ele) {
+								ele.num = 0
+							})
+						}
+
+					},
+			
+					//添加商品/wx/cart/add
+					addCart(index) {
+						let that = this;
+						if (that.box == 2) {
+							return
+						}
+						that.box = 2;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.add,
+								data: that.addGoods
+							})
+							.then(function(resp) {
+								that.box = 1;
+								that.count = resp.data.data.cartTotal.checkedGoodsCount; //总共几件
+
+								that.cartList = resp.data.data.cartList;
+
+								for (var i = 0; i < that.cartList.length; i++) {
+									for (var j = 0; j < that.goods_list.length; j++) {
+										if (that.cartList[i].goods_id == that.goods_list[j].goods_id) {
+											that.goods_list[j].num = that.cartList[i].number;
+											if (that.goods_list[j].num < 0) {
+												that.goods_list[j].num = 0;
+											}
+										}
+									}
+
+								}
+
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					//获取购物车内容
+					myCart(){
+						let that = this;
+						let form_data = new FormData();
+							makeFormData(that.addGoods,form_data);
+							axios({
+								method: 'post',
+								url: that.JumpUrl.index,
+								data:form_data
+							})
+							.then(function (resp) {
+								that.cartList = resp.data.data.cartList;
+								that.count = resp.data.data.cartTotal.checkedGoodsCount;
+								// console.log(that.cartList)
+							}).catch(function (error) {
+								//请求失败
+								console.log('error', error);
+					
+							})
+					},
+
+					//首页获取商品列表
+					goodsList: function() {
+						var that = this;
+						let page = that.page
+						axios({
+								method: 'post',
+								url: that.JumpUrl.list,
+								data: {
+									token: localStorage.getItem('token'),
+									page: page,
+									cate_id: that.cate_id
+
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								if (resp.data.data.data.length == 0) {
+									that.isDone = 1;
+									that.loading = 0;
+									return;
+								}
+								let cartList = that.cartList
+								for (var i = 0; i < resp.data.data.data.length; i++) {
+									resp.data.data.data[i].num = 0;
+									for(var j=0;j < cartList.length;j++){
+										if (cartList[j].goods_id == resp.data.data.data[i].goods_id) {
+											resp.data.data.data[i].num = cartList[j].number;
+										}
+									}
+								};
+								
+								
+								
+								if (page == 1) {
+									that.goods_list = resp.data.data.data
+									that.loading = 0;
+								} else {
+									for (let item of resp.data.data.data) {
+										that.goods_list.push(item);
+									}
+									that.loading = 0;
+								}
+								
+								// console.log(that.goods_list)
+							}).catch(function(error) {
+								that.loading = 0;
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					//banner图片
+					// autoPlay() {
+					// 	this.mark++;
+					// 	if (this.mark === this.bannerImg.length) { //当遍历到最后一张图片置零
+					// 		this.mark = 0
+					// 	}
+					// },
+					//banner图片
+					// play() {
+					// 	this.autoPlay()
+					// 	setInterval(this.autoPlay, 2500)
+					// },
+					//banner图片
+					// change(i) {
+					// 	this.mark = i
+					// },
+					// onChange(index) {
+					//       this.current = index;
+					//     },
+					//首页数据
+					homePageData: function() {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.homeData,
+								data: {
+									token: localStorage.getItem('token'),
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								that.announcement = resp.data.data.announcement;
+								that.bannerImg = resp.data.data.banner
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+
+
+					getShopInfo: function() {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.JumpUrl.shopInfoUrl,
+
+							data: {
+								token: that.token,
+								// shop_id: localStorage.getItem("shop_id")
+							}
+						}).then(function(resp) {
+							let data = resp.data
+							// console.log(JSON.stringify(data))
+							if (data.errno == 0) {
+
+								var shopId = localStorage.getItem("shop_id");
+								// console.log(shopId)
+								if (shopId) {
+								} else {
+									localStorage.setItem('shop_id', data.data.id);
+								}
+								localStorage.setItem('shopInfo', JSON.stringify(data.data));
+								that.shopInfo = data.data
+								that.getJssdk();
+
+							}
+						}).catch(function(error) {
+							//请求失败
+							console.log('error', error);
+
+
+						})
+					},
+					// 促销商品
+					promotionGoods(){
+						axios({
+							method: 'post',
+							url: this.JumpUrl.promotion,
+							data:{token: this.token}
+						}).then(res=>{
+							if(res.data.errno === 0){
+								var data = res.data.data
+								data.forEach(ele=>{
+									ele.num = 0
+								})
+								this.promotion_goods = data
+							}
+						})
+					},
+					setWx() {
+						let that = this;
+						let shopInfo=JSON.parse(localStorage.getItem('shopInfo'));
+						console.log(shopInfo)
+						// let shopInfo = that.shopInfo;
+						
+						let shop_name = shopInfo.shop_name
+						let shop_id = shopInfo.id
+						let logo = shopInfo.logo
+						wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+							wx.onMenuShareTimeline({
+								title: shop_name, // 分享标题
+								desc: '村里面的超市', // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function() {
+
+								}
+							})
+
+							wx.onMenuShareAppMessage({
+								title: shop_name, // 分享标题
+								desc: '村里面的超市', // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function() {
+								}
+							})
+
+
+						});
+					},
+
+					// shareGoods() {
+					// 	let that = this;
+					// 	this.isShare = !this.isShare;
+					// 	//let shopInfo=JSON.parse(localStorage.getItem('shopInfo'));
+					// 	let shopInfo = that.shopInfo;
+
+					// 	let shop_name = shopInfo.shop_name
+					// 	let shop_id = shopInfo.id
+					// 	let logo = shopInfo.logo
+					// 	wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+					// 		wx.onMenuShareTimeline({
+					// 			title: shop_name, // 分享标题
+					// 			desc: '村里面的超市', // 分享描述
+					// 			// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+					// 			link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+					// 			imgUrl: logo, // 分享图标
+					// 			success: function() {
+
+					// 			}
+					// 		})
+
+					// 		wx.onMenuShareAppMessage({
+					// 			title: shop_name, // 分享标题
+					// 			desc: '村里面的超市', // 分享描述
+					// 			// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+					// 			link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+					// 			imgUrl: logo, // 分享图标
+					// 			success: function() {
+					// 			}
+					// 		})
+
+
+					// 	});
+					// },
+					// 获取微信jssdk的配置
+					getJssdk: function() {
+						let that = this;
+						// console.log(window.location.href)
+						// http://sy.xfd365.com/mobile/index.html?shop_id=26
+						axios({
+							method: 'post',
+							url: that.JumpUrl.jssdkUrl,
+							//data: form_data
+							data: {
+								token: that.token,
+								url: window.location.href
+							}
+						}).then(function(resp) {
+							// console.log(JSON.stringify(resp))
+							let data = resp.data
+
+							let sdkData = resp.data
+							wx.config({
+								debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+								appId: sdkData.appId, // 必填，公众号的唯一标识
+								timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+								nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+								signature: sdkData.signature, // 必填，签名
+								jsApiList: [
+									'onMenuShareTimeline',
+									'onMenuShareAppMessage',
+								] // 必填，需要使用的JS接口列表
+							});
+							that.share_url = sdkData.url;
+							that.setWx();
+
+						})
+					},
+
+					// token获取
+					wechatLogin: function() {
+						var that = this;
+						// console.log(that.gzh)
+						if(that.gzh){
+							axios({
+									method: 'post',
+									url: that.JumpUrl.token,
+									//data: form_data
+									data: {
+										code: that.code,
+										shop_id: that.shop_id,
+										shoper_token: localStorage.getItem('shoper_token'),
+										from: that.gzh
+									}
+								}) 
+								.then(function(resp) { //返回数据
+									that.token = resp.data.token;
+									localStorage.setItem('token', that.token);
+									  window.history.pushState(null, null, 'http://sy.xfd365.com/mobile/index.html?shop_id='+that.shop_id);
+									if (that.token) {
+										that.homePageData(); //	banner 图和公告列表
+										// that.play(); //轮播图
+										that.promotionGoods()
+										that.loading = 1;
+										that.page = 1;
+										that.goodsList(); //商品列表
+										that.goodsSort(); //商品分类
+										that.getShopInfo();
+										that.showPage = 1;
+									}
+
+								}).catch(function(error) {
+									//请求失败
+									console.log('error', error);
+
+								})
+						}else{
+							axios({
+									method: 'post',
+									url: that.JumpUrl.token,
+									//data: form_data
+									data: {
+										code: that.code,
+										shop_id: that.shop_id,
+										shoper_token: localStorage.getItem('shoper_token')
+									}
+								})
+								.then(function(resp) { //返回数据
+									that.token = resp.data.token;
+									localStorage.setItem('token', that.token);
+									window.history.pushState(null, null, 'http://sy.xfd365.com/mobile/index.html');
+									if (that.token) {
+										that.homePageData(); //	banner 图和公告列表
+										// that.play(); //轮播图
+										that.promotionGoods()
+										that.loading = 1;
+										that.page = 1;
+										that.goodsList(); //商品列表
+										that.goodsSort(); //商品分类
+										that.getShopInfo();
+										that.showPage = 1;
+									}
+
+								}).catch(function(error) {
+									//请求失败
+									console.log('error', error);
+
+								})
+						}
+
+					},
+
+					wxSign: function() {
+						var that = this;
+						let back_url = 'http://sy.xfd365.com/mobile/index.html';
+
+						if (that.shop_id) {
+							back_url = 'http://sy.xfd365.com/mobile/index.html?shop_id=' + that.shop_id;
+						}
+						if(that.gzh){
+							back_url = 'http://sy.xfd365.com/mobile/index.html?from=' + that.gzh
+						}
+
+						axios({
+								method: 'post',
+								// url: 'http://sy.xfd365.com/wx/wechat/get_jump_url',
+								url: 'https://api.xfd365.com/wx/wechat/get_jump_url',
+								data: {
+									back_url: back_url,
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								window.location.href = resp.data.url;
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+							})
+					},
+
+					//检查token是否过期
+					checkToken: function() {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.checkToken,
+								data: {
+									token: this.token,
+									shop_id: this.shop_id,
+									from: that.gzh
+								}
+
+							})
+							.then(function(resp) {
+								// console.log(resp.data)
+								//返回数据
+								if (resp.data.errno == 1) {
+									//token过期调用跳转页面方法
+									localStorage.removeItem('token')
+									localStorage.removeItem('shoper_token')
+									that.wxSign();
+								} else {
+									// 这个接口返回的shop_id和本地localstorage里面的比较一下，如果不一样的话把这个存一下
+									localStorage.setItem('shop_id', resp.data.data.shop_id)
+									
+									that.homePageData(); //	banner 图和公告列表
+									// that.play(); //轮播图
+									that.promotionGoods()
+									that.loading = 1;
+									that.goodsList(); //商品列表
+									that.goodsSort(); //商品分类
+									that.getShopInfo();
+									that.showPage = 1;
+								}
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					parseUrl(name) {
+						let href = window.location.href
+						if (href.indexOf(name) == -1) {
+							return '';
+						}
+						let param_str = href.substr(href.indexOf('?') + 1);
+						let param_arr = param_str.split('&');
+						for (let p of param_arr) {
+							if (p.indexOf(name)) {
+
+							}
+						}
+					},
+					
+					//弹窗
+					openActionsheet() {
+						var that = this;
+						that.isAction = true;
+						that.manageText = "管理";
+						that.deleteBtn = false;
+							for (var i = 0; i < that.buttons.length; i++) {
+								if (that.buttonTitle == that.buttons[i].shop_name) {
+									localStorage.setItem('shop_id', that.buttons[i].id);
+								}
+							};
+					},
+					//获取店铺
+					obtainShop() {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.my_shops,
+								data: {
+									token: localStorage.getItem("token"),
+								}
+							})
+							.then(function(resp) {
+								// console.log(resp.data.data)
+								let buttons = resp.data.data
+								// that.buttons = resp.data.data;
+								for (var i = 0; i < buttons.length; i++) {
+									if (buttons[i].id == localStorage.getItem("shop_id")) {
+										that.buttonTitle = buttons[i].shop_name;
+										buttons[i].show = false;
+									}else{
+										buttons[i].show = true;
+									}
+								};
+								that.buttons = resp.data.data;
+								// console.log(that.buttons)
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+					
+							})
+					},
+					//弹窗
+					// openActionsheet() {
+					// 	var that = this;
+					// 	that.isAction = true
+					// 	axios({
+					// 			method: 'post',
+					// 			url: that.JumpUrl.my_shops,
+					// 			data: {
+					// 				token: localStorage.getItem("token"),
+					// 			}
+					// 		})
+					// 		.then(function(resp) {
+					// 			console.log(resp.data.data);
+					// 			that.buttons = resp.data.data;
+					// 			for (var i = 0; i < that.buttons.length; i++) {
+					// 				if (that.buttons[i].id == localStorage.getItem("shop_id")) {
+					// 					that.buttonTitle = that.buttons[i].shop_name;
+					// 				}
+					// 				if (resp.buttonTitle == that.buttons[i].shop_name) {
+					// 					localStorage.setItem('shop_id', that.buttons[i].id);
+					// 				}
+					// 			}
+					// 		}).catch(function(error) {
+					// 			//请求失败
+					// 			console.log('error', error);
+					// 		})
+					// },
+					
+					// 切换管理
+					manageFlagFF(){
+						let that = this;
+						that.deleteBtn = !that.deleteBtn; 
+						if(!that.deleteBtn){
+							that.manageText = "管理"
+						}else{
+							that.manageText = "完成"
+						}
+						
+					},
+					// 删除店铺
+					deleteShop(id) {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.JumpUrl.delShop,
+							data: {
+								shop_id: id,
+								token: localStorage.getItem("token"),
+							}
+						}).then(function(resp){
+							that.message = {
+								show: 1,
+								text: resp.data.msg,
+								type: 'success'
+							}
+							setTimeout(function() {
+								that.message.show = 0;
+							}, 1000)
+							
+							that.obtainShop();
+						}).catch(function(error){
+							//请求失败
+							console.log('error', error);
+						})
+					},
+					//切换店铺
+					currentShop(id) {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.changeShop,
+								data: {
+									shop_id: id,
+									token: localStorage.getItem("token"),
+								}
+							})
+							.then(function(resp) {
+								that.message = {
+									show: 1,
+									text: resp.data.msg,
+									type: 'success'
+								}
+								setTimeout(function() {
+									that.message.show = 0;
+								}, 1000)
+								window.location.href = '/mobile/index.html?shop_id=' + id
+								
+								that.myCart();
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+
+				},
+				created: function() {
+					this.$nextTick(()=>{
+						this.myCart()
+					})
+					this.obtainShop();
+					this.loading = 1;
+					let shop_id = getQueryString('shop_id');
+					// console.log(shop_id)
+					
+					let gzh = getQueryString('from')
+					// console.log(gzh)
+					
+					if(gzh){
+						this.gzh = gzh
+					}
+					if (!shop_id) {
+						shop_id = localStorage.getItem('shop_id');
+						// console.log(shop_id)
+						this.shop_id = shop_id?this.shop_id:''
+					}else if (shop_id) {
+						this.shop_id = shop_id
+						if(shop_id != localStorage.getItem('shop_id')){
+							localStorage.setItem('shop_id', shop_id);
+							this.currentShop(this.shop_id)
+						}
+					}
+
+					let code = getQueryString('code');
+					if (code) {
+						this.code = code;
+					}
+
+					var token = localStorage.getItem("token");
+					// console.log(token)
+					// if (token) {
+					// 	this.token = token;
+					// }
+					
+						let index_scroll = localStorage.getItem('index_scroll');
+						let goods_list = localStorage.getItem('goods_list');
+						let curr = localStorage.getItem('curr');
+						let cate_id = localStorage.getItem('cateId');
+						
+						// console.log(goods_list)
+						if(index_scroll > 0){
+							if (document.documentElement && document.documentElement.scrollTop) {
+								document.documentElement.scrollTop = index_scroll;
+							} else if (document.body) {
+								document.body.scrollTop = index_scroll;
+							}
+							this.goods_list = JSON.parse(goods_list);
+							this.curr = curr;
+							this.cate_id = cate_id;
+						}
+						
+						localStorage.removeItem('index_scroll');
+						localStorage.removeItem('goods_list');
+						localStorage.removeItem('curr');
+						localStorage.removeItem('cateId');
+						
+						
+
+					if (this.code) {
+						this.wechatLogin()
+					} else {
+						if (token) {
+							this.checkToken()
+						} else {
+							this.wxSign()
+						}
+					}
+					window.addEventListener('scroll', this.onScroll);
+
+					window.history.pushState(null, null, 'http://sy.xfd365.com/mobile/index.html?shop_id='+this.shop_id);
+					
+					this.banner = JSON.parse(JSON.stringify(this.banner));
+					
+					
+					
+				},
+				mounted: function(){
+					
+					
+				}
+			})
+		</script>
+	</body>
+
+</html>

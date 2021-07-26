@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		html,body { font-size: 16px; height: 100%; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		#app { height: 100%; background: #fff }
+		div { box-sizing: border-box; }
+        /* 佣金兑换背景图 */
+        .cdk-con { position: relative; min-height: 100%; background: url('./images/cdk-bg.png') no-repeat 100% 100%; }
+        .cdk-con .cdk-tit { width: 100%; display: block;  }
+
+        .cdk-absolute-con { position: relative; margin-top: -2rem; margin-left: 5%; width: 90%; }
+        /* cdk输入区域 */
+        .cdk-input-con { position: relative; width: 100%;background: linear-gradient(#ffebbe 0%, #ffe6ae 100%);border-radius: 10px; padding: 1.5rem 1.5rem; }
+        .cdk-input-con .van-cell { padding: 6px 0; background: transparent; border-bottom: 1px solid #b9794e; font-size: 0.9rem; }
+        .cdk-input-con .van-cell input::-webkit-input-placeholder { color:#B9794E; font-size:0.9rem; }
+        .cdk-input-con .van-cell input::-moz-placeholder{  color:#B9794E; font-size:0.9rem; /* Mozilla Firefox 19+ */ }
+        .cdk-input-con .van-cell input:-moz-placeholder{  color:#B9794E; font-size:0.9rem;/* Mozilla Firefox 4 to 18 */ }
+        .cdk-input-con .van-cell input:-ms-input-placeholder{ color:#B9794E; font-size:0.9rem; /* Internet Explorer 10-11 */ }
+        .cdk-input-con .btn-con { width: 100%; padding-top: 2rem; padding-bottom: 1rem; }
+        .cdk-input-con .btn-con .van-button--small { height: 2.2rem; }
+        .cdk-input-con .desc { font-size: 0.8rem; color: #b9794e; text-align: center; }
+        /* cdk使用规则 */
+        .rule-con { margin-top: 1rem; padding-bottom: 1rem;}
+        .rule-con p { font-size: 0.8rem; color: #ffe3b1; padding-top: 5px; }
+
+        /* 导航栏 */
+        .van-nav-bar { background: #eeeeee; }
+        .van-nav-bar .van-icon { color: #444; font-size: 1.1rem; }
+        .van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+        .van-nav-bar .van-nav-bar__right img { display: block; }
+        .van-nav-bar .van-nav-bar__title { font-weight: bold; }
+        .bg-white { background: #eeeeee; }
+
+        /* 使用状态 */
+        .use-status-con { width: 100%; }
+        .use-status-con .status-img-con { width: 100%; display: flex; align-items: center; justify-content: center; padding-top: 3.5rem; padding-bottom: 2.5rem; }
+        .use-status-con .status-img-con img { width: 30%; }
+        .use-status-con  .status-use-text { width: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .use-status-con  .status-use-text .tit { font-weight: bold; font-size: 1.2rem; }
+        .use-status-con  .status-use-text .desc { color: #999; font-size: 1rem; padding-top: 0.5rem; }
+        .use-status-con  .status-use-text .masker { color: #28BD5C;} 
+        .use-status-con  .btn-con { width: 80%;margin-left: 10%; margin-top: 2rem;}
+        .use-status-con  .btn-con .mTop1 { margin-top: 1.5rem;}
+        .use-status-con  .btn-con .van-button--small { height: 2.5rem; font-size: 0.9rem;}
+	</style> 
+
+</head>
+
+<body>
+    <div id="app" ontouchstart="" onmouseover="" v-cloak>
+        <template v-if="isUse">
+            <van-nav-bar :border="false"  title="佣金兑换" left-arrow @click-left="isUse = false"></van-nav-bar>
+            <div class="use-status-con">
+                <div class="status-img-con">
+                    <img :src="isSuccess ? './images/cdk-success-icon.png' : './images/cdk-fail-icon.png'" alt="">
+                </div>
+                <div class="status-use-text">
+                    <template v-if="isSuccess">
+                        <div class="tit">兑换成功</div>
+                        <div class="desc">聚农宝余额可在商城店铺-我的中查看<span class="masker" @click="toShop"> 去商城</span></div>
+                    </template>
+                    <template v-else>
+                        <div class="tit">{{cdkStatus == 2 ? '已兑换' : '兑换失败'}}</div>
+                        <div class="desc">{{errText}}</div>
+                    </template>
+                </div>
+                <div class="btn-con">
+                    <template v-if="isSuccess">
+                        <van-button size="small" block round type="info" color="linear-gradient(#02cf0a 0%, #00be34 100%)" @click="cdkDetail">查看订单</van-button>
+                        <van-button class="mTop1" size="small" hairline  block round type="info" color="#28bd5c" plain @click="toShop">商城使用</van-button>
+                    </template>
+                    <template v-else>
+                        <van-button size="small" block round type="info" color="linear-gradient(#02cf0a 0%, #00be34 100%)" @click="handleFail">{{cdkStatus == 2 ? '去商城' : '重新兑换'}}</van-button>
+                    </template>
+                </div>
+            </div>
+        </template>
+        <template v-else>
+            <div class="cdk-con" >
+				<img class="cdk-tit" src="./images/cdk-tit.png" alt="">
+                <!-- <img class="cdk-bg" src="./images/cdk-bg.png" alt=""> -->
+                <div class="cdk-absolute-con">
+                    <div class="cdk-input-con">
+                        <van-field v-model="cdk" placeholder="请输入CDKEY" clearable></van-field> 
+                            
+                        <div class="btn-con">
+                            <van-button size="small" block round type="info" color="linear-gradient(#e01c06 0%, #ff4330 100%)" @click="userCDk">立即兑换</van-button>
+                        </div>
+        
+                        <div class="desc">— 虚拟权益一旦兑换不支持退换 —</div>
+                    </div>
+                    <div class="rule-con">
+                        <p>使用规则:</p>
+                        <p>1. 一个CDKEY券码仅可兑换一次</p>
+                        <p>2. 一个CDKEY券码可兑换80个聚农宝,价值等同80元人民币</p>
+                        <p>3. 聚农宝可用于商城消费时抵扣现金、也可提现至微信零钱</p>
+                    </div>
+                </div>
+            </div>
+        </template>
+        
+        
+	</div>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				cdk: '',
+				cdkStatus: 0, //0未领取，1已领取，2已兑换，3禁用，4已发放
+				cdkId: null,
+                isUse: false, // 是否使用
+                isSuccess: true, //cdk是否使用成功
+                // isErr: false, //cdk是否使用失败
+                errText: '', // cdk使用失败原因
+				JumpUrl: {
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk2/getSignPackage',
+					checkToken: 'http://sy.xfd365.com/wx/base/checkToken', //检查token
+					token: 'http://sy.xfd365.com/wx/wechat/login', //微信登录
+                    userCdk: baseUrl('/wx/jbc/exchange_cdkey'), // 兑换cdk
+				},
+				token: localStorage.getItem("token"),
+			
+				code: '', // 微信登陆code
+			},
+			methods: {
+                //兑换cdk
+                userCDk() {
+					let that = this;
+					that.cdkId = null
+                    if(!that.cdk) {
+                        that.$toast('请输入要兑换的CDK')
+                        return
+					}
+					that.$toast.loading({
+						duration: 0, // 持续展示 toast
+						forbidClick: true,
+						message: '加载中...',
+					});
+					axios({
+							method: 'post',
+							// url: 'https://api.xfd365.com/wx/wechat/get_jump_url',
+							url: that.JumpUrl.userCdk,
+							data: {
+								cdkey: that.cdk,
+                                token: that.token
+							}
+						})
+						.then(function (resp) {
+							that.$toast.clear()
+							if(resp.data.errno == 0) {
+								that.isSuccess = true
+								that.cdkId = resp.data.data
+								that.cdkStatus = resp.data.status
+							} else {
+								that.isSuccess = false
+								that.errText = resp.data.errmsg ? resp.data.errmsg : '服务异常,请稍后重试'
+								that.cdkStatus = resp.data.status
+							}
+                            that.isUse = true
+						}).catch(function (error) {
+							that.$toast.clear()
+							that.isSuccess = false
+							that.$toast('服务异常,请稍后重试!')
+						})
+                },
+                // 跳转cdk订单详情
+                cdkDetail() {
+                    window.location.href = 'cdkOrderDetail.html?id='+ this.cdkId
+				},
+				// 处理兑换失败
+				handleFail() {
+					if(this.cdkStatus == 2) {
+						window.location.href = 'personal.html'
+					} else {
+						this.isUse = false
+					}
+				},
+				// 商城使用
+				toShop() {
+					window.location.href = 'personal.html'
+				},
+				wxSign() {
+					var that = this;
+					let back_url = 'http://sy.xfd365.com/mobile/cdkExchange.html';
+					axios({
+							method: 'post',
+							// url: 'https://api.xfd365.com/wx/wechat/get_jump_url',
+							url: 'http://sy.xfd365.com/wx/wechat/get_jump_url',
+							data: {
+								back_url: back_url,
+							}
+						})
+						.then(function (resp) {
+							//返回数据
+							window.location.href = resp.data.url;
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+						})
+				},
+				wechatLogin() {
+					var that = this;
+					axios({
+							method: 'post',
+							url: that.JumpUrl.token,
+							//data: form_data
+							data: {
+								code: that.code
+							}
+						})
+						.then(function (resp) { //返回数据
+							that.token = resp.data.token;
+							localStorage.setItem('token', that.token);
+							window.history.pushState(null, null,
+									'http://sy.xfd365.com/mobile/cdkExchange.html');
+							if (that.token) {
+								that.getJssdk();
+							}
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+
+				},
+				//检查token是否过期
+				checkToken: function () {
+					var that = this;
+					axios({
+                        method: 'post',
+                        url: that.JumpUrl.checkToken,
+                        data: {
+                            token: that.token,
+                        }
+                    })
+                    .then(function (resp) {
+                        //返回数据
+                        if (resp.data.errno == 1) {
+                            //token过期调用跳转页面方法
+                            localStorage.removeItem('token')
+                            localStorage.removeItem('shoper_token')
+                            that.wxSign();
+                        } else {
+                            that.getJssdk();
+                        }
+                    }).catch(function (error) {
+                        //请求失败
+                        console.log('error', error);
+                    })
+				},
+				getJssdk() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: encodeURIComponent(location.href.split('#')[0])
+						}
+					}).then(function (resp) {
+						let data = resp.data
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						
+						window.history.pushState(null, null,'http://sy.xfd365.com/mobile/cdkExchange.html');
+					})
+				},
+			
+			
+			
+			},
+			created(){
+                let code = getQueryString('code');
+                if (code) {
+                    this.code = code;
+                }
+                let token = localStorage.getItem('token')
+                if (this.code) {
+                    this.wechatLogin()
+                } else {
+                    if (token) {
+                        this.checkToken()
+                    } else {
+                        this.wxSign()
+                    }
+                }
+				
+			}
+		})
+	</script>
+</body>
+
+</html>

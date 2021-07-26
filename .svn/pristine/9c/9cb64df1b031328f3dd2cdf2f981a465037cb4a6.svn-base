@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>聚农优享</title>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="css/index.css">
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js?v=1"></script>
+		<script type="text/javascript" src="./js/api.js"></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+		<script src="js/vconsole.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+		<style type="text/css">
+			.van-nav-bar {
+				background: linear-gradient(to right, #03DA6B, #00BA59);
+			}
+
+			.van-nav-bar__title {
+				color: #fff;
+			}
+
+			.top {
+				background: url(img/fenxiaoBg.png) no-repeat;
+				width: 100%;
+				height: 55px;
+				background-size: 100% 100%;
+				display: flex;
+				align-items: center;
+			}
+
+			.top .van-cell {
+				background: transparent;
+				color: #fff;
+			}
+
+			.top .van-cell__right-icon {
+				color: #fff;
+			}
+
+			.top img {
+				width: 25px;
+				height: 25px;
+				margin-right: 10px;
+			}
+
+			.van-tabs__line {
+				margin-bottom: 5px;
+			}
+
+			.shenhe {
+				width: 85%;
+				margin: 0 auto;
+			}
+
+			.shenhe .list {
+				display: flex;
+				justify-content: space-between;
+				background: #fff;
+				border-radius: 10px;
+				margin-top: 10px;
+			}
+
+			.shenhe .list img {
+				width: 70px;
+				height: 70px;
+			}
+
+			.shenhe .list div {
+				display: flex;
+				padding: 15px;
+				width:calc(100% - 60px);
+			}
+
+			.shenhe .list div p {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				font-size: 14px;
+				margin-left: 10px;
+				width: 100%;
+			}
+
+			.shenhe .list div p>span {
+				color: #28BD5C;
+				width: 100%;
+				display: flex;
+				justify-content: space-between;
+				/* margin-top: 5px; */
+			}
+
+			.shenhe .list>span {
+				background: linear-gradient(#02CF0A, #00BE34);
+				color: rgba(255, 255, 255, 0.6);
+				border-top-right-radius: 10px;
+				border-bottom-right-radius: 10px;
+				width: 60px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				/* padding-top: 4px; */
+				font-size: 16px;
+			}
+			
+			.zhangdan {
+				width: 85%;
+				margin: 0 auto;
+			}
+			
+			.zhangdan .list {
+				display: flex;
+				justify-content: space-between;
+				background: #fff;
+				border-radius: 10px;
+				margin-top: 10px;
+			}
+			
+			.zhangdan .list img {
+				width: 50px;
+				height: 50px;
+			}
+			
+			.zhangdan .list div div {
+				display: flex;
+			}
+			
+			.zhangdan .list div div p {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				font-size: 14px;
+				margin-left: 10px;
+			}
+			
+			.zhangdan .list>div{
+				padding: 15px;
+				width: calc(100% - 30px);
+			}
+			.zhangdan .list>div>p {
+				display: flex;
+				justify-content: space-between;
+				padding: 0 10px;
+				margin-left: 10px;
+				height: 20px;
+				background: #F5F5F5;
+				margin-top: 10px;
+				line-height: 20px;
+				border-radius: 5px;
+				color: #999999;
+			}
+			
+			.zhangdan .list div div p span {
+				color: #28BD5C;
+				margin-top: 5px;
+			}
+			
+			.zhangdan .list>span {
+				background: linear-gradient(#02CF0A, #00BE34);
+				color: rgba(255, 255, 255, 0.6);
+				border-top-right-radius: 10px;
+				border-bottom-right-radius: 10px;
+				width: 30px;
+				text-align: center;
+				padding-top: 4px;
+				font-size: 16px;
+			}
+			.tixian{
+				height: 40px;
+				background: #fff;
+				width: 100%;
+				position: fixed;
+				bottom: 0;
+				padding: 12px;
+			}
+			.tixian p:first-of-type span{
+				color: #28BD5C;
+				font-size: 18px;
+			}
+			.tixian p:last-of-type{
+				color: #999;
+			}
+			.tixian>span{
+				background: linear-gradient(#02CF0A,#00BE34);
+				position: fixed;
+				bottom: 0;
+				right: 0;
+				height: 80px;
+				width: 90px;
+				border-top-left-radius: 60px;
+				color: #fff;
+				text-align: center;
+				font-size: 16px;
+				font-weight: bold;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			
+			.nodata{margin: 100px auto;text-align: center;}
+			.nodata img{
+				width: 80%;
+			}
+			.nodata p:first-of-type{font-size: 18px;}
+			.nodata p:last-of-type{font-size: 14px;color: #999999;}
+		</style>
+	</head>
+	<body>
+		<div id="main">
+			<van-sticky>
+				<van-nav-bar :border="false" title="分销中心"></van-nav-bar>
+			</van-sticky>
+			<div class="top">
+				<van-cell :title="title" is-link url="zhubanfang.html">
+					<template #icon>
+						<img src="img/logo.png" alt="">
+					</template>
+				</van-cell>
+			</div>
+			<van-tabs v-model="active" color="#02CF0A" line-width="35px" @change="changeTab">
+				<van-tab title="全部"></van-tab>
+				<van-tab title="已审核"></van-tab>
+				<van-tab title="待审核"></van-tab>
+				<van-tab title="驳回审核"></van-tab>
+				<van-tab title="活动账单明细"></van-tab>
+			</van-tabs>
+			
+			<div v-if="active == 4">
+				<div v-if="shenheList.length>0">
+					<div class="zhangdan">
+						<div class="list" v-for="(item,index) in shenheList">
+							<div>
+								<div>
+									<img src="img/uploadPic.png" alt="">
+									<p>
+										{{item.shop_name}}
+										<span>{{item.name}}({{item.type_str}},{{item.target_str}})</span>
+									</p>
+								</div>
+								<p>
+									<span>已使用人数:{{item.user_get_num}}</span>
+									<span>剩余数量:{{item.left_num}}</span>
+								</p>
+							</div>
+							<span @click="toMingxi(item.coupon_id,item.shop_name)">查看明细</span>
+						</div>
+					</div>
+					<div class="tixian">
+						<p>可提现金额: <span>{{money.income_money}}</span>元</p>
+						<p>
+							<span>活动累计金额:{{money.total_income_money}}元</span>
+							<!-- <span>主办方佣金:888485458元</span> -->
+						</p>
+						<span @click="handletixian">立即<br>提现</span>
+					</div>
+				</div>
+				
+				<div v-else class="nodata">
+					<img src="images/no-order-data.png" alt="">
+					<p>暂无账单明细</p>
+					<p>请选择店铺后再进行账单明细查看</p>
+				</div>
+			</div>
+			<div v-else>
+				<div class="shenhe" v-if="shenheList.length>0">
+					<div class="list" v-for="(item,index) in shenheList">
+						<div @click="toDetail(item.coupon_id)">
+							<img src="img/uploadPic.png" alt="">
+							<p>
+								{{item.shop_name}}</br>
+								{{item.name}}({{item.type_str}})
+								<span>{{item.target_str}}  <span v-if="item.distribution_status==0" @click.stop="edit(item.coupon_id,item.shop_name,item.c_code)">编辑</span></span>
+							</p>
+						</div>
+						
+						<span>{{item.type == 0 ? item.money_str : item.discount_str}}</span>
+					</div>
+				</div>
+				<div v-else class="nodata">
+					<img src="images/icon/no-goods.png" alt="">
+					<p>暂无活动</p>
+					<p>请选择店铺后再进行活动查看</p>
+				</div>
+			</div>
+			
+		</div>
+
+		<script>
+			var app = new Vue({
+				el: '#main',
+				data: {
+					title:'请选择店铺',
+					active: 0,
+					shenheList:[],  //审核活动数据
+					money:{},
+					
+					jumpUrl:{
+						youhuiList:baseUrl('/wx/distribution/joiner_look_coupon'),
+						zhangdanList:baseUrl('/wx/distribution/joiner_info'),
+						checkToken: 'http://sy.xfd365.com/wx/base/checkToken', //检查token
+						token: 'http://sy.xfd365.com/wx/wechat/login', //微信登录
+						jssdkUrl: 'http://sy.xfd365.com/wx/jssdk2/getSignPackage',
+						jiameng:baseUrl('/wx/distribution/check_role'),
+						
+						tixian: baseUrl('/wx/distribution/joiner_all_income_withdrawal')
+					},
+					token: localStorage.getItem(('token'))
+				},
+				mounted() {
+					this.title = localStorage.getItem('zhubanName')?localStorage.getItem('zhubanName'):'请选择店铺';
+					this.youhuiList();
+					let code = getQueryString('code');
+					if (code) {
+						this.code = code;
+					}
+					let token = localStorage.getItem('token')
+					if (this.code) {
+						this.wechatLogin()
+					} else {
+						if (token) {
+							this.checkToken()
+						} else {
+							this.wxSign()
+						}
+					}
+				},
+				destroyed() {
+					localStorage.removeItem('zhubanName')
+					localStorage.removeItem('zhubanList')
+				},
+				methods: {
+					toMingxi(id,name){
+						window.location.href = encodeURI('mingxiDetail.html?id='+ id + '&name=' + name)
+					},
+					youhuiList(title){
+						axios.post(this.jumpUrl.youhuiList,{
+							shop_name: this.title!='请选择店铺'?this.title:'',
+							sponsor_id:JSON.parse(localStorage.getItem('zhubanList'))?JSON.parse(localStorage.getItem('zhubanList')).sj_id:'',
+							distribution_status: title=='待审核'?0:title=='已审核'?1:title=='驳回审核'?2:'',
+							token:this.token
+						}).then(res=>{
+							if(res.data.errno == 0){
+								this.shenheList = res.data.data.list
+							}else{
+								this.$toast(res.data.errmsg);
+								setTimeout(function(){
+									window.location.href = 'sendCoupon.html'
+								},1000)
+								
+							}
+						})
+					},
+					handletixian(){
+						axios.post(this.jumpUrl.tixian,{token:this.token}).then(res=>{
+							if(res.data.errno == 0){
+								this.$toast(res.data.errmsg);
+								this.active = 4
+								this.handleZhangdan()
+							}else{
+								this.$toast(res.data.errmsg);
+							}
+						})
+					},
+					handleZhangdan(){
+						axios.post(this.jumpUrl.zhangdanList,{token:this.token}).then(res=>{
+							if(res.data.errno == 0){
+								this.money = res.data.data
+							}
+						})
+					},
+					changeTab(name,title){
+						this.youhuiList(title)
+						if(name == 4){
+							this.handleZhangdan()
+						}
+					},
+					toDetail(id){
+						window.location.href = 'fenxiaoCouponDetail.html?id='+ id
+					},
+					edit(id,name,code){
+						window.location.href = encodeURI('fillCoupon.html?tag=edit&id=' + id + '&name=' + name + '&code=' + code)
+					},
+					
+					
+					wxSign: function () {
+						var that = this;
+						let back_url = 'http://sy.xfd365.com/mobile/fenxiaoList.html';
+						axios({
+								method: 'post',
+								// url: 'https://api.xfd365.com/wx/wechat/get_jump_url',
+								url: 'http://sy.xfd365.com/wx/wechat/get_jump_url',
+								data: {
+									back_url: back_url,
+								}
+							})
+							.then(function (resp) {
+								//返回数据
+								window.location.href = resp.data.url;
+					
+							}).catch(function (error) {
+								//请求失败
+								console.log('error', error);
+							})
+					},
+					wechatLogin: function () {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.jumpUrl.token,
+								//data: form_data
+								data: {
+									code: that.code
+								}
+							})
+							.then(function (resp) { //返回数据
+								that.token = resp.data.token;
+								localStorage.setItem('token', that.token);
+								window.history.pushState(null, null,
+										'http://sy.xfd365.com/mobile/getShopCoupon.html');
+								if (that.token) {
+									that.getJssdk();
+								}
+					
+							}).catch(function (error) {
+								//请求失败
+								console.log('error', error);
+					
+							})
+					
+					},
+					//检查token是否过期
+					checkToken: function () {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.jumpUrl.checkToken,
+								data: {
+									token: that.token,
+									shop_id: that.shop_id,
+									from: that.gzh
+								}
+					
+							})
+							.then(function (resp) {
+								//返回数据
+								if (resp.data.errno == 1) {
+									//token过期调用跳转页面方法
+									localStorage.removeItem('token')
+									localStorage.removeItem('shoper_token')
+									that.wxSign();
+								} else {
+									that.getJssdk();
+								}
+							}).catch(function (error) {
+								//请求失败
+								console.log('error', error);
+							})
+					},
+					
+					getJssdk: function (isShare) {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.jumpUrl.jssdkUrl,
+							//data: form_data
+							data: {
+								token: that.token,
+								url: window.location.href
+							}
+						}).then(function (resp) {
+							window.history.pushState(null, null,
+										'http://sy.xfd365.com/mobile/fenxiaoList.html');
+					
+						})
+					},
+				}
+			})
+		</script>
+	</body>
+</html>

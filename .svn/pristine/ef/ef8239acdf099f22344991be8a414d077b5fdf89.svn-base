@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.8.0/dist/JsBarcode.all.min.js" ></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		html,body { font-size: 16px; height: 100%; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		#app { min-height: 100%; background: #f5f5f5; }
+		div { box-sizing: border-box; }
+		/* 导航栏 */
+        .van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+        .van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+        .van-nav-bar .van-nav-bar__right img { display: block; }
+        .van-nav-bar .van-nav-bar__title { font-weight: bold; }
+		/* tab栏 */
+		.nav-con .van-tab .van-tab__text { color: #888; font-size: 0.875rem; }
+        .nav-con .van-tab--active .van-tab__text { color: #333; font-size: 0.9rem; font-weight: bold; }
+        .nav-con .van-tabs__line { background-color: #333; }
+		.nav-con .van-tab--active .van-tab__text .van-dropdown-item .van-dropdown-item__option { font-weight: 400; }
+		.nav-con .van-tab--active .van-tab__text .van-dropdown-item .van-dropdown-item__option--active { font-weight: bold; }
+		/* 列表 */
+		.list-item { position: relative; padding: 0.3rem 0.75rem; padding-right: 0; display: flex; margin-top: 12px; }
+		.list-item.bg1 { background: url('./images/yhq-item-bg1.png') no-repeat; background-size: 100% 100%; }
+		.list-item.bg2 { background: url('./images/yhq-item-bg2.png') no-repeat; background-size: 100% 100%; }
+		.list-item.bg3 { background: url('./images/yhq-item-bg3.png') no-repeat; background-size: 100% 100%; }
+		.list-item .left { width: 75%; display: flex; flex-direction: column; align-items: center; }
+		.list-item .left .left-top { display: flex; width: 100%; align-items: center}
+		.list-item .left .left-top .shop-logo { width: 40px; height: 40px; border-radius: 4px; overflow: hidden; }
+		.list-item .left .left-top .shop-logo img { width: 100%; height: 100%;}
+		.list-item .left .left-top .shop-info { width: calc(100% - 40px); display: flex; align-items: center; flex-direction: column;padding-left: 8px }
+		.list-item .left .left-top .shop-info .shop-tit { width: 100%;overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.9rem; font-weight: bold; color: #333; }
+		.list-item .left .left-top .shop-info .coupon-tit { width: 100%; font-size: 0.8rem; color: #888; padding-top: 0.2rem; display: flex; align-items: center; }
+		.list-item .left .left-top .shop-info .coupon-type-con { display: flex; align-items: center; padding-top: 0.3rem; width: 100%; }
+		.list-item .left .left-top .shop-info .coupon-type-con .coupon-type { display: inline-block;  font-size: 0.6rem; background-color: #F22120; color: #fff; border-radius:100px; padding:0 0.3rem; margin-right: 0.2rem; }
+		.list-item .left .left-bot { width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 1rem; }
+		.list-item .left .left-bot .desc { width: 100%; font-size: 0.875rem; color: #888; padding-bottom: 0.5rem; }
+		.list-item .left .left-bot .progress { width: 100%;}
+		.list-item .left .left-bot .coupon-desc { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+		.list-item .left .left-bot .coupon-desc .cell { width: 100%; display: flex; align-items: center; font-size: 0.75rem; color: #888; }
+		.list-item .left .left-bot .coupon-desc .cell .cell-left { flex: 1; }
+		.list-item .left .left-bot .coupon-desc .cell .cell-right { min-width: 7rem; text-align: right; }
+		.list-item .left .left-bot .coupon-desc .cell .cell-right.active { color: #ff976a; font-weight: bold; }
+		.list-item .right { width: 25%; display: flex; flex-direction: column; align-items: center; justify-content: center;color: #fff; cursor: pointer; position: relative; }
+		.list-item .right .top { color: #ffe6c4; color: #ffe6c4;  width: 100%; display: flex;  align-items: flex-end; justify-content: center; }
+		.list-item .right .top .price { font-size: 1.6rem; font-weight: bold; }
+		.list-item .right .top .price-icon { font-size: 0.875rem; transform:translateY(-20%) }
+		.list-item .right .small .price { font-size: 1.2rem; font-weight: bold; }
+		.list-item .right .small .price-icon { font-size: 0.65rem; transform:translateY(-20%) }
+		.list-item .right .bot { font-size: 0.875rem; }
+		.list-item .right.no-coupon .top .price,.list-item .right.no-coupon .top .price-icon,.list-item .right.no-coupon .bot { color: #B2B2B2;} 
+		.list-item .yhq-type { position: absolute; width: 3rem; left: 0; top: 0; }
+		.list-item .yhq-yl-icon { position: absolute; right: 0; top: 0; width: 4rem; }
+        .list-item .new { position: absolute; right: 0; top: 0; width: 2rem; }
+		
+		/* loading */
+		.full-loading { position: fixed; left: 0; top: 90px; right: 0; bottom: 0; background-color: #fff; z-index: 9999; }
+		.full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+		/* 无数据 */
+		.no-data { position: fixed; top: 135px; left: 0; right: 0; bottom: 0; z-index: 99;}
+		.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+		.no-data .no-data-con img { width: 100%; }
+		.no-data .no-data-con .no-title{ font-size: 1rem; font-weight:600;  color:rgba(0,0,0,1);  }
+		.no-data .no-data-con .no-desc { font-size: 0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+		.no-data .no-data-con .van-button { font-size: 0.75rem; font-weight:400; color:rgba(1,195,39,1); }
+	
+		/* 去使用弹窗 */
+		.share-popup-con { width: 90%; background: transparent; overflow: inherit; }
+		.share-popup-con .tit { position: absolute; top: 2.81%; left: 0; width: 100%; height: 16.6%; color: #c85002; font-size: 1.375rem; font-weight: bold;display: flex; align-items: center; justify-content: center; }
+		.share-popup-con .imgcode-con { position: absolute;top: 22%; left: 0; width: 100%; height: 30%; display: flex; align-items: center; justify-content: center; }
+		.share-popup-con .imgcode-con #imgcode { width: 70%; height: 100%; background: #000; }
+		.share-popup-con .desc { position: absolute; top: 50%; left: 0; width: 100%; text-align: center; color:  rgba(75,75,75,0.5); font-size: 0.875rem;}
+		.share-popup-con .btn-con { position: absolute; bottom: 21%;left: 6%; width: 88%; height: 10.71%; display: flex; align-items: center; justify-content: center; }
+		.share-popup-con .btn-con .van-button { width: 100%; background: #fff; border: none; box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.14); padding: 0; }
+		.share-popup-con .btn-con .van-button .van-button__text{ color: #c85002; font-weight: bold;font-size: 1rem; }
+		.share-popup-con .bottom { position: absolute;bottom: 5%; left: 6%; width: 88%; height: 10%; padding: 0 10px; display: flex; align-items: center;justify-content: space-between; }
+		.share-popup-con .bottom .item { display: flex; align-items: center; }
+		.share-popup-con .bottom .item img { width: 21px; }
+		.share-popup-con .bottom .item span { color: #fbf5dc; font-size: 0.9rem; margin-left: 10px; }
+		.share-popup-con .bottom .shu { width: 1px; height: 100%; opacity: 0.59; border: 1px solid; border-image: linear-gradient(180deg, rgba(253,251,240,0), #fbf5dd 52%, rgba(251,245,220,0) 104%) 2 2; }
+
+		.share-mask { height: 100%; width: 100%; z-index: 20000; top: 0; left: 0; color: #fff; position: fixed; background: rgba(0, 0, 0, 0.8); }
+		.share-mask-content p { padding-left: 20px; font-size: 28px; color: #fff }
+
+		/* 商品弹窗 */
+		.goods-mask { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); color: #fff; z-index: 19999; }
+		.goods-info { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 80%;  background: #fff; border-radius: 8px; border-top-right-radius: 0; z-index: 20001; }
+		.goods-info .goods_tit { color: #333; font-weight: bold; text-align: center; padding: 10px; position: relative;}
+		.goods-info .goods_tit .close-icon { position: absolute; top: 0; right: 0; font-size: 2rem; transform: translate(50%,-80%); color: #ccc; }
+		.goods-info .goods_img { width: 100%; text-align: center; }
+		.goods-info .goods_img img { max-width: 100%; max-height: 20rem; }
+
+		.img-show-con { width: 100%; height: 100%; background: transparent; }
+		.img-show-con .img-con { position: absolute; top: 50%; width: 100%; transform: translateY(-50%); }
+		/* 会员券弹窗 */
+		.share-popup-con2 { width: 90%; background: transparent; }
+		.share-popup-con2 .tit { position: absolute; top: 19%; left: 15%; width: 100%; color: #c85002; font-size: 1.375rem; font-weight: bold;display: flex; align-items: flex-start }
+		.share-popup-con2 .tit img { width: 1.5rem; }
+		.share-popup-con2 .tit .desc { display: flex; flex-direction: column; margin-left: 10px; }
+		.share-popup-con2 .tit .desc .top { font-size: 1.25rem; color: #856001; padding-bottom: 3px; }
+		.share-popup-con2 .tit .desc .bot { font-size: 0.875rem; font-weight: 400; color: #856001; }
+		.share-popup-con2 .btn-con { position: absolute; top: 58%;left: 6%; width: 88%; height: 10.71%; display: flex; align-items: center; justify-content: space-between; }
+		.share-popup-con2 .btn-con .van-button { width: 46%; background: #fff; border: none; box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.14); padding: 0; }
+		.share-popup-con2 .btn-con .van-button .van-button__text{ color: #c85002; font-weight: bold;font-size: 1rem; }
+		.share-popup-con2 .bottom { position: absolute;bottom: 8%; left: 6%; width: 88%; height: 10%; padding: 0 10px; display: flex; align-items: center;justify-content: space-between; }
+		.share-popup-con2 .bottom .item { display: flex; align-items: center; }
+		.share-popup-con2 .bottom .item img { width: 21px; }
+		.share-popup-con2 .bottom .item span { color: #fbf5dc; font-size: 0.9rem; margin-left: 10px; }
+		.share-popup-con2 .bottom .shu { width: 1px; height: 100%; opacity: 0.59; border: 1px solid; border-image: linear-gradient(180deg, rgba(253,251,240,0), #fbf5dd 52%, rgba(251,245,220,0) 104%) 2 2; }
+
+	</style> 
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+        <van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="我的优惠券" left-arrow @click-left="toRouter()" ></van-nav-bar>
+		<van-sticky :offset-top="46">
+			<div class="nav-con">
+				<van-tabs v-model="active" @change="handleClick" title-inactive-color="#888888" title-active-color="#333333" line-width="30px" line-height="5px">
+					<van-tab title="优惠券" name="0" :disabled="active == 1 && isFullLoading"></van-tab>
+					<van-tab title="线下抵消券" name="2" :disabled="active == 2 && isFullLoading"></van-tab>
+					<van-tab title="平台券" name="1" :disabled="active == 0 && isFullLoading"></van-tab>
+				</van-tabs>
+			</div>
+		</van-sticky>
+		<van-sticky :offset-top="90">
+			<div class="nav-con">
+				<van-tabs v-model="useType" @change="handleClickByUseType" title-inactive-color="#888888" title-active-color="#333333" line-width="30px" line-height="5px">
+					<van-tab title="未使用" name="0" ></van-tab>
+					<van-tab title="已使用" name="1" ></van-tab>
+					<van-tab title="已过期" name="2" ></van-tab>
+				</van-tabs>
+			</div>
+		</van-sticky>
+		<div style="padding: 0 0.75rem;">
+			<div class="list-item bg2":class="{'bg3' : useType != 0}" v-for="(item,index) in shopCouponList" v-if="shopCouponList && shopCouponList.length > 0">
+				<div class="left" @click.stop="detail(item.coupon_id,item.shop_id)">
+					<div class="left-top">
+						<div class="shop-logo">
+							<img :src="item.logo" alt="">
+						</div>
+						<div class="shop-info">
+							<div class="shop-tit">{{item.shop_name}}</div>
+							<div class="coupon-tit">
+								<span>{{item.name}}</span>
+							</div>
+							<div class="coupon-type-con">
+								<div class="coupon-type">{{item.is_online == 0 ? '线上/门店当面交易通用' : (item.is_online == 2 ? '仅限门店当面交易使用' : '仅线上购物使用') }}</div>
+							</div>
+						</div>
+					</div>
+					<div class="left-bot">
+						<div class="coupon-desc">
+							<div class="cell">
+								<div class="cell-left">{{item.target_str}}</div>
+								<div class="cell-right" v-if="useType == 0" :class="{'active': item.isHidden}">{{(item.isHidden ? '' : '有效期至')+ item.end_time_str}}</div>
+								<div class="cell-right" v-if="useType != 0" >有效期至{{item.end_time_str2}}</div>
+							</div>
+							<van-icon name="arrow" color="#888" size="14"></van-icon>	
+						</div>
+					</div>
+				</div>
+				<div class="right" :class="{'no-coupon':useType !=0}" @click.stop="handleUse(item)">
+					<div class="top" id="price-box" :class="{ 'small': item.isSmall }">
+						<span class="price">{{item.c_type == 0 ? item.money : item.discount}}</span>
+						<span class="price-icon">{{item.c_type == 0 ? '元' : '折'}}</span>
+					</div>
+					<div class="bot">{{useType == 0 ? '去使用' : (useType == 1 ? '已使用' : '已过期')}}</div>
+				</div>
+				<img class="yhq-type" :src="item.c_type == 0 ? './images/manjian1.png' : './images/zhekou1.png'" alt="">
+				<img class="new" v-if="item.isNew == 1 && active != 1" src="./images/new.png" alt="">
+			</div>
+		</div>
+		
+		<van-popup v-model="dialogShow" class="share-popup-con">
+			<img src="./images/share-yhq-bg2.png" width="100%" alt="">
+			<div class="tit">
+				{{is_online == 2 ? '线下' : (goods_type == 0 ? '通用' : '指定商品')}}券条形码
+			</div>
+			<div class="imgcode-con" @click="imgShow = true" >
+				<img :src="qrcodeImg" id="imgcode"/>
+			</div>
+			<div class="desc">
+				请向店员出示
+			</div>
+			<div class="btn-con">
+				<van-button type="primary" round @click="toPay()">{{ useType == 0 ? (is_online == 2 ? '查看可用商品' : '去购买') : '查看可用商品'}}</van-button>
+				<!-- <van-button type="primary" round  @click="toShare()">分享优惠券</van-button> -->
+			</div>
+			<div class="bottom">
+				<div class="item share" @click="toShare()" :style="active == 1 ? 'opacity:0.6' : ''">
+					<img src="./images/share-yhq-icon2.png" alt="">
+					<span>分享优惠券</span>
+				</div>
+				<div class="shu"></div>
+				<div class="item" @click="jump('getShopCoupon.html')">
+					<img src="./images/share-yhq-icon.png" alt="">
+					<span>前往领券中心</span>
+				</div>
+			</div>	
+		</van-popup>
+		<van-popup v-model="imgShow" class="img-show-con" @click="imgShow = false">
+			<div class="img-con">
+				<img :src="qrcodeImg" width="100%" alt="">
+			</div>
+		</van-popup>
+		<div class="share-mask" v-show="isShare" @click="isShare = false">
+			<div style="width:100%;height:80px;">
+				<img style="display:block;position:fixed;right:10px;top:0px;width:80px;height:80px;"  src="images/icon/share.png" alt="">
+			</div>
+			<div class="share-mask-content">
+			<p>点击右上角</p>
+			<p>通过【发送给朋友】</p>
+			<p>分享优惠券</p>
+			</div>
+		</div>
+		<div class="full-loading" v-if="isFullLoading">
+			<van-loading  color="#1989fa" /> 
+		</div>
+		<div class="no-data" v-if="(shopCouponList.length === 0 || isErr) && !isFullLoading">
+			<div class="no-data-con">
+				<img :src="isErr ? errImg : noDataImg" alt="">
+				<p class="no-title">{{ isErr ? '网络竟然崩溃了' : (active == 0 ? (useType == 0 ? '暂无可用优惠券' : (useType == 1 ? '暂无已使用优惠券' : '暂无已过期优惠券')) : (active == 1 ? (useType == 0 ? '暂无可用平台券' : (useType == 1 ? '暂无已使用平台券' : '暂无已过期平台券')) : (useType == 0 ? '暂无可用抵消券' : (useType == 1 ? '暂无已使用抵消券' : '暂无已过期抵消券'))))}}</p>
+				<p class="no-desc" v-if="active != 1">{{ isErr ? '别紧张,试试看刷新页面' : '赶紧去领券中心领券吧' }}</p>
+				<van-button size="small" plain round color="#01C327" @click="handleErr" v-if="isErr || active != 1">{{ isErr ? '刷新' : '去领取' }}</van-button>
+			</div>
+		</div>
+
+		<van-popup v-model="vipDialogShow" class="share-popup-con2">
+			<img src="./images/share-yhq-bg3.png" width="100%" alt="">
+			<div class="tit">
+				<img  src="./images/share-vip-icon.png" alt="">
+				<div class="desc">
+					<div class="top">仅限益农卡会员使用</div>
+					<div class="bot">开通益农卡会员，享受更多权益</div>
+				</div>
+			</div>
+			<div class="btn-con">
+				<van-button type="primary" round @click="toPay()">{{ useType == 0 ? (is_online == 2 ? '查看可用商品' : '去购买') : '查看可用商品'}}</van-button>
+				<van-button type="primary" round  @click="openVip()">加入会员</van-button>
+			</div>
+			<div class="bottom">
+				<div class="item share" @click="toShare()" :style="active == 1 ? 'opacity:0.6' : ''">
+					<img src="./images/share-yhq-icon2.png" alt="">
+					<span>分享优惠券</span>
+				</div>
+				<div class="shu"></div>
+				<div class="item" @click="jump('getShopCoupon.html')">
+					<img src="./images/share-yhq-icon.png" alt="">
+					<span>前往领券中心</span>
+				</div>
+			</div>	
+		</van-popup>
+
+		<div class="goods-mask" v-if="isShowGoods" @click="isShowGoods = false">
+			<div class="goods-info" @click.stop="return false">
+				<div class="goods_tit">
+					{{offLineGoodsName}}
+					<van-icon @click="isShowGoods = false" class="close-icon" name="clear" />
+				</div>
+				<div class="goods_img">
+					<img  :src="offLineGoodsImg" alt="">
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+	<script>
+		
+		var app = new Vue({
+			el: '#app',
+			data: {
+				active: '0',
+				useType: '0',
+				JumpUrl: {
+					my_coupon: baseUrl('/wx/coupon/my_coupon'),
+					user_info: baseUrl('/wx/shop/user_info'),
+					changeShop: baseUrl('/wx/shop/changeShop'),
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+				},
+
+				oldCouponArr: [],
+				shopCouponList : [],				
+				token: localStorage.getItem("token"),
+
+				dialogShow: false,
+				curDialogShopId: '',
+				share_title: '',
+				share_content:'',
+				share_img: '',
+				cur_coupon_id:'',
+				cur_target_str: '',
+				cur_yxq: '',
+				qrcodeImg: '',
+				curShopLogo: '',
+				imgShow: false,
+				isShare: false,
+				can_barcode: 1,
+				vipDialogShow : false,
+				is_yn: 0, // 是否为益农卡会员 1-是
+
+				noDataImg: './images/icon/no-goods.png',
+				errImg: './images/err.png',
+
+				isFullLoading: true,
+				isErr: false,
+				goods_type: 0,
+
+				yn_shop_coupon_id: 0,
+				curCouponEndTime: '', // 当前优惠券到期时间
+				user_coupon_id: '',
+				lock_id: '',
+				is_online: '',
+				curDisStatus: 0,
+
+				isShowGoods: false,
+				offLineGoodsName: '',
+				offLineGoodsImg: '',
+			},
+			methods: {	
+				toRouter() {
+					window.location.href = 'getShopCoupon.html'
+				},
+				handleErr() {
+					if(this.isErr) {
+						this.getCouponList()
+					}else {
+						window.location.href = "getShopCoupon.html";
+					}
+				},
+				// 获取用户信息
+				getUserInfo() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.user_info,
+						data: {
+							token: localStorage.getItem('token')
+						}
+					}).then(res => {
+						that.is_yn = res.data.data.is_yn
+					})
+				},
+				// 切换tab状态
+				handleClick(name, title) {
+					this.$toast.clear()
+					this.active = name
+					this.getCouponList();
+				},
+				// 切换使用状态tab栏
+				handleClickByUseType(name,title) {
+					this.$toast.clear()
+					this.useType = name
+					this.getCouponList();
+				},
+				// 获取优惠券列表
+				getCouponList() {
+					let that = this;
+					that.isErr = false; 
+					that.isFullLoading = true;
+					that.shopCouponList = [];
+
+					axios({
+						method: 'post',
+						url: that.JumpUrl.my_coupon,
+						data:{type: that.useType, if_white: that.active == 1 ? 1 : 0, is_online: (that.active == 1 ? 3 : (that.active == 0 ? 1 : 2)), if_all: '1', token: that.token}
+					})
+					.then(function (resp) {
+						that.isErr = false 
+						that.isFullLoading = false;
+						let data=resp.data
+						if(data.code == 1){
+							if(data.data) {
+								let tmpNewData = []
+								let tmpIsNoDateData = []
+								let otherData = []
+								let tmpData = []
+								
+								let newCouponIds = localStorage.getItem('newCouponIds') ? JSON.parse(localStorage.getItem('newCouponIds')) : []
+								let curDate = new Date()
+								
+								data.data.forEach((item,index) =>{
+									if(item.c_type == 0) {
+										if(item.money > 999) {
+											item.isSmall = true
+										}
+									}
+									item.end_time_str2 = item.user_coupon_age.split('-')[1]
+							
+									let tmpDate = (item.user_coupon_age_end + '').length == 10 ? item.user_coupon_age_end*1000 : item.user_coupon_age_end
+									item.yxqEndDate = new Date(tmpDate)
+									let curTimeDiff = parseInt((item.yxqEndDate.getTime() - curDate.getTime()) / 1000)
+									if(curTimeDiff >= 0) {
+										item.diffDay = parseInt(curTimeDiff/86400)
+									} else {
+										item.diffDay = null
+									}
+									if(item.diffDay == 0) {
+										item.isHidden = true
+										item.end_time_str = '今日即将到期'
+									} else if(item.diffDay <= 3){
+										item.isHidden = true
+										item.end_time_str = '还剩'+ item.diffDay + '天到期'
+									} else {
+										item.end_time_str = item.user_coupon_age.split('-')[1]
+									}
+									item.isNew = 0
+									newCouponIds.forEach(subItem =>{
+										if(item.user_coupon_id == subItem) {
+											item.isNew = 1
+										}
+									})
+
+									if(item.isNew == 1) {
+										tmpNewData.push(item)
+									} else if(item.isHidden) {
+										tmpIsNoDateData.push(item)
+									} else {
+										otherData.push(item)
+									}
+								})
+								tmpIsNoDateData = tmpIsNoDateData.sort((x,y) =>{
+									return x.diffDay - y.diffDay
+								})
+								// otherData = otherData.sort((x,y) =>{
+								// 	return y.create_time - x.create_time
+								// })
+								tmpData = tmpNewData.concat(tmpIsNoDateData).concat(otherData)
+								that.shopCouponList = tmpData
+							} 
+						}else{
+							// that.$toast(resp.data.msg ? resp.data.msg : '暂无优惠券')
+						}
+					}).catch(function (error) {
+						that.isFullLoading = false;
+						that.isErr = true
+						//请求失败
+						that.$toast.fail('服务异常,请稍后重试!')
+						console.log('error', error);
+					})
+				},
+				// 获取微信jssdk的配置
+				getJssdk(isShare) {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: localStorage.getItem("token"),
+							url: window.location.href
+						}
+					}).then(function (resp) {
+						// console.log(JSON.stringify(resp))
+						let data = resp.data
+
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						if(isShare) return
+						that.getUserInfo()
+						that.getCouponList()
+					})
+				},
+				//切换店铺
+				currentShop(id,callBack) {
+					var that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.changeShop,
+						data: {
+							shop_id: id,
+							token: localStorage.getItem("token"),
+						}
+					})
+					.then(function (resp) {
+						if(resp.data.errno == 0) {
+							callBack && typeof callBack == 'function' && callBack()
+						}
+					}).catch(function (error) {
+						//请求失败
+						console.log('error', error);
+
+					})
+
+				},
+				toPay() {
+					this.localPageData()
+					if(this.useType == 2) {
+						this.$toast('券已过期')
+						return
+					}
+					if(this.curDisStatus == 1) {
+						if(this.is_online == 2) {
+							this.isShowGoods = true
+							// window.location.href = 'disOffLineCouponGoods.html?coupon_id='+this.cur_coupon_id+'&target_str='+this.cur_target_str+'&cur_yxq='+this.cur_yxq+'&is_distribution=1'+'&source=getShopCoupon'
+						} else {
+							localStorage.setItem('disFrom','getShopCoupon')
+							window.location.href = 'disCouponGoods.html?coupon_id='+this.cur_coupon_id+'&user_coupon_id='+this.user_coupon_id+'&v=2'
+						}
+						// localStorage.setItem('disFrom','myCoupon')
+						// window.location.href = 'disCouponGoods.html?coupon_id='+this.cur_coupon_id+'&user_coupon_id='+this.user_coupon_id+'&v=2'
+						// return
+					} else {
+						if(this.is_online == 2) {
+							let isAll = (this.goods_type == 0 ? 1 : 2)
+							if(isAll == 1) {
+								this.currentShop(this.curDialogShopId,() =>{
+									window.location.href = 'offLineCouponGoods.html?coupon_id='+this.cur_coupon_id+'&target_str='+this.cur_target_str+'&cur_yxq='+this.cur_yxq+'&isAll='+isAll+'&source=myCoupon'
+								})
+								return
+							}
+							window.location.href = 'offLineCouponGoods.html?coupon_id='+this.cur_coupon_id+'&target_str='+this.cur_target_str+'&cur_yxq='+this.cur_yxq+'&isAll='+isAll+'&source=myCoupon'
+						} else {
+							if(this.goods_type == 0) {
+								window.location.href = 'couponAllGoods.html?shop_id='+this.curDialogShopId+'&coupon_id='+this.cur_coupon_id+'&target_str='+this.cur_target_str+'&cur_yxq='+this.cur_yxq+'&to=getmy'
+							} else {
+								window.location.href = 'couponGoods.html?coupon_id='+this.cur_coupon_id+'&target_str='+this.cur_target_str+'&cur_yxq='+this.cur_yxq
+							}
+						}
+					}
+					
+					
+				},
+				// 加入会员
+				openVip() {
+					this.localPageData()
+					window.location.href = 'openVip.html?source=myCoupon'
+				},
+				toShare() {
+					let that = this;
+					if(that.useType == 2) {
+						that.$toast('券已过期,禁止分享')
+						return
+					}
+					if(that.useType == 1) {
+						let tmpDate = (this.curCouponEndTime + '').length == 10 ? this.curCouponEndTime*1000 : this.curCouponEndTime
+						let endTime = new Date(tmpDate)
+						let curTimeDiff = parseInt((endTime.getTime() - new Date().getTime()) / 1000)
+						if(curTimeDiff <= 0) {
+							that.$toast('券已过期,禁止分享')
+							return
+						}
+					}
+					let logo = that.share_img ? that.share_img : that.curShopLogo
+					if(that.active == 1) {
+						let url = 'http://sy.xfd365.com/mobile/getShopCoupon.html'
+						wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+							wx.updateAppMessageShareData({
+								title: '聚农优享领券中心', // 分享标题
+								desc: '优惠券哪里多尽在聚农优享', // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function () {
+
+								}
+							})
+							wx.updateTimelineShareData({
+								title: '聚农优享领券中心', // 分享标题
+								desc: '优惠券哪里多尽在聚农优享', // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function () {}
+							})
+
+
+						});
+						this.$toast('平台通用券禁止分享!')
+						return
+					}
+					let share_title = that.share_title ? that.share_title : '恭喜您！获得一张优惠券~'
+					let share_introduction = that.share_content ? that.share_content : '众多商品种类和优惠活动等你来拿  炎炎夏日送温情，优惠活动享不停!'
+					let shop_id = that.curDialogShopId
+					let share_url = ''
+					if(that.yn_shop_coupon_id == 0) {
+						share_url = 'http://sy.xfd365.com/mobile/shareGetcoupon.html?shop_id='+shop_id +'&coupon_id=' + that.cur_coupon_id
+					} else {
+						share_url = 'http://sy.xfd365.com/mobile/sharePtGetcoupon.html?qrcode='+that.lock_id +'&shop_id='+shop_id
+					}
+					that.isShare = true
+					wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {
+
+							}
+						})
+
+						wx.updateTimelineShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: share_url	, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {}
+						})
+
+
+					});
+				},
+				// 优惠券详情
+				detail(id,shopId) {
+					this.localPageData()
+					window.location.href = 'couponDetail.html?id='+ id + '&source=mycoupon'
+				},
+				// 跳转页面
+				jump(path) {
+					window.location.href = path
+				},
+				// 去使用
+				handleUse(item){
+					let that = this
+					if(that.useType == 2) {
+						that.$toast('券已过期')
+						return
+					}
+					this.curDialogShopId = item.shop_id
+					this.share_title = item.share_title
+					this.share_content = item.share_content
+					this.share_img = item.share_img
+					this.cur_coupon_id = item.coupon_id
+					this.cur_target_str = item.target_str
+					this.cur_yxq = item.user_coupon_age
+					this.curShopLogo = item.logo
+					this.goods_type = item.goods_type
+					this.can_barcode = item.can_barcode
+					this.lock_id = item.lock_id
+					this.yn_shop_coupon_id = item.yn_shop_coupon_id
+					this.is_online = item.is_online
+					this.curDisStatus = item.is_distribution
+					this.user_coupon_id = item.user_coupon_id
+					this.curCouponEndTime = item.user_coupon_age_end
+					if(this.is_online == 2) {
+						this.offLineGoodsName = item.offline_goods_name
+						this.offLineGoodsImg = item.offline_goods_img
+					}
+					if(this.is_yn == 0 && item.can_barcode != 1) {
+						this.vipDialogShow = true
+						return
+					} else {
+						this.dialogShow = true
+					}
+					setTimeout(() =>{
+						JsBarcode("#imgcode", item.uc_code.split('-')[1], {
+							text: ' ',
+							margin:10,
+						});
+						setTimeout(() => {
+							that.qrcodeImg = document.getElementById('imgcode').src
+						});
+						
+					})
+				},
+				initData() {
+						let local = localStorage.getItem('myCouponToDetail')
+						let data = JSON.parse(local)
+						this.active = data.active
+						this.shopCouponList = data.shopCouponList
+						this.isFullLoading = false
+						this.can_barcode = data.can_barcode
+						this.vipDialogShow = data.vipDialogShow
+						this.qrcodeImg = data.qrcodeImg
+						this.dialogShow = data.dialogShow
+						this.is_yn = data.is_yn
+						this.is_online = data.is_online
+						this.useType = data.useType
+
+						this.curDialogShopId = data.curDialogShopId
+						this.share_title = data.share_title
+						this.share_content = data.share_title
+						this.share_img = data.share_img
+						this.cur_coupon_id = data.cur_coupon_id
+						this.cur_target_str = data.cur_target_str
+						this.cur_yxq = data.cur_yxq
+						this.curShopLogo = data.curShopLogo
+						this.goods_type = data.goods_type
+						this.lock_id = data.lock_id
+						this.yn_shop_coupon_id = data.yn_shop_coupon_id
+						this.curDisStatus = data.curDisStatus,
+						this.curCouponEndTime = data.curCouponEndTime, 
+						this.user_coupon_id = data.user_coupon_id,
+						localStorage.removeItem('myCouponToDetail')
+						setTimeout(() =>{
+							document.documentElement.scrollTop = data.scrollTop
+							this.getJssdk(true)
+						})
+					},
+				// 存储本页数据
+				localPageData() {
+					let that = this;
+					let obj = {
+						curDisStatus: that.curDisStatus,
+						curCouponEndTime: that.curCouponEndTime, // 当前优惠券到期时间
+						user_coupon_id: that.user_coupon_id,
+						active: that.active,
+						useType: that.useType,
+						shopCouponList: that.shopCouponList,
+						scrollTop: document.documentElement.scrollTop, // 滚动距离
+						can_barcode: that.can_barcode,
+						vipDialogShow : that.vipDialogShow,
+						qrcodeImg: that.qrcodeImg,
+						dialogShow: that.dialogShow,
+						is_yn: that.is_yn, // 是否为益农卡会员 1-是
+						is_online: that.is_online, 
+						curDialogShopId: that.curDialogShopId,
+						share_title: that.share_title,
+						share_content: that.share_content,
+						share_img: that.share_img,
+						cur_coupon_id: that.cur_coupon_id,
+						cur_target_str: that.cur_target_str,
+						cur_yxq: that.cur_yxq,
+						curShopLogo: that.curShopLogo,
+						goods_type: that.goods_type,
+						lock_id: that.lock_id,
+						yn_shop_coupon_id: that.yn_shop_coupon_id
+					}
+					localStorage.setItem('myCouponToDetail',JSON.stringify(obj))
+				},
+			},
+			created() {
+				let local = localStorage.getItem('myCouponToDetail')
+				let lastGetCouponIds = localStorage.getItem('lastGetCouponIds') ? JSON.parse(localStorage.getItem('lastGetCouponIds')) : []
+				let newCouponIds = localStorage.getItem('newCouponIds') ? JSON.parse(localStorage.getItem('newCouponIds')) : []
+				if(JSON.stringify(lastGetCouponIds) == JSON.stringify(newCouponIds)) {
+					localStorage.removeItem('newCouponIds')
+					localStorage.removeItem('lastGetCouponIds')
+				}
+				if(newCouponIds.length > 0) {
+					lastGetCouponIds = newCouponIds
+				}
+				localStorage.setItem('lastGetCouponIds',JSON.stringify(lastGetCouponIds))
+				localStorage.removeItem('getCouponByShare')
+				if(local) {
+					this.initData()
+				} else {
+					this.getJssdk()
+
+				}
+				
+			}
+		})
+	</script>
+</body>
+
+</html>

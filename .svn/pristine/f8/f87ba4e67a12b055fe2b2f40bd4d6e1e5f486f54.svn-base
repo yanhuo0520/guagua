@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>聚农优享</title>
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+		  display: none;
+		}
+		html,body { font-size: 16px; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		/* 导航栏 */
+		.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+		.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+		.van-nav-bar .van-nav-bar__right img { display: block; }
+		.van-nav-bar .van-nav-bar__title { font-weight: bold; }
+
+		/* 选择地址 */
+		.van-contact-card::before { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: -webkit-repeating-linear-gradient(135deg,#FFC3C3 0,#FFC3C3 20%,transparent 0,transparent 25%,#B3DCFA 0,#B3DCFA 45%,transparent 0,transparent 50%); background-size: 80px; content: ''; }
+		.contact .van-cell__title { padding-left: 0.75rem; }
+		.contact .van-cell__title .contact-con { display: flex; align-items: center; }
+		.contact .van-cell__title .contact-con .name { font-size:1rem; font-weight:500; color:rgba(53,53,53,1); padding-right: 0.75rem; }
+		.contact .van-cell__title .contact-con .tel { font-size:0.875rem; font-weight:400; color:rgba(136,136,136,1); padding-right: 2rem; }
+		.contact .van-cell__title .contact-con .tag { font-size:0.625rem; font-weight:400; color:rgba(0,181,120,1);}
+		.contact .van-cell__title .addr { padding: 0; margin: 0; font-size:0.8rem; font-weight:400; color:rgba(53,53,53,1); }
+		.contact .van-cell__title::before { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: -webkit-repeating-linear-gradient(135deg,#FFC3C3 0,#FFC3C3 20%,transparent 0,transparent 25%,#B3DCFA 0,#B3DCFA 45%,transparent 0,transparent 50%); background-size: 80px; content: ''; }
+		
+		/* 选择的商品列表 */
+		.goods-card { background:rgba(255,255,255,1); margin-top: 0.75rem; margin-bottom: 1.2rem; }
+		.goods-card .shop-name {  padding: 0.5rem  0.75rem 0 0.75rem; display: flex; align-items: center; }
+		.goods-card .shop-name img { width: 1.5rem; height: 1.5rem; border-radius: 50% }
+		.goods-card .shop-name span { font-size: 0.9rem; font-weight: 400; color:rgba(51,51,51,1);padding-left: 0.5rem; }
+		.goods-card .van-card { padding-left: 0.75rem; padding-right: 0.75rem; margin-top: 0; background:rgba(255,255,255,1); }
+		.goods-card .van-card .van-card__header { align-content: center; }		
+		.goods-card .van-card .van-card__thumb { width: auto; height: auto; display: flex; align-items: center; margin-right: 0.5rem;}
+		/* .goods-card .van-card .van-card__content { width: 150px; flex: none; -webkit-box-flex: none; -webkit-box-flex: none } */
+		.goods-card .van-card .van-card__title { width: calc(100% - 5rem); font-size:0.9rem; font-weight:600; color:rgba(53,53,53,1); padding-bottom: 0.375rem; }
+		.goods-card .van-card .desc { width: calc(100% - 2.5rem); font-size:0.75rem; font-weight:400; color:rgba(136,136,136,1); }
+	  	.goods-card .van-card .desc p{ padding: 0; margin: 0; word-break:break-all;word-wrap:break-word; }
+	  	.goods-card .van-card .van-card__price { font-size:0.9rem; font-weight:400; color:#353535;}
+		.goods-card .van-card .van-card__price .price { position: absolute; top: 0; right: 0; width: 5rem; text-align: right;text-overflow: ellipsis; overflow: hidden; }
+		.goods-card .van-card .van-card__price .price1 { position: absolute; bottom: 1.25rem; right: 0; width: 5rem; text-align: right;text-overflow: ellipsis; overflow: hidden; font-size:0.75rem; font-weight:400; color:#888888 }
+		.goods-card .van-card .van-card__num { font-size:0.75rem; font-weight:400; color:#888888 }
+		.goods-card .van-card .van-card__num .num { position: absolute; top: 1.25rem; right: 0; width: 2.5rem;text-align: right;text-overflow: ellipsis; overflow: hidden; }
+		.goods-card .van-card .van-card__num .price2 { position: absolute; bottom: 0; right: 0; width: 5rem; text-align: right;text-overflow: ellipsis; overflow: hidden; font-size:0.75rem; font-weight:400; color:#888888 }
+		.goods-card .delivery .van-cell_title,.goods-card .delivery .van-cell__value { font-size:0.9rem; font-weight:400; color:rgba(51,51,51,1);}
+		.goods-card .ship-date { font-size:0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0 0.75rem 0 0.75rem }
+	  	.goods-card .ship-date .ship-date-bg { display: flex; justify-content: space-between; align-items: center; background:rgba(245,245,245,1); padding: 0 0.75rem; }
+		.goods-card .deal-way .van-cell__title { font-size:0.9rem; font-weight:400; color:rgba(136,136,136,1);}
+	  	.goods-card .deal-way .van-cell__value { font-size:0.9rem; font-weight:400; color:rgba(51,51,51,1); }
+		.goods-card .goods_total_price .van-cell { font-size: 0.9rem; color: #333; }
+		.goods-card .goods_total_price .van-cell__value { color: #333; }
+		.goods-card .other-mark .van-cell { font-size: 0.9rem; color: #888888; }
+		.goods-card .other-mark .van-cell .van-cell__value { color: #888888;  }
+		.goods-card .other-mark .van-cell .price { color: #ff2814; font-weight: 400; }
+		/* 需付款 */
+		.need-pay-con  { margin-top: 0.75rem; }
+		.need-pay-con .van-cell { font-size: 0.9rem; color: #333; }
+		.need-pay-con .van-cell .van-cell__value { font-size: 1.125rem; color: #ff2814; font-weight: 400; }
+		.need-pay-con .van-cell .van-field__body { font-size: 0.875rem;}
+		/* 提交 */
+		.van-submit-bar__bar .van-submit-bar__text { text-align: left; }
+		.van-submit-bar__bar .van-button { width: 5rem; height: 1.875rem; line-height: 1.875rem; background: linear-gradient(#02cf0a, #00be34);}
+
+		.van-popup .van-cell{ padding: 0; font-size: 0.75rem; color: #999999; }
+		.van-popup .van-cell__title, .van-popup .van-cell__value { flex: none; }
+		.van-popup .van-cell__value { flex: 1; }
+		.van-popup p { margin: 0; }
+		.van-popup .list{width: 100%; height: 114px; margin: 0.625rem auto; display: flex; justify-content: space-between; align-items: center; color: #999999; position: relative; border-radius: 3px; overflow: hidden; background: url(img/yhq2.png) no-repeat;background-size:100% 100% }
+		.van-popup .list .left{ width: 23%; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 40px; }
+	
+		.van-popup.list .left span{ font-size: 1.875rem; font-weight: bold; }
+		.van-popup .list .left .juan-desc { font-size: 0.875rem; }
+		.van-popup .list .right{ flex: 1; display: flex; flex-direction: column; justify-content: center; align-content: space-between; padding: 0 0.875rem; }
+		.van-popup .list .right>div{ display: flex; justify-content: space-between; align-items: center; color: #999999; }
+		.van-popup .list .right>div>p { display: flex; flex-direction: column; font-weight: bold; font-size: 1rem; color: #999999; }
+		.van-popup .list .right>div>p span { font-size: 0.875rem; font-weight: normal; margin-top: 8px; margin-bottom: 15px; }
+		.van-popup .list .right>div>p span { color: #999999; }
+		.van-popup .list .right .time { color: #999999; }
+		.van-popup .list .radio-img { position: absolute; bottom: 0; right: 0; width: 20px; }
+		.van-popup .unUsed .left{ color: #FF2814; }
+		.van-popup .unUsed .right>div { color: #333; }
+		.van-popup .unUsed .right>div>p { color: #333333; }
+		.van-popup .list .right .van-cell { background: transparent; }
+		.van-popup .list.bg1 { background: url(img/yhq.png) no-repeat;background-size:100% 100% }
+		.van-popup .list.bg2 { background: url(img/yhq2.png) no-repeat;background-size:100% 100% }
+		/* loading */
+		.van-popup .full-loading,.full-loading { position: fixed; left: 0; top: 46px; right: 0; bottom: 0; background-color: #fff; z-index: 9999; }
+		.van-popup .full-loading .van-loading,.full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+		/* 底部button */
+		.van-popup .footer-btn { position: fixed; bottom: 0; left: 0; width: 100%; height: 2.8rem; display: flex; align-items: center; justify-content: flex-end;  background-color: rgb(0, 181, 120); box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.1)}
+		.van-popup .footer-btn .van-button { width: 100%; height: 100%; }
+	</style>
+</head>
+<body>
+	<div id="app" v-cloak>
+		<van-nav-bar :border="false" :fixed="true" :placeholder="true"  title="确认订单" left-arrow @click-left="returnLast()" @click-right="JumpIndex" >
+			<template #right>
+				<img src="images/icon/shouye.png" alt="" width="20"  @click="JumpIndex">
+			</template>
+		</van-nav-bar>
+		<template>
+			<template v-if="checkedAddress.id">
+			<van-cell class="contact" center :border="false"  @click="collectAddress()">
+				<template #title>
+					<div class="contact-con">
+						<span class="name">{{ checkedAddress.name }}</span>
+						<span class="tel">{{ checkedAddress.mobile }}</span>
+						<div class="tag" v-if="checkedAddress.is_default">
+							<van-tag color="#e9f8ee" text-color="#13ba82">默认</van-tag>
+						</div>
+					</div>
+					<p class="addr">{{ checkedAddress.full_region + (checkedAddress.street ? ' '+checkedAddress.street : '')+ (checkedAddress.village ? ' '+checkedAddress.village : '')+' '+ checkedAddress.address }}</p>
+				</template>
+				<template #icon>
+					<img style="width: 28px; height: 28px" src="images/receipt.png" alt="">
+				</template>
+				<template #right-icon>
+					<van-icon name="arrow" color="#CCCCCC" size="20" style="line-height: inherit;" />
+				</template>
+			</van-cell>
+		</template>
+		<template v-else >
+			<van-contact-card type="add" add-text="添加收货地址" @click="collectAddress()" />
+		</template>
+		<template v-if="goodsList && goodsList.length > 0">
+			<div class="goods-card">
+                <!-- <div class="shop-name" >
+                  <img src="images/speedBuy/sd.png" alt="">
+                  <span>{{ shop_name }}</span>
+                </div> -->
+				<div v-for="(subItem, subIndex) in goodsList" :key="subIndex">
+					<van-card :title="subItem.goods_name" :centered="true" >
+						<template #thumb>
+							<div>
+								<van-image width="6.25rem" height="6.25rem" fit="contain" :src="subItem.thumb" />
+							</div>
+						</template>
+						<template #desc>
+							<div class="desc" >
+								<p v-if="subItem.oneStylesName">{{ subItem.oneStylesTitle }}: {{ subItem.oneStylesName }}</p>
+								<p v-if="subItem.twoStylesName">{{ subItem.twoStylesTitle }}: {{ subItem.twoStylesName }}</p>
+								<p v-if="subItem.threeStylesName">{{ subItem.threeStylesTitle }}: {{ subItem.threeStylesName }}</p>
+							</div>
+						</template>
+						<template #price>
+							<div class="price" >
+								<span style="font-size: 0.7rem;">￥</span>{{subItem.retail_price}}
+							</div>
+						</template>
+						<template #num>
+							<div class="num" >
+								<span style="font-size: 0.5rem;">X</span>{{subItem.number}}
+							</div>
+						</template>
+						<template #bottom>
+							<div class="bottom">
+								<!-- <van-tag color="#f5f5f5" text-color="#888888">24小时内发货</van-tag> -->
+							</div>
+						</template>
+					</van-card>
+				</div>
+				<div class="goods_total_price">
+					<van-cell title="商品总价" :value="'￥'+goodsTotalPrice" />
+				</div>
+				<div class="other-mark">
+					<template v-if="post_fee > 0">
+						<van-cell title="运费/快递" value-class="price" :value="'￥'+post_fee"/>
+					</template>
+					<template v-else>
+						<van-cell title="运费/快递" value="免邮" />
+					</template>
+				</div>
+				<div class="other-mark">
+					<template v-if="disPrice">
+						<van-cell title="优惠券/红包" value-class="price" :value="disPrice > 0 ? '￥'+disPrice :'有可用优惠券'" is-link />
+					</template>
+					<template v-else>
+						<van-cell title="优惠券/红包" value="暂无可用优惠券" />
+					</template>
+				</div>
+			</div>
+		</template>
+		<van-cell-group class="need-pay-con" :border="false">
+			<van-cell title="买家留言" ></van-cell>
+			<van-field v-model="order.note" rows="2" autosize type="textarea" placeholder="请输入留言" ></van-field>
+		</van-cell-group>
+		<van-cell-group class="need-pay-con" style="margin-bottom: 0.75rem;" :border="false">
+			<van-cell title="需付款" :value="'￥'+orderTotalPrice" />
+		</van-cell-group>
+		<div style="height: 50px;"></div>
+		<van-submit-bar :price="orderTotalPrice*100" button-text="付款" button-size="small" @submit="confirmOrder" />
+		</template>
+		<div class="full-loading" v-if="isOutFullLoading">
+			<van-loading  color="#1989fa" /> 
+		</div>
+	</div>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				isFullLoading: true,
+				isOutFullLoading: true,
+				radioImg: './images/radio-gou.png',
+				isShowCoupon: true, // 是否显示无优惠券
+				curOrderTotalPrice:'',
+				disPrice:'',// 优惠金额
+				JumpUrl:{
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+					list: baseUrl('/wx/address/new_lists'),
+					checkout:baseUrl('/wx/distribution/new_checkout'),		
+					submit_single:baseUrl('/wx/distribution/coupon_submit_single'),
+					is_coupon: baseUrl('/wx/distribution/is_coupon'),
+					coupon_detail: baseUrl('/wx/coupon/coupon_detail'),
+
+				},
+				checkedAddress:{},					//默认的地址
+				goodsList:[],						//订单商品
+				actualPrice:'',						//总价格
+				post_fee:'',						//运费
+				goodsTotalPrice:'',					//商品价格
+				orderTotalPrice:'',					//订单总价格
+				goodsCount:'',						//订单总数量
+				shop_name:'',						//商店名字
+				order_id:'',						//订单id
+				rightOff:{
+					is_now:'',
+					token:localStorage.getItem("token"),
+					address_id:'',
+					coupon_id: ''
+				},
+				order:{
+					addressId:'',
+					is_now:'',
+					note:'',	
+					coupon_id: '',						//买家留言
+					token:localStorage.getItem("token"),
+				},
+				address_id:'',
+				token: localStorage.getItem("token"),
+				collect:{
+					token:localStorage.getItem("token"),
+				},
+				goodsArr: '', // 当前订单所以商品id字符串
+				hasCoupon: false, // 判断是否有优惠券
+				is_yn: 0,
+				coupon_id: '',
+				user_coupon_id: '',
+				isUseCoupon: false,
+				couponDetail: ''
+
+			},
+			mounted() {
+				if (window.history && window.history.pushState) {
+					// 向历史记录中插入了当前页
+					history.pushState(null, null, document.URL);
+					window.addEventListener('popstate', this.returnLast, false);
+				}
+			},
+			methods: {
+				//跳转首页
+				JumpIndex(){
+					window.location.href = 'disCouponGoods.html?coupon_id='+this.coupon_id+'&user_coupon_id='+this.user_coupon_id+'&v=1';
+				},
+				//返回上一页
+				returnLast(){
+					// window.history.go(-1);
+					let href = window.location.href;
+					if(href.indexOf("cart") > -1){
+						window.location.href = 'disShoppingCart.html?coupon_id='+this.coupon_id+'&user_coupon_id='+this.user_coupon_id
+					}else if(href.indexOf("is_now") > -1){
+						if(getQueryString('cate_id')){
+							window.location.href = "disGoodsDetail.html?id=" + getQueryString('id') + '&cate_id=' + getQueryString('cate_id')+ '&tabIndex=' + getQueryString('tabIndex')+ '&coupon_id=' + this.coupon_id+'&user_coupon_id='+this.user_coupon_id+'&v=1';
+						}else{
+							window.location.href = "disGoodsDetail.html?id=" + getQueryString('id') + '&coupon_id=' + this.coupon_id+'&user_coupon_id='+this.user_coupon_id+ '&index=1&v=1'
+						}
+					}else{
+						window.history.go(-1);
+					}
+				},
+				collectAddress(){
+					let href = window.location.href;
+					let addressid = this.checkedAddress.id ? this.checkedAddress.id : 0;
+					if(href.indexOf("cart") > -1){
+						window.location.href = "disCollectAddress.html?from=order&source=cart&addressid="+addressid+ '&coupon_id='+this.coupon_id+ '&user_coupon_id='+this.user_coupon_id +'&v=1'
+					}else if(href.indexOf("is_now") > -1){
+						if(getQueryString('cate_id')){
+							window.location.href = "disCollectAddress.html?from=order&source=is_now&id=" + getQueryString('id') + '&cate_id=' + getQueryString('cate_id')+ '&tabIndex=' + getQueryString('tabIndex') +'&addressid='+ addressid + '&coupon_id='+this.coupon_id+ '&user_coupon_id='+this.user_coupon_id+'&v=1'
+						}else{
+							window.location.href = "disCollectAddress.html?from=order&source=is_now&id=" + getQueryString('id') + '&index=1&addressid='+addressid + '&coupon_id='+this.coupon_id+ '&user_coupon_id='+this.user_coupon_id+'&v=1'
+						}
+					}else{
+						window.location.href = "disCollectAddress.html?addressid="+addressid+ '&coupon_id='+this.coupon_id+ '&user_coupon_id='+this.user_coupon_id+'&v=1'
+					}
+				},
+				getParam(paramName){
+					if(!paramName){
+						return '';
+					}
+					let val='';
+					var href=window.location.href;
+					if(href.indexOf(paramName) !=-1){
+						val= window.location.href.split(paramName+"=")[1];
+					}
+					return val;
+				},
+				// 确认选择的优惠券
+				confirmCoupon() {
+					let that = this;
+					that.isUseCoupon = false
+					axios({
+						method: 'post',
+						url: that.JumpUrl.is_coupon,
+						data:{total_price: that.goodsTotalPrice,coupon_id: that.coupon_id,user_coupon_id: that.user_coupon_id,token: localStorage.getItem("token")}
+					})
+					.then(function (resp) {
+						let data=resp.data
+						if(data.errno == 0){
+							if(data.data) {
+								that.orderTotalPrice = data.data.total_price
+								that.disPrice = data.data.jian
+								that.isUseCoupon =false
+							}
+						} else if(data.code == 2){
+							that.checkout()
+							that.isUseCoupon =true
+							that.$dialog.alert({
+									title: '提示',
+									message: '【'+ data.code_name +'】只有益农卡会员才可以使用',
+									showCancelButton: true,
+									confirmButtonText: '加入会员'
+								}).then(() =>{
+									window.location.href = 'openVip.html?source=dishome'
+								}) .catch(() => {});
+						}else {
+							that.$toast.fail(data.errmsg ? data.errmsg : '获取优惠券失败')
+							that.isUseCoupon =true
+						}
+
+					}).catch(function (error) {
+						//请求失败
+						that.$toast.fail('服务异常,请稍后重试!')
+
+					})
+				},
+				// 确认订单
+				confirmOrder(){
+					let that = this;
+					if(that.isUseCoupon) {
+						that.$toast('该优惠券不可使用,请检查是否达到使用门槛或者已使用')
+						return
+					}
+					that.order.addressId = that.checkedAddress.id;
+					that.order.coupon_id = that.coupon_id;
+					that.order.user_coupon_id = that.user_coupon_id;
+					that.order.coupon_price = that.disPrice ? that.disPrice : 0
+						axios({
+							method: 'post',
+							url: that.JumpUrl.submit_single,
+							data:that.order
+						})
+						.then(function (resp) {
+							let data=resp.data
+							if(data.errno == 0){
+								that.order_id = resp.data.order_id;
+								if (that.order_id) {
+									// localStorage.setItem('order_id',that.order_id);
+									let href = window.location.href;
+									// console.log(href)
+									if(href.indexOf("cate_id") > -1){
+										let id = getQueryString('id');
+										let cate_id = getQueryString('cate_id');
+										let tabIndex = getQueryString('tabIndex');
+										window.location.href = "disPay.html" +'?order_id='+that.order_id + '&id='+id+'&cate_id='+cate_id+'&tabIndex='+tabIndex+'&coupon_id='+that.coupon_id+'&user_coupon_id='+that.user_coupon_id;
+									}else if(href.indexOf("is_now") > -1){
+										let id = getQueryString('id');
+										window.location.href = "disPay.html" +'?order_id='+that.order_id + '&id='+id + '&index=1&coupon_id='+that.coupon_id+'&user_coupon_id='+that.user_coupon_id;
+									}else if(href.indexOf("cart") > -1){
+										window.location.href = "disPay.html" +'?order_id='+that.order_id + '&source=cart&coupon_id='+that.coupon_id+'&user_coupon_id='+that.user_coupon_id;
+									}else{
+										window.location.href = "disPay.html" +'?order_id='+that.order_id+'&coupon_id='+that.coupon_id+'&user_coupon_id='+that.user_coupon_id;
+									}
+								}
+							}else{
+								that.$toast.fail(data.errmsg)
+							}
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+						})
+				},
+				//获取订单内容
+				checkout(isFirst){
+					let that = this;
+					that.isOutFullLoading = true;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.checkout,
+						data:that.rightOff
+					})
+					.then(function (resp) {
+						if(resp.data.errno == 0) {
+							that.checkedAddress = resp.data.data.checkedAddress;
+							that.shop_name = resp.data.data.checkedGoodsList.shop_name;
+							that.goodsList = resp.data.data.checkedGoodsList.goodsList;
+							that.goodsTotalPrice = resp.data.data.goodsTotalPrice;
+							that.orderTotalPrice = resp.data.data.orderTotalPrice;
+							that.curOrderTotalPrice = resp.data.data.goodsTotalPrice;
+							that.post_fee = Number(resp.data.data.post_fee);
+							that.goodsCount = resp.data.data.goodsCount;
+							let goodsArr = []
+							that.goodsList.forEach(item =>{
+								goodsArr.push(item.goods_id)
+							})
+							that.goodsArr = goodsArr.join(',')
+							setTimeout(() =>{
+								that.isOutFullLoading = false;
+							})
+							if(isFirst) {
+								that.confirmCoupon()
+							}
+						} else {
+							that.orderTotalPrice = 0;
+							that.isOutFullLoading = false;
+							that.checkedAddress = {};
+							that.rightOff.address_id = ''
+							that.$toast.fail(resp.data.errmsg)
+							that.isUseCoupon = true
+						}
+					}).catch(function (error) {
+						that.isOutFullLoading = false;
+						that.$toast('服务异常,请稍后重试!')
+						//请求失败
+						console.log('error', error);
+					})
+				},
+				
+				//获取收货地址
+				collectList(){
+					let that = this;
+					let form_data = new FormData();
+					that.collect.shop_id = that.couponDetail.shop_id
+					makeFormData(that.collect,form_data);
+					axios({
+						method: 'post',
+						url: that.JumpUrl.list,
+						data:form_data
+					})
+					.then(function (resp) {
+						resp.data.data.forEach(ele=>{
+							if(ele.is_default == 1){
+								that.checkedAddress = ele;
+								that.rightOff.address_id = ele.id
+							}
+						})
+					}).catch(function (error) {
+						//请求失败
+						console.log('error', error);
+					})
+				},
+				setWx() {
+					let that = this;
+					let share_title = that.couponDetail.name
+					let share_introduction = '前往领券中心领取优惠券'
+					let logo = that.couponDetail.share_img
+					wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/getShopCoupon.html',  // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {
+
+							}
+						})
+						wx.updateTimelineShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/getShopCoupon.html',  // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {}
+						})
+					});
+				},
+				getJssdk() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: encodeURIComponent(location.href.split('#')[0])
+						}
+					}).then(function(resp) {
+						let data = resp.data
+					
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						if(localStorage.getItem('disCouponDetail')) {
+							that.couponDetail = JSON.parse(localStorage.getItem('disCouponDetail'))
+						}
+						that.setWx(); 
+						if(!getQueryString('address_id')){
+							that.collectList()
+						}else{
+							that.rightOff.address_id=getQueryString('address_id')
+						}
+						that.checkout(true);
+					})
+				},
+				// 删除上个页面存储数据
+                removeLocal() {
+                    localStorage.removeItem('getCouponData')
+                    localStorage.removeItem('myCouponToDetail')
+                    localStorage.removeItem('myCouponList')
+                },
+				checkPhone() {
+					var _this = this
+					var agent = (navigator.userAgent || navigator.vendor || window.opera)
+					if (agent != null) {
+						var agentName = agent.toLowerCase()
+						if (/android/i.test(agentName)) {
+							return 'android'
+						} else if (/iphone/i.test(agentName)) {
+							return 'ios'
+						}
+					}
+				},
+
+			},
+			created() {
+				let phoneType = this.checkPhone()
+				// 监听页面关闭事件
+				if(phoneType == 'android'){
+					window.onunload = function () {
+						this.removeLocal()
+					}
+				} else if(phoneType == 'ios') {
+					window.addEventListener('pagehide', function () {
+						this.removeLocal()
+					});
+				}
+				var url =location.href;
+				this.order.is_now = getQueryString('is_now');
+				this.rightOff.is_now = getQueryString('is_now');
+				this.rightOff.coupon_id = getQueryString('coupon_id')
+				this.rightOff.user_coupon_id = getQueryString('user_coupon_id')
+				this.coupon_id = getQueryString('coupon_id')
+				this.user_coupon_id = getQueryString('user_coupon_id')
+				this.getJssdk();
+			}
+		})
+	</script>
+</body>
+
+</html>

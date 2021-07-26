@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>微商超</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+		<!-- <link rel="stylesheet" href="css//index.css"> -->
+		<link rel="stylesheet" href="css/index.css" />
+		<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js"></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+		
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5/lib/index.css">
+		
+		<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+		<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script> -->
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant.min.js"></script>
+		
+		<style>
+			[v-cloak] {
+				display: none;
+			}
+
+			img {
+				vertical-align: top;
+			}
+
+			.xz {
+				font-size: 0.7rem;
+				margin-right: 5px;
+			}
+
+			.el-tabs__nav-wrap::after {
+				height: 0px;
+			}
+
+			.el-tabs__item {
+				color: #fff;
+				font-size: 16px;
+			}
+
+			.textTitle {
+				width: 80%;
+				height: auto;
+				word-wrap: break-word;
+				word-break: break-all;
+				overflow: hidden;
+			}
+
+			.goodspp {
+				padding: 10px;
+				font-size: 14px;
+			}
+
+			.goodsyj p {
+				margin-left: 10px;
+				color: #999;
+				font-size: 0.6rem;
+
+			}
+
+			.aui-list-item-arrow {
+				color: #212121;
+				font: 14px/1.5 "微软雅黑", tahoma, arial, \5b8b\4f53;
+			}
+
+			.wholeSee {
+				color: #f36065 !important;
+			}
+
+			.pj .aui-list-item-arrow:before {
+				width: 0;
+				height: 0;
+			}
+
+			.aui-margin-b-15 {
+				margin-bottom: 0 !important;
+			}
+
+			.aui-bar {
+				position: fixed;
+				bottom: 0;
+				right: 0;
+				left: 0;
+				z-index: 10;
+				width: 100%;
+				min-height: 2.25rem;
+				font-size: 14px;
+				text-align: center;
+				display: table;
+			}
+
+			.el-dialog__header {
+				padding: 0;
+			}
+
+			.el-dialog__body {
+				padding: 0px 0px;
+				position: relative;
+			}
+
+			.el-dialog {
+				position: fixed;
+				bottom: 0px;
+				margin: 0 auto;
+			}
+
+			.aui-btn-danger {
+				background-color: #fa8972 !important;
+			}
+
+			.aui-btn-danger.aui-active,
+			.aui-btn-danger:active {
+				color: #ffffff !important;
+				background-color: #fa8972 !important;
+			}
+
+			.el-row {
+				position: fixed;
+			}
+
+			body {
+				padding-top: 50px;
+			}
+
+			.goods_content {
+				margin-top: 10px;
+				background: #fff;
+			}
+
+			.goods_content img {
+				padding: 10px;
+				display: block;
+				margin: 0 auto;
+				max-width: 100%;
+			}
+
+			.share-mask {
+				height: 100%;
+				width: 100%;
+				z-index: 20000;
+				top: 0;
+				left: 0;
+				color: #fff;
+				position: fixed;
+				background: rgba(0, 0, 0, 0.8);
+			}
+
+			.share-mask-content p {
+				padding-left: 20px;
+				font-size: 28px;
+				color: #fff
+			}
+			.specsDiv {margin-top: 15px;}
+			.specsDiv li{margin-right: 10px;margin-top: 10px;padding: 0 5px;border-radius: 5px;background-color: #EEEEEE}
+			.specsDiv li.active{color: #fa8972;background: rgba(250, 137, 114, 0.16);}
+			.specsDiv li.unable{color: #d0d0d0;}
+			.selectCont{color: #333333;padding: 10px 0 0 50px;position: relative;}
+			.selectCont span{position: absolute;left: 0;top: 10px;}
+			
+			.product-delcom{margin-top: 10px;}
+			.product-delcom p{line-height: 5px;margin-top: 15px;}
+			.product-footerlist {
+			    margin-top: 5px;
+			}
+			
+			.product-footerlist li {
+			    border: 1px solid #606060;
+			    border-radius: 5px;
+			    color: #606060;
+			    text-align: center;
+			    padding: 3px 10px;
+			    float: left;
+				margin-top: 10px;
+			    margin-right: 20px;
+			    cursor: pointer;
+			}
+			.product-footerlist li.productActive {
+			    background-color: #1A1A29;
+			    color: #fff;
+			    border: 1px solid #1A1A29;
+			}
+			.product-footerlist li.noneActive {
+			    background-color: #ccc;
+			    opacity: 0.4;
+			    color: #000;
+			    pointer-events: none;
+			}
+			.price{
+			    font-size: 30px;
+			    height: 60px;
+			    line-height: 60px;
+			}
+		</style>
+
+	</head>
+	<body>
+		<div id="app" style="padding-bottom:4rem;" v-cloak>
+			<!-- 		<el-row class="clearfix header">
+	<el-col :span="7" style="line-height: 1.8rem"><div class="el-icon-arrow-left" @click="returnLast()"></div></el-col>
+	<el-col :span="11" style="color: #fff">
+		<el-tabs v-model="activeName" @tab-click="handleClick">
+			<el-tab-pane label="商品" name="goods"></el-tab-pane>
+			<el-tab-pane label="详情" name="details"></el-tab-pane>
+	<el-tab-pane label="评价" name="appraise"></el-tab-pane>
+		</el-tabs>
+	</el-col>
+
+
+</el-row> -->
+
+			<!-- <el-row class="clearfix header" style="font-size: 18px;">
+			<el-col :span="10"><div class="fl"><i  style="font-size:26px" class="el-icon-arrow-left" @click="returnLast()"></i></div></el-col>
+
+			<h2>商品详情</h2>
+
+		</el-row> -->
+
+			<el-row class="clearfix header" style="font-size: 18px;position:fixed;">
+
+				<el-col :span="8">
+					<i style="font-size:26px" class="el-icon-arrow-left" @click="returnLast()"></i>
+				</el-col>
+				<el-col :span="8" style="text-align: center">
+					<h2>商品详情</h2>
+				</el-col>
+				<el-col :span="8" style="position:relative;height: 100%">
+					<img src="images/icon/sy2.png" alt="" width="20" style="margin-top:auto;margin-bottom:auto;top:0;bottom:5px;right: 5px;position:absolute"
+					 @click="JumpIndex">
+				</el-col>
+
+
+			</el-row>
+			<!-- 图片 -->
+			<!-- <div style="text-align:center;background: #fff;width:100%;">
+				<img :src="info.thumb" alt="" style="display:inline-block;">
+			</div> -->
+			
+			<!-- 图片轮播 -->
+			<van-swipe style="height: 300px;">
+				<van-swipe-item>
+					<a href="javascript:;">
+						<img :src="info.thumb" style="width:100%;">
+					</a>
+				</van-swipe-item>
+				<van-swipe-item v-for="(item, index) in info.album" :key="index">
+					<a href="javascript:;">
+						<img :src="item" style="width:100%;">
+					</a>
+				</van-swipe-item>
+			</van-swipe>
+			
+			<!-- 商品介绍 -->
+			<div style="background-color: #fff;">
+				<div class="clearfix goodspp">
+					<div class="fl">
+						<span class="textTitle">{{info.goods_name}}</span>
+					</div>
+					<div class="fr" @click="shareGoods()">
+						<span class="el-icon-share">&nbsp;&nbsp;分享</span>
+					</div>
+				</div>
+				<div v-if="decPrice > 0" style="padding: 0 10px;color: red;font-weight: bold;">每人限购{{promotion_num}}件</div>
+				<!-- 配送费 -->
+				<!-- 			<div class="goodsyj">
+	<p>原价￥99.9  配送费9元（满15免费送货上门）</p>
+
+</div> -->
+				<!-- 价格 -->
+
+				<div class="clearfix goodspp">
+					<div class="fl" v-if="decPrice > 0">
+					{{decPrice}}
+						<span style="color: #f36065;font-weight:700" v-if="info.unit">￥{{decPrice}}/{{info.unit}} </span>
+						<span style="color: #f36065;font-weight:700" v-else>￥{{decPrice}}</span>
+						
+						<span style="color: gray;text-decoration: line-through;font-size: 12px;" v-if="info.unit">￥{{price}}/{{info.unit}} </span>
+						<span style="color: gray;text-decoration: line-through;font-size: 12px;" v-else>￥{{price}}</span>
+					</div>
+					<div class="fl" v-else>
+						<span style="color: #f36065;font-weight:700" v-if="info.unit">￥{{price}}/{{info.unit}} </span>
+						<span style="color: #f36065;font-weight:700" v-else>￥{{price}}</span>
+					</div>
+
+					<div class="fr" style="padding:0 5px;margin-right:10px;background: #eee;border-radius: 10px;">
+						<span v-if="salesShow==1"> 销量{{info.sales_num}}{{info.unit}} </span>
+					</div>
+				</div>
+			</div>
+			<!-- 活动促销 -->
+			<ul class="aui-list aui-list-in" style="margin-top: 10px; background-image:none;background-position:-webkit-linear-gradient(90deg,#dddddd,#fff 50%,transparent 100%);">
+				<!-- 			<li class="aui-list-item aui-list-item-middle">
+	<div class="aui-list-item-inner aui-list-item-arrow">
+		活动促销
+	</div>
+</li> -->
+				<li class="aui-list-item">
+					<div class="aui-list-item-inner aui-list-item-arrow" @click="joinGoods">
+						选择
+					</div>
+				</li>
+
+			</ul>
+
+			<!-- 图片 -->
+			<div class="goods_content" v-html="info.content">
+
+			</div>
+			
+			
+			
+			<!-- 评价 -->
+			<!-- <ul class="aui-list aui-list-in">
+			<li class="aui-list-item">
+				<div class="aui-list-item-inner">
+					<div class="aui-list-item-title">评价</div>
+					<div class="aui-list-item-right wholeSee">查看全部</div>
+				</div>
+			</li>
+		</ul> -->
+
+			<!--
+		<ul class="aui-list aui-media-list pj">
+			<li class="aui-list-item aui-list-item-middle">
+				<div class="aui-media-list-item-inner">
+					<div class="aui-list-item-media" style="width: 3rem;">
+						<div style="width: 40px;height: 40px;margin:auto;border-radius: 50%;background-color: red;overflow: hidden; ">
+							<img src="images/a1.png" alt="" width="100%" height="100%">
+						</div>
+
+					</div>
+					<div class="aui-list-item-inner aui-list-item-arrow">
+						<div class="aui-list-item-text">
+							<div class="aui-list-item-title aui-font-size-14">AUI</div>
+							<div class="aui-list-item-right">2019-03-03</div>
+						</div>
+					</div>
+				</div> -->
+			<!-- 评价
+				<div style="margin-right: 10px;">
+					<p>评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价评价！ 拷贝</p>
+				</div>
+			</li>
+		</ul> -->
+		
+
+			<el-dialog title="" :visible.sync="dialogFormVisible" width="100%" :show-close="false" :close-on-click-modal="true">
+				<div style="padding-left: 20px;padding-right: 10px;margin-bottom:20px;">
+					<div class="clearfix">
+						<div class="fl">
+							<!-- <img style="border:3px solid #fff;height:110px;width:120px;margin-top: -50px;" :src="info.thumb" alt="" style="position: relative;top: -30px"> -->
+							<img style="border:3px solid #fff;height:110px;width:120px;margin-top: -50px;" :src="showImg" alt="" style="position: relative;top: -30px">
+						</div>
+						<div class="fl" style="padding-top: 10px;font-size: 14px;line-height: 24px;">
+							
+							<!-- <p v-if="info.promotion_price != null" style="color: #f36065;font-weight:700;margin-left: 20px">￥{{info.promotion_price}} 
+								<span style="color: gray;text-decoration: line-through;font-size: 12px;">￥{{info.retail_price}}</span></p>
+							<p v-else-if="info.promotion_price == null" style="color: #f36065;font-weight:700;margin-left: 20px">￥{{info.retail_price}}</p> -->
+							
+							
+							<p v-if="decPrice > 0" style="color: #f36065;font-weight:700;margin-left: 20px">￥{{decPrice}}
+								<span style="color: gray;text-decoration: line-through;font-size: 12px;">￥{{price}}</span></p>
+							<p v-else style="color: #f36065;font-weight:700;margin-left: 20px">￥{{price}}</p>
+							
+							
+							<!-- <p style="color: #f36065;font-weight:700;margin-left: 20px">￥{{info.retail_price}} <span></span></p> -->
+							<!-- <p style="margin-left: 20px;">库存 {{info.storage}} {{info.unit}}</p> -->
+							<p v-if="decPrice > 0" style="margin-left: 20px;color: red;">每人限购{{promotion_num}}件</p>
+							<p style="margin-left: 20px;">库存 {{storage}} {{info.unit}}</p>
+						</div>
+						<div class="fr" style="margin-top: 5px;font-size:26px;">
+							<i class="el-dialog__close el-icon el-icon-close" @click="closePop()"></i>
+						</div>
+					</div>
+					<!-- <div class="selectCont"><span>已选择: </span>柠檬抹茶味 柠檬抹茶味 柠檬抹茶味</div> -->
+					<div class="product-content" v-if="simulatedDATA.difference.length > 0">
+					    <div class="product-delcom" v-for="(ProductItem,n) in simulatedDATA.specifications">
+					        <p>{{ProductItem.name}}</p>
+					        <ul class="product-footerlist clearfix">
+					            <li v-for="(oItem,index) in ProductItem.item"
+					                v-on:click="specificationBtn(oItem.name,n,$event,index)"
+					                v-bind:class="[oItem.isShow?'':'noneActive',subIndex[n] == index?'productActive':'']">
+					                {{oItem.name}}
+					            </li>
+					        </ul>
+					    </div>
+					    <!-- <p v-if="price" class="price">¥{{price}}</p> -->
+					</div>
+					
+					<!-- 种类 -->
+					<!-- <div class="clearfix specsDiv">
+						<p>口味</p>
+						<ul >
+							<li class="fl">柠檬抹茶味</li>
+							<li class="fl">柠檬抹茶味</li>
+							<li class="fl">柠檬抹茶味</li>
+							<li class="fl">抹茶味</li>
+							<li class="fl" :class="{'unable':isAble}">柠檬抹茶味</li>
+							<li class="fl" :class="{'active':isActive}">抹茶味</li>
+						</ul>
+					</div>
+					<div class="clearfix specsDiv">
+						<p>口味</p>
+						<ul >
+							<li class="fl">柠檬抹茶味</li>
+							<li class="fl">柠檬抹茶味</li>
+						</ul>
+					</div> -->
+					<!-- 数量 -->
+				</div>
+				
+				<div class="clearfix" v-if="simulatedDATA.difference.length===0" style="padding: 14px;border-top:1px solid #eee;border-bottom:1px solid #eee;">
+					<span class="fl">规格</span>
+					<span class="fr">{{info.spec}}</span>
+				</div>
+				
+				<div class="clearfix" style="padding: 14px;border-top:1px solid #eee;border-bottom:1px solid #eee;margin-bottom: 50px;">
+					<span class="fl">数量</span>
+					<span class="fr">
+
+						<div class="clearfix">
+							<img src="./images/speedBuy/jian.png" alt="" class="fl" width="30px" @click="reduceChange()">
+							<div class="fl" style="margin-left: 20px;margin-right: 20px;height:30px;line-height: 30px;">{{amount}}</div>
+							<img src="./images/speedBuy/jia.png" alt="" class="fl" width="30px" @click="addChange(info.goods_id, spcifi_id)">
+						</div>
+					</span>
+				</div>
+				<div>
+					<p>
+						<div style="border-radius: 0;height:50px;line-height: 50px;" class="aui-btn aui-btn-danger aui-btn-block aui-btn-sm"
+						 @click="joinCart(info.goods_id)">确定</div>
+					</p>
+				</div>
+
+
+			</el-dialog>
+
+
+
+			<!-- 底部 -->
+			<footer class="aui-bar aui-bar-tab aui-margin-t-15 aui-margin-b-15">
+
+				<div class="aui-bar-tab-item" tapmode style="width: 3rem;" @click="addCollect()">
+					<i style="font-size:24px;color:#f1c40f;" v-show="isCollect == 1" class="el-icon-star-on"></i>
+					<i style="font-size:24px;color:#f1c40f;" v-show="isCollect==0" class="el-icon-star-off"></i>
+					<div style="margin-top: -2px;" class="aui-bar-tab-label aui-text-warning">收藏</div>
+				</div>
+
+				<div class="aui-bar-tab-item" tapmode style="width: 3rem;">
+					<a href="index.html">
+
+						<i class="aui-iconfont aui-icon-home aui-text-info"></i>
+						<div class="aui-bar-tab-label aui-text-info">店铺</div>
+					</a>
+				</div>
+
+				<div class="aui-bar-tab-item" tapmode style="width: 3rem;">
+					<i class="aui-iconfont aui-icon-phone aui-text-danger"></i>
+					<div class="aui-bar-tab-label aui-text-danger">客服</div>
+				</div>
+
+				<div class="aui-bar-tab-item aui-bg-warning aui-text-white" tapmode style="width: auto;" @click="joinGoods">加入购物车</div>
+				<div class="aui-bar-tab-item aui-bg-danger aui-text-white" tapmode style="width: auto;" @click="atOnce()">立即购买</div>
+
+
+
+			</footer>
+
+			<div class="message-page-mask" v-show="message.show==1">
+				<div class="message-page-mask-content">
+					<div class="el-loading-spinner">
+						<i v-show="message.type=='success' " class="el-icon-success"></i>
+						<i v-show="message.type=='error' " class="el-icon-error"></i>
+
+						<p class="el-loading-text">{{message.text}}</p>
+					</div>
+				</div>
+			</div>
+
+			<div @click="shareGoods()" class="share-mask" v-show="isShare">
+				<div style="width:100%;height:80px;">
+					<img style="display:block;position:fixed;right:10px;top:0px;width:80px;height:80px;"  src="images/icon/share.png" alt="">
+				</div>
+
+				<div class="share-mask-content">
+				<p>点击右上角</p>
+				<p>通过【发送给朋友】</p>
+				<p>邀请好友购买</p>
+
+				</div>
+
+			</div>
+
+			<div class="page-mask" v-show="loading">
+				<div class="page-mask-content">
+					<div class="el-loading-spinner"><i class="el-icon-loading"></i>
+						<p class="el-loading-text">拼命加载中</p>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					loading: 0,
+					message: {
+						show: 0,
+						type: 'success',
+						text: '成功',
+					},
+					activeName: 'second',
+					dialogFormVisible: false, //加入购物车
+					amount: 1,
+					JumpUrl: {
+						detail: 'http://sy.xfd365.com/wx/goods/detailTest',
+						// detail: 'http://www.guagua.com/index.php/wx/goods/detailTest',
+						comment: 'http://sy.xfd365.com/wx/comment/lists', //商品评价
+						add: 'http://sy.xfd365.com/wx/cart/new_add',
+						// add: 'http://www.guagua.com/wx/cart/new_add',
+						addCollect: 'http://sy.xfd365.com/wx/collect/addordelete',
+						// addCollect: 'http://www.guagua.com/wx/collect/addordelete',
+						jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+						shopInfoUrl: 'http://sy.xfd365.com/wx/shop/shop_info',
+						checkToken: 'http://sy.xfd365.com/wx/base/checkToken',
+						loginUrl: 'http://sy.xfd365.com/wx/wechat/login',
+						index:'http://sy.xfd365.com/wx/cart/new_cart',
+						// index:'http://www.guagua.com/wx/cart/new_cart',
+					},
+					goodsXq: {
+						goods_id: '',
+						spcifi_id: 0, // 商品规格id,没有规格可为0
+						token: localStorage.getItem("token"),
+						number: 1,
+						is_now: '',
+					},
+					goods_id: '',
+					switch: '',
+					info: {
+
+					}, //获取商品信息
+					isCollect: 0,
+					shopInfo: [],
+					isShare: false,
+					token: '',
+					salesShow: 0,
+					goodsName: '',
+					cate_id: '',
+					tabIndex: 0,
+					goodsPage: '',
+					scrollTop: '',
+					goodId: '',
+					addGoods:{
+						goods_id:'',
+						spcifi_id: 0,
+						number:0,
+						token:localStorage.getItem("token"),
+					},
+					cartList: [],
+					isAble: true,
+					isActive: true,
+					simulatedDATA: { //模拟后台返回的数据 多规格
+					    "difference": [],
+					    "specifications": []
+					},
+					selectArr: [], //存放被选中的值
+					shopItemInfo: {}, //存放要和选中的值进行匹配的数据
+					subIndex: [], //是否选中 因为不确定是多规格还是单规格，所以这里定义数组来判断
+					price:'' ,//选中规格的价钱
+					decPrice: '', // 促销价格
+					decSavePrce: '', // 保存促销价格（无规格）
+					storage: 0, // 库存
+					showImg: '', //图片
+					spcifi_id: 0,
+					promotion_num: '',
+					has_buy: ''
+				},
+				mounted(){
+				},
+				methods: {
+					specificationBtn: function (item, n, event, index) {
+					    var self = this;
+						self.amount = 1 // 重置数量
+					    if (self.selectArr[n] != item) {
+					        self.selectArr[n] = item;
+					        self.subIndex[n] = index;
+					    } else {
+					        self.selectArr[n] = "";
+					        self.subIndex[n] = -1; //去掉选中的颜色
+					    }
+					    self.checkItem();
+					},
+					checkItem: function () {
+					    var self = this;
+					    var option = self.simulatedDATA.specifications;
+						
+					    var result = [];  //定义数组储存被选中的值
+					    for(var i in option){
+					        result[i] = self.selectArr[i] ? self.selectArr[i] : '';
+					    }
+					    for (var i in option) {
+					        var last = result[i];  //把选中的值存放到字符串last去
+					        for (var k in option[i].item) {
+					            result[i] = option[i].item[k].name; //赋值，存在直接覆盖，不存在往里面添加name值
+					            option[i].item[k].isShow = self.isMay(result); //在数据里面添加字段isShow来判断是否可以选择
+					        }
+					        result[i] = last; //还原，目的是记录点下去那个值，避免下一次执行循环时被覆盖
+					    }
+					    if(this.shopItemInfo[result]){
+					        this.price = this.shopItemInfo[result].retail_price
+							this.decPrice = this.shopItemInfo[result].promotion_price
+							this.spcifi_id = this.shopItemInfo[result].spcifi_id
+							// this.storage = this.shopItemInfo[result].storage || ''
+							this.storage = this.shopItemInfo[result].storage
+							this.showImg = this.shopItemInfo[result].pic
+							this.promotion_num = this.shopItemInfo[result].promotion_num
+							this.has_buy = this.shopItemInfo[result].has_buy
+					    }
+					    self.$forceUpdate(); //重绘
+						
+					},
+					isMay: function (result) {
+					    for (var i in result) {
+					        if (result[i] == '') {
+					            return true; //如果数组里有为空的值，那直接返回true
+					        }
+					    }
+					    return this.shopItemInfo[result].storage == 0 ? false : true; //匹配选中的数据的库存，若不为空返回true反之返回false
+					},
+					
+					
+					//检查token是否过期
+					checkToken: function() {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.checkToken,
+								data: {
+									token: that.token
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								if (resp.data.errno == 1) {
+									//token过期调用跳转页面方法
+									localStorage.removeItem('token')
+									that.wxSign();
+								} else {
+									that.initPage();
+								}
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					getShopInfo: function() {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.JumpUrl.shopInfoUrl,
+							//data: form_data
+							data: {
+								token: localStorage.getItem('token')
+							}
+						}).then(function(resp) {
+							let data = resp.data
+							if (data.errno == 0) {
+								// console.log(data)
+								localStorage.setItem('shop_id', data.data.id);
+								localStorage.setItem('shopInfo', JSON.stringify(data.data));
+								that.shopInfo = data.data
+								that.getJssdk();
+
+							}
+							//返回数据
+							// console.log(resp)
+						}).catch(function(error) {
+							//请求失败
+							console.log('error', error);
+
+
+						})
+					},
+					setWx() {
+						let that = this;
+						let shopInfo = JSON.parse(localStorage.getItem('shopInfo'));
+						let goodsInfo = this.info
+						let shop_name = shopInfo.shop_name
+						let shop_id = shopInfo.id
+						let logo = shopInfo.logo
+						// console.log(shopInfo, 'shopData');
+						wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+							wx.onMenuShareTimeline({
+								title: goodsInfo.goods_name, // 分享标题
+								desc: '我正在看' + goodsInfo.goods_name + ',快来看看吧', // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/goodsDetails.html?id=' + goodsInfo.goods_id + '&shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: goodsInfo.thumb, // 分享图标
+								success: function() {
+									console.log('good')
+								}
+							})
+							wx.onMenuShareAppMessage({
+								title: goodsInfo.goods_name, // 分享标题
+								desc: '我正在看' + goodsInfo.goods_name + ',快来看看吧!', // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/goodsDetails.html?id=' + goodsInfo.goods_id + '&shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: goodsInfo.thumb, // 分享图标
+								success: function() {
+									console.log('good')
+								}
+							})
+						});
+					},
+					getJssdk() {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.JumpUrl.jssdkUrl,
+							//data: form_data
+							data: {
+								token: localStorage.getItem('token'),
+								url: window.location.href
+							}
+						}).then(function(resp) {
+							// console.log(resp)
+							let data = resp.data
+
+							let sdkData = resp.data
+							// console.log(sdkData, 'sdkData')
+							// console.log(sdkData.signature, 'sig')
+							wx.config({
+								debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+								appId: sdkData.appId, // 必填，公众号的唯一标识
+								timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+								nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+								signature: sdkData.signature, // 必填，签名
+								jsApiList: [
+									'showMenuItems',
+									'onMenuShareTimeline',
+									'onMenuShareAppMessage',
+								] // 必填，需要使用的JS接口列表
+							});
+							that.share_url = sdkData.url;
+							that.setWx();
+
+							//返回数据
+							// console.log(resp)
+						})
+					},
+					shareGoods() {
+						this.isShare = !this.isShare;
+						let that = this;
+						let shopInfo = JSON.parse(localStorage.getItem('shopInfo'));
+						let goodsInfo = this.info
+						let shop_name = shopInfo.shop_name
+						let shop_id = shopInfo.id
+						let logo = shopInfo.logo
+						wx.onMenuShareAppMessage({
+							title: goodsInfo.goods_name, // 分享标题
+							desc: '我正在看' + goodsInfo.goods_name + ',快来看看吧!', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/goodsDetails.html?id=' + goodsInfo.goods_id + '&shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: goodsInfo.thumb, // 分享图标
+							success: function() {
+								console.log('good')
+							}
+						})
+						/*
+										        wx.showMenuItems({
+										            menuList: [
+										              'menuItem:share:timeline', // 分享到朋友圈
+										              "menuItem:share:appMessage", //发送给朋友
+										              'menuItem:favorite', // 收藏
+										              'menuItem:copyUrl' // 复制链接
+										            ],
+										            success: function (res) {
+										               	console.log('share')
+										            },
+										            fail: function (res) {
+										       		console.log(res)
+										            }
+										        });*/
+					},
+
+					addCollect() {
+						let that = this;
+						console.log('ccc')
+						axios({
+								method: 'post',
+								url: that.JumpUrl.addCollect,
+								//data: form_data
+								data: {
+									goods_id: that.goodsXq.goods_id,
+									token: localStorage.getItem('token')
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								console.log(resp)
+								if (resp.data.errno == 0) {
+									if (resp.data.data.type == 'add') {
+										that.message = {
+											show: 1,
+											text: '添加收藏成功',
+											type: 'success'
+										}
+
+
+										that.isCollect = 1
+									} else {
+
+										that.message = {
+											show: 1,
+											text: '取消收藏成功',
+											type: 'success'
+										}
+
+										that.isCollect = 0;
+									}
+									setTimeout(function() {
+										that.message.show = 0;
+									}, 2000)
+								}
+
+							})
+
+					},
+					closePop() {
+						this.dialogFormVisible = false;
+					},
+					//跳转首页
+					JumpIndex() {
+						localStorage.removeItem('dataPromotion')
+						window.location.href = "index.html";
+					},
+					//返回上一页
+					returnLast() {
+						// var tabIndex = getQueryString('tabIndex')
+							var tabIndex = this.tabIndex;
+						// console.log(this.goodId);
+						// console.log(this.goodsName);
+						// console.log(this.cate_id);
+						// console.log(tabIndex);
+						
+						// return false
+						if(this.goodsName !=''){
+							var goodsName = encodeURIComponent(this.goodsName)
+							if(this.cate_id){
+								window.location.href = 'speedBuy.html?cate_id=' + this.cate_id + '&goodsName=' + goodsName + '&tabIndex=' + tabIndex
+							}else{
+								window.location.href = 'lookupGoods.html?goodsName=' + goodsName
+							}
+						}else{
+							if(this.cate_id){
+								let aaa = 'speedBuy.html?cate_id=' + this.cate_id + '&tabIndex=' + tabIndex;
+								console.log(aaa)
+								
+								window.location.href = 'speedBuy.html?cate_id=' + this.cate_id + '&tabIndex=' + tabIndex
+							}else if(getQueryString('index')){
+								window.location.href = 'index.html'
+							}else{
+								window.history.go(-1);
+							}
+						}
+						localStorage.removeItem('dataPromotion')
+						
+					},
+					cancel () {
+						console.log("点击了浏览器的返回按钮");
+						sessionStorage.clear();
+						// window.history.back();
+						this.returnLast();
+					},
+					handleClick(tab, event) {
+						console.log(tab.name);
+					},
+					// 立即购买
+					atOnce() {
+						var that = this;
+						that.switch = 'yes';
+						that.goodsXq.is_now = 1;
+						that.dialogFormVisible = true;
+					},
+					//加入购物车
+					joinGoods() {
+						var that = this;
+						that.switch = 'no';
+						that.goodsXq.is_now = 0;
+						that.dialogFormVisible = true;
+					},
+					reduceChange() {
+						let that = this;
+						that.amount = that.amount - 1;
+						if (that.amount < 1) {
+							that.amount = 1;
+						}
+						let canBuyName = that.promotion_num - that.has_buy;
+						let carNum = 0;
+						that.cartList.forEach(function(ele) {
+							if (ele.spcifi_id == that.spcifi_id && ele.goods_id == that.goods_id) {
+								// console.log(ele)
+								carNum = ele.number;
+							}
+						})
+						if((that.amount + carNum) <= canBuyName  && that.has_buy != -1){
+							if(that.spcifi_id == 0){
+								that.decPrice = that.decSavePrce
+							}else{
+								that.checkItem()
+							}
+							
+						}
+						
+					},
+					addChange(goods_id) {
+						let that = this;
+						let canBuyName = that.promotion_num - that.has_buy;
+						let carNum = 0;
+						that.cartList.forEach(function(ele) {
+							if (ele.spcifi_id == that.spcifi_id && ele.goods_id == that.goodId) {
+								// console.log(ele)
+								carNum = ele.number;
+							}
+						})
+						if((that.amount + carNum) >= that.storage){
+							that.message={
+								show:1,
+								text:'库存不足',
+								type:'error'
+							}
+							
+							setTimeout(function(){
+								that.message.show=0;
+							}, 2000)
+							return;
+						}else{
+							if((that.amount + carNum) == canBuyName && that.has_buy != -1){
+								that.$toast('每人限购' + that.promotion_num + '件，超出数量将按原价累加')
+								that.decPrice = ''
+							}
+							that.amount = that.amount + 1
+						}
+						
+					},
+					//加入购物车
+					joinCart(goods_id) {
+						var that = this;
+						var message = '';
+						var length = 0;
+						that.simulatedDATA.specifications.forEach(ele=> {
+							if(ele.length != 0){
+								length += 1
+								message += ele.name + '、'
+							}
+						})
+						if(that.simulatedDATA.difference.length > 0){
+							if(that.selectArr.length < length){
+								this.$toast('请选择' + message.substr(0, message.length - 1))
+								return
+							}
+							
+						}
+						
+						let canBuyName = that.promotion_num - that.has_buy;
+						let carNum = 0;
+						that.cartList.forEach(function(ele) {
+							if (ele.spcifi_id == that.spcifi_id) {
+								carNum = ele.number;
+							}
+						})
+						if((that.amount + carNum) > that.storage){
+							that.message = {
+								show: 1,
+								text: '库存不足',
+								type: 'error'
+							}
+							setTimeout(function() {
+								that.message.show = 0;
+							}, 2000)
+							return
+						}else{
+							if((that.amount  + carNum) > canBuyName && that.has_buy != -1){
+								that.$toast('每人限购' + that.promotion_num + '件，超出数量将按原价累加')
+							}
+							that.goodsXq.number = that.amount;
+							that.goodsXq.spcifi_id = that.spcifi_id
+							
+							that.dialogFormVisible = false;
+							axios({
+									method: 'post',
+									url: that.JumpUrl.add,
+									data: that.goodsXq
+								})
+								.then(function(resp) {
+									if(resp.data.errno === 1){
+										that.message={
+											show:1,
+											text: resp.data.errmsg,
+											type:'error'
+										}
+										setTimeout(function(){
+											that.message.show=0;
+										}, 2000)
+										return;
+									}
+									// that.amount = resp.data.data.cartList[0].number;
+									if (that.switch == 'yes') {
+										console.log("立即购买")
+										that.message.show = 0;
+										
+										console.log(that.cate_id);
+										// console.log(that.tabIndex);
+										if(!that.cate_id){
+											window.location.href = "confirmOrder.html" + '?is_now=' + 1 + '&id=' + that.goodId;
+										}else{
+											window.location.href = "confirmOrder.html" + '?is_now=' + 1 + '&id=' + that.goodId+ '&cate_id=' + that.cate_id+ '&tabIndex=' + that.tabIndex;
+										}
+										
+									}else{
+										console.log("添加购物车")
+										that.message = {
+											show:  1,
+											text: '添加成功',
+											type: 'success'
+										}
+										setTimeout(function() {
+											that.message.show = 0;
+										}, 2000)
+										that.amount = 1;
+										that.myCart();
+									}
+							
+								}).catch(function(error) {
+									//请求失败
+									console.log('error', error);
+							
+								})
+						}
+						
+
+					},
+					//获取购物车内容
+					myCart(){
+						let that = this;
+						let form_data = new FormData();
+							makeFormData(that.addGoods,form_data);
+							axios({
+								method: 'post',
+								url: that.JumpUrl.index,
+								data:form_data
+							})
+							.then(function (resp) {
+								that.cartList = resp.data.data.cartList;
+								
+								// console.log(that.cartList)
+							}).catch(function (error) {
+								//请求失败
+								console.log('error', error);
+					
+							})
+					},
+
+					// 获取信息
+					getDetail() {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.detail,
+								data: {
+									goods_id: that.goods_id,
+									token: that.token
+								}
+							})
+							.then(function(resp) {
+								that.loading = 0;
+								//返回数据
+								that.info = resp.data.data.info;
+								that.simulatedDATA.difference = resp.data.data.attribute
+								that.simulatedDATA.specifications = resp.data.data.spcifi
+								that.showImg = resp.data.data.info.thumb
+								that.price= resp.data.data.info.retail_price
+								that.decPrice = resp.data.data.info.promotion_price
+								that.decSavePrce = resp.data.data.info.promotion_price
+								that.promotion_num = resp.data.data.info.promotion_num
+								that.storage = resp.data.data.info.storage
+								that.has_buy = resp.data.data.info.has_buy
+								
+								let dataPromotion = localStorage.getItem('dataPromotion');
+								console.log(dataPromotion)
+								if(dataPromotion){
+									dataPromotion = JSON.parse(dataPromotion)
+									if(dataPromotion.spcifi_name){
+										console.log("有规格促销")
+										let array1 = [];
+										let array2 = [];
+										let array3 = []
+										that.simulatedDATA.specifications[0].item.forEach(ele=>{
+											array1.push(ele.name)
+										})
+										if(that.simulatedDATA.specifications[1].item){
+											that.simulatedDATA.specifications[1].item.forEach(ele=>{
+												array2.push(ele.name)
+											})
+										}
+										if(that.simulatedDATA.specifications[2].item){
+											that.simulatedDATA.specifications[2].item.forEach(ele=>{
+												array3.push(ele.name)
+											})
+										}
+										
+										that.selectArr = dataPromotion.spcifi_name.substr(0, dataPromotion.spcifi_name.length - 1).split(",");
+										if(that.selectArr.length == 1){
+											that.subIndex = [array1.indexOf(that.selectArr[0]), 0, 0]
+										}else if(that.selectArr.length == 2){
+											that.subIndex = [array1.indexOf(that.selectArr[0]), array2.indexOf(that.selectArr[1]), 0]
+										}else{
+											that.subIndex = [array1.indexOf(that.selectArr[0]), array2.indexOf(that.selectArr[1]), array3.indexOf(that.selectArr[2])]
+										}
+									}
+								}else{
+									console.log("默认第一个")
+									that.subIndex = [0, 0, 0]
+									if(resp.data.data.attribute.length > 0){
+										if(resp.data.data.attribute[0].threeStylesName){
+											that.selectArr = [resp.data.data.attribute[0].oneStylesName ,resp.data.data.attribute[0].twoStylesName, resp.data.data.attribute[0].threeStylesName]
+										}else if(resp.data.data.attribute[0].twoStylesName && !resp.data.data.attribute[0].threeStylesName){
+											that.selectArr = [resp.data.data.attribute[0].oneStylesName ,resp.data.data.attribute[0].twoStylesName]
+										}else if(!resp.data.data.attribute[0].twoStylesName){
+											that.selectArr = [resp.data.data.attribute[0].oneStylesName]
+										}
+									}
+								}
+								
+								
+								// console.log(that.selectArr)	
+								// console.log(that.info)
+								that.isCollect = resp.data.data.userHasCollect;
+								that.salesShow = resp.data.data.salesShow
+								
+								for (var i in that.simulatedDATA.difference) {
+								    that.shopItemInfo[that.simulatedDATA.difference[i].difference] = that.simulatedDATA.difference[i]; //修改数据结构格式，改成键值对的方式，以方便和选中之后的值进行匹配
+								}
+								that.checkItem();
+								
+								
+								// 判断购物车是否已添加及数量
+								let carNum = 0;
+								that.cartList.forEach(function(ele) {
+									if (ele.spcifi_id == that.spcifi_id && ele.goods_id == that.goodId) {
+										carNum = ele.number;
+									}
+								})
+								if(carNum >= (that.promotion_num - that.has_buy)){
+									that.decPrice = ''
+								}
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					// 获取信息
+					goodsComment() {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.comment,
+								data: {
+									token: that.token
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+
+
+					wechatLogin: function() {
+						var that = this;
+						if (!that.code || !that.shop_id || !that.goods_id) {
+							console.log('参数错误');
+							return;
+						}
+						console.log(that.goods_id, 'goods_id')
+						axios({
+								method: 'post',
+								url: that.JumpUrl.loginUrl,
+								data: {
+									code: that.code,
+									shop_id: that.shop_id
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								that.token = resp.data.token;
+								localStorage.setItem('token', that.token);
+								window.history.pushState(null, null, 'http://sy.xfd365.com/mobile/goodsDetails.html?id=' + that.goods_id);
+								if (that.token) {
+									that.initPage()
+								}
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					initPage() {
+						this.getDetail(); //获取详情
+						this.goodsComment(); //评价
+						//this.joinCart();
+						this.getShopInfo();
+					},
+
+					wxSign: function() {
+						var that = this;
+						if (!that.shop_id || !that.goods_id) {
+							alert('参数错误');
+							return;
+						}
+						back_url = 'http://sy.xfd365.com/mobile/goodsDetails.html?id=' + that.goods_id + '&shop_id=' + that.shop_id;
+						axios({
+								method: 'post',
+								// url: 'http://sy.xfd365.com/wx/wechat/get_jump_url',
+								url: 'https://api.xfd365.com/wx/wechat/get_jump_url',
+								data: {
+									back_url: back_url,
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								window.location.href = resp.data.url;
+
+							})
+					},
+
+				},
+				//获取购物车内容
+
+				created: function() {
+					
+					
+					this.loading = 1;
+					//判断登录
+					let shop_id = getQueryString('shop_id');
+					var goodsName = getQueryString('goodsName')
+					this.goodsName = decodeURIComponent(goodsName)
+					this.goodId = getQueryString('id')
+					
+					var cate_id = getQueryString('cate_id')
+					var tabIndex = getQueryString('tabIndex')
+					
+					// var cate_id = localStorage.getItem('cate_id')
+					// var tabIndex = localStorage.getItem('tabIndex')
+					
+					var scrollTop = getQueryString('scrollTop')
+					
+					// console.log(cate_id)
+					if(cate_id){
+						this.cate_id = cate_id
+					}
+					if(tabIndex){
+						this.tabIndex = tabIndex
+					}
+					if(scrollTop){
+						this.scrollTop = scrollTop
+					}
+					
+					if (!shop_id) {
+						shop_id = localStorage.getItem('shop_id');
+					}else if (shop_id) {
+						this.shop_id = shop_id;
+						localStorage.setItem('shop_id', shop_id);
+					}
+					
+					let code = getQueryString('code');
+					if (code) {
+						this.code = code;
+					}
+
+					var token = localStorage.getItem("token");
+					if (token) {
+						this.token = token;
+					}
+
+					let goods_id = getQueryString('id');
+					this.goodsXq.goods_id = goods_id
+					this.goods_id = goods_id
+
+					if (this.code) {
+						this.wechatLogin()
+					} else {
+						if (token) {
+							this.checkToken()
+						} else {
+							this.wxSign()
+						}
+					}
+					
+					this.$nextTick(()=>{
+						this.myCart()
+					})
+				},
+				mounted () {
+				    if (window.history && window.history.pushState) {
+				        // 向历史记录中插入了当前页
+				        history.pushState(null, null, document.URL);
+				        window.addEventListener('popstate', this.cancel, false);
+				    }
+				},
+				destroyed () {
+				    window.removeEventListener('popstate', this.cancel, false);
+				},
+
+			})
+		</script>
+	</body>
+
+</html>

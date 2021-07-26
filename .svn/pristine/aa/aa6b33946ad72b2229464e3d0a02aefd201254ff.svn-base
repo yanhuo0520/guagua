@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>聚农优享</title>
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+		  display: none;
+		}
+		html,body { font-size: 16px; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		/* 导航栏 */
+		.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+		.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+		.van-nav-bar .van-nav-bar__right img { display: block; }
+		.van-nav-bar .van-nav-bar__title { font-weight: bold; }
+
+		/* 选择地址 */
+		.van-contact-card::before { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: -webkit-repeating-linear-gradient(135deg,#FFC3C3 0,#FFC3C3 20%,transparent 0,transparent 25%,#B3DCFA 0,#B3DCFA 45%,transparent 0,transparent 50%); background-size: 80px; content: ''; }
+		.contact .van-cell__title { padding-left: 0.75rem; }
+		.contact .van-cell__title .contact-con { display: flex; align-items: center; }
+		.contact .van-cell__title .contact-con .name { font-size:1rem; font-weight:500; color:rgba(53,53,53,1); padding-right: 0.75rem; }
+		.contact .van-cell__title .contact-con .tel { font-size:0.875rem; font-weight:400; color:rgba(136,136,136,1); padding-right: 2rem; }
+		.contact .van-cell__title .contact-con .tag { font-size:0.625rem; font-weight:400; color:rgba(0,181,120,1);}
+		.contact .van-cell__title .addr { padding: 0; margin: 0; font-size:0.8rem; font-weight:400; color:rgba(53,53,53,1); }
+		.contact .van-cell__title::before { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: -webkit-repeating-linear-gradient(135deg,#FFC3C3 0,#FFC3C3 20%,transparent 0,transparent 25%,#B3DCFA 0,#B3DCFA 45%,transparent 0,transparent 50%); background-size: 80px; content: ''; }
+		
+		/* 选择的商品列表 */
+		.goods-card { background:rgba(255,255,255,1); margin-top: 0.75rem; margin-bottom: 1.2rem; }
+		.goods-card .shop-name {  padding: 0.5rem  0.75rem 0 0.75rem; display: flex; align-items: center; }
+		.goods-card .shop-name img { width: 1.5rem; height: 1.5rem; border-radius: 50% }
+		.goods-card .shop-name span { font-size: 0.9rem; font-weight: 400; color:rgba(51,51,51,1);padding-left: 0.5rem; }
+		.goods-card .van-card { padding-left: 0.75rem; padding-right: 0.75rem; margin-top: 0; background:rgba(255,255,255,1); }
+		.goods-card .van-card .van-card__header { align-content: center; }		
+		.goods-card .van-card .van-card__thumb { width: auto; height: auto; display: flex; align-items: center; margin-right: 0.5rem;}
+		/* .goods-card .van-card .van-card__content { width: 150px; flex: none; -webkit-box-flex: none; -webkit-box-flex: none } */
+		.goods-card .van-card .van-card__title { width: calc(100% - 5rem); font-size:0.9rem; font-weight:600; color:rgba(53,53,53,1); padding-bottom: 0.375rem; }
+		.goods-card .van-card .desc { width: calc(100% - 2.5rem); font-size:0.75rem; font-weight:400; color:rgba(136,136,136,1); }
+	  	.goods-card .van-card .desc p{ padding: 0; margin: 0; word-break:break-all;word-wrap:break-word; }
+	  	.goods-card .van-card .van-card__price { font-size:0.9rem; font-weight:400; color:#353535;}
+		.goods-card .van-card .van-card__price .price { position: absolute; top: 0; right: 0; width: 5rem; text-align: right;text-overflow: ellipsis; overflow: hidden; }
+		.goods-card .van-card .van-card__price .price1 { position: absolute; bottom: 1.25rem; right: 0; width: 5rem; text-align: right;text-overflow: ellipsis; overflow: hidden; font-size:0.75rem; font-weight:400; color:#888888 }
+		.goods-card .van-card .van-card__num { font-size:0.75rem; font-weight:400; color:#888888 }
+		.goods-card .van-card .van-card__num .num { position: absolute; top: 1.25rem; right: 0; width: 2.5rem;text-align: right;text-overflow: ellipsis; overflow: hidden; }
+		.goods-card .van-card .van-card__num .price2 { position: absolute; bottom: 0; right: 0; width: 5rem; text-align: right;text-overflow: ellipsis; overflow: hidden; font-size:0.75rem; font-weight:400; color:#888888 }
+		.goods-card .delivery .van-cell_title,.goods-card .delivery .van-cell__value { font-size:0.9rem; font-weight:400; color:rgba(51,51,51,1);}
+		.goods-card .ship-date { font-size:0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0 0.75rem 0 0.75rem }
+	  	.goods-card .ship-date .ship-date-bg { display: flex; justify-content: space-between; align-items: center; background:rgba(245,245,245,1); padding: 0 0.75rem; }
+		.goods-card .deal-way .van-cell__title { font-size:0.9rem; font-weight:400; color:rgba(136,136,136,1);}
+	  	.goods-card .deal-way .van-cell__value { font-size:0.9rem; font-weight:400; color:rgba(51,51,51,1); }
+		.goods-card .goods_total_price .van-cell { font-size: 0.9rem; color: #333; }
+		.goods-card .goods_total_price .van-cell__value { color: #333; }
+		.goods-card .other-mark .van-cell { font-size: 0.9rem; color: #888888; }
+		.goods-card .other-mark .van-cell .van-cell__value { color: #888888;  }
+		.goods-card .other-mark .van-cell .price { color: #ff2814; font-weight: 400; }
+		.jbc-mark .van-cell .price { color: #ff2814; font-weight: 400; }
+		/* 需付款 */
+		.need-pay-con  { margin-top: 0.75rem; }
+		.need-pay-con .van-cell { font-size: 0.9rem; color: #333; }
+		.need-pay-con .van-cell .van-cell__value { font-size: 1.125rem; color: #ff2814; font-weight: 400; }
+		.need-pay-con .van-cell .van-field__body { font-size: 0.875rem;}
+		/* 提交 */
+		.van-submit-bar__bar .van-submit-bar__text { text-align: left; }
+		.van-submit-bar__bar .van-button { width: 5rem; height: 1.875rem; line-height: 1.875rem; background: linear-gradient(#02cf0a, #00be34);}
+
+		.van-popup .van-cell{ padding: 0; font-size: 0.75rem; color: #999999; }
+		.van-popup .van-cell__title, .van-popup .van-cell__value { flex: none; }
+		.van-popup .van-cell__value { flex: 1; }
+		.van-popup p { margin: 0; }
+		.van-popup .list{width: 100%; height: 114px; margin: 0.625rem auto; display: flex; justify-content: space-between; align-items: center; color: #999999; position: relative; border-radius: 3px; overflow: hidden; background: url(img/yhq2.png) no-repeat;background-size:100% 100% }
+		.van-popup .list .left{ width: 23%; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 40px; }
+	
+		.van-popup.list .left span{ font-size: 1.875rem; font-weight: bold; }
+		.van-popup .list .left .juan-desc { font-size: 0.875rem; }
+		.van-popup .list .right{ flex: 1; display: flex; flex-direction: column; justify-content: center; align-content: space-between; padding: 0 0.875rem; }
+		.van-popup .list .right>div{ display: flex; justify-content: space-between; align-items: center; color: #999999; }
+		.van-popup .list .right>div>p { display: flex; flex-direction: column; font-weight: bold; font-size: 1rem; color: #999999; }
+		.van-popup .list .right>div>p span { font-size: 0.875rem; font-weight: normal; margin-top: 8px; margin-bottom: 15px; }
+		.van-popup .list .right>div>p span { color: #999999; }
+		.van-popup .list .right .time { color: #999999; }
+		.van-popup .list .radio-img { position: absolute; bottom: 0; right: 0; width: 20px; }
+		.van-popup .unUsed .left{ color: #FF2814; }
+		.van-popup .unUsed .right>div { color: #333; }
+		.van-popup .unUsed .right>div>p { color: #333333; }
+		.van-popup .list .right .van-cell { background: transparent; }
+		.van-popup .list.bg1 { background: url(img/yhq.png) no-repeat;background-size:100% 100% }
+		.van-popup .list.bg2 { background: url(img/yhq2.png) no-repeat;background-size:100% 100% }
+		/* loading */
+		.van-popup .full-loading,.full-loading { position: fixed; left: 0; top: 46px; right: 0; bottom: 0; background-color: #fff; z-index: 9999; }
+		.van-popup .full-loading .van-loading,.full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+		/* 底部button */
+		.van-popup .footer-btn { position: fixed; bottom: 0; left: 0; width: 100%; height: 2.8rem; display: flex; align-items: center; justify-content: flex-end;  background-color: rgb(0, 181, 120); box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.1)}
+		.van-popup .footer-btn .van-button { width: 100%; height: 100%; }
+	</style>
+</head>
+<body>
+	<div id="app" v-cloak>
+		<van-nav-bar :border="false" :fixed="true" :placeholder="true"  title="确认订单" left-arrow @click-left="returnLast()" @click-right="JumpIndex" >
+			<template #right>
+				<img src="images/icon/shouye.png" alt="" width="20"  @click="JumpIndex">
+			</template>
+		</van-nav-bar>
+		<template>
+			<template v-if="checkedAddress.id">
+			<van-cell class="contact" center :border="false"  @click="collectAddress()">
+				<template #title>
+					<div class="contact-con">
+						<span class="name">{{ checkedAddress.name }}</span>
+						<span class="tel">{{ checkedAddress.mobile }}</span>
+						<div class="tag" v-if="checkedAddress.is_default">
+							<van-tag color="#e9f8ee" text-color="#13ba82">默认</van-tag>
+						</div>
+					</div>
+					<p class="addr">{{ checkedAddress.full_region + (checkedAddress.street ? ' '+checkedAddress.street : '')+ (checkedAddress.village ? ' '+checkedAddress.village : '')+' '+ checkedAddress.address }}</p>
+				</template>
+				<template #icon>
+					<img style="width: 28px; height: 28px" src="images/receipt.png" alt="">
+				</template>
+				<template #right-icon>
+					<van-icon name="arrow" color="#CCCCCC" size="20" style="line-height: inherit;" />
+				</template>
+			</van-cell>
+		</template>
+		<template v-else >
+			<van-contact-card type="add" add-text="添加收货地址" @click="collectAddress()" />
+		</template>
+		<template v-if="goodsList && goodsList.length > 0">
+			<div class="goods-card">
+                <!-- <div class="shop-name" >
+                  <img src="images/speedBuy/sd.png" alt="">
+                  <span>{{ shop_name }}</span>
+                </div> -->
+				<div v-for="(subItem, subIndex) in goodsList" :key="subIndex">
+					<van-card :title="subItem.goods_name" :centered="true" >
+						<template #thumb>
+							<div>
+								<van-image width="6.25rem" height="6.25rem" fit="contain" :src="subItem.thumb" />
+							</div>
+						</template>
+						<template #desc>
+							<div class="desc">
+								<p v-if="subItem.oneStylesName">{{ subItem.oneStylesTitle }}: {{ subItem.oneStylesName }}</p>
+								<p v-if="subItem.twoStylesName">{{ subItem.twoStylesTitle }}: {{ subItem.twoStylesName }}</p>
+								<p v-if="subItem.threeStylesName">{{ subItem.threeStylesTitle }}: {{ subItem.threeStylesName }}</p>
+							</div>
+						</template>
+						<template #price>
+							<div class="price">
+								<span style="font-size: 0.7rem;">￥</span>{{subItem.price}}
+							</div>
+						</template>
+						<template #num>
+							<div class="num">
+								<span style="font-size: 0.5rem;">X</span>{{subItem.number}}
+							</div>
+						</template>
+						<template #bottom>
+							<div class="bottom">
+								<!-- <van-tag color="#f5f5f5" text-color="#888888">24小时内发货</van-tag> -->
+							</div>
+						</template>
+					</van-card>
+				</div>
+				<div class="goods_total_price">
+					<van-cell title="商品总价" :value="'￥'+goodsTotalPrice" />
+				</div>
+				<div class="other-mark">
+					<template v-if="post_fee > 0">
+						<van-cell title="运费/快递" value-class="price" :value="'￥'+post_fee"/>
+					</template>
+					<template v-else>
+						<van-cell title="运费/快递" value="免邮" />
+					</template>
+				</div>
+			</div>
+		</template>
+		<div class="jbc-mark" v-if="myJbc > 0 && shop_use_jbc == 1">
+			<van-cell center title="是否使用聚农宝"  :label="'可用个数:'+myJbc">
+					<template #right-icon>
+					<van-switch v-model="checked" active-color="#02cf0a" size="24" @change="changeChoose"></van-switch>
+				</template>
+			</van-cell>
+			<template v-if="checked">
+				<van-cell title="聚农宝抵扣" value-class="price" :value="'￥'+jbc_dikou" ></van-cell>
+			</template>
+		</div>
+		<van-cell-group class="need-pay-con" :border="false">
+			<van-cell title="买家留言" ></van-cell>
+			<van-field v-model="order.note" rows="2" autosize type="textarea" placeholder="请输入留言" ></van-field>
+		</van-cell-group>
+		<van-cell-group class="need-pay-con" style="margin-bottom: 0.75rem;" :border="false">
+			<van-cell title="需付款" :value="'￥'+orderTotalPrice" />
+		</van-cell-group>
+		<div style="height: 50px;"></div>
+		<van-submit-bar :price="orderTotalPrice*100" button-text="付款" button-size="small" @submit="confirmOrder" />
+		</template>
+		<div class="full-loading" v-if="isOutFullLoading">
+			<van-loading  color="#1989fa" /> 
+		</div>
+	</div>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				isFullLoading: true,
+				isOutFullLoading: true,
+				radioImg: './images/radio-gou.png',
+				curOrderTotalPrice:'',
+				JumpUrl:{
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+					list: baseUrl('/wx/address/new_lists'),
+					checkout:baseUrl('/wx/cart/team_checkout'),		
+					submit_single:baseUrl('/wx/order/team_submit_single'),
+					my_jbc: baseUrl('/wx/jbc/my_jbc'), //获取聚农宝余额
+				},
+				checkedAddress:{},					//默认的地址
+				goodsList:[],						//订单商品
+				actualPrice:'',						//总价格
+				post_fee:'',						//运费
+				goodsTotalPrice:'',					//商品价格
+				orderTotalPrice:'',					//订单总价格
+				goodsCount:'',						//订单总数量
+				shop_name:'',						//商店名字
+				order_id:'',						//订单id
+				rightOff:{
+					team_id: 0,
+                    found_id: 0,
+                    goods_id: 0,
+                    spcifi_id: 0,
+                    number: 0,
+					token:localStorage.getItem("token"),
+					address_id:'',
+					if_use_jbc: '1'
+				},
+				order:{
+					addressId:'',
+					goods_id:'',
+                    spcifi_id: 0,
+                    number: 0,
+                    team_id: 0,
+                    found_id: 0,
+					note:'',							//买家留言
+					token:localStorage.getItem("token"),
+				},
+				address_id:'',
+				token: localStorage.getItem("token"),
+				collect:{
+					token:localStorage.getItem("token"),
+				},
+				goodsArr: '', // 当前订单所有商品id字符串
+
+				checked: true,
+				jbc_dikou: 0,
+				myJbc: 0,
+				shop_use_jbc: 0, // 店铺是否开启的聚农宝 0-未开启 1-开始
+			},
+			mounted() {
+				if (window.history && window.history.pushState) {
+					// 向历史记录中插入了当前页
+					history.pushState(null, null, document.URL);
+					window.addEventListener('popstate', this.returnLast, false);
+				}
+			},
+			methods: {
+				//跳转首页
+				JumpIndex(){
+					window.location.href = "index.html?v=11";
+				},
+				// 获取聚农宝余额
+				getMyJbc() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.my_jbc,
+						data: { token: localStorage.getItem("token") }
+					})
+					.then(function (resp) { //返回数据
+						// resp.data = JSON.parse(resp.data)
+						if(resp.data.errno == 0) {
+							that.myJbc = Number(resp.data.data)
+						}
+					}).catch(function (error) {
+						console.log('error', error);
+
+					})
+				},
+				changeChoose() {
+					if(this.checked) {
+						this.rightOff.if_use_jbc = '1'
+					} else {
+						this.rightOff.if_use_jbc = '0'
+					}
+					this.myCart()
+				},
+				//返回上一页
+				returnLast(){
+					// window.history.go(-1);
+					let href = window.location.href;
+					if(href.indexOf("cart") > -1){
+						window.location.href = "shoppingCart.html"
+					}else if(href.indexOf("speedBuy") > -1){
+						window.location.href = "speedBuy.html?v=1"
+					}else if(href.indexOf("is_now") > -1){
+						if(getQueryString('cate_id')){
+							window.location.href = "goodsDetails.html?id=" + getQueryString('id') + '&cate_id=' + getQueryString('cate_id')+ '&tabIndex=' + getQueryString('tabIndex')+'&v=1';
+						}else{
+							window.location.href = "goodsDetails.html?id=" + getQueryString('id') + '&index=1&v=1'
+						}
+					}else if(href.indexOf("team_id") > -1){
+						if(getQueryString('cate_id')){
+							window.location.href = "groupGoodsDetails.html?id=" + getQueryString('id') + '&cate_id=' + getQueryString('cate_id')+ '&tabIndex=' + getQueryString('tabIndex')+ '&team_id='+getQueryString('team_id')+ '&found_id='+getQueryString('found_id')+'&v=1';
+						}else{
+							window.location.href = "groupGoodsDetails.html?id=" + getQueryString('id') + '&team_id='+getQueryString('team_id')+ '&found_id='+getQueryString('found_id')+ '&index=1&v=1'
+						}
+					}else{
+						window.history.go(-1);
+					}
+				},
+				collectAddress(){
+					let href = window.location.href;
+					let addressid = this.checkedAddress.id ? this.checkedAddress.id : 0;
+					if(href.indexOf("cart") > -1){
+						window.location.href = "collectAddress.html?from=order&source=cart&addressid="+addressid +'&v=1'
+					}else if(href.indexOf("speedBuy") > -1){
+						window.location.href = "collectAddress.html?from=order&source=speedBuy&addressid="+addressid+'&v=1'
+					}else if(href.indexOf("is_now") > -1){
+						if(getQueryString('cate_id')){
+							window.location.href = "collectAddress.html?from=order&source=is_now&id=" + getQueryString('id') + '&cate_id=' + getQueryString('cate_id')+ '&tabIndex=' + getQueryString('tabIndex') +'&addressid='+ addressid+'&v=1'
+						}else{
+							window.location.href = "collectAddress.html?from=order&source=is_now&id=" + getQueryString('id') + '&index=1&addressid='+addressid+'&v=1'
+						}
+						// window.location.href = "collectAddress.html?from=order&source=is_now"+'&v=1'
+					}else if(getQueryString('source') == 'detail'){
+						window.location.href = "collectAddress.html?from=order&source=detail&addressid="+addressid+'&team_id=' + getQueryString('team_id')+'&id=' + getQueryString('id')+'&found_id=' + getQueryString('found_id')+'&spcifi_id=' + getQueryString('spcifi_id')+'&number=' + getQueryString('number')+'&v=1'
+					}else{
+						window.location.href = "collectAddress.html?addressid="+addressid+'&v=1'
+					}
+					
+				},
+				getParam(paramName){
+					if(!paramName){
+						return '';
+					}
+					let val='';
+					var href=window.location.href;
+					if(href.indexOf(paramName) !=-1){
+						val= window.location.href.split(paramName+"=")[1];
+					}
+					return val;
+				},
+				// 确认订单
+				confirmOrder(){
+					let that = this;
+					that.order.addressId = that.checkedAddress.id;
+						axios({
+							method: 'post',
+							url: that.JumpUrl.submit_single,
+							data:that.order
+						})
+						.then(function (resp) {
+							let data=resp.data
+							if(data.errno == 0){
+								that.order_id = resp.data.order_id;
+								if (that.order_id) {
+									// localStorage.setItem('order_id',that.order_id);
+									let href = window.location.href;
+                                    let source = getQueryString('source')
+									// console.log(href)
+									if(href.indexOf("cate_id") > -1){
+										let id = getQueryString('id');
+										let cate_id = getQueryString('cate_id');
+										let tabIndex = getQueryString('tabIndex');
+										window.location.href = "pay.html" +'?order_id='+that.order_id + '&id='+id+'&cate_id='+cate_id+'&tabIndex='+tabIndex+'&payType=1';
+									}else if(href.indexOf("team_id") > -1){
+										let id = getQueryString('id');
+										window.location.href = "pay.html" +'?order_id='+that.order_id + '&id='+id + '&index=1&payType=1'+ '&team_id='+getQueryString('team_id')+ '&found_id='+getQueryString('found_id')+ '&spcifi_id='+getQueryString('spcifi_id')+ '&number='+getQueryString('number')+'&index=1';
+									}else if(href.indexOf("speedBuy") > -1){
+										window.location.href = "pay.html" +'?order_id='+that.order_id + '&source=speedBuy&payType=1';
+									}else{
+										window.location.href = "pay.html" +'?order_id='+that.order_id+'&payType=1';
+									}
+									// window.location.href = "pay.html" +'?'+that.order_id;
+								}
+							}else{
+								that.$toast.fail(data.errmsg)
+							}
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				
+
+				//获取订单内容
+				groupGoodsDetail(isFirst){
+					let that = this;
+					that.isOutFullLoading = true;
+
+						axios({
+							method: 'post',
+							url: that.JumpUrl.checkout,
+							data:that.rightOff
+						})
+						.then(function (resp) {
+							if(resp.data.errno == 1){
+                                that.isOutFullLoading = false
+								that.$toast.fail(resp.data.errmsg)
+								return;
+							}
+							
+							// console.log(resp.data.data)
+							that.checkedAddress = resp.data.data.checkedAddress;
+                            resp.data.data.checkedGoods.number = that.rightOff.number;
+							that.goodsList = [resp.data.data.checkedGoods];
+
+							that.goodsTotalPrice = resp.data.data.goodsTotalPrice;
+							that.orderTotalPrice = resp.data.data.orderTotalPrice;
+							that.curOrderTotalPrice = resp.data.data.goodsTotalPrice;
+							that.post_fee = Number(resp.data.data.post_fee);
+							that.jbc_dikou = Number(resp.data.data.jbc_dikou)
+							that.shop_use_jbc =  resp.data.data.shop_use_jbc
+							that.goodsCount = resp.data.data.goodsCount;
+                            that.isOutFullLoading = false;
+						}).catch(function (error) {
+							that.isOutFullLoading = false;
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				
+				//获取收货地址
+				collectList(){
+					let that = this;
+					let form_data = new FormData();
+						makeFormData(that.collect,form_data);
+						axios({
+							method: 'post',
+							url: that.JumpUrl.list,
+							data:form_data
+						})
+						.then(function (resp) {
+							resp.data.data.forEach(ele=>{
+								if(ele.is_default == 1){
+									that.checkedAddress = ele;
+									this.rightOff.address_id = ele.id
+								}
+								
+							})
+				
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+				
+						})
+				},
+				
+				setWx() {
+					let that = this;
+					let shopInfo = JSON.parse(localStorage.getItem('shopInfo'))
+					// let shopInfo = that.shopInfo;
+					let share_title = shopInfo.share_title ? shopInfo.share_title : shopInfo.shop_name
+					let share_introduction = shopInfo.share_introduction
+					let shop_id = shopInfo.id
+					let logo = shopInfo.share_pic ? shopInfo.share_pic : shopInfo.logo
+					let lock_user_id = localStorage.getItem('lock_user_id')
+					wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {
+				
+							}
+						})
+				
+						wx.updateTimelineShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {},
+						})
+					});
+				},
+				getJssdk: function() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function(resp) {
+						let data = resp.data
+					
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.share_url = sdkData.url;
+						that.setWx();
+				
+					})
+				},
+
+			},
+			created:function(){
+				var url =location.href;
+				this.rightOff.team_id = getQueryString('team_id');
+                this.rightOff.found_id = getQueryString('found_id');
+                this.rightOff.goods_id = getQueryString('id');
+                this.rightOff.spcifi_id = getQueryString('spcifi_id');
+                this.rightOff.number = getQueryString('number');
+
+
+				this.order.goods_id = getQueryString('id');
+                this.order.spcifi_id = getQueryString('spcifi_id');
+                this.order.number = getQueryString('number');
+                this.order.team_id = getQueryString('team_id');
+                this.order.found_id = getQueryString('found_id');
+                this.order.note = getQueryString('note');
+				// this.getUserInfo()
+				this.getMyJbc()
+				this.groupGoodsDetail(true);
+				if(!getQueryString('address_id')){
+					this.collectList()
+				}else{
+					this.rightOff.address_id=getQueryString('address_id')
+				}
+				this.getJssdk();
+
+			}
+		})
+	</script>
+</body>
+
+</html>

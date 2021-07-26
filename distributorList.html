@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<title>聚农优享</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+		<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+		<!-- <script src="./js/rem.js"></script> -->
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js?v=3"></script>
+		<script type="text/javascript" src="js/api.js"></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+		<script type="text/javascript" src="js/aui-actionsheet.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+		<style>
+			.van-nav-bar .van-icon{
+				color: #333;
+			}
+			.top{
+				display: flex;
+				justify-content: space-around;
+				align-items: center;
+				background: #fff;
+				height: 65px;
+				margin-bottom: 10px;
+			}
+			.top>.van-dropdown-menu{
+				background: #F5F5F5;
+				width: 90%;
+				height: 35px;
+				border-radius: 20px;
+				color: #333;
+			}
+			.top span{
+				color: #333;
+			}
+			.top .van-dropdown-menu__title{
+				position: static;
+			}
+			.top .van-dropdown-menu__item{
+				justify-content: flex-start;
+				position: relative;
+			}
+			.top .van-dropdown-menu__title::after{
+				right: 10px;
+			}
+			
+			#app>p{
+				color: #28BD5C;
+				margin-left: 15px;
+				margin-bottom: 10px;
+			}
+			
+			.list{
+				background-color: #fff;
+				margin-bottom: 10px;
+				padding-bottom: 10px;
+			}
+			.list .van-cell{
+				padding: 12px 16px;
+			}
+			.list .van-cell img{
+				width: 25px;
+				height: 25px;
+				border-radius: 50%;
+				margin-right: 10px;
+			}
+			.row{
+				display: flex;
+				align-items: center;
+				height: 37px;
+				padding-left: 15px;
+			}
+			.row span{
+				display: flex;
+				align-items: center;
+			}
+			.row span span{
+				color: #999999;
+			}
+			.row img{
+				width: 15px;
+				height: 15px;
+				margin-right: 5px;
+				margin-top: 2px;
+			}
+			.column .van-button{
+				display: block;
+				width: 80%;
+				margin: 10px auto;
+				background: #00BE34;
+				color: #fff;
+				border-radius: 20px;
+				height: 35px;
+				line-height: 35px;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 收入记录，用户分销贡献 -->
+		<div id="app">
+			<van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="用户分销贡献" left-arrow @click-left="returnLast()" v-if="cus_id"></van-nav-bar>
+			<van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="收入记录" left-arrow @click-left="returnLast()" v-else></van-nav-bar>
+			<div class="top">
+				<van-dropdown-menu active-color="#28BD5C">
+				  <van-dropdown-item v-model="statusName" :options="statusArr" @change="selectList" />
+				</van-dropdown-menu>
+			</div>
+			<p>共{{count}}条记录</p>
+
+			<div v-if="cus_id">
+				<van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+					<div class="list" v-for="(item,index) in list" :key="index">
+						<van-cell :title="item.in_id" is-link @click="jump('distributorOrderDetail.html?order_id=' + item.order_id)">
+							<template #icon>
+								<img src="images/ID.png" alt="">
+							</template>
+						</van-cell>
+						<div class="row">
+							<img src="images/no.png" alt="">
+							<span><span>贡献编号：</span>{{item.in_code}}</span>
+						</div>
+						<div class="row">
+							<img src="images/money.png" alt="">
+							<span><span>贡献金额：</span>{{item.money}}</span>
+						</div>
+						<div class="row">
+							<img src="images/status.png" alt="">
+							<span><span>贡献状态：</span>{{item.status == 1?'在途中':item.status == 2?'可提现':item.status==3?'已提现':'已作废（订单退款）'}}</span>
+						</div>
+						<div class="row">
+							<img src="images/time.png" alt="">
+							<span><span>贡献时间：</span>{{item.add_time}}</span>
+						</div>
+					</div>
+				</van-list>
+			</div>
+			<div v-else>
+				<van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+					<div class="list" v-for="(item,index) in list" :key="index">
+						<van-cell :title="item.in_id" is-link @click="jump('distributorOrderDetail.html?order_id=' + item.order_id)">
+							<template #icon>
+								<img src="images/ID.png" alt="">
+							</template>
+						</van-cell>
+						<div class="row">
+							<img src="images/no.png" alt="">
+							<span>收入编号：{{item.in_code}}</span>
+						</div>
+						<div class="row">
+							<img src="images/money.png" alt="">
+							<span>收入金额：{{item.money}}</span>
+						</div>
+						<div class="row">
+							<img src="images/status.png" alt="">
+							<span>收入状态：{{item.status == 1?'在途中':item.status == 2?'可提现':item.status==3?'已提现':'已作废（订单退款）'}}</span>
+						</div>
+						<div class="row">
+							<img src="images/time.png" alt="">
+							<span>收入时间：{{item.add_time}}</span>
+						</div>
+						<div class="column" v-if="item.status == 2">
+							<van-button @click="withdraw(item.in_code)">提现</van-button>
+						</div>
+					</div>
+				</van-list>
+			</div>
+
+		</div>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app',
+				data: {
+					jumpUrl: {
+						list: baseUrl('/wx/distribute/shop_distributor_income'),
+						withdrawal:baseUrl('/wx/distribute/distributor_one_income_withdrawal'),
+						jssdkUrl: baseUrl('/wx/jssdk/getSignPackage'),
+					},
+					token: localStorage.getItem('token'),
+					cus_id: '',
+
+					statusName: 0,
+					statusArr:[
+						{ text: '全部', value: 0 },
+						{ text: '在途中', value: 1 },
+						{ text: '可提现', value: 2 },
+						{ text: '已提现', value: 3 },
+						{ text: '已作废（订单退款）', value: 4 },
+					],
+					list: [],
+					page: 1,
+					loading: false,
+					finished: false,
+					begin: "",
+					end: "",
+					
+					list:[],
+					count:0
+				},
+				mounted() {
+					this.cus_id = getQueryString('cus_id')
+					this.getJssdk()
+				},
+				methods: {
+					setWx() {
+						let that = this;
+						let shopInfo = JSON.parse(localStorage.getItem('shopInfo'))
+						// let shopInfo = that.shopInfo;
+						let share_title = shopInfo.share_title ? shopInfo.share_title : shopInfo.shop_name
+						let share_introduction = shopInfo.share_introduction
+						let shop_id = shopInfo.id
+						let logo = shopInfo.share_pic ? shopInfo.share_pic : shopInfo.logo
+						let lock_user_id = localStorage.getItem('lock_user_id')
+						wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+							wx.updateAppMessageShareData({
+								title: share_title, // 分享标题
+								desc: share_introduction, // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function () {
+					
+								}
+							})
+					
+							wx.updateTimelineShareData({
+								title: share_title, // 分享标题
+								desc: share_introduction, // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function () {},
+							})
+						});
+					},
+					getJssdk: function() {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.jumpUrl.jssdkUrl,
+							//data: form_data
+							data: {
+								token: that.token,
+								url: encodeURIComponent(location.href.split('#')[0])
+							}
+						}).then(function(resp) {
+							let data = resp.data
+						
+							let sdkData = resp.data
+							wx.config({
+								debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+								appId: sdkData.appId, // 必填，公众号的唯一标识
+								timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+								nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+								signature: sdkData.signature, // 必填，签名
+								jsApiList: [
+									'updateAppMessageShareData',
+									'updateTimelineShareData',
+								] // 必填，需要使用的JS接口列表
+							});
+							that.setWx();
+						})
+					},
+					//返回上一页
+					returnLast() {
+						window.history.go(-1);
+					},
+					jump(url){
+						window.location.href = url
+					},
+					formatDate(strTime, format) {
+						let date = new Date(strTime)
+						let fmt = format || 'yyyy-MM-dd hh:mm'
+						var o = {
+							'M+': date.getMonth() + 1, // 月份
+							'd+': date.getDate(), // 日
+							'h+': date.getHours(), // 小时
+							'm+': date.getMinutes(), // 分
+							's+': date.getSeconds(), // 秒
+							'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
+							'S': date.getMilliseconds() // 毫秒
+						}
+						if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+						for (var k in o) {
+							if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : ((
+								'00' + o[k]).substr(('' + o[k]).length)))
+						}
+						return fmt
+					},
+
+					selectList() {
+						let cus = ''
+						if(this.cus_id){
+							cus = this.cus_id
+						}else{
+							cus = ''
+						}
+						axios.post(this.jumpUrl.list, {
+							page: this.page,
+							nickname: this.name,
+							token: this.token,
+							status: this.statusName,
+							cus_id: cus
+						}).then(res => {
+							if (res.data.errno == 0) {
+								this.count = res.data.data.count
+								if (res.data.data.data.length != 0) {
+									var data = res.data.data.data;
+									if (res.data.data.total_page == 1) {
+										this.list = data;
+									} else {
+										this.list = this.list.concat(data);
+									}
+									if (this.page < res.data.data.total_page) {
+										this.page++;
+									}
+									this.loading = false;
+								} else {
+									// this.$toast("暂无记录");
+									this.list = [];
+									this.loading = false;
+									this.finished = true;
+								}
+								// 数据全部加载完成
+								if (this.list.length == res.data.data.count) {
+									this.finished = true;
+								}
+							}else{
+								this.loading = false
+								this.finished = true
+							}
+						})
+					},
+					onLoad(){
+						this.selectList()
+					},
+					
+					// 提现
+					withdraw(in_code){
+						this.$dialog.confirm({
+						  title: '标题',
+						  message: '确定提现吗？',
+						})
+						  .then(() => {
+						    // on confirm
+							axios.post(this.jumpUrl.withdrawal,{
+								in_code: in_code,
+								token: this.token
+							}).then(res=>{
+								if(res.data.errno == 0){
+									this.$toast.success(res.data.errmsg)
+									this.page = 1
+									this.selectList()
+								}else{
+									this.$toast.fail(res.data.errmsg)
+								}
+							})
+						  })
+						  .catch(() => {
+						    // on cancel
+						  });
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

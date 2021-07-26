@@ -1,0 +1,359 @@
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>呱呱农服</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		html,body { font-size: 16px; height: 100%; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		#app { min-height: 100%; background: #04d86a; padding-bottom: 2rem; }
+		div { box-sizing: border-box; }
+		/* 导航栏 */
+		.van-nav-bar { background: transparent; }
+        .van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+        .van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+        .van-nav-bar .van-nav-bar__right img { display: block; }
+        .van-nav-bar .van-nav-bar__title { font-weight: bold; color: #fff; }
+        /* 门店信息 */
+		.detail-info { width: 90%; background: #fff; margin: 0 auto; margin-top: 0.5rem; border-radius: 10px; overflow: hidden;}
+		.detail-info .tit { padding-top: 10px; padding-left: 10px; font-weight: bold; font-size: 0.875rem;}
+		.btn-con { padding: 2rem 10%; }
+		.btn-con .van-button { width: 100%; }
+		.van-checkbox-group { padding: 10px 16px; }
+		.van-checkbox-group .van-checkbox { float: left; margin-right: 0.5rem; margin-bottom: 0.5rem;}
+		.clear {clear: both;}
+
+		.upload-con { padding: 10px 16px; }
+		.upload-con .van-uploader__upload { margin: 0; }
+
+		.van-checkbox__label--disabled { color: #323233; }
+		.van-checkbox__icon--checked .van-icon { color: #fff!important;  background-color: #07c160; border-color: #07c160; } 
+	</style> 
+</head>
+<body>
+	<div id="app" v-cloak>
+        <van-nav-bar  :border="false" title="门店信息"></van-nav-bar>
+        <div class="detail-info">
+			<div class="tit">负责人姓名</div>
+			<van-field v-model="userName"  placeholder="请输入负责人姓名" clearable readonly></van-field>
+			<div class="tit">负责人电话</div>
+			<van-field v-model="userTel" type="tel" placeholder="请输入负责人电话" clearable readonly></van-field>
+			<div class="tit">负责人地址</div>
+			<van-field v-model="userAddr"  placeholder="请输入负责人地址" clearable readonly></van-field>
+			<div class="tit">营业执照</div>
+			<div class="upload-con">
+				<van-uploader v-model="blPicList" :deletable="false" :after-read="afterReadBlPic" :max-count="1"></van-uploader>
+			</div>
+			<div class="tit">门店认证有效期</div>
+			<van-field v-model="endDate"  placeholder="请选择门店认证有效期" readonly ></van-field>
+			<div class="tit">门店服务范围</div>
+			<van-checkbox-group v-model="serveArr">
+				<van-checkbox :disabled="true" shape="square" checked-color="#07c160" name="预包装种子销售">预包装种子销售</van-checkbox>
+				<van-checkbox :disabled="true" shape="square" checked-color="#07c160" name="非限制类农药销售">非限制类农药销售</van-checkbox>
+				<van-checkbox :disabled="true" shape="square" checked-color="#07c160" name="化肥销售">化肥销售</van-checkbox>
+				<van-checkbox :disabled="true" shape="square" checked-color="#07c160" name="农险服务">农险服务</van-checkbox>
+				<van-checkbox :disabled="true" shape="square" checked-color="#07c160" name="粮食收储">粮食收储</van-checkbox>
+				<van-checkbox :disabled="true" shape="square" checked-color="#07c160" name="农机服务（含飞防）">农机服务（含飞防）</van-checkbox>
+				<van-checkbox :disabled="true" shape="square" checked-color="#07c160" name="农机具销售（含设备）">农机具销售（含设备）</van-checkbox>
+				<van-checkbox :disabled="true" shape="square" checked-color="#07c160" name="农技服务（含订单、培训）">农技服务（含订单、培训）</van-checkbox>
+				<van-checkbox :disabled="true" shape="square" checked-color="#07c160" name="劳务服务（含运输）">劳务服务（含运输）</van-checkbox>
+				<van-checkbox :disabled="true" shape="square" checked-color="#07c160" name="农业供应链金融服务">农业供应链金融服务</van-checkbox>
+			</van-checkbox-group>
+			<div class="clear"></div>
+			
+			<div class="tit">店铺图片</div>
+			<div class="upload-con">
+				<van-uploader v-model="shopPicList" :deletable="false" :after-read="afterReadShopPic" :max-count="1"></van-uploader>
+			</div>
+			<!-- <div class="btn-con">
+				<van-button type="primary" round @click="submit">提交</van-button>
+			</div> -->
+		</div>
+		<van-calendar v-model="calendarShow" @confirm="onCalendarConfirm" />
+	</div>
+
+	<script>
+		
+		var app = new Vue({
+			el: '#app',
+			data: {
+				qrcode_id: '',
+				userName: '',
+				userTel: '',
+				userAddr: '',
+				endDate: '',
+				serveArr: [],
+				calendarShow: false,
+				blPicList: [],
+				shopPicList: [],
+				lastData: '', // 上次提交的数据
+			},
+			methods: {	
+				// 根据id获取详情
+				getDetailById(id) {
+					let that = this
+					that.$toast.loading({
+						message: '加载中...',
+						forbidClick: true,
+						duration: 0
+					});
+					axios({
+						method: 'post',
+						url: 'http://sy.xfd365.com/index.php/wx/user/qrcode_lists',
+						data: {qrcode_id: id}
+					})
+					.then(function(resp) { //返回数据
+						that.$toast.clear()
+						if(resp.data.errno == 0) {
+							let data = resp.data.data
+							that.userName = data.name;
+							that.userTel = data.phone;
+							that.userAddr = data.address;
+							that.endDate = data.validity;
+							that.serveArr = data.service.split('#')
+							that.blPicList = [{
+								url: data.business_license,
+								status: 'done',
+								message: '',
+								isImage: true 
+							}],
+							that.shopPicList = [{
+								url: data.pic,
+								status: 'done',
+								message: '',
+								isImage: true 
+							}]
+						} else {
+							that.$toast(resp.data.errmsg)
+						}
+					}).catch(function(error) {
+						that.$toast.clear()
+						that.$toast('服务异常,请稍后重试!')
+						//请求失败
+						console.log('error', error);
+					})
+				},
+				// 上传营业执照
+				afterReadBlPic(file) {
+					let that = this
+					that.blPicList = [{
+						url: 'https://img.yzcdn.cn/vant/leaf.jpg',
+						status: 'uploading',
+						message: '上传中...',
+					}]
+					let formdata = new FormData();
+					formdata.append("file", file.file);	
+					axios({
+						method: 'post',
+						url: 'http://sy.xfd365.com/wx/users/uploadImg',
+						data: formdata
+					})
+					.then(function(resp) { //返回数据
+						if(resp.data.errno == 0) {
+							that.blPicList = [{
+								url: resp.data.data.url,
+								status: 'done',
+								message: '',
+							}]
+						} else {
+							that.$toast(resp.data.errmsg)
+							that.blPicList = [{
+								url: 'https://img.yzcdn.cn/vant/leaf.jpg',
+								status: 'failed',
+								message: '上传失败',
+							}]
+						}
+
+					}).catch(function(error) {
+						that.$toast('服务异常,请稍后重试!')
+						that.blPicList = [{
+							url: 'https://img.yzcdn.cn/vant/leaf.jpg',
+							status: 'failed',
+							message: '上传失败',
+						}]
+						//请求失败
+						console.log('error', error);
+
+					})
+				},
+				// 上传店铺图片
+				afterReadShopPic(file) {
+					let that = this
+					that.shopPicList = [{
+						url: 'https://img.yzcdn.cn/vant/leaf.jpg',
+						status: 'uploading',
+						message: '上传中...',
+					}]
+					let formdata = new FormData();
+					formdata.append("file", file.file);	
+					axios({
+						method: 'post',
+						url: 'http://sy.xfd365.com/wx/users/uploadImg',
+						data: formdata
+					})
+					.then(function(resp) { //返回数据
+						if(resp.data.errno == 0) {
+							that.shopPicList = [{
+								url: resp.data.data.url,
+								status: 'done',
+								message: '',
+							}]
+						} else {
+							that.$toast(resp.data.errmsg)
+							that.shopPicList = [{
+								url: 'https://img.yzcdn.cn/vant/leaf.jpg',
+								status: 'failed',
+								message: '上传失败',
+							}]
+						}
+
+					}).catch(function(error) {
+						that.$toast('服务异常,请稍后重试!')
+						that.shopPicList = [{
+							url: 'https://img.yzcdn.cn/vant/leaf.jpg',
+							status: 'failed',
+							message: '上传失败',
+						}]
+						//请求失败
+						console.log('error', error);
+
+					})
+				},
+				// 选择营业执照有效期
+				onCalendarConfirm(date) {
+					this.endDate = dateFormat('yyyy-MM-dd', date)
+					this.calendarShow = false
+				},
+				// 提交编辑信息
+				submit() {
+					let that = this
+					let reg = /^1[3456789]\d{9}$/
+					if(!that.userName) {
+						that.$toast('请输入负责人姓名')
+						return
+					}
+					if(!reg.test(that.userTel)) {
+						that.$toast('请输入正确的负责人电话')
+						return
+					}
+					if(!that.userAddr) {
+						that.$toast('请输入负责人地址')
+						return
+					}
+					if(!that.blPicList || that.blPicList.length == 0) {
+						that.$toast('请上传营业执照')
+						return
+					}
+					if(!that.endDate) {
+						that.$toast('请选择营业执照有效期')
+						return
+					}
+					if(!that.serveArr || that.serveArr.length == 0) {
+						that.$toast('请至少选择一项服务范围')
+						return
+					}
+					if(!that.shopPicList || that.shopPicList.length == 0) {
+						that.$toast('请上传店铺图片')
+						return
+					}
+					if(that.blPicList && that.blPicList.length > 0) {
+						if(that.blPicList[0].status == 'uploading') {
+							that.$toast('营业执照正在上传中,请稍后重试')
+							return
+						}
+						if(that.blPicList[0].status == 'failed') {
+							that.$toast('营业执照上传失败,请重新上传')
+							return
+						}
+					}
+					if(that.shopPicList && that.shopPicList.length > 0) {
+						if(that.shopPicList[0].status == 'uploading') {
+							that.$toast('店铺图片正在上传中,请稍后重试')
+							return
+						}
+						if(that.shopPicList[0].status == 'failed') {
+							that.$toast('店铺图片上传失败,请重新上传')
+							return
+						}
+					}
+					let params = {
+						qrcode_id: that.qrcode_id,
+						name: that.userName,
+						phone: that.userTel,
+						address: that.userAddr,
+						business_license: that.blPicList[0].url,
+						validity: that.endDate,
+						pic: that.shopPicList[0].url,
+						service: that.serveArr.join('#')
+					}
+					if(JSON.stringify(that.lastData) == JSON.stringify(params)) {
+						that.$toast('内容无变化,请勿重复提交!')
+						return
+					}
+					axios({
+						method: 'post',
+						url: 'http://sy.xfd365.com/index.php/wx/user/qrcode_add',
+						data: params
+					})
+					.then(function(resp) { //返回数据
+						if(resp.data.code == 1) {
+							that.lastData = params
+							that.$toast('提交成功')
+						} else {
+							that.$toast(resp.data.errmsg)
+						}
+					}).catch(function(error) {
+						that.$toast('服务异常,请稍后重试!')
+						//请求失败
+						console.log('error', error);
+
+					})
+				}
+			},
+			created() {
+				let id = getQueryString('id');
+				if(id) {
+					this.qrcode_id = id
+					this.getDetailById(id)
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>

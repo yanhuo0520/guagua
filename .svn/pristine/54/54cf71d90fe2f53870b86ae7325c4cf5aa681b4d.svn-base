@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
+	<title>微商超</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<!-- 	<link rel="stylesheet" type="text/css" href="./css/aui.css" /> -->
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="css/index.css">
+
+	<script src="./js/rem.js"></script>
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/vue-resource.js"></script>
+	<script type="text/javascript" src="js/publick.js"></script>
+	<script type="text/javascript" src="./js/api.js" ></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		.header{
+			font-size: 1.5em;
+			padding: 1em;
+			color: #fff;
+			background-image:url(./images/headerBg.png);
+			background-repeat:no-repeat;
+			background-size:100% auto;
+			height: 12em;
+
+		}
+
+		img {
+			vertical-align: top;
+		}
+
+		ul li {
+			list-style: none;
+		}
+		.slide {
+			width: 6.8rem;
+			height: 150px;
+			margin: 0 auto;
+			/* margin-top: 50px;  */
+			overflow: hidden;
+			position: relative;
+			top:-3rem;
+			left: 0.7rem;
+		}
+		.slideshow {
+			width: 6rem;
+			height: 150px;
+		}
+		.slide li {
+			position: absolute;
+		}
+		.slide img {
+			width: 95px;
+			height: 150px;
+		}
+		.bar {
+			position: absolute;
+			width: 100%;
+			bottom: 10px;
+			margin: 0 auto;
+			z-index: 10;
+			text-align: center;
+		}
+		.bar span {
+			width: 20px;
+			height: 5px;
+			/*    border: 1px solid ;  */
+			background: white;
+			display: inline-block;
+			margin-right: 10px;
+		}
+		.slide .active {
+			background: #bfd6b6 !important;
+		}
+
+		/*图标导航*/
+		.nav{
+			display:flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-content: space-between;
+			padding-top: 0.24rem;
+			background-color:#fff;
+			margin-top:20px;
+			padding:0 2%;
+		}
+		.nav img{
+			width: 0.8rem;
+			height: 0.8rem;
+		}
+		.nav li{
+			text-align: center;
+			font-size: 0.24rem;
+			color: #444;
+			margin:0.14rem;
+
+		}
+
+		.textTitle{
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space:nowrap;
+			width:1.5rem;
+			height:0.5rem;
+			display:block;
+		}
+		.bottom-nav{
+			/*margin-top: 0.2rem;*/
+
+			width: 100%;
+			height: calc(1rem + 10px);
+			border-bottom: 1px solid #e6e6e6;
+			position: fixed;
+			bottom: 0;
+			/*left: 50%;
+			margin-left: -3.75rem;*/
+			display:flex;
+			background-color: #fff;
+
+		}
+
+		.bottom-nav .box1{
+			text-align:center;
+			padding-top:10px;
+		}
+		.bottom-nav .box1 img{
+			width: 0.46rem;
+			height: 0.46rem;
+			padding-bottom:5px;
+
+		}
+		
+		.sousuo{
+			position: relative;
+		}
+		.sousuo input{
+			border: none;
+			width: 95%;
+			height:35px;
+			background:#fff;
+			border-radius:35px;
+			padding-left: 10px;
+			font-size: 14px;
+		}
+		.sousuo img{
+			position: absolute;
+			right: 4%;
+			top: 10px;
+			width: 15px;
+			height: 15px;
+		}
+		
+		.xixuan{
+			width: 38%;
+			height: 200px;
+			padding: 10px;
+			margin-top: 0.3rem;
+			margin-left: 0.35rem;
+			border-radius: 5px;
+			background-color:#fff;
+		}
+		.jingT{
+			min-width: 7.5rem;
+			min-height: 4.2rem;
+			margin-bottom:1.56rem;
+			padding-bottom:0.3rem;
+			background-color: #f5f5f5;
+			display: flex;
+			justify-content: flex-start;
+			flex-wrap: wrap;
+		}
+		.xixuan img{
+			width: 100%;
+			height: 140px;
+		}
+		.xixuan .box1{
+			width: 100%;
+			margin:0.1rem;
+		
+		}
+		.xixuan>p{
+			font-size: 14px;
+			margin-top: 10px;
+			width: 100%;
+			overflow: hidden;
+			text-overflow:ellipsis;
+			white-space:nowrap;
+		}
+		
+		.xixuan span{
+			font-size: 0.22rem;
+			color: #989898;
+			line-height: 0.4rem;
+		}
+		.xixuan .price{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-top: 10px;
+		}
+		.xixuan .price p span:first-of-type{
+			color: #FF5E5B;
+			font-size: 14px;
+		}
+		/*.xixuan .price p span:last-of-type{
+			color: rgba(0,0,0,0.3);
+			font-size: 12px;
+			text-decoration: line-through;
+		}*/
+		.xixuan .price>span{
+			border: 2px solid #EDEDED;
+			width: 25px;
+			height: 25px;
+			text-align: center;
+			line-height: 25px;
+			border-radius: 50%;
+			font-size: 20px;
+			color: #5FC22A;
+		}
+		
+		
+		.resou{
+			color: #888;
+			font-size: 12px;
+			display: flex;
+			justify-content: flex-start;
+			line-height: 24px;
+			margin: 10px 0;
+			position: relative;
+		}
+		.resou ul{
+			display: flex;
+			justify-content: flex-start;
+			width: 70%;
+			flex-wrap: wrap;
+		}
+		.resou ul li{
+			padding: 0 6px;
+			background:rgba(245,245,245,1);
+			border-radius:19px;
+			margin-left: 12px;
+		}
+		.resou img{
+			width: 20px;
+			height: 21px;
+			position: absolute;
+			right: 0;
+			top: 2px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app" v-cloak>
+	
+	
+		<div >
+			<div style="margin: 0.2rem 0.38rem 0rem 0.36rem">
+				<!-- <el-input placeholder="请输入内容" v-model="goods_name" class="input-with-select" size="mini">
+				    
+				    <el-button slot="append" icon="el-icon-search" size="mini" @click="goodslookup()"></el-button>
+				</el-input> -->
+				<div class="sousuo">
+					<input type="text" v-model="goods_name" v-focus="true" placeholder="请输入内容">
+					<img src="images/icon/sousuo.png" alt="" @click="goodslookup">
+				</div>
+				
+				<div class="resou">
+					<p>历史搜索：</p>
+					<ul>
+						<li v-for="item in historyWord">{{item}}</li>
+					</ul>
+					<img src="images/del.png" alt="" @click="clearHistory">
+				</div>
+			</div>
+		</div>
+
+
+
+
+			<!-- 列表 -->
+			<!-- <div class="jingT clearfix" ref="content">
+
+				<div class="xixuan fl" v-for="(item, index) in goods_list" @click="details(item.goods_id)">
+					<div style="height: 2.2rem">
+						<img :src="item.thumb" height="220" width="320" alt=""  >
+					</div>
+
+					<div class="box1 clearfix">
+						<p class="fl textTitle">{{item.goods_name}}</p>
+						<p class="fr price">￥{{item.retail_price}}</p>
+					</div>
+				</div>
+
+			</div>-->
+			 
+			<div class="jingT" ref="content">
+			
+				<div class="xixuan" v-for="(item, index) in goods_list" @click="details(item.goods_id)">
+					<div>
+						<img :src="item.thumb" height="220" width="320" alt="">
+					</div>
+			
+					<p>{{item.goods_name}}</p>
+			
+					<div class="price">
+						<p>
+							<span v-if="item.unit">￥{{item.retail_price}}/{{item.unit}}</span>
+							<span v-else>￥{{item.retail_price}}</span>
+							<!--<span>￥{{item.retail_price}}</span>-->
+						</p>
+						<!-- <span>+</span> -->
+					</div>
+				</div>
+			
+			</div>
+			
+			
+			<!-- 底部导航 -->
+			<el-row class="bottom-nav">
+				<el-col :span="6" class="box1">
+					<div @click="indexJump()">
+						<img src="images/icon/sy.png" alt="">
+						<p>首页</p>
+					</div>
+					
+				</el-col>
+				<el-col :span="6" class="box1">
+					<div @click="shoppingCart()">
+						<img src="images/icon/gwc1.png" alt="">
+						<p>购物车</p>
+					</div>
+
+				</el-col>
+				<el-col :span="6" class="box1" >
+					<div @click="speed()">
+						<img src="images/icon/jsgm1.png" alt="" >
+						<p>极速购买</p>
+					</div>
+
+				</el-col>
+				<el-col :span="6" class="box1">
+					<div @click="personal()">
+						<img src="images/icon/grzx1.png" alt="">
+						<p>个人中心</p>
+					</div>
+
+				</el-col>
+			</el-row>
+
+		<div class="page-mask" v-show="loading">
+			<div class="page-mask-content">
+				<div class="el-loading-spinner"><i class="el-icon-loading"></i><p class="el-loading-text">拼命加载中</p></div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+
+
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+					goods_name:'',
+					goods_list:[],
+					JumpUrl:{
+					
+						list:'http://sy.xfd365.com/wx/goods/goodsLists',	
+
+					},
+					page:0,
+					loading:0,
+					historyWord: []
+	
+				},
+
+				methods: {
+					// 极速购买跳转
+					speed:function(){
+						window.location.href = "speedBuy.html" ;
+					},
+					//个人中心跳转
+					personal:function(){
+						window.location.href = "personal.html" ;
+					},
+					//购物车跳转
+					shoppingCart:function(){
+						window.location.href = "shoppingCart.html" ;
+					},
+	
+					//商品详情
+					details(id){
+						var goodsName = localStorage.getItem('goodsName')
+						goodsName = encodeURIComponent(JSON.stringify(goodsName))
+						if(goodsName){
+							window.location.href = "goodsDetails.html" + '?' + 'id=' + id + '&goodsName=' + goodsName;
+						}
+
+					},
+					//首页
+					indexJump:function(){
+						window.location.href = "index.html" ;
+					},
+					onScroll(){
+						if(this.isDone){
+							return;
+						}
+						/*页面高度*/
+						var scrollTop = 0;
+						if(document.documentElement && document.documentElement.scrollTop) {
+							scrollTop = document.documentElement.scrollTop;
+						} else if(document.body) {
+							scrollTop = document.body.scrollTop;
+						}
+						/*当前可视高度*/
+						let clientHeight=document.documentElement.clientHeight;
+						/*文档完整的高度*/
+						let  scrollHeight=Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+
+						let that=this;
+						if((scrollHeight - clientHeight -scrollTop)<= 200){
+							if(that.loading ==1){
+								return;
+							}
+							this.page+=1;
+							that.loading=1;
+							that.goodsList();
+						}
+
+					},
+
+					goodslookup(){
+						this.page = 1;
+						this.goodsList();
+						var that = this
+						let searchWord=localStorage.getItem('searchWord'); 
+								  
+						if(searchWord==null){
+						    localStorage.setItem('searchWord',that.goods_name);
+							if(that.goods_name!=''){
+								that.historyWord.push(that.goods_name)
+							}
+						}else{
+						    let arr=localStorage.getItem('searchWord')
+						    arr=arr.split(',')
+						    if(arr.indexOf(that.goods_name)!=-1){
+						        arr=arr
+						    }else if(that.goods_name!=''){
+						        arr.unshift(that.goods_name);
+						    }
+						    that.historyWord=arr
+						    if(that.historyWord.length>5){
+						        that.historyWord.pop()
+						    }
+						    localStorage.setItem('searchWord',that.historyWord)
+						}
+						localStorage.setItem('goodsName',that.goods_name)
+					},
+					clearHistory(){
+						localStorage.removeItem('searchWord')
+						this.historyWord = []
+					},
+
+				
+
+					//首页获取商品列表
+					goodsList:function(){
+						var that = this;
+						let page=that.page
+						
+
+						axios({
+							method: 'post',
+							url: that.JumpUrl.list,
+							data: {
+								token:localStorage.getItem('token'),
+								page:page,
+								goods_name:that.goods_name,
+							
+							}
+						})
+						.then(function (resp) {
+
+							
+							//返回数据
+							if(resp.data.data.data.length == 0){
+								that.isDone=1;
+								that.loading=0;
+								return;
+							}
+							if(page == 1){
+								that.goods_list=resp.data.data.data
+								that.loading=0;
+							}else{
+								for(let item of resp.data.data.data){
+									that.goods_list.push(item);
+								}
+								that.loading=0;
+							}
+
+
+						}).catch(function (error) {
+							that.loading=0;
+							//请求失败
+							console.log('error', error);
+
+						})
+					},
+
+
+
+
+
+		},
+		created:function(){
+			this.loading=1;
+			var goodsName = getQueryString('goodsName')
+			if(goodsName){
+				goodsName = decodeURIComponent(goodsName)
+				this.goods_name= goodsName.replace(/\"/g, "");
+			}else{
+				this.goods_name = ''
+			}
+			this.goodsList();
+			var searchWord = localStorage.getItem('searchWord')
+			if(searchWord){
+				this.historyWord = searchWord.split(',')
+			}
+			// this.historyWord=localStorage.getItem('searchWord')
+			// this.historyWord=this.historyWord.split(',')  //将字符串转成数组
+			
+
+		
+		
+
+			window.addEventListener('scroll', this.onScroll);
+
+		},
+	})
+</script>
+</body>
+
+</html>

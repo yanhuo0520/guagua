@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>微商超</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+	<style>
+		[v-cloak] {
+		  display: none;
+		}
+		img {
+			vertical-align: top;
+		}
+		.clearfix:after{
+			content: ".";
+			display: block;
+			height: 0;
+			visibility: hidden;
+			clear: both;
+		}
+		.xz{
+			font-size:0.7rem;
+			margin-right:5px;
+		}
+		.operation{
+			margin-top: 10px;
+			font-size:0.7rem;
+		}
+		.operation .el-button{
+			line-height:0.1;
+		}
+		body{
+			padding-bottom:80px;
+		}
+		.aui-radio:checked, .aui-radio.aui-checked, .aui-checkbox:checked, .aui-checkbox.aui-checked{
+			background-color:#f76162;
+			border:1px solid #fdc08a;
+		}
+	</style>
+
+</head>
+<body>
+	<div id="app" v-cloak>
+		<!-- 头部 -->
+	<!-- 	<el-row class="clearfix header">
+			<el-col :span="8"><div class="el-icon-arrow-left" @click="returnLast()"></div></el-col>
+			<el-col :span="8"><div>收货地址管理</div></el-col>
+		</el-row> -->
+
+		<el-row class="clearfix header">
+				<el-col :span="8">
+					<i  style="font-size:26px" class="el-icon-arrow-left" @click="returnLast()"></i>
+				</el-col>
+				<el-col :span="8" style="text-align: center">
+					<div>收货地址管理</div>
+				</el-col>
+				<el-col  :span="8" style="position:relative;height: 100%">
+					<img src="images/icon/sy2.png" alt="" width="20"  style="margin-top:auto;margin-bottom:auto;top:0;bottom:5px;right: 5px;position:absolute" @click="JumpIndex">
+				</el-col>
+		</el-row>
+		
+		<div>
+			<el-image src="images/speedBuy/br.png"></el-image>
+		</div>
+
+		<div class="divide" style="padding:10px;background-color: #fff;" v-for="(x,index) in allAddress">
+			<el-row  class="clearfix">
+				<el-col :span="12">
+					<div @click="selectAddress(x.id)"  class="fl">
+						{{x.name}}
+					</div>
+				</el-col>
+				<el-col :span="12" >
+					<div class="fr" @click="selectAddress(x.id)" >
+						{{x.mobile}}
+					</div>
+				</el-col>
+
+			</el-row>
+
+			<el-row  >
+			  	<el-col :span="24"><div @click="selectAddress(x.id)"  style="font-size: 14px;color: #999">{{x.full_region}}&nbsp;{{x.address}}</div></el-col>
+			</el-row>
+
+			<el-row class="clearfix operation">
+				<el-col :span="8">
+					<div class="fl"  >
+						 <label ><input class="aui-radio"  @change="setAddress(index)"  type="radio" name="demo" checked="" value="x.id" :checked="x.is_default"> 设为默认</label>
+						<!-- <label><input class="aui-radio" type="radio"  :checked="x.is_default" value="x.id" @click="yan()" name="demo"> <label> -->
+					</div>
+				</el-col>
+				<el-col :span="16">
+					<div class="fr">
+						<el-button style="background-color:#fff;color:#f76162;border:2px solid #f76162; " type="primary" round @click.native="editAddress(x.id)">编辑</el-button>
+						<el-button type="danger" round @click.native="deleteAddress(index, x.id)">删除</el-button>
+					</div>
+				</el-col>
+
+			</el-row>
+
+
+		</div>
+
+
+		<div class="save-btn" @click="addAddress()">
+			添加地址
+
+		</div>
+
+		<div class="message-page-mask" v-show="message.show==1">
+			<div class="message-page-mask-content">
+				<div class="el-loading-spinner">
+					<i v-show="message.type=='success' " class="el-icon-success"></i>
+					<i v-show="message.type=='error' " class="el-icon-error"></i>
+
+					<p class="el-loading-text">{{message.text}}</p>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				message:{
+					show:0,
+					type:'success',
+					text:'成功',
+				},
+				allAddress:[],//全部地址
+				collect:{
+					token:localStorage.getItem("token"),
+				},
+				JumpUrl:{
+					list:'http://sy.xfd365.com/wx/address/lists',
+					delete:'http://sy.xfd365.com/wx/address/delete',
+					setDefault:'http://sy.xfd365.com/wx/address/setDefault',
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+				},
+				delete:{
+					id:'',
+					token:localStorage.getItem("token"),
+				},
+				from:'',
+				token:localStorage.getItem('token'),
+			},
+			methods: {
+				selectAddress(address_id){
+					let that=this;
+					let href = window.location.href;
+					if(href.indexOf("cart") > -1){
+						window.location.href = "confirmOrder.html?source=cart&address_id="+address_id
+					}else if(href.indexOf("speedBuy") > -1){
+						window.location.href = "confirmOrder.html?source=speedBuy&address_id="+address_id
+					}else if(href.indexOf("is_now") > -1){
+						if(getQueryString('cate_id')){
+							window.location.href="confirmOrder.html?is_now=1&address_id="+address_id + '&id='+getQueryString('id')+'&cate_id='+getQueryString('cate_id')+'&tabIndex=' + getQueryString('tabIndex');
+						}else{
+							window.location.href="confirmOrder.html?is_now=1&address_id="+address_id + '&id='+getQueryString('id');
+						}
+						
+					}else{
+						window.location.href="confirmOrder.html?address_id="+address_id
+					}
+					// else{
+					// 	window.location.href="confirmOrder.html?address_id="+address_id
+					// }
+					
+					// if(that.from =='order'){
+					// 	window.location.href="confirmOrder.html?address_id="+address_id
+					// }
+				},
+				getParam(paramName){
+					if(!paramName){
+						return '';
+					}
+					let val='';
+					var href=window.location.href;
+					if(href.indexOf(paramName) !=-1){
+						val= window.location.href.split(paramName+"=")[1];
+					}
+					return val;
+				},
+				//跳转首页
+				JumpIndex(){
+					window.location.href = "index.html";
+				},
+				//返回上一页
+				returnLast(){
+					// window.history.go(-1);
+					let href = window.location.href;
+					if(href.indexOf("cart") > -1){
+						window.location.href = "confirmOrder.html?source=cart"
+					}else if(href.indexOf("speedBuy") > -1){
+						window.location.href = "confirmOrder.html?source=speedBuy"
+					}else if(href.indexOf("is_now") > -1){
+						window.location.href="confirmOrder.html?is_now=1"
+					}else{
+						window.location.href = "personal.html"
+					}
+					// if(href.indexOf("order") > -1){
+					// 	window.location.href = "personal.html"
+					// }else{
+					// 	window.location.href = "confirmOrder.html"
+					// }
+					
+				},
+				goBack () {
+					this.returnLast();
+					console.log("点击了浏览器的返回按钮");
+					// sessionStorage.clear();
+					// window.history.back();
+				},
+				//编辑地址
+				editAddress(id){
+					//localStorage.setItem('editAddress',id);
+					let base_url="addEditAddress.html?address_id="+id;
+					let href = window.location.href;
+					if(href.indexOf("cart") > -1){
+						window.location.href = base_url+"&from=cart"
+					}else if(href.indexOf("speedBuy") > -1){
+						window.location.href = base_url+"&from=speedBuy"
+					}else if(href.indexOf("is_now") > -1){
+						window.location.href = base_url+"&from=is_now"
+					}else{
+						window.location.href = base_url
+					}
+					
+					// if(this.from=='order'){
+					// 	window.location.href = base_url+"&from=order"
+					// }else{
+					// 	window.location.href = base_url
+					// }
+				},
+				//删除地址
+				deleteAddress(index, id){
+					let that = this;
+					if(that.allAddress.length > 1){
+						let is_default=that.allAddress[index].is_default;
+						if(is_default == 1 && index > 0){
+							that.message.show=0;
+							that.setAddress(0, 1);  // 删除非第一个默认地址
+						}else if(is_default == 1 && index == 0){
+							that.message.show=0;
+							that.setAddress(1, 1);  // 删除第一个默认地址
+						}
+					}
+					that.delete.id = id;
+					let form_data = new FormData();
+						makeFormData(that.delete,form_data);
+						axios({
+							method: 'post',
+							url: that.JumpUrl.delete,
+							data:form_data
+						})
+						.then(function (resp) {
+							that.collectList();
+							that.message={
+								show:1,
+								text:'删除成功',
+								type:'success'
+							}
+							setTimeout(function(){
+								that.message.show=0;
+							}, 3000)
+						
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+						
+				},
+				setAddress(index, del){
+					let that = this;
+					let is_default=that.allAddress[index].is_default
+					let address_id=that.allAddress[index].id
+					if(is_default == 1){
+						is_default=0;
+					}else{
+						is_default=1;
+					}
+						axios({
+							method: 'post',
+							url: that.JumpUrl.setDefault,
+							data:{
+								address_id:address_id,
+								is_default:is_default,
+								token:that.token,
+							}
+						})
+						.then(function (resp) {
+							that.collectList();
+							that.message={
+								show: 1,
+								text:'设置成功',
+								type:'success'
+							}
+							if(del == 1){
+								that.message.text="删除成功";
+							}
+							setTimeout(function(){
+								that.message.show=0;
+							}, 3000)
+						}).catch(function (error) {
+
+						})
+				},
+				//新增地址
+				addAddress(){
+					localStorage.setItem('editAddress',0);
+					
+					let href = window.location.href;
+					if(href.indexOf("cart") > -1){
+						window.location.href = "addEditAddress.html?from=cart";
+					}else if(href.indexOf("speedBuy") > -1){
+						window.location.href = "addEditAddress.html?from=speedBuy";
+					}else if(href.indexOf("is_now") > -1){
+						window.location.href="addEditAddress.html?from=is_now";
+					}else{
+						window.location.href = "addEditAddress.html?from=1";
+					}
+					
+					// if(this.from == 'order'){
+					// 	window.location.href = "addEditAddress.html?from=order";
+					// }else{
+					// 	window.location.href = "addEditAddress.html?from=1";
+					// }
+				},
+				//获取收货地址
+				collectList(){
+					let that = this;
+					let form_data = new FormData();
+						makeFormData(that.collect,form_data);
+						axios({
+							method: 'post',
+							url: that.JumpUrl.list,
+							data:form_data
+						})
+						.then(function (resp) {
+						that.allAddress = resp.data.data;
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				setWx() {
+					let that = this;
+					let shopInfo=JSON.parse(localStorage.getItem('shopInfo'));
+					// console.log(shopInfo)
+					let shop_name = shopInfo.shop_name
+					let shop_id = shopInfo.id
+					let logo = shopInfo.logo
+					wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+						wx.onMenuShareTimeline({
+							title: shop_name, // 分享标题
+							desc: '村里面的超市', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function() {
+				
+							}
+						})
+				
+						wx.onMenuShareAppMessage({
+							title: shop_name, // 分享标题
+							desc: '村里面的超市', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function() {
+							}
+						})
+				
+				
+					});
+				},
+				getJssdk: function() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function(resp) {
+						let data = resp.data
+					
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'onMenuShareTimeline',
+								'onMenuShareAppMessage',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.share_url = sdkData.url;
+						that.setWx();
+				
+					})
+				},
+				
+				
+			},
+			mounted () {
+			    if (window.history && window.history.pushState) {
+			        // 向历史记录中插入了当前页
+			        history.pushState(null, null, document.URL);
+			        window.addEventListener('popstate', this.goBack, false);
+			    }
+			},
+			destroyed () {
+			    window.removeEventListener('popstate', this.goBack, false);
+			},
+			created:function(){
+				this.getJssdk();
+				this.collectList()
+				this.from=getQueryString('from')
+			}
+	})
+</script>
+</body>
+
+</html>

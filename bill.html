@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            }
+        
+        .box {
+            width: 23.4375rem;
+            height: 48rem;
+            position: relative;
+        }
+        .content_img {
+            width: 100%;
+            height: 100%;
+            background-image: url(../images/bill_bg.png);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+            float: left;
+        }
+        .top_title {
+            width: 23.4375rem;
+            height: 2.75rem;
+            font-size: 1.125rem;
+            line-height: 2.75rem;
+            text-align: center;
+            font-family: 中黑体;
+            font-weight: 500;
+            color: #333;
+            background-color: #ffffff;
+        }
+        .content_title {
+            width: 16.875rem;
+            height: 3.375rem;
+            margin-top: 1.3125rem;
+            margin-left: 3.125rem;
+        }
+        .content_title img {
+            width: 100%;
+            height: 100%;
+        }
+        .Stand_back {
+            width: 18.75rem;
+            height: 1.375rem;
+            margin-top: .625rem;
+            margin-left: 2.3125rem;
+        }
+        .Stand_back img {
+            width: 100%;
+            height: 100%;
+            }
+        .red_packets {
+            width: 23.4375rem;
+            height: 31.125rem;
+            position: relative;
+        }
+        .red_packets img {
+            width: 100%;
+            height: 100%;
+            
+        }
+        .qrcode_box {
+            width: 9.375rem;
+            height: 9.375rem;
+            display: inline-block;
+            position: absolute;
+            top: 3.75rem;
+            left: 7.0625rem;
+            background-color: pink;
+        }
+        .qrcode_img {
+            width: 9.375rem;
+            height: 9.375rem;
+            display: inline-block;
+        }
+        .qrcode_img img {
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+            background-color: #fff; 
+            padding: .375rem;
+        }
+        .save_share_rqcode {
+            width: 12.5rem;
+            height: 2.5rem;
+            position: absolute;
+            top: 20.875rem;
+            left: 5.4375rem;
+        }
+        .save_share_rqcode img {
+            width: 100%;
+            height: 100%;
+        }
+        .save_btn {
+            width: 8rem;
+            height: 2.875rem;
+            position: absolute;
+            top: 24.8125rem;
+            left: 3.25rem;
+        }
+        .save_btn img {
+            width: 100%;
+            height: 100%;
+        }
+        .btn {
+            width: 8rem;
+            height: 2.875rem;
+            position: absolute;
+            top: 24.8125rem;
+            left: 12.125rem;
+        }
+        .btn img {
+            width: 100%;
+            height: 100%;
+        }
+        .bottom_box {
+            width: 23.4375rem;
+            height: 3.625rem;
+            position: absolute;
+            bottom: 0;
+        }
+        .bottom_box img {
+            width: 100%;
+            height: 100%;
+    }
+    .showMessage {
+    padding: .3125rem .625rem;
+    border-radius: .3125rem;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%);
+    color: #ffffff;
+    }
+
+    .showMessageSuccess {
+    background-color: #666;
+    }
+
+    .showMessageError {
+    background-color: #666;
+    }
+
+    .popup-kk img {
+        width: 100%;
+        height: 100%;
+    }
+
+    #mask-kk{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999;
+            background: #666;
+            opacity: 0.5;
+            filter: alpha(opacity=50)-moz-opacity: 0.5;
+            display: none;
+    }
+        .popup-kk{
+            position: absolute;
+            left: 50%;
+            width: 18.75rem;
+            height: 31.25rem;
+            z-index: 1000;
+            display: none;
+            border-radius: .3125rem;
+        }
+        
+        .close {
+            position: fixed;
+            top: 3.125rem;
+            right: 1.25rem;
+            cursor:pointer;
+            z-index: 1000;
+            font-size: 1.25rem;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="box">
+        <!-- 顶部标题 -->
+        <div class="top_title">预约二维码</div>
+        <!-- 背景图片 -->
+        <div class="content_img">
+        <!-- 益农开卡乐 -->
+        <div class="content_title">
+            <img src="../images/title.png" alt />
+        </div>
+    <!-- 立返佣金 -->
+    <div class="Stand_back">
+            <img src="../images/Stand _back.png" alt />
+    </div>
+    <!-- 红包 -->
+<div class="red_packets">
+            <img src="../images/red_packets.png" alt />
+            <!-- 二维码 -->
+            <div class="qrcode_box">
+              <div id="qrcode" class="qrcode_img">
+                  <img src="../images/qrcode.jpg" alt="">
+              </div>
+            </div>
+            <!-- 保存并转发二维码 -->
+            <div class="save_share_rqcode">
+              <img src="../images/save_share_rqcode.png" alt />
+            </div>
+            <!-- 保存按钮 -->
+            <div class="save_btn" id="saveBtn">
+              <img src="../images/save_btn.png" alt="">
+            </div>
+            <!-- 转发按钮 -->
+            <div class="btn" id="shareBtn">
+              <img src="../images/share_btn.png" alt="">
+            </div>
+</div>
+    
+<!-- 底部 -->
+<div class="bottom_box">
+            <img src="../images/bottom_box.png" alt="">
+</div>
+        </div>
+        <div style="display: none;" class="share_pop">
+            <img src="../images/bill_share.png" alt="">
+            
+        </div>
+
+            <div id="mask-kk">
+            </div>    
+            <div class="popup-kk">
+                <img src="../images/bill_share.png" alt="">
+                <span class="close"> 返回 </span>
+            </div>
+
+</div>
+<script src="../components/jquery.min.js"></script>
+<script>
+        
+            $("#saveBtn").click(function () {
+                showMessage("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;长按图片 </br> 即可保存到本地！",1);
+            });
+                $('.btn').click(function() {
+                        $('#mask-kk').css({
+                            display: 'block',
+                            height: $(document).height()
+                        })
+                        var $Popup = $('.popup-kk');
+                        $Popup.css({
+                        left: ($('body').width() - $Popup.width()) / 2+ 'px',
+                        top: ($(window).height() - $Popup.height()) / 2 + $(window).scrollTop() + 'px',
+                        display: 'block'
+                        })
+                        $("body").css({overflow:"hidden"})
+                    })
+            $('.close').click(function() {
+                $('#mask-kk').css({
+                            display: 'none'
+                        })
+                $('.popup-kk').css({
+                            display: 'none'
+                        })
+            })
+
+            /**
+             * 弹出消息提示框，采用浏览器布局，位于整个页面中央，默认显示3秒
+             * 后面的消息会覆盖原来的消息
+             * @param message：待显示的消息
+             * @param type：消息类型，0：错误消息，1：成功消息
+             */
+            function showMessage(message, type) {
+            let messageJQ = $("<div class='showMessage'>" + message + "</div>");
+            if (type == 0) {
+                messageJQ.addClass("showMessageError");
+            } else if (type == 1) {
+                messageJQ.addClass("showMessageSuccess");
+            }
+            /**先将原始隐藏，然后添加到页面，最后以600秒的速度下拉显示出来*/
+            messageJQ.hide().appendTo("body").slideDown(600);
+            /**3秒之后自动删除生成的元素*/
+            window.setTimeout(function () {
+                messageJQ.remove();
+            }, 2000);
+            }
+</script>
+</body>
+</html>

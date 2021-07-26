@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		
+		<title>聚农优享</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<!-- 	<link rel="stylesheet" type="text/css" href="./css/aui.css" /> -->
+		<link rel="stylesheet" href="css/reset.css">
+		<script src="./js/vue.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js?v=3"></script>
+        <script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+        <script type="text/javascript" src="./js/md5.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+		<style type="text/css">
+			[v-cloak] {
+				display: none;
+			}
+			html,body { font-size: 16px; height: 100%;}
+			@media all and (max-width:375px) {
+				body,html{
+					font-size: 14px;
+				}
+			}
+			@media only screen and (min-width: 414px) {
+				body,html {
+					font-size: 16px !important;
+				}
+			}
+			@media only screen and (min-width: 480px) {
+				body,html {
+					font-size: 22px !important;
+				}
+			}
+            #app { min-height: 100%; background: #f5f5f5; }
+            div { box-sizing: border-box; }
+            /* 欢迎语 */
+            .tit { font-size: 1.375rem; color: #333; font-weight: bold; padding: 1.6rem 1.1rem }
+            .login-con { padding: 0 1.1rem;}
+            .login-con .van-tabs { border-radius: 8px; overflow: hidden; }
+            .login-con .van-tab .van-tab__text { color: #888; font-size: 1rem; }
+            .login-con .van-tab--active .van-tab__text { color: #333; font-size: 1rem; font-weight: bold; }
+            .login-con .van-tabs__line { background-color: #00C02F; }
+            .login-con .van-tabs__content { background: #fff; }
+            .login-con .info { padding: 1.5rem 1rem; }
+            .login-con .info .van-cell { background-color: #f9f9f9; border-radius: 100px; display: flex; align-content: center; }
+            .login-con .info .van-cell .van-field__left-icon { display: flex;align-items: center; }
+            .login-con .info .van-cell:first-child { margin-bottom: 1.5rem;  }
+            .login-con .info .forget-pwd-desc-con {  color: #999; font-size: 0.875rem; display: flex; align-items: center; justify-content: flex-end; padding-top: 1rem; }
+            .login-con .info .forget-pwd-desc-con .forget-pwd-desc { min-width: 5rem; height: 100%; }
+            .login-con .btn-con { margin-top: 2rem; width: 80%; margin-left: 10%; }
+            .login-con .wx-login { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+            .login-con .wx-login img { width: 18%; }
+            .login-con .wx-login span { color: #888; font-size: 0.875rem; margin-top: 10px; }
+		</style>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+            <div class="tit">欢迎来到聚农优享</div>
+            <div class="login-con">
+                <van-tabs v-model="active" title-inactive-color="#888888" title-active-color="#333333" line-width="20px" line-height="4px" @disabled="onClickDisabled">
+                    <van-tab title="登录">
+                        <div class="info">
+                            <van-field v-model="tel"  placeholder="请输入您的账号" clearable >
+                                <template #left-icon>
+                                    <img width="20px" src="./images/login-tel.png" alt="">
+                                </template>
+                            </van-field>
+                            <van-field v-model="pwd" type="password"  placeholder="请输入您的密码" clearable >
+                                <template #left-icon>
+                                    <img width="20px" src="./images/login-pwd.png" alt="">
+                                </template>
+                            </van-field>
+                            <div class="forget-pwd-desc-con">
+                                <div class="forget-pwd-desc" @click="toResetPwd">忘记密码</div>
+                            </div>
+                            <div class="btn-con">
+                                <van-button round color="linear-gradient(90deg,#02cf0a, #00be34)" block @click="toLogin">登录</van-button>
+                            </div>
+                            <div style="padding: 1rem;">
+                                <van-divider>其他登录方式</van-divider>
+                            </div>
+
+                            <div class="wx-login">
+                                <img src="./images/wx-login.png" alt="" @click="wxSign" >
+                                <span>微信登录</span>
+                            </div>
+                        </div>
+                    </van-tab>
+                    <van-tab title="注册" disabled></van-tab>
+                </van-tabs>
+            </div>
+		</div>
+		
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+                    active: 0,
+					tel: '',
+                    pwd: '',
+                    JumpUrl: {
+                        checkToken: 'http://sy.xfd365.com/wx/base/checkToken', //检查token
+				    	token: 'http://sy.xfd365.com/wx/wechat/login', //微信登录
+                        login: baseUrl('/index.php/api/new_login'), // 账号密码登录
+                        if_shop_owner: baseUrl('/wx/coupon/if_shop_owner'), //判断是否为店主
+                    },
+                    code: '',
+                    token: localStorage.getItem('token')
+				},
+				methods: {
+                    // 点击注册
+                    onClickDisabled() {
+                        window.location.href = 'regShop.html'
+                    },
+                    // 找回密码
+                    toResetPwd() {
+                        window.location.href = 'resetPwd.html'
+                    },
+                    // 账号密码登录
+					toLogin(){
+                        var that = this;
+                        if(!that.tel) {
+                            that.$toast('请输入您的账号')
+                            return
+                        }
+                        if(!that.pwd) {
+                            that.$toast('请输入您的密码')
+                            return
+                        }
+                        let pwd = 'shop'+that.pwd
+                        pwd = md5(pwd)
+						axios({
+							method: 'post',
+							url: that.JumpUrl.login,
+							data: {
+								uname:that.tel,
+								password:pwd,
+								from:'pc'
+							}
+						})
+						.then(function (resp) {
+							if(resp.data.code==1){
+                                localStorage.setItem('shoper_token', resp.data.token)
+                                localStorage.setItem('token', resp.data.token);
+                                localStorage.setItem('loginTel', that.tel);
+                                window.location.href = 'http://sy.xfd365.com/mobile/index.html?shop_id='+ resp.data.shop_id +'&v=11'
+							}else{
+								that.$toast(resp.data.msg)
+							}
+						
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+						})
+                    },
+                    // 判断是否为商家
+					getShopUser(callback) {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.JumpUrl.if_shop_owner,
+							data: { token: that.token }
+						})
+						.then(function (resp) { //返回数据
+							// resp.data = JSON.parse(resp.data)
+                            callback && callback(resp.data.data)
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+					},
+                    wxSign() {
+                        var that = this;
+                        let back_url = window.location.href
+                        axios({
+                                method: 'post',
+                                // url: 'https://api.xfd365.com/wx/wechat/get_jump_url',
+                                url: 'http://sy.xfd365.com/wx/wechat/get_jump_url',
+                                data: {
+                                    back_url: back_url,
+                                }
+                            })
+                            .then(function (resp) {
+                                //返回数据
+                                window.location.href = resp.data.url;
+
+                            }).catch(function (error) {
+                                //请求失败
+                                console.log('error', error);
+                            })
+                    },
+                    wechatLogin() {
+                        var that = this;
+                        axios({
+                                method: 'post',
+                                url: that.JumpUrl.token,
+                                //data: form_data
+                                data: {
+                                    code: that.code
+                                }
+                            })
+                            .then(function (resp) { //返回数据
+                                that.token = resp.data.token;
+                                that.getShopUser(res =>{
+                                    if(Number(res) > 0) {
+                                        localStorage.setItem('token', that.token);
+                                        localStorage.setItem('shoper_token', that.token)
+                                        window.location.href = 'http://sy.xfd365.com/mobile/index.html?from=gzh&v=11'
+                                    } else {
+                                        localStorage.setItem('token', that.token);
+                                        window.location.href = 'index.html?v=11'
+
+                                    }
+                                })
+                            }).catch(function (error) {
+                                //请求失败
+                                console.log('error', error);
+
+                            })
+
+                    },
+				},
+				mounted:function(){
+					let shoper_token = localStorage.getItem('shoper_token')
+					if(shoper_token){
+						window.location.href = 'http://sy.xfd365.com/mobile/index.html?from=gzh&v=11'
+                    } else {
+                        let tel =  localStorage.getItem('loginTel')
+                        if(tel) {
+                            this.tel = tel
+                        }
+                        let code = getQueryString('code');
+                        this.code = code
+                        if (this.code) {
+                            this.wechatLogin()
+                        }
+                    }
+                   
+                    
+				}
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<!-- <title>聚农优享</title> -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<!-- <script src="js/vue.js" type="text/javascript" charset="utf-8"></script> -->
+	<script src="js/axios.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5/lib/index.css">
+	<script src="./js/rem.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant.min.js"></script>
+	<link rel="stylesheet" href="css/public.css">
+	<style>
+		.van-popup {
+			width: 100%;
+			background: transparent;
+		}
+
+		.van-popup .yn {
+			box-sizing: border-box;
+			padding: 0.32rem;
+			height: calc((100vw - 0.64rem) *1.01);
+			background: url(img/tankuang.png) no-repeat;
+			background-size: 100% 100%;
+			text-align: center;
+		}
+		.van-popup .jh {
+			box-sizing: border-box;
+			padding: 0.32rem;
+			height: calc((140vw - 0.64rem) *1.01);
+			background: url(img/tankuang.png) no-repeat;
+			background-size: 100% 100%;
+			text-align: center;
+		}
+
+		.van-popup div p:first-of-type {
+			padding-top: 2rem;
+		}
+
+		.van-popup div p:nth-of-type(2) {
+			color: #888888;
+			margin-top: 0.44rem;
+			margin-bottom: 0.66rem;
+		}
+
+		.van-popup div button {
+			width: 4.08rem;
+			height: 0.72rem;
+			background: linear-gradient(#34333a, #28243f);
+			border-radius: 4px;
+			color: #fff;
+			font-size: 0.32rem;
+		}
+
+		.van-popup p {
+			font-size: 0.32rem;
+		}
+
+		[v-cloak] {
+			display: none;
+		}
+
+		/* 导航栏 */
+		.van-nav-bar {
+			background: transparent;
+			position: absolute;
+			width: 100%;
+		}
+
+		.van-nav-bar .van-icon {
+			color: #fff;
+			font-size: 0.32rem;
+		}
+
+		.van-nav-bar .van-nav-bar__right {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+
+		.van-nav-bar .van-nav-bar__right img {
+			display: block;
+		}
+
+		.van-nav-bar .van-nav-bar__title {
+			font-weight: bold;
+			color: #fff;
+		}
+
+		/* 内容 */
+		.vip-con {
+			font-size: .2rem;
+		}
+
+		.vip-con .bg {
+			width: 100%;
+		}
+
+		.vip-con .user-info {
+			position: absolute;
+			top: 6.8rem;
+			width: 100%;
+			box-sizing: border-box;
+			background: transparent;
+			padding: 0 0.72rem;
+		}
+
+		.vip-con .user-info .van-cell {
+			height: 0.96rem;
+			background: #f5f5f5;
+			margin-bottom: 0.32rem;
+			border-radius: 8px;
+		}
+
+		.vip-con .user-info .van-cell .van-cell__value input {
+			text-align: center;
+		}
+
+		.vip-con .user-info .bank-pic-con {
+			width: 100%;
+			height: 3.3rem;
+			text-align: center;
+			background-color: #f5f5f5;
+			border-radius: 8px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			margin-bottom: 20px;
+		}
+
+		.vip-con .user-info .bank-pic {
+			max-width: 100%;
+			max-height: 100%;
+			
+		}
+
+		.vip-con .user-info .del-icon-con {
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 20px;
+			height: 20px;
+			background-color: rgba(0, 0, 0, 0.7);
+			border-radius: 0 0 0 18px;
+		}
+
+		.vip-con .user-info .del-icon-con .del-icon {
+			position: absolute;
+			top: 0;
+			right: 0;
+			color: #fff;
+			font-size: 16px;
+			-webkit-transform: scale(0.5);
+			transform: scale(0.5);
+		}
+
+		.vip-con .user-info .btn-con {
+			height: 0.96rem;
+			margin-top: 0.7rem;
+		}
+
+		.vip-con .user-info .van-button__text {
+			color: #856001;
+			font-weight: bold;
+		}
+
+		.van-uploader {
+			width: 100%;
+			background: #f5f5f5;
+			margin-bottom: 20px;
+		}
+
+		.van-uploader .van-uploader__input-wrapper {
+			width: 100%;
+		}
+
+		.upload-con {
+			height: 3.3rem;
+			background: #f5f5f5;
+			border-radius: 8px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.upload-con img {
+			width: 1.38rem;
+			height: 1.38rem;
+		}
+
+		.upload-con span {
+			font-size: 14px;
+			margin-top: 10px;
+			color: #888;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<div class="vip-con">
+			<!-- <van-nav-bar :border="false"  title="绑定益农卡领取会员" :left-arrow="source != ''" @click-left="toRouter()" > </van-nav-bar> -->
+			<img class="bg" src="./images/open-vip-bg.png" alt="">
+			<van-cell-group class="user-info" :border="false">
+				<van-uploader  image-fit="fill" v-if="!bankPic" :after-read="upLoadImg">
+					<div class="upload-con">
+						<img src="./images/upload-icon.png" alt="">
+						<span>上传益农卡正面照片</span>
+					</div>
+				</van-uploader>
+				<div class="bank-pic-con"  v-else>
+					<img class="bank-pic" :src="bankPic" @click.stop="imgPreview" alt="">
+					<div class="del-icon-con"  @click.stop="delImg">
+						<van-icon class="del-icon" name="cross" color="#fff" />
+					</div>
+				</div>
+
+				<van-field v-model="name" :border="false" clearable placeholder="请输入姓名"></van-field>
+				<van-field v-model="mobile" :border="false" clearable placeholder="请输入手机号" type="tel"></van-field>
+				<van-field v-model="card_no" :border="false" clearable placeholder="请输入益农卡卡号" type="digit"></van-field>
+
+
+				<div class="btn-con">
+					<van-button type="primary" color="#ecd696" block @click="submit">提交</van-button>
+				</div>
+			</van-cell-group>
+		</div>
+		<van-popup v-model="bank1show" :close-on-click-overlay="false">
+			<div class="yn">
+				<p>{{msg}}</p>
+				<p>会员权益将在第一时间通知您!</p>
+				<button @click="hidePopup">{{(source == 'home' || source == 'dishome') ? '返回店铺' : (source == 'coupon' ? '返回优惠券中心' : (source == 'userInfo' ? '返回个人信息' : '前往领券中心'))}}</button>
+			</div>
+		</van-popup>
+
+		<van-popup v-model="bank2show" :close-on-click-overlay="false">
+			<div class="jh">
+				<p>{{msg}}</p>
+				<p>绑定益农卡享受更多优惠!</p>
+				<button @click="bindBankByYn">绑定益农卡</button>
+				<button @click="hidePopup">前往领券中心</button>
+			</div>
+		</van-popup>
+
+		<van-overlay :show="isLogin" style="display:flex;justify-content:center;align-items:center;">
+			<van-loading vertical>上传中，请稍后...</van-loading>
+		  </van-overlay>
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				isLogin: false,
+				scroll: 0,
+				baseUrl: 'http://sy.xfd365.com',
+				name: '',
+				mobile: '',
+				card_no: '',
+				msg: '!',
+				msgName: '请输入姓名',
+				msgMobile: '请输入手机号',
+				msgCard: '请输入益农联名卡卡号',
+				is_yn: 0,
+				if_shop_owner: 'http://sy.xfd365.com',
+				curShopId: '',
+				JumpUrl: {
+					jssdkUrl: '/wx/jssdk2/getSignPackage',
+					checkToken: '/wx/base/checkToken', //检查token
+				},
+				token: localStorage.getItem('token'),
+				source: '',
+				bankPic: '',
+				bankType: '', // 1-益农卡 2-建行
+				bank1show: false, // 益农卡弹窗
+				bank2show: false, // 建行卡弹窗
+			},
+			created() {
+				let code = getQueryString('code');
+				let source = getQueryString('source');
+				this.source = source
+				if (code) {
+					this.code = code;
+				}
+				let token = localStorage.getItem('token')
+				if (this.code) {
+					this.weChatLogin()
+				} else {
+					if (token) {
+						this.checkToken()
+					} else {
+						this.wxSign()
+					}
+				}
+			},
+			methods: {
+				recognitionBankCardNum() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.baseUrl + '/wx/users/bankCard',
+						data: {
+							pic: that.bankPic
+						}
+					}).then(res => {
+						that.isLogin = false;
+						if (res.data.errno == 0 && res.data.data.bank_name != "") {
+							console.log(res);
+							// that.card_no = res.data.data.bank_card_number.trim();
+							that.card_no = res.data.data.bank_card_number;
+						} else {
+							// that.$toast(res.data.errmsg ? res.data.errmsg : '请上传正确的银行卡照片')
+							that.$toast('您的银行卡照片识别失败，请横屏拍摄清晰的银行卡照片')
+						}
+					})
+				},
+				toRouter() {
+					window.history.go(-1)
+				},
+				// 获取用户信息
+				getUserInfo() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.baseUrl + '/wx/shop/user_info',
+						data: {
+							token: localStorage.getItem('token')
+						}
+					}).then(res => {
+						// that.getShopUser()
+						if (res.data.data.is_yn == 1) {
+							that.bank1show = true;
+							that.bankType = 1;
+							that.msg = '您已经成为聚农优享的一份子了'
+							return
+						}
+						if (res.data.data.is_jh == 1) {
+							that.bank2show = true;
+							that.bankType = 2;
+							that.msg = '您已经成功绑定建行卡'
+						}
+					})
+				},
+				// 预览图片
+				imgPreview() {
+					window.vant.ImagePreview([this.bankPic])
+				},
+				// 删除照片
+				delImg() {
+					this.bankPic = ''
+				},
+				// 上传照片
+				upLoadImg(file) {
+					let that = this;
+					that.isLogin = true;
+					var formdata = new FormData();
+					formdata.append("file", file.file);
+					axios({
+							method: 'post',
+							url: that.baseUrl + '/wx/users/uploadImg',
+							data: formdata
+						})
+						.then(function (resp) { //返回数据
+							if (resp.data.errno == 0) {
+								that.bankPic = resp.data.data.url;
+								that.recognitionBankCardNum()
+							} else {
+								that.$toast(resp.data.errmsg)
+							}
+						}).catch(function (error) {
+							that.$toast('服务异常,请稍后重试!')
+							//请求失败
+							console.log('error', error);
+						})
+				},
+				getUrlParam(name) {
+					var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+					var r = window.location.search.substr(1).match(reg);
+					if (r != null) return unescape(r[2]);
+					return null;
+				},
+				weChatLogin() {
+					let that = this;
+					axios({
+							method: 'post',
+							url: that.baseUrl + '/wx/wechat/login',
+							data: {
+								code: this.code,
+							}
+						})
+						.then(function (resp) { //返回数据
+							that.token = resp.data.token;
+							localStorage.setItem('token', that.token);
+							window.history.pushState(null, null,
+								'http://sy.xfd365.com/mobile/openVip.html');
+							if (that.token) {
+								that.getJssdk();
+							}
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+						})
+				},
+				wxSign() {
+					let back_url = window.location.href
+					axios({
+							method: 'post',
+							url: this.baseUrl + '/wx/wechat/get_jump_url',
+							data: {
+								back_url: encodeURIComponent(back_url),
+							}
+						})
+						.then(function (resp) {
+							//返回数据
+							window.location.href = decodeURIComponent(resp.data.url);
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+						})
+				},
+				//检查token是否过期
+				checkToken: function () {
+					var that = this;
+					axios({
+							method: 'post',
+							url: that.baseUrl + '/wx/base/checkToken',
+							data: {
+								token: that.token,
+							}
+						})
+						.then(function (resp) {
+							//返回数据
+							if (resp.data.errno == 1) {
+								//token过期调用跳转页面方法
+								localStorage.removeItem('token')
+								that.wxSign();
+							} else {
+								console.log(resp.data.data);
+								that.getJssdk();
+							}
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+						})
+				},
+				getJssdk() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.baseUrl + '/wx/jssdk2/getSignPackage',
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function (resp) {
+						let data = resp.data
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+						});
+						that.getUserInfo();
+					})
+				},
+				// 如果已经绑定建行卡 再次进入此页面提示绑定益农卡(初始化未绑卡状态)
+				bindBankByYn() {
+					this.banType = ''
+					this.card_no = ''
+					this.bankPic = ''
+					this.bank2show = false
+				},
+				// 隐藏popup
+				hidePopup() {
+					if (this.bankType == 1) {
+						this.bank1show = false;
+						if (this.source == 'home') {
+							window.location.href = "index.html?shopId=" + this.curShopId;
+						} else if (this.source == 'coupon') {
+							window.history.go(-1)
+						} else if (this.source == 'myCoupon') {
+							window.location.href = "myCoupon.html"
+						} else if (this.source == 'myCouponList') {
+							window.location.href = "myCouponList.html"
+						} else if (this.source == 'userInfo') {
+							window.location.href = "userInfoDetail.html"
+						} else if (this.source == 'dishome') {
+							window.location.href = 'disPersonal.html?coupon_id=' + getQueryString('coupon_id') +
+								'&user_coupon_id=' + getQueryString('user_coupon_id')
+						} else {
+							window.location.href = "getCoupon.html?type=yncard"
+						}
+					} else if (this.bankType == 2) {
+						this.bank2show = false;
+						window.location.href = "getCoupon.html?type=jhcard"
+					}
+				},
+				// 提交
+				submit() {
+					let that = this;
+					that.show = false;
+					let reg = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/;
+					let reg1 = /^([1-9]{1})(\d{15}|\d{18})$/
+					if (this.name == '') {
+						this.$toast('请输入姓名')
+					} else if (this.mobile == '') {
+						this.$toast('请输入手机号')
+					} else if (!reg.test(this.mobile)) {
+						this.$toast('请输入正确手机号')
+					} else if (this.card_no == '') {
+						this.$toast('请输入益农联名卡卡号')
+					}
+					// else if (!reg1.test(this.card_no)) {
+					// 	this.$toast('请输入正确益农联名卡卡号')
+					// } 
+					else {
+						axios({
+							method: 'post',
+							url: that.baseUrl + '/wx/user/bank_card_add',
+							data: {
+								name: that.name,
+								mobile: that.mobile,
+								card_no: that.card_no,
+								pic: that.bankPic,
+								token: that.token
+							}
+						}).then(function (res) {
+							if (res.data.errno == 1) {
+								that.$toast(res.data.errmsg ? res.data.errmsg : res.data.msg)
+							} else if (res.data.errno == 0) {
+								that.bankType = res.data.data
+								if (res.data.data == 1) {
+									that.msg = '恭喜您成为益农会员!'
+									that.bank1show = true
+									// window.location.href = "getCoupon.html?type=yncard"
+								} else if (res.data.data == 2) {
+									that.msg = '建行卡绑定成功!'
+									that.bank2show = true
+									// window.location.href = "getCoupon.html?type=jhcard"
+								}
+							} else if(res.data.errno == 2){
+								if(res.data.errmsg.indexOf("建行卡")==-1){
+									that.bank1show = true
+								}else {
+									that.bank2show = true
+								}
+							}else {
+								that.$toast(res.data.errmsg ? res.data.errmsg : '绑定银行卡失败')
+							}
+						}).catch(function (error) {
+							console.log('error', error)
+						})
+					}
+				},
+			}
+		})
+	</script>
+</body>
+
+</html>

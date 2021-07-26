@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>聚农优享</title>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="css/index.css">
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js?v=3"></script>
+		<script type="text/javascript" src="./js/api.js" ></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+		<script src="js/vconsole.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+		<style type="text/css">
+			.bg{
+				background: url(img/sendCoupon.png) no-repeat;
+				background-size: 100% 100%;
+				width: 100%;
+				height: 100vh;
+				position: absolute;
+			}
+			.btn{
+				width: 80%;
+				margin: 0 auto;
+				position: absolute;
+				bottom: 30px;
+				left: 10%;
+			}
+			.btn .van-button{
+				width: 100%;
+				border-radius: 20px;
+				border: none;
+				font-size: 16px;
+				font-weight: bold;
+			}
+			.btn .van-button:first-of-type{
+				background: linear-gradient(to right,#FFE676,#FFF3BD);
+				color: #B80000;
+				margin-bottom: 20px;
+			}
+			.btn .van-button:last-of-type{
+				border: 1px solid #FFE676;
+				background: transparent;
+				color: #FFF68F;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="main">
+			<div class="bg">
+				<div class="btn">
+					<van-button @click="toZhuban">主办方(入驻平台联合店铺发券)</van-button>
+					<van-button @click="toJiameng">加盟方(平台合伙人，享受营销活动)</van-button>
+				</div>
+			</div>
+		</div>
+		
+		<script>
+			var app = new Vue({
+				el:'#main',
+				data:{
+					baseUrl: 'http://172.168.0.50',
+					token: localStorage.getItem('token'),
+					jumpUrl:{
+						zhuban:baseUrl('/wx/distribution/apply_become_sponsor'),
+						jiameng:baseUrl('/wx/distribution/check_role'),
+						checkToken: 'http://sy.xfd365.com/wx/base/checkToken', //检查token
+						token: 'http://sy.xfd365.com/wx/wechat/login', //微信登录
+						jssdkUrl: 'http://sy.xfd365.com/wx/jssdk2/getSignPackage',
+					}
+				},
+				methods:{
+					toZhuban(){
+						axios.post(this.jumpUrl.zhuban,{token:this.token}).then(res=>{
+							this.$toast({
+								message: res.data.errmsg,
+								overlay: true
+							})
+							// if(res.data.errno == 0 || res.data.errno == 1){
+							// }else if(res.data.errno == 2){
+							// }else{
+							// }
+						})
+					},
+					toJiameng(){
+						axios.post(this.jumpUrl.jiameng,{token:this.token}).then(res=>{
+							if(res.data.errno == 0){
+								if(res.data.is_joiner == 2){
+									window.location.href = 'fillCoupon.html?tag=isJoiner'
+								}else if(res.data.is_joiner == 0){
+									window.location.href = 'jiamengInfo.html'
+								}
+							}
+						})
+						
+					},
+					
+					
+					wxSign: function () {
+						var that = this;
+						let back_url = 'http://sy.xfd365.com/mobile/sendCoupon.html';
+						axios({
+								method: 'post',
+								// url: 'https://api.xfd365.com/wx/wechat/get_jump_url',
+								url: 'http://sy.xfd365.com/wx/wechat/get_jump_url',
+								data: {
+									back_url: encodeURIComponent(back_url),
+								}
+							})
+							.then(function (resp) {
+								//返回数据
+								window.location.href = decodeURIComponent(resp.data.url);
+					
+							}).catch(function (error) {
+								//请求失败
+								console.log('error', error);
+							})
+					},
+					wechatLogin: function () {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.jumpUrl.token,
+								//data: form_data
+								data: {
+									code: that.code
+								}
+							})
+							.then(function (resp) { //返回数据
+								that.token = resp.data.token;
+								localStorage.setItem('token', that.token);
+								window.history.pushState(null, null,
+										'http://sy.xfd365.com/mobile/getShopCoupon.html');
+								if (that.token) {
+									that.getJssdk();
+								}
+					
+							}).catch(function (error) {
+								//请求失败
+								console.log('error', error);
+					
+							})
+					
+					},
+					//检查token是否过期
+					checkToken: function () {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.jumpUrl.checkToken,
+								data: {
+									token: that.token,
+									shop_id: that.shop_id,
+									from: that.gzh
+								}
+					
+							})
+							.then(function (resp) {
+								//返回数据
+								if (resp.data.errno == 1) {
+									//token过期调用跳转页面方法
+									localStorage.removeItem('token')
+									localStorage.removeItem('shoper_token')
+									that.wxSign();
+								} else {
+									that.getJssdk();
+								}
+							}).catch(function (error) {
+								//请求失败
+								console.log('error', error);
+							})
+					},
+					
+					getJssdk: function (isShare) {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.jumpUrl.jssdkUrl,
+							//data: form_data
+							data: {
+								token: that.token,
+								url: encodeURIComponent(location.href.split('#')[0])
+							}
+						}).then(function (resp) {
+							window.history.pushState(null, null,
+										'http://sy.xfd365.com/mobile/sendCoupon.html');
+					
+						})
+					},
+				},
+				mounted(){
+					let code = getQueryString('code');
+					if (code) {
+						this.code = code;
+					}
+					let token = localStorage.getItem('token')
+					if (this.code) {
+						this.wechatLogin()
+					} else {
+						if (token) {
+							this.checkToken()
+						} else {
+							this.wxSign()
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<!-- <script type="text/javascript" src="js/myscroll.js"></script> -->
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+		  display: none;
+		}		
+		html,body { font-size: 16px; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		.van-nav-bar .van-icon{
+			color: #333;
+		}
+		/* 订单状态 */
+		.nav-bg {  background: linear-gradient(#03da6b, #00ba59); }
+		.order-type { height: 6.5rem; display: flex; align-items: center; justify-content: space-between; padding-left:2rem; padding-right: 3rem;color: #ffffff; font-weight: bold; font-size: 1.125rem; }
+		.order-type img { height: 3.8rem; }
+		/* 选择地址 */
+		.van-contact-card::before { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: -webkit-repeating-linear-gradient(135deg,#FFC3C3 0,#FFC3C3 20%,transparent 0,transparent 25%,#B3DCFA 0,#B3DCFA 45%,transparent 0,transparent 50%); background-size: 80px; content: ''; }
+		.contact .van-cell__title { padding-left: 0.75rem; }
+		.contact .van-cell__title .contact-con { display: flex; align-items: center; }
+		.contact .van-cell__title .contact-con .name { font-size:1rem; font-weight:500; color:rgba(53,53,53,1); padding-right: 0.75rem; }
+		.contact .van-cell__title .contact-con .tel { font-size:0.875rem; font-weight:400; color:rgba(136,136,136,1); padding-right: 2rem; }
+		.contact .van-cell__title .contact-con .tag { font-size:0.625rem; font-weight:400; color:rgba(0,181,120,1);}
+		.contact .van-cell__title .addr { padding: 0; margin: 0; font-size:0.8rem; font-weight:400; color:rgba(53,53,53,1); }
+		.contact .van-cell__title::before { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: -webkit-repeating-linear-gradient(135deg,#FFC3C3 0,#FFC3C3 20%,transparent 0,transparent 25%,#B3DCFA 0,#B3DCFA 45%,transparent 0,transparent 50%); background-size: 80px; content: ''; }
+		/* 选择的商品列表 */
+		.goods-card { background:rgba(255,255,255,1); margin-top: 0.75rem; }
+		.goods-card .shop-name {  padding: 0.5rem  0.75rem 0 0.75rem; display: flex; align-items: center; }
+		.goods-card .shop-name img { width: 1.5rem; height: 1.5rem; border-radius: 50% }
+		.goods-card .shop-name span { font-size: 0.9rem; font-weight: 400; color:rgba(51,51,51,1);padding-left: 0.5rem; }
+		.goods-card .van-card { padding-left: 0.75rem; padding-right: 0.75rem; margin-top: 0; background:rgba(255,255,255,1); }
+		.goods-card .van-card .van-card__header { align-content: center; }		
+		.goods-card .van-card .van-card__thumb { width: auto; height: auto; display: flex; align-items: center; margin-right: 0.5rem;}
+		/* .goods-card .van-card .van-card__content { width: 150px; flex: none; -webkit-box-flex: none; -webkit-box-flex: none } */
+		.goods-card .van-card .van-card__title { width: calc(100% - 5rem); font-size:0.9rem; font-weight:600; color:rgba(53,53,53,1); padding-bottom: 0.375rem; }
+		.goods-card .van-card .desc { width: calc(100% - 2.5rem); font-size:0.75rem; font-weight:400; color:rgba(136,136,136,1); }
+	  	.goods-card .van-card .desc p{ padding: 0; margin: 0; word-break:break-all;word-wrap:break-word; }
+	  	.goods-card .van-card .van-card__price { font-size:0.9rem; font-weight:400; color:#353535;}
+		.goods-card .van-card .van-card__price .price { position: absolute; top: 0; right: 0; width: 5rem; text-align: right;text-overflow: ellipsis; overflow: hidden; }
+		.goods-card .van-card .van-card__price .price1 { position: absolute; bottom: 1.25rem; right: 0; width: 5rem; text-align: right;text-overflow: ellipsis; overflow: hidden; font-size:0.75rem; font-weight:400; color:#888888 }
+		.goods-card .van-card .van-card__num { font-size:0.75rem; font-weight:400; color:#888888 }
+		.goods-card .van-card .van-card__num .num { position: absolute; top: 1.25rem; right: 0; width: 2.5rem;text-align: right;text-overflow: ellipsis; overflow: hidden; }
+		.goods-card .van-card .van-card__num .price2 { position: absolute; bottom: 0; right: 0; width: 5rem; text-align: right;text-overflow: ellipsis; overflow: hidden; font-size:0.75rem; font-weight:400; color:#888888 }
+		.goods-card .delivery .van-cell_title,.goods-card .delivery .van-cell__value { font-size:0.9rem; font-weight:400; color:rgba(51,51,51,1);}
+		.goods-card .ship-date { font-size:0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0 0.75rem 0 0.75rem }
+	  	.goods-card .ship-date .ship-date-bg { display: flex; justify-content: space-between; align-items: center; background:rgba(245,245,245,1); padding: 0 0.75rem; }
+		.goods-card .deal-way .van-cell__title { font-size:0.9rem; font-weight:400; color:rgba(136,136,136,1);}
+	  	.goods-card .deal-way .van-cell__value { font-size:0.9rem; font-weight:400; color:rgba(51,51,51,1); }
+		.goods-card .goods_total_price .van-cell { font-size: 0.9rem; color: #333; }
+		.goods-card .goods_total_price .van-cell__value { color: #333; }
+		.goods-card .other-mark .van-cell { font-size: 0.9rem; color: #888888; }
+		.goods-card .other-mark .van-cell .van-cell__value { color: #888888;  }
+		.goods-card .other-mark .van-cell .price { color: #ff2814; font-weight: 400; }
+		/* 需付款 */
+		.need-pay-con  { margin-top: 0.75rem; }
+		.need-pay-con .van-cell { font-size: 0.9rem; color: #333; }
+		.need-pay-con .van-cell .van-cell__value { font-size: 1.125rem; color: #ff2814; font-weight: 400; }
+		/* 订单号等标注信息 */
+		.order-desc { padding: 10px 16px; background: #fff; margin-top: 0.75rem; margin-bottom: 0.75rem; }
+		.order-desc p{ font-size: 0.8rem; color: #888; margin-bottom: 2px; }
+
+		.fenxiao{
+			font-size: 12px;
+		}
+		.fenxiao .van-cell{
+			padding: 5px 16px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app" v-cloak>
+		<template>
+			<template>
+				<van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="商品详情" left-arrow @click-left="returnLast()"></van-nav-bar>
+				<div class="goods-card">
+					<!-- <div class="shop-name" >
+						<img src="images/speedBuy/sd.png" alt="">
+						<span>{{ shop_name }}</span>
+					</div> -->
+					<div v-for="(subItem, subIndex) in orderGoods" :key="subIndex">
+						<van-card :title="subItem.goods_name" :centered="true" >
+							<template #thumb>
+								<div>
+									<van-image width="6.25rem" height="6.25rem" fit="contain" :src="subItem.thumb" />
+								</div>
+							</template>
+							<template #desc>
+								<div class="desc" :style="subItem.two==1 ? 'width:calc(100% - 5rem)' : ''">
+									<p v-if="subItem.oneStylesName">{{ subItem.oneStylesTitle }}: {{ subItem.oneStylesName }}</p>
+									<p v-if="subItem.twoStylesName">{{ subItem.twoStylesTitle }}: {{ subItem.twoStylesName }}</p>
+									<p v-if="subItem.threeStylesName">{{ subItem.threeStylesTitle }}: {{ subItem.threeStylesName }}</p>
+								</div>
+							</template>
+							<template #price>
+								<div class="price" v-if="!subItem.pro_price">
+									<span style="font-size: 0.7rem;">￥</span>{{subItem.retail_price}}
+								</div>
+								<div v-else>
+									<div class="price" style="color: #ff2814;" >
+										<span style="font-size: 0.7rem;">￥</span>{{subItem.pro_price}}
+									</div>
+									<div class="price" style="top:1.25rem;color: #888888;text-decoration:line-through" >
+										<span style="font-size: 0.7rem;">￥</span>{{subItem.retail_price}}
+									</div>
+								</div>
+							</template>
+							<template #num>
+								<div class="num" v-if="!subItem.pro_price">
+									<span style="font-size: 0.5rem;">X</span>{{subItem.goods_num}}
+								</div>
+								<div class="num" v-else style="top:2.5rem">
+									<span style="font-size: 0.5rem;">X</span>{{subItem.goods_num}}
+								</div>
+							</template>
+							<template #bottom>
+								<div class="bottom">
+									<!-- <van-tag color="#f5f5f5" text-color="#888888">24小时内发货</van-tag> -->
+								</div>
+							</template>
+						</van-card>
+						<div class="fenxiao">
+							<van-cell title="分销活动名称" :value="subItem.distribute_name"></van-cell>
+							<van-cell title="分销所得百分比" :value="subItem.distribute_per" v-if="subItem.distribute_type == 1"></van-cell>
+							<van-cell title="分销所得固定金额" :value="subItem.first_money + '元'" v-else></van-cell>
+							<van-cell title="分销总佣金" :value="subItem.distribute_money"></van-cell>
+						</div>
+						</div>
+					</div>
+					<div class="goods_total_price">
+						<van-cell title="商品总价" :value="'￥'+orderInfo.total_price" />
+					</div>
+				</div>
+			</template>
+			<!-- <van-cell-group class="need-pay-con" :border="false">
+				<van-cell :title="orderInfo.order_status == 1 ? '需付款' : '已付款'" :value="'￥'+orderInfo.real_price" />
+			</van-cell-group> -->
+			<div class="order-desc">
+				<p>订单编号: {{orderInfo.order_no}}</p>
+				<p>下单时间: {{orderInfo.add_time}}</p>
+				<p>支付方式: {{(orderInfo.pay_type == 2 || orderInfo.pay_type == null)? '微信支付' : '银联支付'}}</p>
+			</div>
+		</template>
+	</div>
+
+	<script>
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				jumpUrl:{
+					detail: baseUrl('/wx/distribute/distributor_income_order_detail'),
+						jssdkUrl: baseUrl('/wx/jssdk/getSignPackage'),
+				},
+				token:localStorage.getItem('token'),
+				orderGoods:[],
+				orderInfo: {}
+			},
+			mounted() {
+				this.goodsDetail()
+				this.getJssdk()
+			},
+			methods: {
+				setWx() {
+					let that = this;
+					let shopInfo = JSON.parse(localStorage.getItem('shopInfo'))
+					// let shopInfo = that.shopInfo;
+					let share_title = shopInfo.share_title ? shopInfo.share_title : shopInfo.shop_name
+					let share_introduction = shopInfo.share_introduction
+					let shop_id = shopInfo.id
+					let logo = shopInfo.share_pic ? shopInfo.share_pic : shopInfo.logo
+					let lock_user_id = localStorage.getItem('lock_user_id')
+					wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {
+				
+							}
+						})
+				
+						wx.updateTimelineShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {},
+						})
+					});
+				},
+				getJssdk: function() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.jumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function(resp) {
+						let data = resp.data
+					
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.setWx();
+					})
+				},
+				//返回上一页
+				returnLast() {
+					window.history.go(-1);
+				},
+				goodsDetail(){
+					axios.post(this.jumpUrl.detail,{
+						order_id: getQueryString('order_id'),
+						token: this.token
+					}).then(res=>{
+						if(res.data.errno == 0){
+							this.orderInfo = res.data.data.orderInfo
+							this.orderGoods = res.data.data.orderGoods
+						}
+					})
+				}
+			},
+		})
+	</script>
+</body>
+
+</html>

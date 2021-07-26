@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/0.4.3/weui.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<script type="text/javascript" src="./js/api.js" ></script>
+	<script type="text/javascript" src="./js/aui-dialog.js" ></script>
+	
+
+
+</head>
+<body>
+	<div id="app">
+		<div class="aui-content-padded">
+			<div class="aui-btn aui-btn-block aui-btn-info" tapmode @click="openDialog()">基本dialog</div>
+		</div>
+		
+	</div>
+	
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				i:-1,
+				flag:true,
+				
+				tableData: [{
+					date: '2016-05-02',
+					name: '1111111111111',
+					address: '0'
+				}, {
+					date: '2016-05-04',
+					name: '22222222222222',
+					address: '0'
+				}, {
+					date: '2016-05-01',
+					name: '33333333333',
+					address: '0'
+				}, {
+					date: '2016-05-03',
+					name: '444444444444',
+					address: '0'
+				}]
+			},
+			methods: {
+
+				openDialog(){
+					var dialog = new auiDialog();
+					dialog.alert({
+						title:"提示",
+						msg:'这里是内容',
+						buttons:['取消','确定']
+					},function(ret){
+						console.log(ret)
+						if(ret){
+							
+						}
+					})
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>

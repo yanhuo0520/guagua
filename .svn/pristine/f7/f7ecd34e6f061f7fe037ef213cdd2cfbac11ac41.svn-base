@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
+	<title>微商超</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="css/elementIndex.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<link rel="stylesheet" href="css/index.css">
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+	<style>
+		[v-cloak] {
+		  display: none;
+		}
+		img {
+			vertical-align: top;
+		}
+
+		.clearfix::after {
+			content: "";
+			display: table;
+			clear: both;
+
+		}
+
+		ul li {
+			list-style: none;
+			/*position:absolute;*/
+		}
+		.aui-icon-my:before{
+			font-weight:900;
+		}
+		.el-divider--horizontal{
+			margin:10px 0px;
+		}
+		.aui-bar{
+			font-size:0.7rem;
+		}
+		.aui-margin-b-15{
+			margin-bottom:0!important;
+		}
+		.mgf{
+			padding: 10px;
+
+		}
+		.item-line{
+			height:30px;
+			line-height:30px;
+		}
+		body{
+			padding-bottom:50px;
+		}
+		.el-row{
+			position:fixed;
+		}
+		body{
+			padding-top:50px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app" v-cloak>
+		<el-row class="clearfix header white">
+			<el-col :span="8"><div class="el-icon-arrow-left" @click="returnLast()"></div></el-col>
+			<el-col :span="8"><div style="text-align: center">我的收藏</div></el-col>
+			<el-col  :span="8"><div @click="setDel()" style="text-align: right;font-size: 16px">管理</div></el-col>
+		</el-row>
+
+
+		<div style="margin-top: 10px;" class="white">
+			<div>
+				<div class="mgf" >
+					<div class="clearfix" v-for="(x,index) in collectList" style="padding:10px 0;border-bottom:1px solid #eee;">
+
+							<div class="clearfix">
+						<a :href=" 'goodsDetails.html?id=' + x.goods_id ">
+								<div class="fl ">
+									<img :src="x.thumb" width="100" height="70" alt="">
+								</div>
+						</a>
+								<div class="fl" style="width: 58vw;margin-left: 10px" >
+						<a :href=" 'goodsDetails.html?id=' + x.goods_id ">
+									<p style="color: #000">{{x.goods_name.slice(0,12)}}</p>
+						</a>
+									<div class="clearfix" style="margin-top: 20px;">
+										<span class="fl" style="color: #f36065;line-height: 28px">￥{{x.retail_price}}</span>
+										<p v-show="isDel" style="color: #999" @click="delCollect(index)"  class="fr">删除</p>
+									</div>
+								</div>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+			<div class="message-page-mask" v-show="message.show==1">
+				<div class="message-page-mask-content">
+					<div class="el-loading-spinner">
+						<i v-show="message.type=='success' " class="el-icon-success"></i>
+						<i v-show="message.type=='error' " class="el-icon-error"></i>
+
+						<p class="el-loading-text">{{message.text}}</p>
+					</div>
+				</div>
+			</div>
+
+	</div>
+
+	<script>
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				message:{
+					show:0,
+					type:'success',
+					text:'成功',
+				},
+				isDel:false,
+				JumpUrl:{
+					list:'http://sy.xfd365.com/wx/collect/new_lists',
+					// list:'http://www.guagua.com/wx/collect/new_lists',
+					delCollect:'http://sy.xfd365.com/wx/collect/addordelete',
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+				},
+				collectList:[],
+				token:localStorage.getItem('token')
+
+			},
+			methods: {
+				//返回上一页
+				returnLast(){
+					window.history.go(-1);
+				},
+			setDel(){
+				this.isDel=!this.isDel
+			},
+			    //取消收藏
+				delCollect(index){
+					let that=this;
+					axios({
+				    		method: 'post',
+				    		url: that.JumpUrl.delCollect,
+				    		//data: form_data
+				    		data: {
+				    			goods_id:that.collectList[index].goods_id ,
+				    			token:localStorage.getItem('token')
+				    		}
+				    	})
+				    	.then(function (resp) {
+						//返回数据
+					console.log(resp)
+						if(resp.data.errno == 0){
+							that.collectList.splice(index,1)
+							that.message={
+								show:1,
+								text:'删除成功',
+								type:'success'
+							}
+
+			    				setTimeout(function(){
+								that.message.show=0;
+							}, 2000)
+						}
+
+					})
+
+				},
+				//订单详情
+				getCollectList(){
+					var that = this;
+			    	axios({
+			    		method: 'post',
+			    		url: that.JumpUrl.list,
+			    		data: {
+			    			token:that.token
+			    		}
+			    	})
+			    	.then(function (resp) {
+			    		console.log(resp.data.data)
+					that.collectList=resp.data.data
+
+			    	}).catch(function (error) {
+						//请求失败
+						console.log('error', error);
+
+					})
+				},
+
+				setWx() {
+					let that = this;
+					let shopInfo=JSON.parse(localStorage.getItem('shopInfo'));
+					// console.log(shopInfo)
+					let share_title = shopInfo.share_title
+					let share_introduction = shopInfo.share_introduction
+					let shop_id = shopInfo.id
+					let logo = shopInfo.logo
+					wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+						wx.onMenuShareTimeline({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function() {
+				
+							}
+						})
+				
+						wx.onMenuShareAppMessage({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function() {
+							}
+						})
+				
+				
+					});
+				},
+				getJssdk: function() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function(resp) {
+						let data = resp.data
+					
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'onMenuShareTimeline',
+								'onMenuShareAppMessage',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.share_url = sdkData.url;
+						that.setWx();
+				
+					})
+				},
+
+			},
+			created:function(){
+				this.getJssdk();
+				this.getCollectList()
+			},
+		})
+	</script>
+</body>
+
+</html>

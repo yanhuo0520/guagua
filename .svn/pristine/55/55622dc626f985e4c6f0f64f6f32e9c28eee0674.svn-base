@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<!-- <script src="js/vue.js" type="text/javascript" charset="utf-8"></script> -->
+		<script src="js/axios.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5/lib/index.css">
+        <script src="./js/rem.js"></script>
+		<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant.min.js"></script>
+		<link rel="stylesheet" href="css/public.css">
+		<style>
+			
+			.van-popup{
+                width: 100%;
+				background: transparent;
+			}
+			.van-popup div{
+                box-sizing: border-box;
+                padding: 0.32rem;
+                height: calc((100vw - 0.64rem) *1.01);
+				background: url(img/tankuang.png) no-repeat;
+				background-size: 100% 100%;
+				text-align: center;
+			}
+			.van-popup div p:first-of-type{
+				padding-top: 2rem;
+			}
+			.van-popup div p:nth-of-type(2){
+				color: #888888;
+				margin-top: 0.44rem;
+				margin-bottom: 0.66rem;
+			}
+			.van-popup div button{
+				width: 4.08rem;
+				height: 0.72rem;
+				background: linear-gradient(#34333a, #28243f);
+				border-radius: 4px;
+				color: #fff;
+                font-size: 0.32rem;
+			}
+            .van-popup p { font-size: 0.32rem; }  
+            [v-cloak] {
+            display: none;
+            }
+            /* 导航栏 */
+            .van-nav-bar { background: transparent; background: #161d31; }
+            .van-nav-bar .van-icon { color: #fff; font-size: 0.32rem; }
+            .van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+            .van-nav-bar .van-nav-bar__right img { display: block; }
+            .van-nav-bar .van-nav-bar__title { font-weight: bold; color: #fff; }
+			/* 内容 */
+            .vip-con .bg { width: 100%; }
+            .vip-con .user-info { position: absolute; top: 9rem; width: 100%; box-sizing: border-box; background: transparent; padding: 0 0.72rem;  }
+            .vip-con .user-info .van-cell { height: 0.96rem; background: #f5f5f5; margin-bottom: 0.32rem; border-radius: 8px; }
+            .vip-con .user-info .btn-con { height: 0.96rem; margin-top: 0.9rem; }
+            .vip-con .user-info .van-button__text { color: #856001; font-weight: bold; }
+		</style>
+	</head>
+	<body>
+		<div id="app">
+            <div class="vip-con">
+                <van-nav-bar :border="false" :fixed="true" z-index="9999" title="绑定益农卡领取会员" left-arrow @click-left="toRouter()" > </van-nav-bar>
+                <img class="bg" src="./images/open-vip-bg.png" alt="">
+                <van-cell-group class="user-info":border="false" >
+                    <van-field v-model="name"  :border="false" clearable placeholder="请输入姓名" ></van-field>
+                    <van-field v-model="mobile"  :border="false" clearable placeholder="请输入手机号" ></van-field>
+                    <van-field v-model="card_no"  :border="false" clearable placeholder="请输入益农卡卡号" ></van-field>
+                    <div class="btn-con">
+                        <van-button type="primary" color="#ecd696" block @click="submit">提交</van-button>
+                    </div>
+                </van-cell-group>
+            </div>
+			<van-popup v-model="show" :close-on-click-overlay="false">
+				<div>
+					<p>{{msg}}</p>
+					<p>会员权益将在第一时间通知您!</p>
+					<button @click="hidePopup">知道了</button>
+				</div>
+			</van-popup>
+		</div>
+
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+                    scroll: 0,
+					baseUrl: 'http://sy.xfd365.com',
+					name: '',
+					mobile: '',
+					card_no: '',
+					show: false,
+					msg: '恭喜您成为益农会员!',
+					msgName: '请输入姓名',
+					msgMobile: '请输入手机号',
+					msgCard: '请输入益农联名卡卡号',
+                    is_yn: 0,
+				},
+				mounted() {
+					// let code = this.getUrlParam('code')
+					// if (code) {
+					// 	this.weChatLogin(code)
+					// } else {
+					// 	this.weSign()
+					// }
+
+					axios({
+						method: 'post',
+						url: this.baseUrl + '/wx/shop/user_info',
+						data: {
+							token: localStorage.getItem('token')
+						}
+					}).then(res => {
+						if (res.data.data.is_yn == 1) {
+							this.show = true;
+                            this.is_yn = 1;
+							this.msg = '您已经成为益农联盟的一份子了'
+						}
+					})
+
+				},
+				methods: {
+                    toRouter() {
+						window.history.go(-1)
+					},
+					getUrlParam(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if (r != null) return unescape(r[2]);
+						return null;
+					},
+					weChatLogin(code) {
+						axios({
+								method: 'post',
+								url: this.baseUrl + '/wx/wechat/login',
+								data: {
+									code: code,
+									shop_id: 1,
+								}
+							})
+							.then(function(resp) { //返回数据
+								localStorage.setItem('token', resp.data.token);
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					weSign() {
+						let back_url = 'http://sy.xfd365.com/mobile/openVip.html'
+						axios({
+								method: 'post',
+								url: this.baseUrl + '/wx/wechat/get_jump_url',
+								data: {
+									back_url: back_url,
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								window.location.href = resp.data.url;
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+							})
+					},
+                    // 隐藏popup
+                    hidePopup() {
+                        this.show = false;
+                        if(this.is_yn == 1) {
+                            window.location.href = "index.html";
+                        }
+                    },
+                    // 提交
+					submit() {
+						let that = this;
+						let reg = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/;
+						let reg1 = /^([1-9]{1})(\d{15}|\d{18})$/
+						if (this.name == '') {
+							this.$toast('请输入姓名')
+						} else if (this.mobile == '') {
+							this.$toast('请输入手机号')
+						} else if (!reg.test(this.mobile)) {
+							this.$toast('请输入正确手机号')
+						} else if (this.card_no == '') {
+							this.$toast('请输入益农联名卡卡号')
+						} else if (!reg1.test(this.card_no)) {
+							this.$toast('请输入正确益农联名卡卡号')
+						} else {
+							axios({
+								method: 'post',
+								url: this.baseUrl + '/wx/user/card_add',
+								data: {
+									name: this.name,
+									mobile: this.mobile,
+									card_no: this.card_no,
+									token: localStorage.getItem('token')
+								}
+							}).then(function(res) {
+								that.show = true;
+								if (res.data.errno == 0) {
+                                    that.is_yn = 1;
+									that.msg = '恭喜您成为益农会员！'
+								} else {
+									that.msg = res.data.errmsg
+								}
+							}).catch(function(error) {
+								console.log('error', error)
+							})
+						}
+					},
+				}
+			})
+		</script>
+	</body>
+</html>

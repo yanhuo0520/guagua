@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<script src="./js/rem.js"></script>
+	<script src="./js/vue.js"></script>
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/myscroll.js"></script>
+	<style>
+		.el-icon-arrow-up:before {
+			content: none;
+		}
+		.el-input__inner{
+			text-align:center;
+			border-radius:0px;
+			border:0px;
+		}
+		.el-select-dropdown__item{
+			width: 7.5rem;
+		}
+		.yx .el-input__inner{
+			border-left:1px solid #eee;
+		}
+		.el-select .el-input__inner:focus {
+		    border-color: #eee;
+		}
+		.el-select .el-input.is-focus .el-input__inner {
+		    border-color: #eee;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<div style="width: 100%;border: 1px solid #eee">
+			<el-row>
+				<el-col :span="12">
+					<el-select v-model="value1" placeholder="附近">
+						<el-option
+							v-for="item in options1"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value">
+						</el-option>
+					</el-select>
+				</el-col>
+				<el-col :span="12">
+					<el-select v-model="value2" placeholder="智能排序" class="yx">
+						<el-option
+							v-for="item in options2"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value">
+						</el-option>
+					</el-select>
+				</el-col>
+			</el-row>
+
+
+
+</div>
+</div>
+
+<script>
+	var app = new Vue({
+		el: '#app',
+		data:{
+			
+			options1: [{
+				value: '不限',
+				label: '不限'
+			}, {
+				value: '1000米',
+				label: '1000米'
+			}, {
+				value: '2000米',
+				label: '2000米'
+			}, {
+				value: '5000米',
+				label: '5000米'
+			}],
+			options2: [{
+				value: '距离最近',
+				label: '距离最近'
+			}, {
+				value: '最新入驻',
+				label: '最新入驻'
+			}],
+			value1: '',
+			value2: '',
+		},
+
+		methods: {
+
+		}
+	})
+</script>
+</body>
+
+</html>

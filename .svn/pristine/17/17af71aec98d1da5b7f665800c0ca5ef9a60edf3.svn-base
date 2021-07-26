@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		.van-nav-bar .van-icon{
+			color: #333;
+		}
+		
+		.van-uploader{
+			margin: 10px;
+		}
+		
+		.van-button{
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			background: #00BE34;
+			color: #fff;
+		}
+	</style> 
+
+</head>
+
+<body>
+	<div id="app" class="ucenter" v-cloak>
+		<van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="添加业务" left-arrow @click-left="clickLeft"></van-nav-bar>
+		<van-cell-group>
+			<van-field v-model="title" label="业务标题" placeholder="请输入业务标题" input-align="right"></van-field>
+			<van-field v-model="content" rows="3" autosize label="业务简介" type="textarea" placeholder="请输入业务简介" input-align="right"></van-field>
+			<van-cell title="上传图片"></van-cell>
+			<van-uploader :after-read="afterRead" v-model="fileList"></van-uploader>
+			<van-cell title="上传视频"></van-cell>
+			<van-uploader :after-read="afterReadVideo" v-model="fileList1" accept="video" />
+		</van-cell-group>
+		
+		<van-button @click="submit">确定</van-button>
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				title:'',//标题
+				content:'',//简介
+				fileList:[],
+				fileList1:[],
+				jumpUrl:{
+					add:baseUrl('/wx/Business/serviceAdd'),
+					upload:baseUrl('/wx/users/uploadImg'),
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+				},
+				token: localStorage.getItem('token'),
+				pic:'',
+				video:''
+			},
+			mounted() {
+				this.getJssdk();
+			},
+			methods: {
+				setWx() {
+					let that = this;
+					let shopInfo = JSON.parse(localStorage.getItem('shopInfo'))
+					// let shopInfo = that.shopInfo;
+					let share_title = shopInfo.share_title ? shopInfo.share_title : shopInfo.shop_name
+					let share_introduction = shopInfo.share_introduction
+					let shop_id = shopInfo.id
+					let logo = shopInfo.share_pic ? shopInfo.share_pic : shopInfo.logo
+					let lock_user_id = localStorage.getItem('lock_user_id')
+					wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {
+				
+							}
+						})
+				
+						wx.updateTimelineShareData({
+							title: share_title, // 分享标题
+							desc: share_introduction, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function () {},
+						})
+					});
+				},
+				getJssdk: function () {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.jumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function (resp) {
+						let data = resp.data
+				
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						this.setWx();
+				
+					})
+				},
+				clickLeft(){
+					window.history.go(-1);
+				},
+				afterRead(file) {
+					this.upload(file)
+				},
+				upload(file) {
+					let formdata = new FormData();
+					formdata.token = this.token
+					// formdata.append("from", 'pc');
+					formdata.append("token", this.token);
+					//可以通过append()方法来追加数据
+					if (file.file) {
+						if (file.file.size > 500 * 1024) {
+							let canvas = document.createElement("canvas"); // 创建Canvas对象(画布)
+							let context = canvas.getContext("2d");
+							let img = new Image();
+							img.src = file.content; // 指定图片的DataURL(图片的base64编码数据)
+							img.onload = () => {
+								canvas.width = img.width * 0.5;
+								canvas.height = img.height * 0.5;
+								context.drawImage(img, 0, 0, img.width * 0.5, img.height * 0.5);
+								file.content = canvas.toDataURL(file.file.type, 0.92); // 0.92为默认压缩质量
+								let files = this.dataURLtoFile(file.content, file.file.name);
+								files.content = canvas.toDataURL(files.type, 0.92);
+								if (files.size > 600000) {
+									this.upload(files);
+								} else {
+									formdata.append("file",files);
+									this.uploadFile(formdata,'pic');
+								}
+							};
+						} else {
+							//小于500k直接上传
+							formdata.append("file",file.file);
+							this.uploadFile(formdata,'pic');
+						}
+					} else {
+						if (file.size > 500 * 1024) {
+							let canvas = document.createElement("canvas"); // 创建Canvas对象(画布)
+							let context = canvas.getContext("2d");
+							let img = new Image();
+							img.src = file.content; // 指定图片的DataURL(图片的base64编码数据)
+							img.onload = () => {
+								canvas.width = img.width * 0.5;
+								canvas.height = img.height * 0.5;
+								context.drawImage(img, 0, 0, img.width * 0.5, img.height * 0.5);
+								file.content = canvas.toDataURL(file.type, 0.92); // 0.92为默认压缩质量
+								let files = this.dataURLtoFile(file.content, file.name);
+								files.content = canvas.toDataURL(files.type, 0.92);
+								if (files.size > 600000) {
+									this.upload(files);
+								} else {
+									formdata.append("file",files);
+									this.uploadFile(formdata,'pic');
+								}
+							};
+						} else {
+							//小于500k直接上传
+							formdata.append("file",file);
+							this.uploadFile(formdata,'pic');
+						}
+					}
+				},
+				dataURLtoFile(dataurl, filename) {
+					// 将base64转换为file文件
+					let arr = dataurl.split(",");
+					let mime = arr[0].match(/:(.*?);/)[1];
+					let bstr = atob(arr[1]);
+					let n = bstr.length;
+					let u8arr = new Uint8Array(n);
+					while (n--) {
+						u8arr[n] = bstr.charCodeAt(n);
+					}
+					return new File([u8arr], filename, {
+						type: mime
+					});
+				},
+				uploadFile(formdata, tag) {
+					const instance = axios.create({
+						//withCredentials:true
+						// headers:{
+						//   'authToken': localStorage.getItem('token')
+						// }
+					});
+					instance
+						.post(this.jumpUrl.upload, formdata)
+						.then(res => {
+							if (res.data.errno == 0) {
+								this.$toast.success("上传成功");
+								if(tag == 'pic'){
+									this.pic = res.data.data.url
+								}else if(tag == 'video'){
+									this.video = res.data.data.url
+								}
+							} else {
+								this.$toast(res.data.message);
+							}
+						}).catch((e) => {
+							this.$toast(e)
+						});
+				},
+				
+				afterReadVideo(file){
+					let formdata = new FormData();
+					formdata.token = this.token
+					// formdata.append("from", 'pc');
+					formdata.append("token", this.token);
+					formdata.append("file", file.file);
+					this.uploadFile(formdata,'video')
+				},
+				submit(){
+					if(this.title == ''){
+						this.$toast.fail('请填写业务标题')
+						return
+					}
+					if(this.content == ''){
+						this.$toast.fail('请填写业务简介')
+						return
+					}
+					if(this.pic == ''){
+						this.$toast.fail('请上传图片')
+						return
+					}
+					if(this.video == ''){
+						this.$toast.fail('请上传视频')
+						return
+					}
+					axios.post(this.jumpUrl.add,{
+						title: this.title,
+						brief: this.content,
+						pic_url:this.pic,
+						video_url: this.video,
+						token: this.token
+					}).then(res=>{
+						if(res.data.errno == 0){
+							this.$toast.success(res.data.errmsg)
+							window.history.go(-1);
+						}
+					})
+				}
+			},
+		})
+	</script>
+</body>
+
+</html>

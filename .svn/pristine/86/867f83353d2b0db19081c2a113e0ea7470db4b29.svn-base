@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/api.js" ></script>
+	<script type="text/javascript" src="js/aui-actionsheet.js" ></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		.header{
+			color: #fff;
+			background-image:url(./images/headerBg.png);
+			background-repeat:no-repeat;
+			background-size:100% auto;
+		}
+		img {
+			vertical-align: top;
+		}
+		.el-icon-arrow-up:before {
+			content: none;
+		}
+		.el-input__inner{
+			text-align:center;
+			border-radius:0px;
+			border:0px;
+		}
+		.el-select-dropdown__item{
+			width: 7.5rem;
+		}
+		.yx .el-input__inner{
+			border-left:1px solid #eee;
+		}
+		.el-select .el-input__inner:focus {
+			border-color: #eee;
+		}
+		.el-select .el-input.is-focus .el-input__inner {
+			border-color: #eee;
+		}
+	
+		.dividing{
+			height: 10px;background-color: #f5f5f5;
+		}
+		.aui-actionsheet-btn{
+			    max-height: 300px;
+			    overflow-x: hidden;
+			    overflow-y: scroll;
+		}
+		</style>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+	<!-- 	<el-row class="clearfix header" :gutter="20">
+			<el-col :span="2"><i class="el-icon-arrow-left"></i></el-col>
+			<el-col :span="20" style="text-align: center"><h2>全部商户</h2></el-col>
+			<el-col :span="2" ><i class="el-icon-arrow-right"></i></el-col>
+		</el-row> -->
+
+
+		<el-row class="clearfix header" style="font-size: 18px;">
+
+			<el-col :span="6">
+				<i  style="font-size:26px" class="el-icon-arrow-left" @click="returnLast()"></i>
+			</el-col>
+			<el-col :span="12" style="text-align: center">
+				<h2>更换绑定所属店铺</h2>
+			</el-col>
+			<el-col  :span="6" style="position:relative;height: 100%">
+				<img src="images/icon/sy2.png" alt="" width="20"  style="margin-top:auto;margin-bottom:auto;top:0;bottom:5px;right: 5px;position:absolute" @click="JumpIndex"> 
+			</el-col>
+			
+			
+		</el-row>
+
+
+		<div >
+			<div style="padding: 10px 20px;background-color: #fff" >
+				<div @click="obtainShop()">
+					<span>所属店铺：</span>
+					<span>{{buttonTitle}}</span>
+
+				</div>
+				
+
+			</div>
+			<el-row class="dividing"></el-row>
+		</div>
+		<!-- 第二个 -->
+
+
+	</div>
+	<script type="text/javascript" src="js/api.js" ></script>
+	<script type="text/javascript" src="js/aui-actionsheet.js" ></script>
+	<script>
+		apiready = function(){
+	        api.parseTapmode();
+	    }
+    	var actionsheet = new auiActionsheet();
+		var app = new Vue({
+			el: '#app',
+			data: {
+				buttons:[],
+				buttonTitle:'',
+				JumpUrl:{
+					my_shops:'http://sy.xfd365.com/wx/shop/my_shops',
+					
+				},
+			},
+			methods: {
+				//跳转首页
+				JumpIndex(){
+					window.location.href = "?v=1";
+				},
+				//弹窗
+				openActionsheet(){
+					var that =this;
+					var shops=[];
+					for (var i = 0; i < that.buttons.length; i++) {
+						shops.push(that.buttons[i].shop_name)
+					};
+					
+					actionsheet.init({
+			            frameBounces:true,//当前页面是否弹动，（主要针对安卓端）
+			            title:"请选择小区",
+			            cancelTitle:'取消',     	
+			            buttons:shops,
+			            
+			        },function(ret){
+			        	that.buttonTitle=ret.buttonTitle;
+			           for (var i = 0; i < that.buttons.length; i++) {
+							if (ret.buttonTitle == that.buttons[i].shop_name) {
+								localStorage.setItem('shop_id',that.buttons[i].id);
+
+							}
+						};
+			        })
+				},
+				//获取店铺
+			    obtainShop(){
+			    	var that = this;
+			    	axios({
+			    		method: 'post',
+			    		url: that.JumpUrl.my_shops,
+			    		data: {
+			    			token:localStorage.getItem("token"),
+			    		}
+			    	})
+			    	.then(function (resp) {
+			    		
+			    		that.buttons = resp.data.data;
+			    		that.openActionsheet();
+			    	}).catch(function (error) {
+						//请求失败
+						console.log('error', error);
+
+				})
+			    },
+
+			    //当前店铺
+			    currentShop(){
+			    	var that = this;
+			    	
+			    	axios({
+			    		method: 'post',
+			    		url: that.JumpUrl.del,
+			    		data: that.orderCancel
+			    	})
+			    	.then(function (resp) {
+			    		
+			    	}).catch(function (error) {
+						//请求失败
+						console.log('error', error);
+
+				})
+			    },
+				
+			}
+		})
+	</script>
+</body>
+
+</html>

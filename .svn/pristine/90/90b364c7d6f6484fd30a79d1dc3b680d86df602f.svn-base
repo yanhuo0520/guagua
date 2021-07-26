@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>聚农优享</title>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="css/index.css">
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js?v=1"></script>
+		<script type="text/javascript" src="./js/api.js"></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+		<script src="js/vconsole.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+		<style>
+			.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+			.inputValue{background: #fff;height: 65px;display: flex;align-items: center;justify-content: center;position: relative;}
+			.inputValue input{width: 80%;height: 35px;border: none;border-radius: 20px;padding-left: 15px;}
+			.inputValue button{position: absolute;right: 10%;border: none;background: linear-gradient(#02CF0A,#00BE34);color: #fff;height: 29px;padding: 0 15px;border-radius: 20px;font-size: 14px;}
+			.info{color: #28BD5C;margin:15px;}
+			.selected img{width: 25px;height: 25px;margin-right: 5px;}
+			.selected>div>.content{
+				background: #fff;
+				padding: 15px;
+				font-size: 14px;
+				color: #999999;
+			}
+			.selected .content span{
+				color: #28BD5C;
+			}
+			.selected .van-radio-group .content{font-size: 14px;}
+			.selected .van-radio-group .van-cell{margin-bottom: 10px;}
+			.selected .van-cell-group{background: transparent;}
+			.van-radio{
+				align-items: flex-start;
+			}
+			.saveBtn{background: linear-gradient(#02CF0A,#00BE34);border: none;color: #fff;height: 44px;border-radius: 20px;font-size: 16px;width: 80%;margin: 20px auto;display: block;}
+		</style>
+	</head>
+	<body>
+		<div id="main">
+			<van-sticky>
+				<van-nav-bar :border="false" left-arrow title="选择主办方" @click-left="returnLeft"></van-nav-bar>
+			</van-sticky>
+			<p class="inputValue">
+				<input type="text" v-model="searchText" placeholder="请输入您合作店铺的名称">
+				<button @click="zhubanfList">搜索</button>
+			</p>
+			<div v-if="selected" class="selected">
+				<p class="info">已选择的主办方</p>
+				<div>
+					<van-cell :title="selectedList.shop_name">
+						<template #icon>
+							<img src="img/logo.png" alt="">
+						</template>
+					</van-cell>
+					<div class="content">
+						<p>{{selectedList.clerk_name}} <span>|</span> {{selectedList.phone}}</p>
+						<p>{{selectedList.province+selectedList.city+selectedList.county}}</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="selected">
+				<p class="info">主办方列表</p>
+				<van-radio-group v-model="radio">
+				  <van-cell-group>
+				    <van-cell :title="item.shop_name" clickable @click="radio = index" v-for="(item,index) in zhubanList" :key="index">
+				      <template #right-icon>
+				        <van-radio :name="index" checked-color="#28BD5C" />
+				      </template>
+					  <template #icon>
+						  <img src="img/logo.png" alt="">
+					  </template>
+					  <template #label>
+						  <div class="content">
+						  	<p>{{item.clerk_name}} <span>|</span> {{item.phone}}</p>
+						  	<p>{{item.province+item.city+item.county}}</p>
+						  </div>
+					  </template>
+				    </van-cell>
+				  </van-cell-group>
+				</van-radio-group>
+			</div>
+			
+			<button class="saveBtn" @click="confirm">确定</button>
+		</div>
+		<script>
+			var app = new Vue({
+				el:'#main',
+				data:{
+					selected:false,
+					selectedList:{},
+					radio:'',
+					zhubanList:[{
+						title:'肯尼亚益农社全省总平台',
+						name:'徐东昌',
+						phone:'18656985632',
+						address:'河南省郑州市金水区中岛东路焕新路交叉口'
+					},{
+						title:'益农社全省总平台',
+						name:'徐东昌',
+						phone:'18656323632',
+						address:'河南省郑州市金水区中岛东路焕新路交叉口'
+					}],
+					searchText:'',
+					jumpUrl:{
+						list:baseUrl('/wx/distribution/joiner_belong_to_sponsor_list')
+					},
+					token:localStorage.getItem('token')
+					
+				},
+				mounted() {
+					if(localStorage.getItem('zhubanName')){
+						this.selected = true
+						this.selectedList = JSON.parse(localStorage.getItem('zhubanList'))
+					}
+					this.zhubanfList()
+					
+				},
+				methods:{
+					returnLeft(){
+						window.location.href = 'fenxiaoList.html'
+					},
+					zhubanfList(){
+						axios.post(this.jumpUrl.list,{
+							shop_name: this.searchText,
+							token:this.token
+						}).then(res=>{
+							if(res.data.errno == 0){
+								this.zhubanList = res.data.data.list
+								console.log(this.zhubanList)
+							}
+						})
+					},
+					confirm(){
+						if(this.radio === ''){
+							console.log(this.radio)
+							this.$toast('请选择主办方')
+						}else{
+							localStorage.setItem('zhubanName',this.zhubanList[this.radio].shop_name)
+							localStorage.setItem('zhubanList',JSON.stringify(this.zhubanList[this.radio]))
+							window.location.href = 'fenxiaoList.html'
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

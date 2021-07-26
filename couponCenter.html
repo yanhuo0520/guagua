@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<title>聚农优享</title>
+		<link rel="stylesheet" href="css/public.css">
+		<script type="text/javascript" src="js/publick.js?v=3"></script>
+		<script src="js/axios.min.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5/lib/index.css">
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant.min.js"></script>
+		
+		<style type="text/css">
+			[v-cloak] {
+				display: none;
+			}
+			html,body { font-size: 16px; height: 100%;}
+			@media all and (max-width:375px) {
+				body,html{
+					font-size: 14px;
+				}
+			}
+			@media only screen and (min-width: 414px) {
+				body,html {
+					font-size: 16px !important;
+				}
+			}
+			@media only screen and (min-width: 480px) {
+				body,html {
+					font-size: 22px !important;
+				}
+			}
+			#app { min-height: 100%; background: #f5f5f5; }
+			div { box-sizing: border-box; }
+			/* 导航栏 */
+			.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+			.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+			.van-nav-bar .van-nav-bar__right img { display: block; }
+			.van-nav-bar .van-nav-bar__title { font-weight: bold; }
+			/* tab导航栏 */
+			.nav-con .van-tab .van-tab__text { color: #888; font-size: 0.875rem; }
+			.nav-con .van-tab--active .van-tab__text { color: #333; font-size: 0.9rem; font-weight: bold; }
+			.nav-con .van-tabs__line { background-color: #333; }
+			.nav-con .van-tab--active .van-tab__text .van-dropdown-item .van-dropdown-item__option { font-weight: 400; }
+			.nav-con .van-tab--active .van-tab__text .van-dropdown-item .van-dropdown-item__option--active { font-weight: bold; }
+			/* 列表 */
+			.list-item { position: relative; padding: 0.3rem 0.75rem; padding-right: 0; display: flex; margin-top: 12px; }
+			.list-item.bg1 { background: url('./images/yhq-item-bg1.png') no-repeat; background-size: 100% 100%; }
+			.list-item.bg2 { background: url('./images/yhq-item-bg2.png') no-repeat; background-size: 100% 100%; }
+			.list-item.bg3 { background: url('./images/yhq-item-bg3.png') no-repeat; background-size: 100% 100%; }
+			.list-item .left { width: 75%; display: flex; flex-direction: column; align-items: center; }
+			.list-item .left .left-top { display: flex; width: 100%; align-items: center}
+			.list-item .left .left-top .shop-logo { width: 40px; height: 40px; border-radius: 4px; overflow: hidden; }
+			.list-item .left .left-top .shop-logo img { width: 100%; height: 100%;}
+			.list-item .left .left-top .shop-info { width: calc(100% - 40px); display: flex; align-items: center; flex-direction: column;padding-left: 8px }
+			.list-item .left .left-top .shop-info .shop-tit { width: 100%;overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.9rem; font-weight: bold; color: #333; }
+			.list-item .left .left-top .shop-info .coupon-tit { width: 100%; font-size: 0.8rem; color: #888; padding-top: 0.2rem;display: flex; align-items: center; }
+			.list-item .left .left-top .shop-info .coupon-type-con { display: flex; align-items: center; padding-top: 0.3rem; width: 100%; font-size: 0.8rem; color:#888; }
+			.list-item .left .left-bot { width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 1rem; }
+			.list-item .left .left-bot .desc { width: 100%; font-size: 0.75rem; color: #888; padding-bottom: 0.5rem;  display: flex;align-items: center; justify-content: space-between;}
+			.list-item .left .left-bot .desc .coupon-type { display: inline-block;  font-size: 0.6rem; background-color:#F22120; color: #fff; border-radius:100px; padding:0 0.3rem; margin-right: 0.2rem; }
+		
+			.list-item .left .left-bot .progress { width: 100%;}
+			.list-item .left .left-bot .coupon-desc { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+			.list-item .left .left-bot .coupon-desc .cell { width: 100%; display: flex; align-items: center; font-size: 0.75rem; color: #888; }
+			.list-item .left .left-bot .coupon-desc .cell .cell-left { flex: 1; }
+			.list-item .left .left-bot .coupon-desc .cell .cell-right { min-width: 7rem; }
+			.list-item .right { width: 25%; display: flex; flex-direction: column; align-items: center; justify-content: center;color: #fff; cursor: pointer; position: relative; }
+			.list-item .right .top { color: #ffe6c4; color: #ffe6c4;  width: 100%; display: flex;  align-items: flex-end; justify-content: center; }
+			.list-item .right .top .price { font-size: 1.6rem; font-weight: bold; }
+			.list-item .right .top .price-icon { font-size: 0.875rem; transform:translateY(-20%) }
+			.list-item .right .small .price { font-size: 1.2rem; font-weight: bold; }
+			.list-item .right .small .price-icon { font-size: 0.65rem; transform:translateY(-20%) }
+			.list-item .right .bot { font-size: 0.875rem; }
+			.list-item .right.no-coupon .top .price,.list-item .right.no-coupon .top .price-icon,.list-item .right.no-coupon .bot { color: #B2B2B2;} 
+			.list-item .yhq-type { position: absolute; width: 3rem; left: 0; top: 0; }
+			.list-item .yhq-yl-icon { position: absolute; right: 0; top: 0; width: 4rem; }
+			.list-item .new { position: absolute; right: 0; top: 0; width: 2rem; }
+			.list-item .right:active { opacity: 0.6; }
+			/* loading */
+			.full-loading { position: fixed; left: 0; top: 135px; right: 0; bottom: 0; background-color: #fff; z-index: 9999; }
+			.full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+			/* 无数据 */
+			.no-data { position: fixed; top: 135px; left: 0; right: 0; bottom: 0; z-index: 99;}
+			.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+			.no-data .no-data-con img { width: 100%; }
+			.no-data .no-data-con .no-title{ font-size: 1rem; font-weight:600;  color:rgba(0,0,0,1);  }
+			.no-data .no-data-con .no-desc { font-size: 0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+			.no-data .no-data-con .van-button { font-size: 0.75rem; font-weight:400; color:rgba(1,195,39,1); }
+		</style>
+	</head>
+	<body>
+		<div id="app"  v-cloak>
+			<van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="优惠券中心" left-arrow @click-left="toRouter()" >
+                <template #right>
+                    <img src="images/icon/shouye.png" alt="" width="20"  @click="JumpIndex">
+                </template>
+			</van-nav-bar>
+			<van-sticky :offset-top="46">
+				<div class="nav-con">
+					<van-tabs v-model="tabIndex" @change="handleClick" title-inactive-color="#888888" title-active-color="#333333" line-width="30px" line-height="5px">
+						<van-tab title="全部" name="0"></van-tab>
+						<van-tab title="通用券" name="1"></van-tab>
+						<van-tab title="商品券" name="2"></van-tab>
+						<van-tab title="会员券" name="3"></van-tab>
+					</van-tabs>
+				</div>
+			</van-sticky>
+			<van-sticky :offset-top="90">
+				<div class="nav-con">
+					<van-tabs v-model="tab2Index" @change="handleTab2Click" title-inactive-color="#888888" title-active-color="#333333" line-width="30px" line-height="5px">
+						<van-tab title="优惠券" name="1"></van-tab>
+						<van-tab title="线下抵消券" name="2"></van-tab>
+					</van-tabs>
+				</div>
+			</van-sticky>
+			<div class="coupon-list" style="padding: 0 0.75rem;" v-if="shopCouponList && shopCouponList.length > 0">
+				<div :class="item.can_get == 0 ? 'list-item bg3' : 'list-item bg1'" v-for="(item,index) in shopCouponList" >
+					<div class="left" @click.stop="detail(item.coupon_id,item.shop_id)">
+						<div class="left-top">
+							<div class="shop-logo">
+								<img :src="item.logo" alt="">
+							</div>
+							<div class="shop-info">
+								<div class="shop-tit">{{item.shop_name}}</div>
+								<div class="coupon-tit">
+									<span>{{item.name}}</span>
+								</div>
+								<div class="coupon-type-con">
+									<span>{{item.target_str}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="left-bot">
+							<!-- <template v-if="item.can_get != 2"> -->
+								<div class="desc">
+									<span>剩余：{{item.left_num}}张</span>
+									<div class="coupon-type">{{item.is_online == 0 ? '线上/门店当面交易通用' : (item.is_online == 2 ? '仅限门店当面交易使用' : '仅线上购物使用') }}</div>
+								</div>
+								<div class="progress">
+									<van-progress :percentage="item.percentage" color="#f22120" ></van-progress>
+								</div>
+							<!-- </template> -->
+							<!-- <template v-else>
+								<div class="coupon-desc">
+									<div class="cell">
+										<div class="cell-left">{{item.target_str}}</div>
+										<div class="cell-right">{{'有效期至' + item.end_time_str}}</div>
+									</div>
+									<van-icon name="arrow" color="#888" size="14"></van-icon>	
+								</div>
+							</template>	 -->
+						</div>
+					</div>
+					<div :class="item.can_get == 0 ? 'right no-coupon' : 'right'" @click.stop="receiveItem(item)">
+						<div class="top" :class="{ 'small': item.isSmall }">
+							<span class="price">{{item.type == 0 ? item.money : item.discount}}</span>
+							<span class="price-icon">{{item.type == 0 ? '元' : '折'}}</span>
+						</div>
+						<div class="bot" >{{item.can_get == 0 ? '已领完' : (item.can_get == 1 ? '领取' : '领取上限')}}</div>
+					</div>
+					<img class="yhq-type" :src="item.type == 0 ? './images/manjian1.png' : './images/zhekou1.png'" alt="">
+				</div>
+			</div>	
+			
+			<!-- <van-tabs v-model="active" background="#f5f5f5" color="#00B578" line-width="35px" line-height="2px" title-active-color="#00B578" @change="handleClick" sticky :offset-top="46">
+			  <van-tab :title="item.tabIndex==1?'通用券':item.tabIndex==2?'商品券':item.tabIndex==3?'会员券':'全部'" v-for="(item,index) in totalList" :key="index">
+				  <div :class="itm.can_get!=0?'unUsed list':'list'"  v-for="(itm,idx) in item.list"  >
+					<div class="left">
+						<p><span>{{itm.type == 0 ? itm.money : itm.discount}}</span>{{itm.type == 0 ? '元' : '折'}}</p>
+						<p class="juan-desc">{{itm.type_str}}</p>
+					</div>
+					<div class="right">
+						<div>
+							<p>{{itm.name}}<span>{{itm.target_str}}</span></p>
+							<button  @click="receiveItem(itm,idx)">{{itm.can_get == 0 ? '已领完' : (itm.can_get == 1 ? '领取' : '领取上限')}}</button>
+						</div>
+						<van-cell :title="'有效期至' + itm.end_time_str" value="规则详情" is-link arrow-direction="down" @click.stop="detail(itm.coupon_id)"></van-cell>
+					</div>
+				  </div>
+			  </van-tab>
+			</van-tabs> -->
+			<div class="full-loading" v-if="isFullLoading">
+				<van-loading  color="#1989fa" /> 
+			</div>
+			<div class="no-data" v-if="(shopCouponList.length === 0 || isErr) && !isFullLoading">
+				<div class="no-data-con">
+					<img :src="isErr ? errImg : noDataImg" alt="">
+					<p class="no-title">{{ isErr ? '网络竟然崩溃了' : '暂无可领取优惠券' }}</p>
+					<p class="no-desc">{{ isErr ? '别紧张,试试看刷新页面' : '请尝试切换优惠券种类' }}</p>
+					<van-button size="small" plain round color="#01C327" @click="handleErr" v-if="isErr">{{ isErr ? '刷新' : '' }}</van-button>
+				</div>
+			</div>
+		</div>
+		
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					tabIndex: 0,
+					tab2Index: 1,
+					shopCouponList: [],
+					JumpUrl:{
+						list: baseUrl('/wx/coupon/shop_coupon_list'), 
+						get_coupon: baseUrl('/wx/coupon/get_coupon'),
+					},
+					noDataImg: './images/icon/no-goods.png',
+					errImg: './images/err.png',
+					isFullLoading:true,
+					isErr: false,
+				},
+				methods:{
+					//跳转首页
+					JumpIndex(){
+						window.location.href = "index.html?v=11";
+					},
+					getListData(val) {
+						let that = this;
+						that.shopCouponList = []
+						if(!val) {
+							that.isFullLoading = true
+							that.isErr = false
+						}
+						axios({
+							method: 'post',
+							url: that.JumpUrl.list,
+							data:{tab_type: that.tabIndex, is_online: that.tab2Index, token: localStorage.getItem("token")}
+						})
+						.then(function (resp) {
+							if(!val) {
+								that.isFullLoading = false
+								that.isErr = false
+							}
+							let data=resp.data
+							if(data.code == 1){
+								let tmpData = []
+								if(data.data && data.data.length > 0) {
+									data.data.forEach(item =>{
+										if(item.type == 0) {
+											if(item.money > 999) {
+												item.isSmall = true
+											}
+										}
+										item.end_time_str = item.coupon_age.split('-')[1]
+										item.percentage = ((item.left_num/item.all)*100).toFixed(2)
+										if(item.can_get == 1) {
+											tmpData.push(item)
+										}
+									})
+									that.shopCouponList = tmpData
+								}
+							}else{
+								console.log(data.msg)
+								// that.$toast.fail(data.msg ? data.msg : '获取失败')
+							}
+
+						}).catch(function (error) {
+							that.isFullLoading = false
+							that.isErr =true
+							//请求失败
+							that.$toast.fail('服务异常,请稍后重试!')
+							console.log('error', error);
+
+						})
+					},
+					handleErr() {
+						if(this.isErr) {
+							this.getListData()
+						}
+					},
+					// 领取优惠券
+					receiveItem(item,index) {
+						if(item.can_get == 0) return
+						if(item.can_get == 2) {
+							this.$toast('领取次数已达上限')
+							return
+						}
+						let that = this
+						if(item.can_get == 1) {
+							if(that.get_coupon) return
+							that.get_coupon = true
+							axios({
+								method: 'post',
+								url: that.JumpUrl.get_coupon,
+								data:{coupon_id: item.coupon_id,token: localStorage.getItem("token")}
+							})
+							.then(function (resp) {
+								that.get_coupon = false
+								let data=resp.data
+								if(data.code == 1){
+									that.$toast('领取成功')
+									let newCouponIds = localStorage.getItem('newCouponIds') ? JSON.parse(localStorage.getItem('newCouponIds')) : []
+									newCouponIds.push(data.data.user_coupon_id)
+									localStorage.setItem('newCouponIds', JSON.stringify(newCouponIds)) // 领取的最新的优惠券id
+									that.getListData(true)
+								}else if(data.code == 2){
+									that.$dialog.alert({
+										title: '提示',
+										message: '只有益农卡会员才可以领取',
+										showCancelButton: true,
+										confirmButtonText: '加入会员'
+									}).then(() =>{
+										window.location.href = 'openVip.html?source=coupon'
+									}) .catch(() => {});
+								} else {
+									that.$toast.fail(data.msg ? data.msg : '领取失败')
+								}
+
+							}).catch(function (error) {
+								that.get_coupon = false
+								that.$toast.fail('服务异常,请稍后重试!')
+							})
+						}
+					},
+					// 切换tab1状态
+					handleClick(name, title) {
+						this.$toast.clear()
+						this.tabIndex = name
+						this.getListData();
+					},
+					// 切换tab2状态
+					handleTab2Click(name, title) {
+						this.$toast.clear()
+						this.tab2Index = name
+						this.getListData();
+					},
+					// 优惠券详情
+					detail(id) {
+						window.location.href = "couponDetail.html?id=" + id;
+						this.localPageData()
+					},
+
+					toRouter() {
+						window.history.go(-1)
+					},
+					initData() {
+						let local = localStorage.getItem('couponCenter')
+						let data = JSON.parse(local)
+						this.tabIndex = data.tabIndex
+						this.tab2Index = data.tab2Index
+						this.shopCouponList = data.shopCouponList
+						this.isFullLoading = false
+						localStorage.removeItem('couponCenter')
+						setTimeout(() =>{
+							document.documentElement.scrollTop = data.scrollTop
+						})
+					},
+					// 存储本页数据
+					localPageData() {
+						let that = this;
+						let obj = {
+							tabIndex: that.tabIndex,
+							tab2Index: that.tab2Index,
+							shopCouponList: that.shopCouponList,
+							scrollTop: document.documentElement.scrollTop, // 滚动距离
+						}
+						localStorage.setItem('couponCenter',JSON.stringify(obj))
+					}
+	
+				},
+				created: function() {
+					let local = localStorage.getItem('couponCenter')
+					let lastGetCouponIds = localStorage.getItem('lastGetCouponIds') 
+					let newCouponIds = localStorage.getItem('newCouponIds')
+					if(JSON.stringify(lastGetCouponIds) == JSON.stringify(newCouponIds)) {
+						localStorage.removeItem('newCouponIds')
+						localStorage.removeItem('lastGetCouponIds')
+					}
+					if(local) {
+						this.initData()
+					} else {
+						this.getListData();
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

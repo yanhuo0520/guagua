@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+	<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=smZPCVTuah1zIemCZPgjrNvOlx074Ca0"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		html,body { font-size: 16px; height: 100%; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		#app { height: 100%; background: #f5f5f5; overflow: hidden; }
+		div { box-sizing: border-box; }
+        /* 头部 */
+        .shop .header-con { position: relative; margin-top: -40px;}
+        .shop .header-con .bg { width: 100%; display: block; }
+        .shop .header-con .top { position: absolute; left: 0; top: 55px; width: 100%; height: 50px; padding: 10px 0.75rem; display: flex; align-items: center; justify-content: space-between; }
+        .shop .header-con .top .location { width: 40%; height: 100%; display: flex; align-items: center; background: #22C88A; align-items: center; border-radius: 1000px; padding: 0 5px; height: 36px; font-size: 0.9rem; }
+		.shop .header-con .top .location.w100 { width: 100%;}
+		.shop .header-con .top .location .icon { width: 18px; display: flex;align-items: center; }
+        .shop .header-con .top .location .icon img { width: 100%;  }
+        .shop .header-con .top .location .adress { font-size: 0.9rem; color: #fff; font-weight: bold; max-width: calc(100% - 40px); padding: 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .shop .header-con .top .search { width: 55%; height: 36px; }
+        .shop .header-con .top .search .van-search { height: 100%; background: transparent; border-radius: 100px; overflow: hidden; padding: 0; }
+        .shop .header-con .top .search .van-search .van-search__content { background: #22C88A; }
+        .shop .header-con .top .search .van-search .van-search__content .van-cell .van-field__left-icon { color: #fff; }
+        .shop .header-con .top .search .van-search .van-search__content .van-field__body input { color: #fff; }
+        .shop .header-con .top .search .van-search .van-search__content .van-field__body input::-webkit-input-placeholder { color: #fff; }
+        .shop .header-con .top .search .van-search .van-search__content .van-field__body .van-icon { color: #fff; }
+		/* 导航栏 */
+		.tab-con { margin: 0 16px; margin-top: -13vw; position: relative; }
+		.tab-con img { display: block; width: 100%; }
+		.tab-con .tab-absolute-con { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: flex; align-content: center; justify-content: center; padding-top: 4%; }
+		.tab-con .tab-absolute-con  .tab-item { flex: 1; display: flex; align-items: center; justify-content: center; color: #333;}
+		/* 店铺列表 */
+		.shop-list { margin: 0 16px; background: #fff; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; height: calc(100% - 77vw); overflow-y: auto;}
+		.shop-list .van-cell { padding: 12px 8px; }
+		.shop-list .van-cell .logo { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #04BB70; padding: 5px; margin-right: 8px; }
+		.shop-list .van-cell .logo img { width: 100%; height: 100%; }
+		.shop-list .van-cell .van-cell__value { max-width: 100px; flex: inherit; }
+		
+		/* 无数据 */
+		.no-data { position: relative; top: 0; left: 0; width: 100%; height: 300px; z-index: 99;}
+		.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+		.no-data .no-data-con img { width: 100%; }
+		.no-data .no-data-con .no-title{ font-size: 1rem; font-weight:600;  color:rgba(0,0,0,1);  }
+		.no-data .no-data-con .no-desc { font-size: 0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+		.no-data .no-data-con .van-button { font-size: 0.75rem; font-weight:400; color:rgba(1,195,39,1); }
+	</style> 
+
+</head>
+
+<body>
+	<div id="app" class="shop" ontouchstart="" onmouseover="" v-cloak>
+			<div class="header-con">
+				<img class="bg" src="./images/findshop-bg.png" alt="">
+				<div class="top">
+					<div class="location" @click="chooseAddress()">
+						<div class="icon">
+							<img src="./images/location-white.png" alt="">
+						</div>
+						<div class="adress">{{locationName ? locationName : '重新获取定位'}}</div>
+						<van-icon name="arrow-down" color="#fff" ></van-icon>
+					</div>
+					<div class="search" >
+						<!-- form仅为在ios上显示搜索按钮 -->
+						<form action=""> 
+							<van-search v-model="searchVal" placeholder="请输入店铺名称" @search="searchShop" @input="searchInput" @clear="getShop()"></van-search>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!-- <van-tabs v-model="shopTab" @change="handleShopTabClick">
+				<van-tab title="附近20公里" name="1"></van-tab>
+				<van-tab title="我的收藏" name="2"></van-tab>
+			</van-tabs> -->
+			<div class="tab-con">
+				<img :src="shopTab == 2 ? './images/find-shop-nav2.png' : './images/find-shop-nav1.png'" alt="">
+				<div class="tab-absolute-con">
+					<div class="tab-item" @click="handleShopTabClick(2)">收藏的店铺</div>
+					<div class="tab-item" @click="handleShopTabClick(1)">附近20公里的店铺</div>
+				</div>
+			</div>
+        <!-- 店铺列表	 -->
+        <div class="shop-list">
+            <van-list v-model="loading" :immediate-check="false" :finished="finished" @load="getShop(true)" :finished-text="shopList.length > 0 ? '没有更多了' : ''" >
+                <van-cell :title="item.shop_name" :label="item.address ? item.address : item.full_address" is-link  center @click="shopItemClick(item,index)" v-for="(item,index) in shopList">
+                    <template #icon>
+                        <div class="logo">
+                            <img  :src="item.logo ? item.logo : './images/shop-logo.png'" alt="">
+                        </div>
+                    </template>
+                </van-cell>
+            </van-list>
+            <div class="no-data"  v-if="(shopList.length === 0 || isErr) && !loading">
+                <div class="no-data-con">
+                    <img :src="isErr ? errImg : noDataImg" alt="异常图片">
+                    <p class="no-title">{{isErr ? '网络异常' : (!locationName ? (shopTab == 1 ? '定位失败' : (searchVal ? '暂未搜索到该店铺' : (shopTab == 1 ? '附近20公里暂无店铺' : '暂无收藏的店铺'))) : (searchVal ? '暂未搜索到该店铺' : (shopTab == 1 ? '附近20公里暂无店铺' : '暂无收藏的店铺')))}}</p>
+                    <p class="no-desc">{{isErr ? '别紧张,试试看刷新页面' : (!locationName ? (shopTab == 1 ? (locationErr ? '获取定位失败,请重新定位' : (locationCancel ? '您已取消定位,请重新定位' : '定位失败,请重新定位')) : (searchVal ? '换个词再给我次机会吧T T' : '请尝试切换其它标签试试')) : (searchVal ? '换个词再给我次机会吧T T' : '请尝试切换其它标签试试')) }}</p>
+                    <van-button size="small" plain round color="#01C327" @click="handleErr" v-if="isErr || (shopTab == 1 && !locationName)">{{ isErr ? '刷新' : '重新定位' }}</van-button>
+                </div>
+            </div>
+		</div>
+		<div style="height: 30px;"></div>
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+                shopTab: '2', // 1-附近店铺 2-收藏的店铺
+                searchVal: '',
+				locationName: '',
+				lng: '', 
+                lat: '', 
+				JumpUrl: {
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk2/getSignPackage',
+					checkToken: 'http://sy.xfd365.com/wx/base/checkToken', //检查token
+					token: 'http://sy.xfd365.com/wx/wechat/login', //微信登录
+					my_shops: baseUrl('/wx/shop/my_shops_page'), // 获取收藏的店铺
+					near_shops: baseUrl('/wx/coupon/nearby_shop'), // 获取附近的店铺
+				},
+				token: localStorage.getItem("token"),
+				distance: 20, // 附近公里
+			
+				nearPage: 0, // 附近xx公里内店铺列表分页
+				page: 0,//收藏店铺列表分页
+				loading: true, // 列表请求loading
+				finished: false, // 列表是否请求完成
+				shopList: [],
+
+				noDataImg: './images/icon/no-goods.png',
+				errImg: './images/err.png',
+				
+				isErr: false,
+				locationErr: true,
+				locationCancel: true,
+				code: '', // 微信登陆code
+			},
+			methods: {
+				// 搜索店铺
+				searchShop(val) {
+					if(val) {
+						this.searchVal = val
+						this.getShop()
+					}
+				},
+                // 搜索框输入事件  (当输入内容为空请求接口数据)
+                searchInput(val) {
+                    if(!val) {
+                        if(this.shopTab == 1) {
+							if(this.locationName) {
+								this.getShop() 
+							}
+						} else if(this.shopTab == 2){
+							this.getShop()
+						}
+                    }
+                },
+				// 处理tab1点击
+				handleShopTabClick(val) {
+					if(this.shopTab == val) return
+					if(this.loading) {
+						if(this.shopTab == 1) { 
+							this.$toast('正在请求附近20公里的店铺,请稍后点击')
+						} else {
+							this.$toast('正在请求收藏的店铺,请稍后点击')
+						}
+						return
+					}
+					this.shopTab = val
+					this.getShop()
+				},	
+				// 获取店铺列表
+				getShop(isLoad){
+					if(!isLoad) {
+						this.nearPage = 0
+						this.page = 0
+						this.shopList = []
+					}
+					this.finished = false
+					this.loading = true
+					
+                    if(this.shopTab == 1) {
+						if(this.locationName) {
+							this.getShopListByNear()
+						} else {
+							this.loading = false
+							this.finished = true
+						}
+                    } else if(this.shopTab == 2) {
+                        this.getShopListByCollect()
+                    }
+				}, 
+				// 获取附近xx公里内的店铺
+				getShopListByNear() {
+					let that = this;
+					let page = that.nearPage + 1
+					if (page !== 1) {
+						that.loading = true
+					}
+					axios({
+                        method: 'post',
+                        url: that.JumpUrl.near_shops,
+                        data: {
+                            token: that.token,
+							page: page,
+							size: 10,
+							lng: that.lng,
+							lat: that.lat,
+							shop_name: that.searchVal,
+							km: that.distance,
+                        }
+                    })
+                    .then(function (resp) {
+                        that.isErr = false 
+                        that.loading = false
+                        that.finished = true
+                        if(resp.data.code == 1) {
+                            if(resp.data.data.data && resp.data.data.data.length > 0) {
+                                let resultData = resp.data.data.data;
+								if (resultData) {
+									that.shopList = that.shopList.concat(resultData)
+								}
+								that.nearPage = page
+								if(resp.data.data.totalPage) {
+									if (that.nearPage >= resp.data.data.totalPage) {
+										that.finished = true
+									} else {
+										that.finished = false
+									}
+								} 
+								
+                            } else {
+                                that.shopList = [];
+                            }
+                        } 
+                    }).catch(function (error) {
+                        that.isErr = true 
+                        that.loading = false
+						that.finished = true
+                        //请求失败
+                        console.log('error', error);
+
+                    })
+				},
+				// 获取收藏的店铺
+				getShopListByCollect() {
+					let that = this;
+					let page = that.page + 1
+					if (page !== 1) {
+						that.loading = true
+					}
+					console.log(page)
+					axios({
+                        method: 'post',
+                        url: that.JumpUrl.my_shops,
+                        data: {
+                            token: that.token,
+							page: page,
+							size: 10,
+							shop_name: that.searchVal,
+                        }
+                    })
+                    .then(function (resp) {
+                        that.isErr = false 
+                        that.loading = false
+                        that.finished = true
+                        if(resp.data.errno == 0) {
+                            if(resp.data.data && resp.data.data.data.length > 0) {
+                                let resultData = resp.data.data.data;
+								if (resultData) {
+									that.shopList = that.shopList.concat(resultData)
+								}
+								that.page = page
+								if(resp.data.data.totalPage) {
+									if (that.page >= resp.data.data.totalPage) {
+										that.finished = true
+									} else {
+										that.finished = false
+									}
+								} 
+                            } else {
+                                that.shopList = [];
+                            }
+                        }
+                    }).catch(function (error) {
+                        that.isErr = true 
+                        that.loading = false
+						that.finished = true
+                        //请求失败
+                        console.log('error', error);
+
+                    })
+				},
+				// 处理店铺列表请求失败事件
+				handleErr() {
+					if(this.shopTab == 1) {
+						if(this.locationName) {
+							this.getShop()
+						} else {
+							this.getLocation(() =>{
+								this.getShop()
+							})
+						}
+					} else if(this.shopTab == 2) {
+						this.getShop()
+					}
+				},
+                // 点击当前店铺
+                shopItemClick(row,index) {
+					let shopId = this.shopTab == 1 ? row.shop_id : row.id
+                    window.location.href = 'index.html?shop_id='+shopId+'&v=12'
+                },
+				wxSign() {
+					var that = this;
+					let back_url = 'http://sy.xfd365.com/mobile/findShop.html';
+					axios({
+							method: 'post',
+							// url: 'https://api.xfd365.com/wx/wechat/get_jump_url',
+							url: 'http://sy.xfd365.com/wx/wechat/get_jump_url',
+							data: {
+								back_url: back_url,
+							}
+						})
+						.then(function (resp) {
+							//返回数据
+							window.location.href = resp.data.url;
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+						})
+				},
+				wechatLogin() {
+					var that = this;
+					axios({
+							method: 'post',
+							url: that.JumpUrl.token,
+							//data: form_data
+							data: {
+								code: that.code
+							}
+						})
+						.then(function (resp) { //返回数据
+							that.token = resp.data.token;
+							localStorage.setItem('token', that.token);
+							window.history.pushState(null, null,
+									'http://sy.xfd365.com/mobile/findShop.html');
+							if (that.token) {
+								that.getJssdk();
+							}
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+
+				},
+				//检查token是否过期
+				checkToken: function () {
+					var that = this;
+					axios({
+                        method: 'post',
+                        url: that.JumpUrl.checkToken,
+                        data: {
+                            token: that.token,
+                        }
+                    })
+                    .then(function (resp) {
+                        //返回数据
+                        if (resp.data.errno == 1) {
+                            //token过期调用跳转页面方法
+                            localStorage.removeItem('token')
+                            localStorage.removeItem('shoper_token')
+                            that.wxSign();
+                        } else {
+                            that.getJssdk();
+                        }
+                    }).catch(function (error) {
+                        //请求失败
+                        console.log('error', error);
+                    })
+				},
+				getJssdk() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function (resp) {
+						let data = resp.data
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'getLocation',
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						let source = getQueryString('source');
+						if(source == 'map') {
+							that.lng = getQueryString('lng');
+							that.lat = getQueryString('lat');
+							that.locationName = localStorage.getItem('locationNameByFindShop');
+							that.getShop()
+							window.history.pushState(null, null,
+									'http://sy.xfd365.com/mobile/findShop.html');
+							return
+						} else {
+							localStorage.removeItem('locationNameByFindShop');
+							localStorage.removeItem('searchNameByFindShop')
+						}
+						that.getLocation(() =>{
+							that.getShop()
+						})
+						window.history.pushState(null, null,'http://sy.xfd365.com/mobile/findShop.html');
+					})
+				},
+				// 获取微信定位
+                getLocation(callBack) {
+					let that = this;
+                    wx.ready(function () {  
+						wx.getLocation({
+							type: 'gcj02',
+							success: function (res) {
+								that.locationErr = false
+								that.locationCancel = false
+								var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+								var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+								var speed = res.speed; // 速度，以米/每秒计
+								var accuracy = res.accuracy; // 位置精度
+								that.lng = longitude
+								that.lat = latitude
+								that.geocoder(callBack)
+							},
+							fail: function (err) {
+								that.locationErr = true
+								that.locationCancel = false
+								that.locationName = ''
+								that.loading = false
+								// that.$dialog.alert({
+								// 	message:JSON.stringify(err)
+								// })
+								that.$toast('定位失败,请检查是否开启定位权限')
+							},
+							cancel: function (res) {
+								that.locationErr = false
+								that.locationCancel = true
+								that.locationName = ''
+								that.loading = false
+								that.$toast('您已取消定位')
+							}
+						});
+                    }); 
+                },  
+				// 逆地址解析
+                geocoder(callBack) {
+					let that = this
+					let point = new BMap.Point(that.lng,that.lat);
+					let geoc = new BMap.Geocoder();    
+					geoc.getLocation(point, function(res){
+						that.locationName = res.business ? res.business : res.address
+						callBack && typeof callBack == 'function' && callBack()
+					});    
+				},
+				// 跳转选择地址页面
+				chooseAddress() {
+					if(this.locationName) {
+						localStorage.setItem('searchNameByFindShop',this.locationName)
+						window.location.href = 'adressChooseByFindShop.html?lng='+this.lng+'&lat='+this.lat
+					} else {
+						localStorage.removeItem('locationNameByFindShop');
+						localStorage.removeItem('searchNameByFindShop')
+						this.getLocation()
+					}
+					
+				},
+			},
+			created(){
+                let code = getQueryString('code');
+                if (code) {
+                    this.code = code;
+                }
+                let token = localStorage.getItem('token')
+                if (this.code) {
+                    this.wechatLogin()
+                } else {
+                    if (token) {
+                        this.checkToken()
+                    } else {
+                        this.wxSign()
+                    }
+                }
+				
+			}
+		})
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.8.0/dist/JsBarcode.all.min.js" ></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		html,body { font-size: 16px; height: 100%; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		#app { min-height: 100%; background: #f5f5f5; }
+		div { box-sizing: border-box; }
+		/* 导航栏 */
+        .van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+        .van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+        .van-nav-bar .van-nav-bar__right img { display: block; }
+        .van-nav-bar .van-nav-bar__title { font-weight: bold; }
+		.no-data-nav .van-nav-bar { background: #02d066; }
+		.no-data-nav .van-nav-bar .van-icon { color: #fff; }
+		.no-data-nav .van-nav-bar .van-nav-bar__title { color: #fff; }
+        /* 拼团信息 */
+        .my-group-bg { position: absolute; top: 46px; left: 0; width: 100%; }
+        .group-info-con { padding: 1rem 0.75rem; position: relative; min-height: 100px; }
+        .group-info-con .group-info { width: 100%;height: 100%; border-radius: 8px; background-color: #fff; }
+        .group-info-con .group-info .card-info { padding: 0 1rem; } 
+        .group-info-con .group-info .card-info .van-card {  background: #fff; }
+        .group-info-con .group-info .card-info .goods-name {  font-size: 0.9rem; font-weight: bold; padding-bottom: 0.3rem; }
+        .group-info-con .group-info .card-info .price-con { display: flex; align-items: center; width: 100%; padding-top: 0.3rem; }
+        .group-info-con .group-info .card-info .price-type {  background: #ff3310; color: #fff; padding: 0.1rem 0.3rem; font-size: 0.6rem; border-radius: 4px; line-height: normal; }
+		.group-info-con .group-info .card-info .price-icon { font-weight: bold; color: #ff2814; margin-left: 0.3rem; }
+        .group-info-con .group-info .card-info .price { font-weight: bold; color: #ff2814; font-size: 1rem; }
+        .group-info-con .group-info .card-info .retail-price { color: #888888; font-size: 0.75rem; text-decoration: line-through; margin-left: 0.3rem;  }
+        
+        .group-info-con .group-info .group-fail .tit { font-size: 1rem; font-weight: bold; color: #333; padding: 0.5rem 0;text-align: center; }
+        .group-info-con .group-info .group-fail .desc { font-size: 0.875rem; color: #f66002;  display: flex; align-items: center; justify-content: center; }
+        .group-info-con .group-info .group-fail .desc img { width: 2rem; }
+        .group-info-con .group-info .group-fail .desc span { margin: 0 0.5rem; }
+        .group-info-con .group-info .group-fail .join-people { display: flex; align-items: center; justify-content: center; padding: 0.8rem 0; }
+        .group-info-con .group-info .group-fail .join-people .avatar { width: 3rem; height: 3rem; border: 1px solid #00c859; border-radius: 50%; overflow: hidden; margin-right: 0.3rem; }
+        .group-info-con .group-info .group-fail .join-people .avatar:last-child { margin-right: 0;}
+        .group-info-con .group-info .group-fail .join-people .avatar img { width: 100%; height: 100%; }
+        .group-info-con .group-info .group-fail .join-people .avatar.dashed { border: 1px dashed #979797; }
+        .group-info-con .group-info .group-fail .btn-con { width: 80%; margin: 0 auto; padding: 1rem 0; }
+        .group-info-con .group-info .group-fail .btn-con .van-button { width: 100%; background: #00c859; color: #fff; height: 40px; line-height: 40px; }
+
+        .group-info-con .group-rule-con { padding-top: 0.9rem; }
+        .group-info-con .group-rule-con .tip-con { display: flex; align-items: center; justify-content: center; }
+        .group-info-con .group-rule-con .tip-con .tip-icon { font-size: 1rem; font-family: Tensentype, Tensentype-MeiHeiJ; font-weight: MeiHeiJ; color: #01c327; }
+        .group-info-con .group-rule-con .tip-con .tip-border { background: #dfdfdf; height: 1px; flex: 1; margin-left: 0.8rem;}
+        .group-info-con .group-rule-con .group-rule { font-size: 0.875rem; font-weight: bold; color: #333; padding-bottom: 0.3rem; }
+        .group-info-con .group-rule-con .rule-item { display: flex; }
+        .group-info-con .group-rule-con .rule-item .dot { width: 0.5rem; height: 0.5rem; background-color: #01c327; border-radius: 50%; transform: translateY(50%); }
+        .group-info-con .group-rule-con .rule-item .info { font-size: 0.875rem; flex: 1; padding-left: 0.3rem;}
+        .group-info-con .group-rule-con .rule-item .info span { color: #f66002;}
+        .group-info-con .invating-con { padding-top: 0.5rem; }
+        .group-info-con .invating-con .time { display: flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+        .group-info-con .invating-con .time .block { color: #00c859;}
+        .group-info-con .invating-con .time .van-count-down { margin-left: 0.3rem; }
+        .group-info-con .invating-con .diff-people { font-size: 0.875rem; color: #333; font-weight: bold; text-align: center; padding-top: 0.3rem; }
+        .group-info-con .invating-con .diff-people .num { color: #00c859; }
+        .group-info-con .invating-con .join-people { display: flex; align-items: center; justify-content: center; padding: 0.8rem 0; }
+        .group-info-con .invating-con .join-people .avatar { width: 3rem; height: 3rem; border: 1px solid #00c859; border-radius: 50%; overflow: hidden; margin-right: 0.3rem; }
+        .group-info-con .invating-con .join-people .avatar:last-child { margin-right: 0;}
+        .group-info-con .invating-con .join-people .avatar img { width: 100%; height: 100%; }
+        .group-info-con .invating-con .join-people .avatar.dashed { border: 1px dashed #979797; }
+        .group-info-con .invating-con .avtivity-desc { color: #494848; font-size: 0.75rem; text-align: center; }
+        .group-info-con .invating-con .btn-con { width: 80%; margin: 0 auto; padding: 1rem 0; }
+        .group-info-con .invating-con .btn-con .van-button { width: 100%; background: #00c859; color: #fff; height: 40px; line-height: 40px; }
+       
+        .share-mask { height: 100%; width: 100%; z-index: 20000; top: 0; left: 0; color: #fff; position: fixed; background: rgba(0, 0, 0, 0.8); }
+		.share-mask-content p { padding-left: 20px; font-size: 28px; color: #fff }
+	</style> 
+</head>
+<body>
+	<div id="app" v-cloak>
+        <van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="我的拼团" left-arrow @click-left="toRouter()" >
+            <template #right>
+                <img src="images/icon/shouye.png" alt="" width="20"  @click="JumpIndex">
+            </template>
+        </van-nav-bar>
+        <img class="my-group-bg" src="images/my-group-bg.png" alt="">
+        <div class="group-info-con" v-if="info">
+           <div class="group-info">
+                <div class="card-info">
+                    <van-card class="van-hairline--bottom" centered >
+                        <template #thumb>
+                            <img :src="info.thumb" width="100%" height="100%" onerror="this.src='http://sy.xfd365.com/public/uploads/exp.jpg';this.onerror='null'" alt="">
+                        </template>
+                        <template #title>
+                            <div class="goods-name">{{info.goods_name}}</div>
+                        </template>
+                        <template #tags>
+                            <van-tag round plain color="#ff410c" >{{info.needer}}人团</van-tag>
+                        </template>
+                        <template #price>
+                            <div class="price-con">
+                                <div class="price-type">拼团价</div>
+                                <div class="price-icon">￥</div>
+                                <div class="price">{{info.team_price}}</div>
+                                <div class="retail-price">￥{{info.price}}</div>
+                            </div>
+                        </template>
+                    </van-card>
+                </div>
+                <div class="group-fail" v-if="info.status == 3 || info.status == 2">
+                    <div class="tit">已结束</div>
+                    <div class="desc">
+                        <img src="images/group-left-icon.png" alt="">
+                        <span :style="info.status == 2 ? 'color:#00c859' : ''">{{info.status == 2 ? '拼团成功' : '拼团失败'}}</span>
+                        <img src="images/group-right-icon.png" alt="">
+                    </div>
+                    <div class="join-people">
+                        <div class="avatar" :class="{'dashed': (item > info.need_list.length)}" v-for="(item,index) in info.needer">
+                            <img :src="item <= info.need_list.length ? info.need_list[index].follow_user_head_pic : 'images/icon/no-avatar-icon.png'" alt="">
+                        </div>
+                    </div>
+                    <div class="btn-con">
+                        <van-button round @click="aginInvite">再次开团</van-button>
+                    </div>
+                </div>
+                <div class="invating-con" v-if="info.status == 0 || info.status == 1">
+                    <div class="time">
+                        <span>距结束</span>
+                        <van-count-down :time="info.s_end_time*1000">
+                            <template #default="timeData">
+                                <template v-if="timeData.days > 0">
+                                    <span class="block">{{ timeData.days }}</span>
+                                    <span class="colon">天</span>
+                                </template>
+                                <span class="block">{{ timeData.hours < 10 ? ('0'+timeData.hours) : timeData.hours }}</span>
+                                <span class="colon">时</span>
+                                <span class="block">{{ timeData.minutes < 10 ? ('0'+timeData.minutes) : timeData.minutes }}</span>
+                                <span class="colon">分</span>
+                                <span class="block">{{ timeData.seconds < 10 ? ('0'+timeData.seconds) : timeData.seconds }}</span>
+                                <span class="colon">秒</span>
+                            </template>
+                    </div>
+                    <div class="diff-people">还差<span class="num">{{info.needer -  info.need_list.length}}人</span>拼团成功,快去分享给好友吧~</div>
+                    <div class="join-people">
+                        <div class="avatar" :class="{'dashed': (item > info.need_list.length)}" v-for="(item,index) in info.needer">
+                            <img :src="item <= info.need_list.length ? info.need_list[index].follow_user_head_pic : 'images/icon/no-avatar-icon.png'" alt="">
+                        </div>
+                    </div>
+                    <div class="avtivity-desc">共{{info.needer}}人参团,{{info.time_limit}}小时内人数不足自动退款</div>
+                    <div class="btn-con">
+                        <van-button round @click="inviteFriends">邀请好友</van-button>
+                    </div>
+                </div>
+           </div>
+
+           <div class="group-rule-con">
+               <div class="tip-con">
+                    <div class="tip-icon">TIPS</div>
+                    <div class="tip-border"></div>
+               </div>
+               <div class="group-rule">拼团规则</div>
+               <div class="rule-item">
+                   <div class="dot"></div>
+                   <div class="info">拼团有效期:自开团起<span>{{info.time_limit}}小时</span>内为拼团有效,如果距离活动小于<span>{{info.time_limit}}小时</span>,则以活动结束时间为准</div>
+               </div>
+           </div>
+        </div>
+        
+        <div class="share-mask" v-show="isShare" @click="isShare = false">
+			<div style="width:100%;height:80px;">
+				<img style="display:block;position:fixed;right:10px;top:0px;width:80px;height:80px;"  src="images/icon/share.png" alt="">
+			</div>
+			<div class="share-mask-content">
+                <p>点击右上角</p>
+                <p>通过【发送给朋友】</p>
+                <p>邀请好友</p>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		
+		var app = new Vue({
+			el: '#app',
+			data: {
+                follow_id: '',//拼团id
+				JumpUrl: {
+					my_team_detail: baseUrl('/wx/team/my_team_detail'),
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+				},
+                isShare: false,
+                time: 100000000,
+                info: '',
+			},
+			methods: {
+                //跳转首页
+                JumpIndex(){
+                    window.location.href = "index.html?v=1";
+                },	
+				toRouter() {
+					window.location.href = 'myGroupBuyList.html'
+				},
+                // 展开当前折叠面板
+                showCurCollapse(item) {
+                    item.isShow = !item.isShow
+                },
+                // 邀请好友
+                inviteFriends() {
+                    let that = this;
+                    let info = that.info;
+					let nowTime = new Date().getTime()
+					if(nowTime >= info.found_end_time*1000) {
+						that.$dialog.confirm({
+							title: '提示',
+							message: '该商品拼团已结束，是否继续拼一单?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							window.location.href='groupGoodsDetails.html?id='+info.goods_id+'&team_id='+info.team_id+'&v=1'
+						})
+						return
+					}
+					if(info.status == 0) {
+						that.$dialog.confirm({
+							title: '提示',
+							message: '订单还未支付，是否继续支付?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							// that.promptlyPay();
+						})
+						return
+					}
+					if(info.status == 1) {
+						that.isShare = true
+						return
+					}
+					if(info.status == 2) {
+						that.$dialog.confirm({
+							title: '提示',
+							message: '已经拼团成功，是否继续拼一单?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							window.location.href='groupGoodsDetails.html?id='+info.goods_id+'&team_id='+info.team_id+'&v=1'
+							// that.promptlyPay();
+						})
+						return
+					}
+					if(info.status == 3) {
+						that.$dialog.confirm({
+							title: '提示',
+							message: '拼团失败，是否继续拼一单?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							window.location.href='groupGoodsDetails.html?id='+info.goods_id+'&team_id='+info.team_id+'&v=1'
+
+							// that.promptlyPay();
+						})
+						return
+					}
+                },
+                // 再次开团
+                aginInvite() {
+                    let that = this;
+                    let info = that.info;
+					let nowTime = new Date().getTime()
+					if(nowTime >= info.found_end_time*1000) {
+						that.$dialog.confirm({
+							title: '提示',
+							message: '该商品拼团已结束，是否继续拼一单?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							window.location.href='groupGoodsDetails.html?id='+info.goods_id+'&team_id='+info.team_id+'&v=1'
+						})
+						return
+					}
+                    if(info.status == 2) {
+						that.$dialog.confirm({
+							title: '提示',
+							message: '已经拼团成功，是否继续拼一单?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							window.location.href='groupGoodsDetails.html?id='+info.goods_id+'&team_id='+info.team_id+'&v=1'
+						})
+						return
+					}
+					if(info.status == 3) {
+						that.$dialog.confirm({
+							title: '提示',
+							message: '拼团失败，是否继续拼一单?',
+							confirmButtonText: '继续'
+						}).then(() => {
+							window.location.href='groupGoodsDetails.html?id='+info.goods_id+'&team_id='+info.team_id+'&v=1'
+						})
+						return
+					}
+                },
+                // 获取拼团详情
+                getDetailById(id) {
+                    let that = this;
+                    that.$toast.loading({
+                        message: '加载中...',
+                        forbidClick: true,
+                        duration: 0,
+                    });
+					axios({
+						method: 'post',
+						url: that.JumpUrl.my_team_detail,
+						data: {
+							token: localStorage.getItem("token"),
+							follow_id: that.follow_id
+						}
+					}).then(function (resp) {
+                        that.$toast.clear()
+						if(resp.data.code == 1) {
+                            that.info = resp.data.data.data
+							that.setWx(that.info)
+                        } else {
+                            that.$toast(resp.data.msg ? resp.data.msg : '获取失败')
+                        }
+					}).catch(err =>{
+                        that.$toast.clear()
+                        that.$toast('服务异常,请稍后重试')
+                    })
+                },
+				// 获取微信jssdk的配置
+				getJssdk(isShare) {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: localStorage.getItem("token"),
+							url: window.location.href
+						}
+					}).then(function (resp) {
+						// console.log(JSON.stringify(resp))
+						let data = resp.data
+
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateTimelineShareData',
+								'updateAppMessageShareData',
+							] // 必填，需要使用的JS接口列表
+                        });
+                        that.getDetailById(that.follow_id)
+					})
+				},
+				setWx(item) {
+					let shop_id = localStorage.getItem('shop_id')
+					wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+						wx.updateAppMessageShareData({
+							title: item.share_title, // 分享标题
+							desc: item.share_desc, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/groupGoodsDetails.html?id=' + item.goods_id + '&team_id='+item.team_id + '&found_id='+item.found_id + '&shop_id=' + shop_id+'&from=share&v=1', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: item.share_img, // 分享图标
+							success: function() {
+				
+							}
+						})
+						wx.updateTimelineShareData({
+							title: item.share_title, // 分享标题
+							desc: item.share_desc, // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/groupGoodsDetails.html?id=' + item.goods_id + '&team_id='+item.team_id + '&found_id='+item.found_id + '&shop_id=' + shop_id+'&from=share&v=1', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: item.share_img, // 分享图标
+							success: function() {
+							}
+						})
+					});
+				},
+			
+			},
+			created() {
+                let id = getQueryString('id')
+                this.follow_id = id
+                this.getJssdk()
+			}
+		})
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<script src="./js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		html,body { font-size: 16px; height: 100%; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		#app { min-height: 100%; background: #ffffff; }
+		div { box-sizing: border-box; }
+		.van-field--disabled .van-cell__title { color: #323233; }
+		/* 导航栏 */
+        .van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+        .van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+        .van-nav-bar .van-nav-bar__right img { display: block; }
+        .van-nav-bar .van-nav-bar__title { font-weight: bold; }
+        /* 修改信息 */
+        .edit-info { padding-top: 2rem; padding-bottom: 2rem;}
+        .edit-info .btn-con { width: 100%; display: flex; align-items: center; justify-content: center; margin-top: 3rem;}
+        .edit-info .btn-con .van-button { width: 80%; height: 2.5rem; line-height: 2.5rem; padding: 0; font-size: 0.8rem; }
+        .edit-info .btn-con .dis-btn { opacity: 0.6; }
+		.van-uploader { width: 100%;background: #f5f5f5; }
+		.van-uploader .van-uploader__input-wrapper { width: 100%; }
+		.upload-con { height: 10.3rem; background: #f5f5f5; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+		.upload-con img { width: 4.3rem; height: 4.3rem; }
+		.upload-con span { font-size: 14px; margin-top: 10px; color: #888; }
+		.bank-pic-con { width: 100%; height: 10.3rem; text-align: center; background-color: #f5f5f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative; }
+		.bank-pic { max-width: 100%; max-height: 100%; }
+		.del-icon-con { position: absolute; top: 0; right: 0; width: 20px; height: 20px; background-color: rgba(0, 0, 0, 0.7); border-radius: 0 0 0 18px; }
+		.del-icon-con .del-icon { position: absolute; top: 0; right: 0; color: #fff; font-size: 16px; -webkit-transform: scale(0.5); transform: scale(0.5);}
+		.pic-con { padding: 10px 2rem; }
+		.sms-text { display: block; min-width: 80px; color: #01C327; font-size: 0.9rem; text-align: center; }
+	</style> 
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+        <van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" :border="false" title="重置密码" left-arrow @click-left="toRouter()" ></van-nav-bar>
+        <div class="edit-info">
+                <van-cell-group>
+                    <van-field v-model="tel" label="账号" placeholder="请输入您的账号" clearable ></van-field>
+                    <van-field v-model="sms" label="短信验证码" placeholder="短信验证码" clearable >
+                        <template #button>
+                            <van-button size="small" type="primary" @click="sendMsg">{{time ? (time + '秒') : '获取验证码' }}</van-button>
+                        </template>
+                    </van-field>
+                    <van-field v-model="pwd" label="密码" type="password" placeholder="请输入您的密码" clearable ></van-field>
+                    <van-field v-model="confirmPwd" label="确认密码" type="password" placeholder="请确认您的密码" clearable ></van-field>
+                </van-cell-group>
+            <div class="btn-con">
+                <van-button  round type="primary" color="linear-gradient(90deg,#02cf0a, #00be34)" @click="submit">重置密码</van-button>
+            </div>
+        </div>
+	</div>
+
+	<script>
+		
+		var app = new Vue({
+			el: '#app',
+			data: {
+                tel: '',
+                sms: '', // 验证码
+                pwd: '',
+                confirmPwd: '',
+                time: '', // 验证码计时
+                timeSetInterVal: '', // 验证码定时器
+				JumpUrl: {
+                    get_code: baseUrl('/index.php/api/index/reset_get_code'),
+					forget_password: baseUrl('/wx/base/forget_password'),
+				},
+                isSend: false,
+                code: '',
+			},
+			methods: {	
+				toRouter() {
+					clearInterval(this.timeSetInterVal)
+					window.location.href = 'login.html'
+				},
+                // 发送验证码
+                sendMsg() {
+                    let that = this;
+                    let reg = /^1[3456789]\d{9}$/
+                    if(!reg.test(that.tel)) {
+                        that.$toast('请输入正确的手机号')
+                        return
+                    }
+                    if(that.time) return
+                    axios({
+                        method: 'post',
+                        url: that.JumpUrl.get_code,
+                        data:{
+                            phone:that.tel
+                        }
+                    })
+                    .then(function (resp) {
+                        if(resp.data.code == 1) {
+                            that.time = 60
+                            that.isSend = true
+                            that.timeSetInterVal = setInterval(() =>{
+                                that.time--
+                                if(that.time <= 0) {
+                                    clearInterval(that.timeSetInterVal)
+                                }
+                            },1000)
+                        } else {
+                            that.$toast(resp.data.msg)
+                        }
+                    })
+                   
+                },
+                // 提交按钮
+                submit() {
+                    let that = this;
+                    let reg = /^1[3456789]\d{9}$/
+                    let param = {}
+                    if(!reg.test(that.tel)) {
+                        that.$toast('请输入正确的手机号!')
+                        return
+                    }
+                    if(!that.sms) {
+                        that.$toast('请输入短信验证码!')
+                        return
+                    }
+                    if(!that.isSend) {
+                        that.$toast('请先获取验证码!')
+                        return
+                    }
+                    if(!that.pwd) {
+                        that.$toast('请输入您的密码!')
+                        return
+                    }
+                    if(!that.confirmPwd) {
+                        that.$toast('请再次输入您的密码!')
+                        return
+                    }
+                    if(that.pwd != that.confirmPwd) {
+                        that.$toast('两次密码输入不一致!')
+                        return
+                    }
+                    param = {
+                        phone: that.tel,
+                        code: that.sms,
+                        password: that.pwd,
+                        password2: that.confirmPwd
+                    }
+					axios({
+                        method: 'post',
+                        url: that.JumpUrl.forget_password,
+                        data:param
+                    })
+                    .then(function (resp) {
+                        if(resp.data.code == 1) {
+                            localStorage.setItem('loginTel', that.tel);
+                            that.$toast.loading({
+                                message: '重置密码成功正在前往登陆页...',
+                                forbidClick: true,
+                            });
+                            setTimeout(() =>{
+                                window.location.href = 'login.html'
+                            },1000)
+                        } else {
+                            that.$toast(resp.data.msg)
+                        }
+                    }).catch(function (error) {
+                        //请求失败
+                        that.$toast('服务异常,请稍后重试')
+                        console.log('error', error);
+                    })
+                }
+			},
+            destroyed() {
+                clearInterval(this.timeSetInterVal)
+            }
+		})
+	</script>
+</body>
+
+</html>

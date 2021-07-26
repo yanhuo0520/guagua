@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>微商超</title>
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>我的订单</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+<!-- 	<script src="js/query-1.10.2.js"></script -->
+	<!-- <script type="text/javascript" src="js/myscroll.js"></script> -->
+	<style>
+		[v-cloak] {
+		  display: none;
+		}
+		img {
+			vertical-align: top;
+		}
+		.xz{
+			font-size:0.7rem;
+			margin-right:5px;
+		}
+	/*	.el-tabs{
+			width: 26rem;
+			margin: auto;
+			}*/
+			.el-tabs__nav-wrap{
+				width: 100%;
+			}
+		/*.el-tabs__item{
+			width: 25%;
+			text-align:center;
+			}*/
+			.mgf{
+				padding:0 10px;
+				border-top:1px solid #eee;
+				background-color: #fff;
+			}
+			.el-divider--horizontal {
+				margin: 10px 0;
+			}
+			.spacing{
+				padding:10px;
+				background-color: #fff;
+			}
+
+		.el-tabs__item.is-active{
+			/* background:#fff; */
+			color:#f36065;
+		}
+		.el-tabs__active-bar{
+			background-color:#f36065;
+		}
+		.el-dialog__header{
+			    padding: 0px 20px 10px;
+		}
+		.order_btn{
+			width:80px;
+			height:30px;
+			line-height:30px;
+			border-radius:26px;
+			text-align:center;
+			font-size:14px;
+		}
+		.pay_btn{
+			color:#fff;
+			 background:-webkit-linear-gradient(left,#f76162,#fdc08a);/*for safari5.1-6.0*/
+			 background:-o-linear-gradient(left,#f76162,#fdc08a);/*Opera 11.1-12.0*/
+			 background:-moz-linear-gradient(left,#f76162,#fdc08a);/*firefox 3.6-15*/
+			 background:linear-gradient(left,#f76162,#fdc08a);/*标准语法，必须放在最后*/
+		}
+		.cancel_btn{
+			background-color:#ddd;
+			margin-right:20px;
+			color:#fff;
+		}
+		.del_btn{
+			border:2px solid #f76162;
+		}
+		.el-row{
+			position:fixed;
+		}
+		body{
+			padding-top:50px;
+		}
+		</style>
+
+
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<el-row class="clearfix header" style="font-size: 18px;">	
+				<el-col :span="8">
+					<i  style="font-size:26px" class="el-icon-arrow-left" @click="returnLast()"></i>
+				</el-col>
+				<el-col :span="8" style="text-align: center">
+					<div>我的订单</div>
+				</el-col>
+				<el-col  :span="8" style="position:relative;height: 100%">
+					<img src="images/icon/sy2.png" alt="" width="20"  style="margin-top:auto;margin-bottom:auto;top:0;bottom:5px;right: 5px;position:absolute" @click="JumpIndex"> 
+				</el-col>	
+		</el-row>
+
+			<div style="width:100%;padding:0 2%;" class="white">
+			  <el-tabs v-model="status" @tab-click="handleClick">
+			    <el-tab-pane label="全部" name="">   </el-tab-pane>
+			    <el-tab-pane label="待付款" name="1"></el-tab-pane>
+			    <el-tab-pane label="待发货" name="2"></el-tab-pane>
+			    <el-tab-pane label="待收货" name="7"></el-tab-pane>
+			    <el-tab-pane label="已完成" name="10"></el-tab-pane>
+			  </el-tabs>
+			</div>
+
+			<div >
+				<div label="全部" >
+					<!-- {{item.order_id}} -->
+					<div v-for="(item,index) in payment" style="margin-bottom: 10px;">
+						<div class="white"  style="padding-bottom: 10px;">
+							<div class="spacing clearfix" >
+
+								<span class="fl">
+									<img  style="margin-top: 4px;" src="images/speedBuy/sd.png" alt="" width="16">
+								</span>
+								<span class="fl">
+									&nbsp;订单号:
+								</span>
+								<span style="padding-left: 10px" class="fl">
+									{{item.order_id}}
+								</span>
+							<span class="fr" style="color: #f36065">
+								{{item.order_status_name}}
+							</span>
+						</div>
+
+						<div class="mgf">
+							<div class="clearfix" v-for="x in item.goodsList" @click="detailsOrder(item.order_id)" style="margin-top: 10px;padding-bottom:10px;border-bottom: 1px solid #eee;">
+								<div class="clearfix">
+									<div class="fl ">
+										<img :src="x.thumb" width="100"  height="70"  alt="">
+									</div>
+									<div class="fl" style="margin-left: 10px" >
+										<p>{{x.goods_name.slice(0,8)}}</p>
+
+										<div class="clearfix"  style="margin-top: 20px;">
+											<span class="fl" style="color: #f36065;line-height: 28px">￥{{x.retail_price}}</span>
+										</div>
+									</div>
+
+									<div class='fr' style="margin-top: 48px;">
+
+											<p style="color: #999;" class="fr">X{{x.goods_num}}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- 待支付 -->
+						<div class="clearfix" style="margin:10px 20px 0px 20px" v-if="item.order_status == 1">
+							<div  class="order_btn pay_btn  fr" @click="goPay(item.order_id)">去支付</div>
+							<div class="order_btn cancel_btn fr" @click="cancelOrder(item.order_id,index)">取消</div>
+						</div>
+
+						<!-- 待发货 -->
+			<!-- 			<div class="clearfix" style="margin:10px 20px 0px 20px" v-if="item.order_status == 2">
+				<div class="order_btn cancel_btn fr" @click="cancelOrder(item.order_id)">取消</div>
+			</div>
+
+			 -->
+						<!-- 待收货 -->
+						<div class="clearfix" style="margin:10px 20px 0px 20px" v-if="item.order_status == 7">
+							
+							<div  class="order_btn pay_btn  fr" @click="confirmOrder(item.order_id)">确认收货</div>
+						</div>
+						
+
+						<!-- 已完成 -->
+						<div class="clearfix" style="margin:10px 20px 0px 20px" v-if="item.order_status == 10">
+							<div  class="order_btn pay_btn  fr" @click="deleteOrder(item.order_id,index)">删除</div>
+						</div>
+					</div>
+				</div>
+
+				</div>
+
+	</div>
+
+
+		<div class="msg-page-mask" v-show="msg.show==1">
+			<div class="msg-page-mask-content">
+				<div class="el-loading-spinner">
+					<i v-show="msg.type=='success' " class="el-icon-success"></i>
+					<i v-show="msg.type=='error' " class="el-icon-error"></i>
+					{{msg.text}}
+				</div>
+			</div>
+		</div>
+		
+		<div class="page-mask" v-show="loading">
+			<div class="page-mask-content">
+				<div class="el-loading-spinner"><i class="el-icon-loading"></i><p class="el-loading-text">拼命加载中</p></div>
+			</div>
+		</div>
+
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				loading:0,
+				msg:{
+					show:0,
+					type:'success',
+					text:'成功',
+				},
+				status:'',
+				JumpUrl:{
+					orderLists:'http://sy.xfd365.com/wx/order/lists',
+					cancel:'http://sy.xfd365.com/wx/order/cancel',
+					del:'http://sy.xfd365.com/wx/order/del',
+					receiving_goods:'http://sy.xfd365.com/wx/order/receiving_goods',
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+				},
+				order_status:'',
+				orderCancel:{
+					token:localStorage.getItem("token"),
+					order_id:'',
+				},
+				payment:[],			//待付款
+				page:1,
+				loading:0,
+				isDone:0,
+				token: localStorage.getItem("token"),
+			},
+			methods: {
+				onScroll(){
+					if(this.isDone){
+						return;
+					}
+					/*页面高度*/
+					        var scrollTop = 0;
+					        if(document.documentElement && document.documentElement.scrollTop) {
+					            scrollTop = document.documentElement.scrollTop;
+					        } else if(document.body) {
+					            scrollTop = document.body.scrollTop;
+					        }
+					       /*当前可视高度*/
+					        let clientHeight=document.documentElement.clientHeight;
+					        /*文档完整的高度*/
+					        let  scrollHeight=Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+
+					        let that=this;
+					        if((scrollHeight - clientHeight -scrollTop)<= 100){
+					        	// console.log(that.loading)
+					        	// console.log(that.page)
+					        	if(that.loading ==1){
+					        		return;
+					        	}
+					        	this.page+=1;
+					        	that.loading=1;
+					        	console.log("加载更多")
+					        	that.getOrderLists();
+					        }
+
+				},
+				//跳转首页
+				JumpIndex(){
+					window.location.href = "index.html";
+					localStorage.setItem('status', '')
+				},
+				//返回上一页
+				returnLast(){
+					// window.history.go(-1);
+					window.location.href = "personal.html";
+					localStorage.setItem('status', '')
+				},
+				//跳转订单详情
+				detailsOrder(val){
+					var status = localStorage.getItem('status')
+					if(status){
+						window.location.href = "orderDetails.html" +'?order_id='+val + '&status=' + this.status;
+					}else{
+						window.location.href = "orderDetails.html" +'?order_id='+val;
+					}
+					
+					// window.location.href = "orderDetails.html" +'?order_id='+val;
+				},
+
+				handleClick(tab, event) {
+					this.loading=1;
+					this.isDone=0;
+					this.payment=[];
+				        // console.log(tab.name);
+						localStorage.setItem('status', tab.name)
+				        this.order_status = tab.name;
+				        this.getOrderLists();
+				    },
+
+			    //确认订单
+			    goPay(val){
+			    	window.location.href = "pay.html" +'?order_id='+val + '&orderMy=1';
+			    },
+
+			    //确认收货
+			    confirmOrder(val){
+			    	var that = this;
+			    	that.orderCancel.order_id = val;
+			    	axios({
+			    		method: 'post',
+			    		url: that.JumpUrl.receiving_goods,
+			    		data: that.orderCancel
+			    	})
+			    	.then(function (resp) {
+			    		that.msg={
+						show:1,
+						text:'收货成功',
+						type:'success'
+
+						}
+						setTimeout(function(){
+							that.msg.show=0;
+						}, 2000)
+							that.getOrderLists();
+			    		
+
+			    	}).catch(function (error) {
+						//请求失败
+						console.log('error', error);
+
+				})
+			    },
+
+			    //删除订单
+			    deleteOrder(val){
+			    	var that = this;
+			    	that.orderCancel.order_id = val;
+
+			    	// that.state.order_status = that.status;
+			    	axios({
+			    		method: 'post',
+			    		url: that.JumpUrl.del,
+			    		data: that.orderCancel
+			    	})
+			    	.then(function (resp) {
+			    		that.getOrderLists();
+			    		// that.payment.splice(index,1)
+			    	}).catch(function (error) {
+						//请求失败
+						console.log('error', error);
+
+				})
+			    },
+
+			    //取消订单
+			    cancelOrder(val,index){
+			    	var that = this;
+			    	let order_id = val;
+
+			    	axios({
+			    		method: 'post',
+			    		url: that.JumpUrl.cancel,
+			    		data: {
+			    			token:localStorage.getItem('token'),
+			    			order_id:order_id
+			    		}
+			    	})
+			    	.then(function (resp) {
+			    		console.log(resp.data)
+			    		if(resp.data.errno == 0){
+
+						that.msg={
+							show:1,
+							text:'取消成功',
+							type:'success'
+						}
+						setTimeout(function(){
+							that.msg.show=0
+							if(that.order_status ){
+						    		that.payment.splice(index,1)
+							}else{
+						    		window.location.reload()
+							}
+						}, 2000)
+
+			    		}
+
+			    	}).catch(function (error) {
+						//请求失败
+						console.log('error', error);
+
+					})
+			    },
+
+			    //获取订单状态
+			    getOrderLists(){
+			    	var that = this;
+			    	let page=this.page;
+			    	axios({
+			    		method: 'post',
+			    		url: that.JumpUrl.orderLists,
+			    		data: {
+			    			token:localStorage.getItem('token'),
+			    			order_status:that.order_status,
+			    			page:page,
+			    			size:10
+			    		}
+			    	})
+			    	.then(function (resp) {
+			    		if (resp.data.errno == 0) {
+			    			that.loading=0;
+			    		}
+			    		let resultData=resp.data.data;
+			    		console.log(resultData,'aaaa')
+			    		if(resultData){
+
+				    		for (var i = 0; i < resultData.length; i++) {
+				    			if (resultData[i].order_status ==1) {
+				    				resultData[i].order_status_name = '未付款'
+					    		};
+					    		if (resultData[i].order_status ==2) {
+					    			resultData[i].order_status_name = '待发货'
+					    		};
+					    		if (resultData[i].order_status ==7) {
+					    			resultData[i].order_status_name = '待收货'
+					    		};
+					    		if (resultData[i].order_status ==8) {
+					    			resultData[i].order_status_name = '退换货'
+					    		};
+					    		if (resultData[i].order_status ==10) {
+					    			resultData[i].order_status_name = '已完成'
+					    		};
+					    		if (resultData[i].order_status ==5) {
+					    			resultData[i].order_status_name = '已取消'
+					    		};
+					    	}
+			    		}else{
+			    			console.log(that.payment)
+			    			that.isDone=1;
+			    			
+			    			return;
+			    		}
+			    		
+			    		if(that.page == 1){
+				    		that.payment = resultData;
+			    		}else{
+						for(let item of resultData){
+							that.payment.push(item);
+						}
+							that.loading=0;
+			    		}
+
+
+
+
+
+
+			    	}).catch(function (error) {
+			    		that.loading=0;
+					//请求失败
+					console.log('error', error);
+
+				})
+
+			    },
+				setWx() {
+					let that = this;
+					let shopInfo=JSON.parse(localStorage.getItem('shopInfo'));
+					// console.log(shopInfo)
+					let shop_name = shopInfo.shop_name
+					let shop_id = shopInfo.id
+					let logo = shopInfo.logo
+					wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+						wx.onMenuShareTimeline({
+							title: shop_name, // 分享标题
+							desc: '村里面的超市', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function() {
+				
+							}
+						})
+				
+						wx.onMenuShareAppMessage({
+							title: shop_name, // 分享标题
+							desc: '村里面的超市', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function() {
+							}
+						})
+				
+				
+					});
+				},
+				getJssdk: function() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function(resp) {
+						let data = resp.data
+					
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'onMenuShareTimeline',
+								'onMenuShareAppMessage',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.share_url = sdkData.url;
+						that.setWx();
+				
+					})
+				},
+			},
+			created:function(){
+				this.getJssdk();
+				this.loading=1;
+				this.getOrderLists();
+				 this.status = window.location.href.split("status=")[1];
+				 this.order_status = this.status;
+				 window.addEventListener('scroll', this.onScroll);
+				 
+
+			}
+		})
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<title>聚农优享</title>
+		<link rel="stylesheet" href="css/public.css">
+		<script src="js/axios.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.8.0/dist/JsBarcode.all.min.js" ></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+        <script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+        <script type="text/javascript" src="js/publick.js?v=3"></script>
+		
+		<style type="text/css">
+			[v-cloak] {
+				display: none;
+			}
+			html,body { font-size: 16px; height: 100%;}
+			@media all and (max-width:375px) {
+				body,html{
+					font-size: 14px;
+				}
+			}
+			@media only screen and (min-width: 414px) {
+				body,html {
+					font-size: 16px !important;
+				}
+			}
+			@media only screen and (min-width: 480px) {
+				body,html {
+					font-size: 22px !important;
+				}
+			}
+            #app { min-height: 100%; background: #f5f5f5; }
+            div { box-sizing: border-box; }
+			/* 导航栏 */
+			.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+			.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+			.van-nav-bar .van-nav-bar__right img { display: block; }
+			.van-nav-bar .van-nav-bar__title { font-weight: bold; }
+            /* 搜索 */
+            .search-con .van-button { width: 52px; height: 25px; font-size: 13px; padding: 0; text-align: center; line-height: 25px; }
+			/* tab导航栏 */
+            .tab-con .van-tab .van-tab__text { color: #888; font-size: 0.875rem; }
+            .tab-con .van-tab--active .van-tab__text { color: #333; font-size: 0.9rem; font-weight: bold; }
+            .tab-con .van-tabs__line { background-color: #333; }
+            /* 日期选择 */
+            .date-choose-con { padding: 12px 0; background: #fff; display: flex; align-items: center; justify-content: space-around; }
+            .date-choose-con .item { border: 1px solid #e7eaec; padding: 0 10px; color: #333; font-size: 0.75rem; border-radius: 100px; height: 25px; line-height: 25px; overflow: hidden; }
+            .date-choose-con .item.active { border-color: #04d769; color: #04d769; }
+            .date-choose-con .desc { position: relative; padding-right: 35px; }
+            
+            .date-choose-con .desc .icon { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; }
+            .date-choose-con .desc .icon img { width: 100%; height: 100%;  }
+            /* 列表 */
+            .vip-con { padding: 12px }
+            .vip-con .item { width: 100%; min-height: 4.7rem; background: url('./images/member-item-bg.png') no-repeat; background-size: 100% 100%; display: flex; align-items: center; padding-left: 0.8rem; padding-top: 0.3rem; padding-bottom: 0.3rem; margin-bottom: 8px; }
+            .vip-con .item .avatar-con { width: 3.1rem; height: 3.1rem; border-radius: 50%; overflow: hidden; }
+            .vip-con .item .avatar-con img { width: 100%; height: 100%; }
+            .vip-con .item .user-info-con { flex: 1; display: flex;  flex-direction: column; padding-left: 1.5rem;  }
+            .vip-con .item .user-info-con .name { font-size: 0.9rem; font-weight: bold; }
+            .vip-con .item .user-info-con .address { font-size: 0.8rem; color: #888; padding-top: 0.2rem; }
+            .vip-con .item .user-info-con .yhq { font-size: 0.8rem; color: #888; padding-top:0.2rem }
+            .vip-con .item .btn-con { width: 28%; padding: 0 0.8rem; display: flex; align-items: center; justify-content: center;}
+            .vip-con .item .btn-con .van-button { width: 100%; height: 1.6rem; line-height: 1.6rem; padding: 0; font-size: 0.75rem; }
+            .vip-con .item .btn-con .dis-btn { opacity: 0.6; }
+            .add-date-desc { font-size: 0.7rem; color: #999; margin-bottom: 8px; }
+            /* loading */ 
+			.full-loading { position: fixed; left: 0; top: 90px; right: 0; bottom: 0; background-color: #fff; z-index: 9999; }
+			.full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+			/* 无数据 */
+			.no-data { position: fixed; top: 90px; left: 0; right: 0; bottom: 0; z-index: 99;}
+			.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+			.no-data .no-data-con img { width: 100%; }
+			.no-data .no-data-con .no-title{ font-size: 1rem; font-weight:600;  color:rgba(0,0,0,1);  }
+			.no-data .no-data-con .no-desc { font-size: 0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+			.no-data .no-data-con .van-button { font-size: 0.75rem; font-weight:400; color:rgba(1,195,39,1); }
+		</style>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<van-sticky>
+                <van-nav-bar :border="false"  z-index="9999" title="发券给会员" left-arrow @click-left="returnLast()">
+                    <template #right>
+                        <span @click="manageFlagFF()">{{isBatch ? '单个发放' : '批量发放'}}</span>
+                    </template>
+                </van-nav-bar>
+                <van-search v-model="searchVal" placeholder="请输入搜索关键词"  shape="round"  class="search-con" >
+                    <template #right-icon>
+                        <van-button round type="primary" color="linear-gradient(90deg,#02cf0a, #00be34)" @click="onSearch">搜索</van-button>
+                    </template>
+                </van-search>
+                <van-tabs v-model="tabIndex" :border="false" @change="handleTabClick" class="tab-con" title-inactive-color="#888888" title-active-color="#333333" line-width="30px" line-height="5px"> 
+                    <van-tab title="全部会员" name="0"></van-tab>
+                    <van-tab title="益农卡会员" name="1"></van-tab>
+                    <van-tab title="新办会员" name="3"></van-tab>
+                    <van-tab title="已发券会员" name="2"></van-tab>
+                </van-tabs>
+            </van-sticky>
+            <van-list v-model="loading" :finished="finished" finished-text="没有更多了"  @load="getAllUserList" v-if="tabIndex != 3"  >
+                <div class="vip-con">
+                    <div class="item" v-for="(item,index) in userList" :key="index">
+                        <div class="avatar-con">
+                            <img :src="item.headimgurl" alt="">
+                        </div>
+                        <div class="user-info-con">
+                            <div class="name">{{item.nickname}}</div>
+                            <div class="address">{{item.addressInfo}}</div>
+                            <div class="yhq">发放【{{item.user_coupon_count}}】张 使用【{{item.user_use_coupon_count}}】张</div>
+                        </div>
+                        <div class="btn-con">
+                            <van-checkbox v-model="item.checked" @click="clickChoose(item)" :disabled="item.can_get == 0"  checked-color="#07c160" v-if="isBatch" ></van-checkbox>
+                            <van-button :class="{'dis-btn': item.can_get == 0}" round type="primary" color="linear-gradient(90deg,#02cf0a, #00be34)"  v-else  @click="sendSingle(item)">{{item.can_get == 1 ? '点击发券' : ('限发'+item.get_limit + '次')}}</van-button>
+                        </div>
+                    </div>
+                </div>
+            </van-list>
+           
+            <div class="date-choose-con" v-if="tabIndex == 3">
+                    <div :class="(todayText == (startDate+ '-' + endDate) ? 'item active' : 'item')" @click="chooseDateFast(0)">今日</div>
+                    <div :class="(weekText == (startDate+ '-' + endDate) ? 'item active' : 'item')" @click="chooseDateFast(1)">本周</div>
+                    <div :class="(monthText == (startDate+ '-' + endDate) ? 'item active' : 'item')" @click="chooseDateFast(2)">本月</div>
+                    <div class="item desc" @click="calendarShow = true">
+                        <span>{{startDate}}</span>
+                        <span>至</span>
+                        <span>{{endDate}}</span>
+                        <div class="icon">
+                            <img src="./images/icon/rili.png" alt="">
+                        </div>
+                    </div>
+            </div>
+            <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getAllUserList"  v-if="tabIndex == 3" >
+                <div class="vip-con" >
+                   <div v-for="(item,index) in userList" :key="index">
+                        <div class="add-date-desc">{{item.date}}</div>
+                        <div class="item" v-for="(subItem,subIndex) in item.child" :key="index">
+                            <div class="avatar-con">
+                                <img :src="subItem.headimgurl" alt="">
+                            </div>
+                            <div class="user-info-con">
+                                <div class="name">{{subItem.nickname}}</div>
+                                <div class="address">{{subItem.addressInfo}}</div>
+                                <div class="yhq">发放【{{subItem.user_coupon_count}}】张 使用【{{subItem.user_use_coupon_count}}】张</div>
+                            </div>
+                            <div class="btn-con">
+                                <van-checkbox v-model="subItem.checked" @click="clickChoose(item)" checked-color="#07c160" v-if="isBatch" ></van-checkbox>
+                                <van-button :class="{'dis-btn': item.can_get == 0}" round type="primary" color="linear-gradient(90deg,#02cf0a, #00be34)"  v-else  @click="sendSingle(subItem)">{{subItem.can_get == 1 ? '点击发券' : ('限发'+subItem.get_limit + '次')}}</van-button>
+                            </div>
+                        </div>
+                   </div>
+                </div>
+            </van-list>
+
+            <div  v-if="isBatch" style="height: 50px;"></div>
+            <van-tabbar v-if="isBatch">
+                <div style="flex: 1; padding: 5px 16px;">
+                    <van-button style="width: 100%;height: 100%;line-height: 100%" plain type="primary" block round @click="sendBatch(0)">批量发放</van-button>
+                </div>
+                <div style="flex: 1; padding: 5px 16px;">
+                    <van-button style="width: 100%;height: 100%;line-height: 100%" plain type="info" block round  @click="sendBatch(1)">全部发放</van-button>
+                </div>
+            </van-tabbar>
+
+            <van-calendar v-model="calendarShow" type="range" :default-date="defaultDate" :min-date="minDate" @confirm="onDateConfirm" ></van-calendar>
+
+			<div class="full-loading" v-if="isFullLoading">
+				<van-loading  color="#1989fa" /> 
+			</div>
+			<!-- <div class="no-data" v-if="(totalList[active].list.length === 0 || isErr) && !isFullLoading">
+				<div class="no-data-con">
+					<img :src="isErr ? errImg : noDataImg" alt="">
+					<p class="no-title">{{ isErr ? '网络竟然崩溃了' : '无优惠券' }}</p>
+					<p class="no-desc">{{ isErr ? '别紧张,试试看刷新页面' : '赶紧去优惠券中心领券吧' }}</p>
+					<van-button size="small" plain round color="#01C327" @click="handleErr">{{ isErr ? '刷新' : '去领取' }}</van-button>
+				</div>
+			</div> -->
+		</div>
+		<script>
+						
+			var app = new Vue({
+				el: '#app',
+				data: {
+					searchVal: '',
+                    tabIndex: '0',
+                    calendarShow: false,
+
+                    startDate: '',
+                    endDate: '',
+                    defaultDate: [],
+                    minDate: new Date(2010, 0, 1),
+                    todayText: '',
+                    weekText: '',
+                    monthText: '',
+                    isBatch: false,
+                    page: 0,
+					loading: true, // 列表请求loading
+                    finished: false, // 列表是否请求完成
+                    isErr: false,
+                    isFullLoading: false,
+                    userList: [],
+                    allIds: [],
+                    curIdArr: [],
+                    id: '',
+                    JumpUrl: {
+                        shop_give_user_coupon: baseUrl('/wx/coupon/shop_give_user_coupon'), // 给会员下发优惠券
+                        shop_user_list:  baseUrl('/wx/coupon/shop_user_list'), // 会员列表
+                    },
+                    
+				},
+				methods:{
+                    //返回上一页
+                    returnLast(){
+                        let tabIndex = getQueryString('tabIndex');
+                        let coupon_id =  getQueryString('coupon_id');
+                        window.location.href ='platCouponDetail.html?id=' +this.id+ '&tabIndex='+ tabIndex + '&coupon_id='+coupon_id
+                    },
+                    // 搜索
+                    onSearch() {
+                        this.userList = [];
+                        this.page = 0;
+                        this.getAllUserList();
+                    },
+                    manageFlagFF() {
+                        this.isBatch = !this.isBatch;
+                    },
+                    // 导航栏切换
+                    handleTabClick(name,title) {
+                        this.tabIndex = name;
+                        this.userList = [];
+                        this.page = 0;
+                        this.getAllUserList();
+
+                    },
+
+                    // 获取店铺会员列表
+                    getAllUserList() {
+                        var that = this;
+						let page = this.page + 1
+						that.isErr = false 
+						if (page !== 1) {
+							that.loading = true
+						} else {
+                            that.isFullLoading = true
+                        }
+						axios({
+								method: 'post',
+								url: that.JumpUrl.shop_user_list,
+								data: {
+                                    id: that.id,
+									token: localStorage.getItem('token'),
+                                    type: that.tabIndex,
+                                    key_words: that.searchVal,
+                                    start: that.startDate,
+                                    end: that.endDate,
+									page: page,
+									size: 10
+								}
+							})
+							.then(function(resp) {
+								that.isErr = false 
+								that.loading = false
+								that.isFullLoading = false
+								if (resp.data.code == 1) {
+                                    let resultData = resp.data.data;
+									if (resultData) {
+                                        let dateArr = []
+                                        resultData.forEach((item,index) =>{
+                                            if(item.country) {
+                                                item.addressInfo = item.country
+                                                if(item.province) {
+                                                    item.addressInfo = item.country + ' ' + item.province
+                                                    if(item.city) {
+                                                        item.addressInfo = item.country + ' ' +item.province + ' ' + item.city
+                                                    }
+                                                }
+                                            } else {
+                                                item.addressInfo = ''
+                                            }
+                                            item.date_text = dateFormat('yyyy-MM-dd', new Date((item.add_time+'').length == 10 ? item.add_time*1000 : item.add_time))
+                                            dateArr.push(item.date_text)
+                                        })
+                                        if(that.tabIndex == 3) {
+                                            let tmpDateArr = Array.from(new Set(dateArr))
+                                            let level1Data = []
+                                            tmpDateArr.forEach(item =>{
+                                                let tmpObj = {
+                                                    date: item,
+                                                    child:[]
+                                                }  
+                                                resultData.forEach(subItem =>{
+                                                    if(subItem.date_text == item) {
+                                                        tmpObj.child.push(subItem)
+                                                    }
+                                                })
+                                                level1Data.push(tmpObj)
+                                            })
+                                            that.userList = that.userList.concat(level1Data)
+                                        } else {
+                                            that.userList = that.userList.concat(resultData)
+                                        }
+                                        
+                                    }
+									that.page = page
+									if (that.page >= resp.data.totalPage) {
+										that.finished = true
+									} else {
+										that.finished = false
+                                    }
+                                    that.allIds = resp.data.ids_arr
+                                    
+								} else {
+									that.loading = false
+									that.finished = true
+									that.$toast(resp.data.errmsg)
+								}
+								
+							}).catch(function(error) {
+								that.isErr = true
+								that.isFullLoading = false
+								that.loading = false
+                                that.finished = true
+                                that.$dialog.alert({
+                                    title: '失败',
+                                    message: JSON.stringify(error)
+                                })
+								//请求失败
+								console.log('error', error);
+							})
+                    },
+
+                    // 单一发送
+                    sendSingle(item) {
+                        if(item.can_get == 0) {
+                            this.$toast('每人限发'+item.get_limit+'次')
+                            return
+                        }
+                        let tmpData = []
+                        tmpData.push(item.wechat_user_id)
+                        this.curIdArr = tmpData
+                        this.sendSubmit()
+                    },
+                    // 点击选择
+                    clickChoose(item) {
+                        if(item.can_get == 0) {
+                            this.$toast('每人限发'+item.get_limit+'次')
+                            return
+                        }
+                    },
+                    // 多个发送 type:0-批量发放 1-全部发放
+                    sendBatch(type) {
+                        let that = this;
+                        if(type == 0) {
+                            let tmpData = JSON.parse(JSON.stringify(that.userList))
+                            let tmpIds = []
+                            if(that.tabIndex == 3) {
+                                tmpData.forEach(item =>{
+                                    item.child.forEach(subItem =>{
+                                        if(subItem.checked) {
+                                            tmpIds.push(subItem.wechat_user_id)
+                                        }
+                                    })
+                                })
+                                that.curIdArr = tmpIds
+                            } else {
+                                tmpData.forEach(item =>{
+                                    if(item.checked) {
+                                        tmpIds.push(item.wechat_user_id)
+                                    }
+                                })
+                                that.curIdArr = tmpIds
+                            }
+                        }
+                        if(type == 1) {
+                            that.curIdArr = that.allIds
+                        }
+                        if(!that.curIdArr || that.curIdArr.length == 0) {
+                            this.$toast('请先选择发放的会员！')
+                            return
+                        }
+                        that.sendSubmit()
+                    },
+                    // 发放提交
+                    sendSubmit() {
+                        var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.shop_give_user_coupon,
+								data: {
+                                    id: that.id,
+									ids: that.curIdArr,
+									token: localStorage.getItem('token'),
+								}
+							})
+							.then(function(resp) {
+								if (resp.data.code == 1) {
+                                    that.$toast(resp.data.msg)
+                                    let chooseArr = JSON.parse(JSON.stringify(that.curIdArr))
+                                    let userList = JSON.parse(JSON.stringify(that.userList))
+                                    userList.forEach(item =>{
+                                        if(chooseArr.indexOf(item.wechat_user_id) > - 1) {
+                                            item.user_coupon_count++
+                                            if(item.get_limit != 0) {
+                                                if(item.user_coupon_count >= item.get_limit) {
+                                                    item.can_get = 0
+                                                }
+                                            }
+                                            
+                                        }
+                                    })
+                                    that.userList = userList
+								} else {
+									that.$toast(resp.data.msg)
+								}
+								
+							}).catch(function(error) {
+								console.log('error', error);
+							})
+                    },
+                    // 点击今日 本周 本月 type 0-今日 1-本周 2-本月
+                    chooseDateFast(type) {
+                        let defaultDate = []
+                        if(type == 0) {
+                            this.startDate = this.getToDay()
+                            this.endDate = this.getTomorrow()
+                            this.todayText = this.startDate + '-' + this.endDate
+                        } else if(type == 1) {
+                            this.startDate = this.getWeekFirstDay()
+                            this.endDate = this.getWeekLastDay()
+                            this.weekText = this.startDate + '-' + this.endDate
+                        } else if(type == 2) {
+                            this.startDate = this.getMonthFirstDay()
+                            this.endDate = this.getMonthLastDay()
+                            this.monthText = this.startDate + '-' + this.endDate
+                        }
+                        defaultDate.push(new Date(this.startDate))
+                        defaultDate.push(new Date(this.endDate))
+                        this.defaultDate = defaultDate
+                        this.userList = [];
+                        this.page = 0;
+                        this.getAllUserList();
+                    },
+                    // 日期确定
+                    onDateConfirm(date) {
+                        this.calendarShow = false
+                        this.startDate = dateFormat('yyyy-MM-dd',date[0])
+                        this.endDate = dateFormat('yyyy-MM-dd',date[1]) 
+                        this.userList = [];
+                        this.page = 0;
+                        this.getAllUserList();
+                    },
+                    /**
+                    * 小于10 自动补零
+                    * @param num 要补零的数字
+                    */
+                    addZero(num) {
+                        if (parseInt(num) < 10) {
+                            num = '0' + num
+                        }
+                        return num
+                    },
+
+                    /**
+                    * 获取今日 日期
+                    * @returns '2020-06-04'
+                    */
+                    getToDay(){     
+                        let nowDate = new Date();  
+                        let month = Number(nowDate.getMonth()) + 1;     
+                        return nowDate.getFullYear() + "-" + this.addZero(month) + "-" + this.addZero(nowDate.getDate());     
+                    },
+
+                    /**
+                    * 获取明日 日期
+                    * @returns '2020-06-04'
+                    */
+                    getTomorrow(){     
+                        let tom = new Date()
+                        tom.setDate(tom.getDate()+1);     
+                        let month = Number(tom.getMonth()) + 1;     
+                        return tom.getFullYear() + "-" + this.addZero(month) + "-" + this.addZero(tom.getDate());     
+                    },
+
+                    /**
+                    * 获取本周 第一天
+                    * @returns '2020-06-04'
+                    */
+                    getWeekFirstDay(){     
+                        let nowDate = new Date();     
+                        let weekFirstDay = new Date(nowDate - (nowDate.getDay() -1 ) * 86400000);     
+                        let month = Number(weekFirstDay.getMonth()) + 1;    
+                        return weekFirstDay.getFullYear() + "-" + this.addZero(month) + "-" + this.addZero(weekFirstDay.getDate());     
+                    },
+
+                    /**
+                    * 获取本周 最后一天
+                    * @returns '2020-06-04'
+                    */
+                    getWeekLastDay(){     
+                        let nowdate = new Date();     
+                        let weekFirstDay = new Date(nowdate - (nowdate.getDay() - 1) * 86400000);     
+                        let weekLastDay = new Date((weekFirstDay/1000 + 6*86400)*1000);     
+                        let month = Number(weekLastDay.getMonth()) + 1;     
+                        return weekLastDay.getFullYear() + "-" + this.addZero(month) + "-" + this.addZero(weekLastDay.getDate());     
+                    },
+
+                    /**
+                    * 获取本月 第一天
+                    * @returns '2020-06-04'
+                    */
+                    getMonthFirstDay() {     
+                        let nowdate = new Date();     
+                        let monthFirstDay = new Date(nowdate.getFullYear(),nowdate.getMonth(),1);     
+                        let month =Number(monthFirstDay.getMonth()) + 1;     
+                        return monthFirstDay.getFullYear() + "-" + this.addZero(month) + "-" + this.addZero(monthFirstDay.getDate());     
+                    },
+
+                    /**
+                    * 获取本月 最后一天
+                    * @returns '2020-06-04'
+                    */
+                    getMonthLastDay() {     
+                        let nowdate = new Date();     
+                        let monthNextFirstDay = new Date(nowdate.getFullYear(),nowdate.getMonth() + 1,1);     
+                        let monthLastDay = new Date(monthNextFirstDay - 86400000);     
+                        let month = Number(monthLastDay.getMonth()) + 1;     
+                        return monthLastDay.getFullYear() + "-" + this.addZero(month) + "-" + this.addZero(monthLastDay.getDate());     
+                    } 
+				
+				},
+				created() {
+                    this.id = getQueryString('id');
+                    this.startDate = this.getWeekFirstDay()
+                    this.endDate = this.getWeekLastDay()
+                    this.weekText = this.startDate + '-' + this.endDate
+                    this.getAllUserList()
+				}
+			})
+		</script>
+	</body>
+</html>

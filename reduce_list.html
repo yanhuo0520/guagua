@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>微商超</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<link rel="stylesheet" href="css/index.css">
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+	<style>
+		.header{position: fixed !important;}
+		.el-card{margin: 5px 15px 0 15px;}
+		.el-card .reduce{position: absolute;left: 0;top: 0; background: skyblue;color: #FFFFFF;text-align: center;height: 100px;line-height: 80px;width: 60px;}
+		.el-card .title{font-weight: bold;color: #333333;}
+		.el-card .time{font-size: 12px; color: #908f8f;}
+	</style>
+</head>
+<body>
+	<div id="app" v-cloak>
+		<el-row class="clearfix header white">
+			<el-col :span="8"><div class="el-icon-arrow-left" @click="returnLast()"></div></el-col>
+			<el-col :span="8"><div style="text-align: center">优惠券列表</div></el-col>
+		</el-row>
+		<div style="margin-top: 55px;">
+			<el-card :body-style="{ padding: '0px' }">
+			  <div style="padding: 10px;position: relative;">
+				<p class="reduce">¥ <span style="font-size: 20px;">5</span></p>
+				<div class="right clearfix" style="padding-left: 60px;">
+				  <p class="title">满10减5块</p>
+				  <p class="time">开始时间：2020-04-15 15:26:45</p>
+				  <p class="time">结束时间：2020-04-15 15:26:45</p>
+				</div>
+			  </div>
+			</el-card>
+			<el-card :body-style="{ padding: '0px' }">
+			  <div style="padding: 10px;position: relative;">
+				<p class="reduce">¥ <span style="font-size: 20px;">5</span></p>
+				<div class="right clearfix" style="padding-left: 60px;">
+				  <p class="title">满10减5块</p>
+				  <p class="time">开始时间：2020-04-15 15:26:45</p>
+				  <p class="time">结束时间：2020-04-15 15:26:45</p>
+				</div>
+			  </div>
+			</el-card>
+		</div>
+
+
+
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				JumpUrl:{
+					list:'http://sy.xfd365.com/wx/index/reduce_lists',
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+				},
+				reduceList:[],
+				token:localStorage.getItem('token'),
+			},
+			methods: {
+				//返回上一页
+				returnLast(){
+					window.history.go(-1);
+				},
+				getList(){
+					
+				},
+				setWx() {
+					let that = this;
+					let shopInfo=JSON.parse(localStorage.getItem('shopInfo'));
+					// console.log(shopInfo)
+					let shop_name = shopInfo.shop_name
+					let shop_id = shopInfo.id
+					let logo = shopInfo.logo
+					wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+						wx.onMenuShareTimeline({
+							title: shop_name, // 分享标题
+							desc: '村里面的超市', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function() {
+				
+							}
+						})
+				
+						wx.onMenuShareAppMessage({
+							title: shop_name, // 分享标题
+							desc: '村里面的超市', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function() {
+							}
+						})
+				
+				
+					});
+				},
+				getJssdk: function() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function(resp) {
+						let data = resp.data
+					
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'onMenuShareTimeline',
+								'onMenuShareAppMessage',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.share_url = sdkData.url;
+						that.setWx();
+				
+					})
+				},
+
+			},
+			created:function(){
+				this.getJssdk();
+				this.getList();
+			},
+		})
+	</script>
+</body>
+
+</html>

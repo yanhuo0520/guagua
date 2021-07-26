@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>微商超</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js"></script>
+	<style>
+		[v-cloak] {
+		  display: none;
+		}
+		img {
+			vertical-align: top;
+		}
+		.clearfix:after{
+			content: ".";
+			display: block;
+			height: 0;
+			visibility: hidden;
+			clear: both;
+		}
+		.xz{
+			font-size:0.7rem;
+			margin-right:5px;
+		}
+		.operation{
+			margin-top: 10px;
+			font-size:0.7rem;
+		}
+		.operation .el-button{
+			line-height:0.1;
+		}
+		body{
+			padding-bottom:80px;
+		}
+		.aui-radio:checked, .aui-radio.aui-checked, .aui-checkbox:checked, .aui-checkbox.aui-checked{
+			background-color:#f76162;
+			border:1px solid #fdc08a;
+		}
+	</style>
+
+</head>
+<body>
+	<div id="app" v-cloak>
+		<!-- 头部 -->
+	<!-- 	<el-row class="clearfix header">
+			<el-col :span="8"><div class="el-icon-arrow-left" @click="returnLast()"></div></el-col>
+			<el-col :span="8"><div>收货地址管理</div></el-col>
+
+		</el-row> -->
+
+		<el-row class="clearfix header">
+
+				<el-col :span="8">
+					<i  style="font-size:26px" class="el-icon-arrow-left" @click="returnLast()"></i>
+				</el-col>
+				<el-col :span="8" style="text-align: center">
+					<div>收货地址管理</div>
+				</el-col>
+				<el-col  :span="8" style="position:relative;height: 100%">
+					<img src="images/icon/sy2.png" alt="" width="20"  style="margin-top:auto;margin-bottom:auto;top:0;bottom:5px;right: 5px;position:absolute" @click="JumpIndex">
+				</el-col>
+
+
+		</el-row>
+
+
+
+
+		<div>
+			<el-image src="images/speedBuy/br.png"></el-image>
+		</div>
+
+		<div   class="divide" style="padding:10px;background-color: #fff;" v-for="(x,index) in allAddress">
+			<el-row  class="clearfix">
+				<el-col :span="12">
+					<div @click="selectAddress(x.id)"  class="fl">
+						{{x.name}}
+					</div>
+				</el-col>
+				<el-col :span="12" >
+					<div class="fr" @click="selectAddress(x.id)" >
+						{{x.mobile}}
+					</div>
+				</el-col>
+
+			</el-row>
+
+			<el-row  >
+			  	<el-col :span="24"><div @click="selectAddress(x.id)"  style="font-size: 14px;color: #999">{{x.full_region}}&nbsp;{{x.address}}</div></el-col>
+			</el-row>
+
+			<el-row class="clearfix operation">
+				<el-col :span="8">
+					<div class="fl"  >
+						 <label ><input class="aui-radio"  @change="setAddress(index)"  type="radio" name="demo" checked="" value="x.id" :checked="x.is_default"> 设为默认</label>
+						<!-- <label><input class="aui-radio" type="radio"  :checked="x.is_default" value="x.id" @click="yan()" name="demo"> <label> -->
+					</div>
+				</el-col>
+				<el-col :span="16">
+					<div class="fr">
+						<el-button style="background-color:#fff;color:#f76162;border:2px solid #f76162; " type="primary" round @click.native="editAddress(x.id)">编辑</el-button>
+						<el-button type="danger" round @click.native="deleteAddress(x.id)">删除</el-button>
+					</div>
+				</el-col>
+
+			</el-row>
+
+
+		</div>
+
+
+		<div class="save-btn" @click="addAddress()">
+			添加地址
+
+		</div>
+
+		<div class="message-page-mask" v-show="message.show==1">
+			<div class="message-page-mask-content">
+				<div class="el-loading-spinner">
+					<i v-show="message.type=='success' " class="el-icon-success"></i>
+					<i v-show="message.type=='error' " class="el-icon-error"></i>
+
+					<p class="el-loading-text">{{message.text}}</p>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				message:{
+					show:0,
+					type:'success',
+					text:'成功',
+				},
+				allAddress:[],//全部地址
+				collect:{
+					token:localStorage.getItem("token"),
+				},
+				JumpUrl:{
+					list:'http://sy.xfd365.com/wx/address/list',
+					delete:'http://sy.xfd365.com/wx/address/delete',
+					setDefault:'http://sy.xfd365.com/wx/address/setDefault'
+				},
+				delete:{
+					id:'',
+					token:localStorage.getItem("token"),
+				},
+				from:'',
+				token:localStorage.getItem('token'),
+			},
+			methods: {
+				selectAddress(address_id){
+					console.log(address_id)
+					let that=this;
+					if(that.from =='order'){
+						window.location.href="confirmOrder.html?address_id="+address_id
+					}
+				},
+				getParam(paramName){
+					if(!paramName){
+						return '';
+					}
+					let val='';
+					var href=window.location.href;
+					if(href.indexOf(paramName) !=-1){
+						val= window.location.href.split(paramName+"=")[1];
+					}
+					return val;
+				},
+				//跳转首页
+				JumpIndex(){
+					window.location.href = "index.html";
+				},
+				//返回上一页
+				returnLast(){
+					// window.history.go(-1);
+					if(this.from == 'order'){
+					
+						window.location.href = "addEditAddress.html?from=order";
+					}else{
+					
+						window.location.href = "addEditAddress.html?from=1";
+					}
+				},
+				//编辑地址
+				editAddress(id){
+					//localStorage.setItem('editAddress',id);
+					let base_url="addEditAddress.html?address_id="+id;
+
+					if(this.from=='order'){
+						window.location.href = base_url+"&from=order"
+					}else{
+						window.location.href = base_url
+					}
+				},
+				//删除地址
+				deleteAddress(id){
+					let that = this;
+					that.delete.id = id;
+					let form_data = new FormData();
+						makeFormData(that.delete,form_data);
+						axios({
+							method: 'post',
+							url: that.JumpUrl.delete,
+							data:form_data
+						})
+						.then(function (resp) {
+						that.collectList();
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				setAddress(index){
+					let that = this;
+					let is_default=that.allAddress[index].is_default
+					let address_id=that.allAddress[index].id
+					if(is_default == 1){
+						is_default=0;
+					}else{
+						is_default=1;
+					}
+						axios({
+							method: 'post',
+							url: that.JumpUrl.setDefault,
+							data:{
+								address_id:address_id,
+								is_default:is_default,
+								token:that.token,
+							}
+						})
+						.then(function (resp) {
+							that.collectList();
+
+							that.message={
+								show:1,
+								text:'设置成功',
+								type:'success'
+							}
+							setTimeout(function(){
+								that.message.show=0;
+							}, 3000)
+
+						}).catch(function (error) {
+
+						})
+				},
+				//新增地址
+				addAddress(){
+				localStorage.setItem('editAddress',0);
+				if(this.from == 'order'){
+
+					window.location.href = "addEditAddress.html?from=order";
+				}else{
+
+					window.location.href = "addEditAddress.html?from=1";
+				}
+				},
+				//获取收货地址
+				collectList(){
+					let that = this;
+					let form_data = new FormData();
+						makeFormData(that.collect,form_data);
+						axios({
+							method: 'post',
+							url: that.JumpUrl.list,
+							data:form_data
+						})
+						.then(function (resp) {
+						that.allAddress = resp.data.data;
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+			},
+			created:function(){
+				this.collectList()
+				this.from=getQueryString('from')
+			}
+	})
+</script>
+</body>
+
+</html>

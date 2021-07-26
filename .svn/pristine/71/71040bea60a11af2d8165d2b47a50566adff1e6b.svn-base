@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<title>微商超</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+		<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+		<!-- <script src="./js/rem.js"></script> -->
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js"></script>
+		<script type="text/javascript" src="js/api.js"></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+		<script type="text/javascript" src="js/aui-actionsheet.js"></script>
+
+		<style>
+			[v-cloak] {
+				display: none;
+			}
+
+			#app {
+				background-color: #fff;
+			}
+
+			.top {
+				font-size: 1.2em;
+				padding: 1em;
+				background-image: url(./images/headerBg.png);
+				background-repeat: no-repeat;
+				background-size: 100% auto;
+				/* height: 12em; */
+
+			}
+
+			.header .gr {
+				color: #fff;
+			}
+
+			img {
+				vertical-align: top;
+			}
+
+			.clearfix::after {
+				content: "";
+				display: table;
+				clear: both;
+			}
+
+			.headPortrait {
+				width: 100%;
+				height: 220px;
+				background-color: #fff;
+				margin-top: 10px;
+				padding-top: 10px;
+				border-radius: 5px;
+				box-shadow: 1px 1px 5px #888888;
+			}
+
+			.aui-grid .aui-iconfont {
+				margin: auto;
+				height: 1rem;
+			}
+
+			.aui-content {
+				/* margin-top:2rem; */
+			}
+
+			.aui-bar-tab .aui-active {
+				color: #757575;
+			}
+
+			.aui-bar-tab {
+				padding-top: 4px;
+			}
+
+			.aui-actionsheet-btn {
+				max-height: 320px;
+				overflow-x: hidden;
+				overflow-y: auto;
+			}
+
+			.aui-actionsheet {
+				padding: 0;
+			}
+
+			.aui-actionsheet-btn {
+				margin-bottom: 0;
+			}
+			
+			.overlay{
+				background: rgba(0,0,0,.5);
+				width: 100%;
+				height: 100vh;
+				position: fixed;
+				top: 0;
+				left: 0;
+				z-index: 999;
+			}
+			.actionSheet{
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				z-index: 1000;
+				width: 100%;
+				height: 320px;
+				background: #fff;
+			}
+			.actionSheet h3{
+				text-align: center;
+				height: 40px;
+				line-height: 40px;
+			}
+			.actionSheet ul {
+				height: 240px;
+				overflow-y: auto;
+			}
+			.actionSheet ul li{
+				height: 40px;
+				line-height: 40px;
+				text-align: center;
+				border-bottom: 1px solid #ddd;
+			}
+			.actionSheet p{
+				position: fixed;
+				bottom: 0;
+				height: 40px;
+				line-height: 40px;
+				width: 100%;
+				text-align: center;
+			}
+			
+			.relative{
+				position: relative;
+			}
+			.relative span{
+				position: absolute;
+				top: 10px;
+				right: 20px;
+				width: 20px;
+				height: 20px;
+				border-radius: 50%;
+				border: 1px solid #f56d66;
+				color: #F56D66;
+				background: #fff;
+				text-align: center;
+				line-height: 20px;
+				font-size: 12px;
+				z-index: 999;
+			}
+		</style>
+
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<el-row class="clearfix top">
+				<div class="gr">个人中心</div>
+				<div class="headPortrait clearfix">
+					<div style="width: 80px;height: 80px;margin:auto;border-radius: 50%;background-color: red;overflow: hidden; ">
+						<img :src="headimgurl" alt="" width="100%" height="100%">
+
+					</div>
+					<div style="font-weight: 500;font-size: 14px;text-align: center;margin-top: 5px;">{{nickname}}</div>
+					<section class="aui-grid">
+						<div class="aui-row">
+							<div class="aui-col-xs-3 relative" @click="orderState('')">
+								<img src="./images/gr/qb.png" alt="" class="aui-iconfont">
+								<div class="aui-grid-label">全部</div>
+							</div>
+							<div class="aui-col-xs-3 relative" @click="orderState(1)">
+								<img src="./images/gr/dfk.png" alt="" class="aui-iconfont">
+								<div class="aui-grid-label">待付款</div>
+								<span v-if="wait_pay>1 || wait_pay==1">{{wait_pay}}</span>
+							</div>
+							<div class="aui-col-xs-3 relative" @click="orderState(2)">
+								<img src="./images/gr/dfh.png" alt="" class="aui-iconfont">
+								<div class="aui-grid-label">待发货</div>
+								<span v-if="wait_send>1 || wait_send==1">{{wait_send}}</span>
+							</div>
+							<div class="aui-col-xs-3 relative" @click="orderState(7)">
+								<img src="./images/gr/dsh.png" alt="" class="aui-iconfont">
+								<div class="aui-grid-label">待收货</div>
+								<span v-if="wait_receive>1 || wait_receive==1">{{wait_receive}}</span>
+							</div>
+
+						</div>
+
+					</section>
+
+				</div>
+
+			</el-row>
+			<div class="clear"></div>
+			<section class="aui-content">
+				<ul class="aui-list aui-list-in aui-margin-b-15">
+					<li class="aui-list-item" @click="jump('collect.html')">
+
+
+						<div class="aui-list-item-inner aui-list-item-arrow">
+							<div class="aui-list-item-title">我的收藏</div>
+						</div>
+
+					</li>
+					<li class="aui-list-item" @click="jump('collectAddress.html')">
+						<div class="aui-list-item-inner aui-list-item-arrow">
+							<div class="aui-list-item-title">收货地址管理</div>
+						</div>
+					</li>
+					<!-- <li class="aui-list-item" @click="subordinateShop()">
+					<div class="aui-list-item-inner aui-list-item-arrow">
+						<div class="aui-list-item-title">所属店铺</div>
+					</div>
+				</li> -->
+					<li class="aui-list-item" @click="openActionsheet()">
+						<div class="aui-list-item-inner">
+							<div class="aui-list-item-title">所属店铺</div>
+							<div class="aui-list-item-right">{{buttonTitle}}</div>
+						</div>
+					</li>
+				</ul>
+			</section>
+
+			<footer class="aui-bar aui-bar-tab" id="footer">
+				<div class="aui-bar-tab-item aui-active" tapmode @click="homePage">
+					<img src="images/icon/sy1.png" alt="" width="25" style="margin:auto;margin-bottom: 5px">
+					<div class="aui-bar-tab-label">首页</div>
+				</div>
+
+				<div class="aui-bar-tab-item" tapmode @click="shoppingCart">
+					<img src="images/icon/gwc1.png" alt="" width="25" style="margin:auto;margin-bottom: 5px">
+					<div class="aui-bar-tab-label">购物车</div>
+				</div>
+
+				<div class="aui-bar-tab-item" tapmode @click="speed">
+					<img src="images/icon/jsgm1.png" alt="" width="25" style="margin:auto;margin-bottom: 5px">
+					<div class="aui-bar-tab-label">极速购买</div>
+				</div>
+
+				<div class="aui-bar-tab-item" tapmode>
+					<img src="images/icon/grzx.png" alt="" width="25" style="margin:auto;margin-bottom: 5px">
+					<div class="aui-bar-tab-label">个人中心</div>
+				</div>
+			</footer>
+
+
+
+			<div class="message-page-mask" v-show="message.show==1">
+				<div class="message-page-mask-content">
+					<div class="el-loading-spinner">
+						<i v-show="message.type=='success' " class="el-icon-success"></i>
+						<i v-show="message.type=='error' " class="el-icon-error"></i>
+
+						<p class="el-loading-text">{{message.text}}</p>
+					</div>
+				</div>
+			</div>
+			<div class="overlay" v-show="isAction" @click="isAction=false"></div>
+			<div class="actionSheet" v-show="isAction">
+				<h3>请选择店铺</h3>
+				<ul>
+					<li v-for="item in buttons" @click="currentShop(item.id,item.shop_name)">{{item.shop_name}}</li>
+				</ul>
+				<p @click="isAction=false">取消</p>
+			</div>
+
+		</div>
+
+		<script>
+			apiready = function() {
+				api.parseTapmode();
+			}
+			var actionsheet = new auiActionsheet();
+			var app = new Vue({
+				el: '#app',
+				data: {
+					message: {
+						show: 0,
+						type: 'success',
+						text: '成功',
+					},
+					buttons: [],
+					buttonTitle: '',
+
+					JumpUrl: {
+						my_shops: 'http://sy.xfd365.com/wx/shop/my_shops',
+						user_info: 'http://sy.xfd365.com/wx/shop/user_info',
+						changeShop: 'http://sy.xfd365.com/wx/shop/changeShop',
+						jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+					},
+					message: {
+						token: localStorage.getItem("token"),
+					},
+					headimgurl: '',
+					nickname: '',
+					isAction: false,
+					wait_pay: 0,
+					wait_send: 0,
+					wait_receive: 0
+				},
+				methods: {
+					//订单状态
+					orderState(val) {
+						window.location.href = "orderMy.html" + '?' + 'status=' + val;
+					},
+					//获取用户信息
+					userMessage() {
+						var that = this;
+
+						axios({
+								method: 'post',
+								url: that.JumpUrl.user_info,
+								data: that.message
+							})
+							.then(function(resp) {
+
+								that.headimgurl = resp.data.data.headimgurl;
+								that.nickname = resp.data.data.nickname;
+								that.wait_pay = resp.data.data.wait_pay;
+								that.wait_send = resp.data.data.wait_send;
+								that.wait_receive = resp.data.data.wait_receive
+
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+
+					},
+					//首页跳转
+					homePage: function() {
+						window.location.href = "index.html";
+					},
+					//购物车跳转
+					shoppingCart: function() {
+						window.location.href = "shoppingCart.html";
+					},
+					// 极速购买跳转
+					speed: function() {
+						window.location.href = "speedBuy.html";
+					},
+
+					jump(url) {
+						window.location.href = url;
+
+					},
+					subordinateShop() {
+						window.location.href = "nearbyPos.html";
+					},
+					//弹窗
+					openActionsheet() {
+						var that = this;
+						that.isAction = true
+							for (var i = 0; i < that.buttons.length; i++) {
+								if (that.buttonTitle == that.buttons[i].shop_name) {
+									localStorage.setItem('shop_id', that.buttons[i].id);
+						
+								}
+							};
+						// for (var i = 0; i < that.buttons.length; i++) {
+						// 	shops.push(that.buttons[i].shop_name)
+						// };
+						// actionsheet.init({
+						// 	frameBounces: true, //当前页面是否弹动，（主要针对安卓端）
+						// 	title: "请选择小区",
+						// 	cancelTitle: '取消',
+						// 	buttons: shops,
+
+						// }, function(ret) {
+
+						// 	if (ret.buttonTitle == "取消") {
+
+						// 	} else {
+						// 		for (var i = 0; i < that.buttons.length; i++) {
+						// 			if(ret.buttonTitle == that.buttons[i].shop_name){
+						// 				that.currentShop(that.buttons[i].id)
+						// 			}
+						// 		};
+								
+						// 		that.buttonTitle = ret.buttonTitle;
+						// 	}
+
+						// 	for (var i = 0; i < that.buttons.length; i++) {
+						// 		if (ret.buttonTitle == that.buttons[i].shop_name) {
+						// 			localStorage.setItem('shop_id', that.buttons[i].id);
+
+						// 		}
+						// 	};
+
+						// })
+					},
+					//获取店铺
+					obtainShop() {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.my_shops,
+								data: {
+									token: localStorage.getItem("token"),
+								}
+							})
+							.then(function(resp) {
+
+								that.buttons = resp.data.data;
+								for (var i = 0; i < that.buttons.length; i++) {
+									if (that.buttons[i].id == localStorage.getItem("shop_id")) {
+										that.buttonTitle = that.buttons[i].shop_name;
+
+									}
+								};
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+
+					//切换店铺
+					currentShop(id,name) {
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.changeShop,
+								data: {
+									shop_id: id,
+									token: localStorage.getItem("token"),
+								}
+							})
+							.then(function(resp) {
+								that.isAction = false
+								that.message = {
+									show: 1,
+									text: resp.data.msg,
+									type: 'success'
+								}
+								setTimeout(function() {
+									that.message.show = 0;
+								}, 1000)
+								localStorage.setItem('shop_id',id)
+								that.buttonTitle = name
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					
+					setWx() {
+						let that = this;
+						let shopInfo=JSON.parse(localStorage.getItem('shopInfo'));
+						// console.log(shopInfo)
+						
+						let shop_name = shopInfo.shop_name
+						let shop_id = shopInfo.id
+						let logo = shopInfo.logo
+						wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+							wx.onMenuShareTimeline({
+								title: shop_name, // 分享标题
+								desc: '村里面的超市', // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function() {
+					
+								}
+							})
+					
+							wx.onMenuShareAppMessage({
+								title: shop_name, // 分享标题
+								desc: '村里面的超市', // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function() {
+								}
+							})
+					
+					
+						});
+					},
+					getJssdk: function() {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.JumpUrl.jssdkUrl,
+							//data: form_data
+							data: {
+								token: that.token,
+								url: window.location.href
+							}
+						}).then(function(resp) {
+							let data = resp.data
+					
+							let sdkData = resp.data
+							wx.config({
+								debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+								appId: sdkData.appId, // 必填，公众号的唯一标识
+								timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+								nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+								signature: sdkData.signature, // 必填，签名
+								jsApiList: [
+									'onMenuShareTimeline',
+									'onMenuShareAppMessage',
+								] // 必填，需要使用的JS接口列表
+							});
+							that.share_url = sdkData.url;
+							that.setWx();
+					
+						})
+					},
+
+				},
+				created: function() {
+
+					this.userMessage();
+					this.obtainShop();
+					this.getJssdk();
+
+				}
+			})
+		</script>
+	</body>
+
+</html>

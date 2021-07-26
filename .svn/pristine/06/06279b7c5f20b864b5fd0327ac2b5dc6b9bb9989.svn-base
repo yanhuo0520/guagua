@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<title>聚农优享</title>
+		<link rel="stylesheet" href="css/public.css">
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js?v=3"></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.8.0/dist/JsBarcode.all.min.js" ></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5/lib/index.css">
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant.min.js"></script>
+		
+		<style type="text/css">
+			[v-cloak] {
+				display: none;
+			}
+			html,body { font-size: 16px; height: 100%;}
+			@media all and (max-width:375px) {
+				body,html{
+					font-size: 14px;
+				}
+			}
+			@media only screen and (min-width: 414px) {
+				body,html {
+					font-size: 16px !important;
+				}
+			}
+			@media only screen and (min-width: 480px) {
+				body,html {
+					font-size: 22px !important;
+				}
+			}
+			#app { min-height: 100%; background: #f5f5f5; }
+			div { box-sizing: border-box; }
+			/* 导航栏 */
+			.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+			.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+			.van-nav-bar .van-nav-bar__right img { display: block; }
+			.van-nav-bar .van-nav-bar__title { font-weight: bold; }
+			/* 核销列表 */
+			.coupon-list-con { padding: 0 0.75rem; }
+			.coupon-list-con .list-item { position: relative; padding-bottom: 37%; display: flex; margin-top: 12px; background: url('./images/destroy-bg.png') no-repeat; background-size: 100% 100%; }
+			.coupon-list-con .list-item .look-goods-con { position: absolute; padding: 0 0.875rem; background: transparent; width: 100%; height: 22%; display: flex; align-items: center; justify-content: space-between; }
+			.coupon-list-con .list-item .look-goods-con .van-cell__title { font-weight: bold; font-size: 0.8rem; color: #fff; flex: inherit; }
+			.coupon-list-con .list-item .look-goods-con .van-cell__value { font-weight: bold; font-size: 0.8rem; color: #fff;  }
+			.coupon-list-con .list-item .look-goods-con .van-cell__right-icon { color: #fff; font-size: 14px; }
+			.coupon-list-con .list-item .coupon-item-con { position: absolute; top: 22%; width: 100%; height: 78%; display: flex; align-items: center; justify-content: space-between; flex-direction: column; padding: 0.75rem; }
+			.coupon-list-con .list-item .coupon-item-con .coupon-info { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+			.coupon-list-con .list-item .coupon-item-con .coupon-info .user-con { display: flex; align-items: center; width: 77%; }
+			.coupon-list-con .list-item .coupon-item-con .coupon-info .avatar { width: 2.5rem; height: 2.5rem; border-radius: 8px; overflow: hidden; }
+			.coupon-list-con .list-item .coupon-item-con .coupon-info .avatar img { width: 100%; height: 100%; }
+			.coupon-list-con .list-item .coupon-item-con .coupon-info .name-con { padding-left: 0.5rem; width: calc(100% - 2.5rem); }
+			.coupon-list-con .list-item .coupon-item-con .coupon-info .name-con .user-name { width: 100%; font-size: 1rem; font-weight: bold; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;  }
+			.coupon-list-con .list-item .coupon-item-con .coupon-info .name-con .coupon-name { width: 100%; font-size: 0.8rem; color: #c2c2c2;padding-top: 0.3rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;  }
+			.coupon-list-con .list-item .coupon-item-con .coupon-info .price-con { width: 23%; display: flex; align-items: center; justify-content: center; color: #c2c2c2; }
+			.coupon-list-con .list-item .coupon-item-con .coupon-info .price-con .price { font-size: 1.6rem; font-weight: bold; }
+			.coupon-list-con .list-item .coupon-item-con .coupon-info .price-con .price-icon { font-size: 0.8rem; transform:translateY(20%)  }
+			.coupon-list-con .list-item .coupon-item-con .coupon-info .small .price { font-size: 1.2rem; font-weight: bold; }
+			.coupon-list-con .list-item .coupon-item-con .coupon-info .small .price-icon { font-size: 0.65rem; transform:translateY(-20%) }
+			.coupon-list-con .list-item .coupon-item-con .coupon-rule { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+			.coupon-list-con .list-item .coupon-item-con .coupon-rule .date-con { width: 52%; font-size: 0.75rem; color: #c2c2c2; display: flex; align-items: center;  }
+			.coupon-list-con .list-item .coupon-item-con .coupon-rule .date-con .date { max-width: calc(100% - 0.75rem); white-space: nowrap; overflow: hidden;   }
+			.coupon-list-con .list-item .coupon-item-con .coupon-rule .date-con .van-icon-arrow { font-size: 0.75rem; margin-left: 0.3rem; }
+			.coupon-list-con .list-item .coupon-item-con .coupon-rule .rule { width: 48%; text-align: right; font-size: 0.75rem; color: #c2c2c2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+			.coupon-list-con .list-item .destroy-icon { position: absolute; top: 22%; right: 0; width: 4.2rem; }
+			.coupon-list-con .list-item .destroy-icon img { width: 100%; }
+			/* loading */
+			.full-loading { position: fixed; left: 0; top: 46px; right: 0; bottom: 0; background-color: #fff; z-index: 9999; }
+			.full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+			/* 无数据 */
+			.no-data { position: fixed; top: 46px; left: 0; right: 0; bottom: 0; z-index: 1;}
+			.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+			.no-data .no-data-con img { width: 100%; }
+			.no-data .no-data-con .no-title{ font-size: 1rem; font-weight:600;  color:rgba(0,0,0,1);  }
+			.no-data .no-data-con .no-desc { font-size: 0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+			.no-data .no-data-con .van-button { font-size: 0.75rem; font-weight:400; color:rgba(1,195,39,1); }
+		</style>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="抵销券核销列表" left-arrow @click-left="toRouter()" >
+                <template #right>
+                    <img src="images/icon/shouye.png" alt="" width="20"  @click="JumpIndex">
+                </template>
+			</van-nav-bar>
+			<div class="coupon-list-con" v-if="couponList && couponList.length > 0 && isShopUser && !isErr">
+				<van-list v-model="loading" :immediate-check="false" :finished="finished" finished-text="没有更多了" @load="getCouponList">
+					<div class="list-item" v-for="(item,index) in couponList" :key="index">
+						<van-cell class="look-goods-con" :title="item.c_type == 0 ? '满减券' : '折扣券'" is-link value="查看可使用商品入口" @click="toLookGoods(item)"></van-cell>
+						<div class="coupon-item-con" @click="detail(item.coupon_id)">
+							<div class="coupon-info">
+								<div class="user-con">
+									<div class="avatar">
+										<img :src="item.headimgurl" alt="">
+									</div>
+									<div class="name-con">
+										<div class="user-name">{{item.nickname}}</div>
+										<div class="coupon-name">{{item.name}}</div>
+									</div>
+								</div>
+								<div class="price-con" :class="{'small':item.isSmall}">
+									<span class="price">{{item.c_type == 0 ? item.money : item.discount}}</span>
+									<span class="price-icon">{{item.c_type == 0 ? '元' : '折'}}</span>
+								</div>
+							</div>
+							<div class="coupon-rule">
+								<div class="date-con">
+									<div class="date">{{item.end_time_str}}</div>
+									<van-icon name="arrow" color="#c2c2c2" ></van-icon>
+								</div>
+								<div class="rule">{{item.target_str}}</div>
+							</div>
+						</div>
+						<div class="destroy-icon">
+							<img src="images/destroy-icon.png" alt="">
+						</div>
+					</div>
+				</van-list>
+			</div>
+			
+			<div class="full-loading" v-if="loading && page <=1 ">
+				<van-loading  color="#1989fa" /> 
+			</div>
+			<div class="no-data" v-if="(couponList.length === 0 || isErr || !isShopUser) && !loading">
+				<div class="no-data-con">
+					<img :src="isErr ? errImg : noDataImg" alt="">
+					<p class="no-title">{{ isErr ? '网络竟然崩溃了' : isShopUser ? '暂无线下核销数据' : '您还不是商家' }}</p>
+					<p class="no-desc">{{ isErr ? '别紧张,试试看刷新页面' : isShopUser ? '' : '该列表为商家权限，请先入驻商家' }}</p>
+					<van-button size="small" plain round color="#01C327" v-if="isErr || !isShopUser" @click="handleErr">{{isShopUser ? '入驻商家' : '刷新'}}</van-button>
+				</div>
+			</div>
+
+			
+		</div>
+		<script>
+						
+			var app = new Vue({
+				el: '#app',
+				data: {
+					JumpUrl:{
+						jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+						list: baseUrl('/wx/coupon/owner_offline_coupon'), 
+						if_shop_owner: baseUrl('/wx/coupon/if_shop_owner'),
+					},
+					noDataImg: './images/icon/no-goods.png',
+					errImg: './images/err.png',
+					couponList: [],
+					page: 0,
+					loading: true, // 列表请求loading
+					finished: false, // 列表是否请求完成
+					isErr: false,
+					isShopUser: false,
+				},
+				methods:{
+					//跳转首页
+					JumpIndex(){
+						window.location.href = "index.html?v=1";
+					},
+					// 判断是否为商家
+					getShopUser() {
+						let that = this;
+						that.loading = true;
+						axios({
+							method: 'post',
+							url: that.JumpUrl.if_shop_owner,
+							data: { token: localStorage.getItem('token') }
+						})
+						.then(function (resp) { //返回数据
+							that.loading = false;
+							if(resp.data.code == 1) {
+								if(Number(resp.data.data) > 0) {
+									that.isShopUser = true
+								}else {
+									that.isShopUser = false
+								}
+							} else {
+								that.isShopUser = false
+							}
+						}).catch(function (error) {
+							that.loading = false;
+							that.isShopUser = false
+							//请求失败
+							console.log('error', error);
+
+						})
+					},
+					// 获取核销列表
+					getCouponList() {
+						let page = this.page + 1
+						let that = this;
+						that.isErr = false 
+						if (page != 1) {
+							that.loading = true
+						} 
+						axios({
+							method: 'post',
+							url: that.JumpUrl.list,
+							data: {
+								token: localStorage.getItem('token'),
+								page: page,
+								size: 10
+							}}).then(function(resp) {
+								that.isErr = false 
+								that.loading = false
+								if (resp.data.code == 1) {
+									let resultData = resp.data.data;
+									if (resultData) {
+										resultData.forEach(item =>{
+											if(item.c_type == 0) {
+												if(item.money > 999) {
+													item.isSmall = true
+												}
+											}
+											item.end_time_str = '有效期至'+item.user_coupon_age.split('-')[1]
+										})
+										that.couponList = that.couponList.concat(resultData)
+									}
+									that.page = page
+									if(resultData.length < 10) {
+										that.finished = true
+									} else {
+										that.finished = false
+									}
+									// if (that.page >= resp.data.totalPage) {
+									// 	that.finished = true
+									// } else {
+									// 	that.finished = false
+									// }
+								} else {
+									that.loading = false
+									that.finished = true
+								}
+							}).catch(function(error) {
+								that.isErr = true
+								that.loading = false
+								//请求失败
+								console.log('error', error);
+							})
+					},
+					toLookGoods(item){
+						let isAll = item.goods_type == 0 ? 1 : 2
+						window.location.href = 'offLineCouponGoods.html?coupon_id='+item.coupon_id+'&target_str='+item.target_str+'&cur_yxq='+item.user_coupon_age+'&isAll='+isAll+'&source=destroyList'
+					},
+					// 优惠券详情
+					detail(id) {
+						window.location.href = "couponDetail.html?id=" + id+'&source=destroyList';
+					},
+					getShopInfo() {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.JumpUrl.shopInfoUrl,
+							data: {
+								token: localStorage.getItem("token"),
+								// shop_id: localStorage.getItem("shop_id")
+							}
+						}).then(function (resp) {
+							let data = resp.data
+							if (data.errno == 0) {
+								that.curShopInfo = data.data
+							}
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+						})
+					},
+					// 查看可用商品
+					toPay(item) {
+                        let isAll = (item.goods_type == 0 ? 1 : 2)
+                        window.location.href = 'offLineCouponGoods.html?coupon_id='+this.cur_coupon_id+'&target_str='+this.cur_target_str+'&cur_yxq='+this.cur_yxq+'&isAll='+isAll+'&source=myCouponList'
+					},
+					toRouter() {
+						window.location.href = 'personal.html'
+					},
+					handleErr() {
+						if(this.isErr) {
+							this.getCouponList()
+						}else if(this.isShopUser){
+							window.location.href = 'regShop.html'
+						}
+					},
+					
+				},
+				created() {
+					this.getShopUser()
+					this.getCouponList()
+				}
+			})
+		</script>
+	</body>
+</html>

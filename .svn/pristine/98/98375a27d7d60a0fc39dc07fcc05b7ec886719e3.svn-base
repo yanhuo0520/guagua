@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>微商超</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+		<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" href="css/weui.min.css">
+		<script src="./js/rem.js"></script>
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js"></script>
+		<script src="js/vconsole.min.js"></script>
+		<script>
+			// var vConsole = new VConsole();
+		</script>
+
+		<style>
+			[v-cloak] {
+				display: none;
+			}
+
+			img {
+				vertical-align: top;
+			}
+
+			.el-tabs__nav {
+				background-color: #f5f5f5;
+				height: 85vh;
+				overflow-y: scroll;
+				width: 1.7rem;
+
+			}
+
+			.xixuan {
+				width: 2rem;
+
+				/* box-shadow:1px 1px 1px #ccc; */
+			}
+
+			.xixuan img {
+				width: 2rem;
+				height: 1.4rem;
+			}
+
+			.rContent {
+				margin-top: 0.1rem;
+				padding-left: 0.3rem;
+				padding-top: 0.2rem;
+				padding-bottom: 0.2rem;
+				border-bottom: 1px solid #eee;
+				background-color: #fff;
+			}
+
+			.el-input-number--mini {
+				width: 100px;
+			}
+
+			.bottom-shopping {
+				/*height: 1.5rem;*/
+				background-color: #f5f5f5;
+				position: fixed;
+				bottom: 0px;
+				z-index: 3000;
+				width: 100%;
+			}
+
+			.bottom-cart {
+				background-color: #444;
+				width: 5.5rem;
+				height: 1rem;
+				margin-left: 1rem;
+				margin-top: 0.25rem;
+				border-radius: 0.8rem;
+			}
+
+			.item {
+				margin: 0.25rem;
+			}
+
+			.settlement {
+				width: 1.4rem;
+				height: 0.6rem;
+				background-image: url(./images/speedBuy/gwcjs.png);
+				background-repeat: no-repeat;
+				background-size: 100% auto;
+				margin-right: 0.2rem;
+				margin-top: 0.2rem;
+				border-radius: 20px;
+				text-align: center;
+				line-height: 0.6rem;
+				font-size: 16px;
+				color: #fff;
+			}
+
+			.el-dialog {
+				position: fixed;
+				bottom: 0rem;
+			}
+
+			.el-dialog .el-image {
+				width: 56px;
+			}
+
+			.el-dialog__body {
+				padding: 10px 20px;
+				margin-bottom: 50px;
+				height: 300px;
+				overflow-y: auto;
+				padding-top: 46px;
+			}
+			.el-tab-pane {
+				height: 80vh;
+				overflow-y: scroll;
+				padding-bottom: 1.5rem;
+			}
+
+
+
+			/*//弹窗样式*/
+			.el-message-box--center {
+				padding-bottom: 0px;
+			}
+
+			.el-message-box {
+				padding-bottom: 0px;
+				width: 260px;
+			}
+
+			.el-message-box__btns .el-button {
+				border: 0px solid #DCDFE6;
+				display: inline-block;
+				line-height: 1;
+				white-space: nowrap;
+				cursor: pointer;
+				background: #FFF;
+				color: #606266;
+				text-align: center;
+				box-sizing: border-box;
+				outline: 0;
+				margin: 0;
+				font-weight: 500;
+				padding: 20px;
+				font-size: 14px;
+				border-radius: 0px;
+				line-height: 0px;
+			}
+
+			.el-message-box__btns {
+				background-color: #fff;
+				padding: 0px;
+			}
+
+			.el-message-box__headerbtn i {
+				display: none;
+			}
+
+			.el-message-box__btns .el-button:nth-child(1) {
+
+				width: 130px;
+				border-top: 1px solid #ccc;
+
+			}
+
+			.el-message-box__btns .el-button:nth-child(2) {
+				border-top: 1px solid #ccc;
+				border-left: 1px solid #ccc;
+				color: #fda06f;
+				width: 130px;
+				margin-left: 0px;
+			}
+
+			.el-tabs__item.is-active {
+				background: #fff;
+				color: #f36065;
+			}
+
+			.el-tabs__active-bar {
+				background-color: #f36065;
+			}
+
+			.el-dialog__header {
+				padding: 0px 20px 10px;
+			}
+			
+			.aui-radio{
+				width: 0.5rem;
+				    height: 0.5rem;
+				    background-color: #ffffff;
+				    border: solid 1px #dddddd;
+				    -webkit-border-radius: 0.6rem;
+				    border-radius: 0.6rem;
+				    font-size: 0.8rem;
+				    margin: 0;
+				    padding: 0;
+				    position: relative;
+				    display: inline-block;
+				    vertical-align: top;
+				    cursor: default;
+				    -webkit-appearance: none;
+				    -webkit-user-select: none;
+				            user-select: none;
+				    -webkit-transition: background-color ease 0.1s;
+				            transition: background-color ease 0.1s;
+							margin: 0.1rem 0.1rem 0 0;
+			}
+			.aui-radio:checked, .aui-radio.aui-checked, .aui-checkbox:checked, .aui-checkbox.aui-checked{
+						background-color:#f36065;
+						border:1px solid #f36065;
+					}
+			.aui-radio:checked:before,
+			.aui-radio.aui-checked:before,
+			.aui-checkbox:checked:before,
+			.aui-checkbox.aui-checked:before,
+			.aui-radio:checked:after,
+			.aui-radio.aui-checked:after,
+			.aui-checkbox:checked:after,
+			.aui-checkbox.aui-checked:after {
+			    content: '';
+			    width: 0.2rem;
+			    height: 0.15rem;
+			    position: absolute;
+			    top: 50%;
+			    left: 50%;
+			    margin-left: -0.1rem;
+			    margin-top: -0.07rem;
+			    background: transparent;
+			    border: 1px solid #ffffff;
+			    border-top: none;
+			    border-right: none;
+			    z-index: 2;
+			    -webkit-border-radius: 0;
+			            border-radius: 0;
+			    -webkit-transform: rotate(-45deg);
+			            transform: rotate(-45deg);
+			}
+
+			body {
+				padding-top: 50px;
+			}
+			/* #app,#iframe{
+				height: 100%;
+			}
+			#iframe{
+				display: none;
+			} */
+			
+		</style>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<div id="speed">
+				
+			
+				<el-row class="clearfix header" style="font-size: 18px;position:fixed;">
+
+					<el-col :span="8">
+						<i style="font-size:26px" class="el-icon-arrow-left" @click="returnLast()"></i>
+					</el-col>
+					<el-col :span="8" style="text-align: center">
+						<h2>快速购买</h2>
+					</el-col>
+					<el-col :span="8" style="position:relative;height: 100%">
+						<img src="images/icon/sy2.png" alt="" width="20" style="margin-top:auto;margin-bottom:auto;top:0;bottom:5px;right: 5px;position:absolute"
+						 @click="JumpIndex">
+					</el-col>
+
+
+				</el-row>
+				<el-row style="background-color: #fff">
+					<el-col>
+						<el-tabs :tab-position="tabPosition" v-model="cate_name" @tab-click="handleClick">
+							<el-tab-pane label="全部" name="全部" cate_id="0">
+								<div v-for="(x, index) in allGoods">
+									<div class="clearfix rContent">
+										<div class="fl xixuan">
+											<el-image :src="x.thumb" height="300" width="329" alt="" @click="details(x.goods_id)"></el-image>
+										</div>
+										<div class="fl" style="width: 35vw;margin-left: 0.15rem;height: 1.6rem;">
+											<p style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">{{x.goods_name}}</p>
+											<div class="clearfix" style="margin-top: 0.65rem;position: relative;" v-if="x.promotion_price !=null">
+												<div class="fl" style="line-height: 26px;width: 50%;display: flex;" v-if="x.unit">￥{{x.promotion_price}}<span style="width: 50%;overflow: hidden;white-space: nowrap;">/{{x.unit}}</span></div>
+												<span class="fl" style="line-height: 26px" v-else>￥{{x.promotion_price}}</span>
+												<span class="fr" style="position: absolute;right: 0;bottom: 0;">
+													<span v-if="x.storage == 0 || x.storage < 0" style="color: #f36065;">库存不足</span>
+
+													<img src="images/speedBuy/tianjia.png" alt="" v-if="x.num == 0 && x.storage!=0 " width="25" @click="addG(index,x.goods_id)">
+
+													<div v-if="x.num > 0 && x.storage>0" class="clearfix">
+														<img src="./images/speedBuy/jian.png" alt="" class="fl" width="20px" @click="reduceChange(x.goods_id,index)">
+														<div class="fl" style="margin-left: 10px;margin-right: 10px">{{x.num}}</div>
+														<img src="./images/speedBuy/jia.png" alt="" class="fl" width="20px" @click="addChange(x.goods_id,)">
+													</div>
+												</span>
+											</div>
+											<div class="clearfix" style="margin-top: 0.65rem;position: relative;" v-else>
+												<div class="fl" style="line-height: 26px;width: 50%;display: flex;" v-if="x.unit">￥{{x.retail_price}}<span style="width: 50%;overflow: hidden;white-space: nowrap;">/{{x.unit}}</span></div>
+												<span class="fl" style="line-height: 26px" v-else>￥{{x.retail_price}}</span>
+												<span class="fr" style="position: absolute;right: 0;bottom: 0;">
+													<span v-if="x.storage == 0 || x.storage < 0" style="color: #f36065;">库存不足</span>
+
+													<img src="images/speedBuy/tianjia.png" alt="" v-if="x.num == 0 && x.storage!=0 " width="25" @click="addG(index,x.goods_id)">
+
+													<div v-if="x.num > 0 && x.storage>0" class="clearfix">
+														<img src="./images/speedBuy/jian.png" alt="" class="fl" width="20px" @click="reduceChange(x.goods_id,index)">
+														<div class="fl" style="margin-left: 10px;margin-right: 10px">{{x.num}}</div>
+														<img src="./images/speedBuy/jia.png" alt="" class="fl" width="20px" @click="addChange(x.goods_id,)">
+													</div>
+												</span>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</el-tab-pane>
+
+							<el-tab-pane label="促销商品" name="促销商品">
+								<div v-for="(x, index) in promotion_goods">
+									<div class="clearfix rContent">
+										<div class="fl xixuan">
+											<el-image :src="x.thumb" height="300" width="329" alt="" @click="details(x.goods_id)"></el-image>
+										</div>
+										<div class="fl" style="width: 35vw;margin-left: 0.15rem;height: 1.6rem;">
+											<p style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">{{x.goods_name}}</p>
+											<div class="clearfix" style="margin-top: 0.65rem;position: relative;">
+												<div class="fl" style="line-height: 26px;width: 50%;display: flex;" v-if="x.unit">￥{{x.promotion_price}}<span style="width: 50%;overflow: hidden;white-space: nowrap;">/{{x.unit}}</span></div>
+												<span class="fl" style="line-height: 26px" v-else>￥{{x.promotion_price}}</span>
+												<span class="fr" style="position: absolute;right: 0;bottom: 0;">
+													<span v-if="x.storage == 0" style="color: #f36065;">库存不足</span>
+
+													<img src="images/speedBuy/tianjia.png" alt="" v-if="x.num == 0 && x.storage!=0 " width="25" @click="addG(index,x.goods_id)">
+
+													<div v-if="x.num > 0 && x.storage>0" class="clearfix">
+														<img src="./images/speedBuy/jian.png" alt="" class="fl" width="20px" @click="reduceChange(x.goods_id,index)">
+														<div class="fl" style="margin-left: 10px;margin-right: 10px">{{x.num}}</div>
+														<img src="./images/speedBuy/jia.png" alt="" class="fl" width="20px" @click="addChange(x.goods_id,)">
+													</div>
+												</span>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</el-tab-pane>
+							<el-tab-pane :label="item.cate_name" v-for="item in LeftNav" :name="item.cate_name" :key="item.cate_id" :cate_id="item.cate_id">
+								<div v-for="(x, index) in allGoods">
+									<div class="clearfix rContent">
+										<div class="fl xixuan">
+											<el-image :src="x.thumb" height="300" width="329" alt="" @click="details(x.goods_id)"></el-image>
+										</div>
+										<div class="fl" style="width: 35vw;margin-left: 0.15rem;height: 1.6rem;">
+											<p style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">{{x.goods_name}}</p>
+											<div class="clearfix" style="margin-top: 0.65rem;position: relative;" v-if="x.promotion_price !=null">
+												<div class="fl" style="line-height: 26px;width: 50%;display: flex;" v-if="x.unit">￥{{x.promotion_price}}<span style="width: 50%;overflow: hidden;white-space: nowrap;">/{{x.unit}}</span></div>
+												<span class="fl" style="line-height: 26px" v-else>￥{{x.promotion_price}}</span>
+												<span class="fr" style="position: absolute;right: 0;bottom: 0;">
+													<span v-if="x.storage == 0 || x.storage < 0" style="color: #f36065;">库存不足</span>
+								
+													<img src="images/speedBuy/tianjia.png" alt="" v-if="x.num == 0 && x.storage!=0 " width="25" @click="addG(index,x.goods_id)">
+								
+													<div v-if="x.num > 0 && x.storage>0" class="clearfix">
+														<img src="./images/speedBuy/jian.png" alt="" class="fl" width="20px" @click="reduceChange(x.goods_id,index)">
+														<div class="fl" style="margin-left: 10px;margin-right: 10px">{{x.num}}</div>
+														<img src="./images/speedBuy/jia.png" alt="" class="fl" width="20px" @click="addChange(x.goods_id,)">
+													</div>
+												</span>
+											</div>
+											<div class="clearfix" style="margin-top: 0.65rem;position: relative;" v-else>
+												<div class="fl" style="line-height: 26px;width: 50%;display: flex;" v-if="x.unit">￥{{x.retail_price}}<span style="width: 50%;overflow: hidden;white-space: nowrap;">/{{x.unit}}</span></div>
+												<span class="fl" style="line-height: 26px" v-else>￥{{x.retail_price}}</span>
+												<span class="fr" style="position: absolute;right: 0;bottom: 0;">
+													<span v-if="x.storage == 0 || x.storage < 0" style="color: #f36065;">库存不足</span>
+								
+													<img src="images/speedBuy/tianjia.png" alt="" v-if="x.num == 0 && x.storage!=0 " width="25" @click="addG(index,x.goods_id)">
+								
+													<div v-if="x.num > 0 && x.storage>0" class="clearfix">
+														<img src="./images/speedBuy/jian.png" alt="" class="fl" width="20px" @click="reduceChange(x.goods_id,index)">
+														<div class="fl" style="margin-left: 10px;margin-right: 10px">{{x.num}}</div>
+														<img src="./images/speedBuy/jia.png" alt="" class="fl" width="20px" @click="addChange(x.goods_id,)">
+													</div>
+												</span>
+											</div>
+										</div>
+									</div>
+								
+								</div>
+								
+								
+
+							</el-tab-pane>
+
+
+						</el-tabs>
+					</el-col>
+				</el-row>
+
+
+				<div class="bottom-shopping">
+					<div class="bottom-cart">
+						<el-badge class="item fl" @click.native="hideDialog()">
+							<img style="width: 0.8rem; height: 0.6rem" src="images/speedBuy/gwc.png">
+						</el-badge>
+						<div class="fl" style="margin-top: 0.1rem;color: #fff">
+							<div>￥ {{amount}}</div>
+							<div>
+								共 {{count}} 件 配送费￥{{post_fee}}
+							</div>
+						</div>
+						<div class="fr">
+							<div class="settlement" @click="settlement()">去结算</div>
+						</div>
+					</div>
+				</div>
+
+
+
+				<el-dialog title="" :visible.sync="dialogFormVisible" width="100%" sytle="overflow-y:scroll;margin-top: 50px;"
+				 :show-close="false" :close-on-click-modal="true">
+					<div style="width:100;height:40px;border-bottom:1px solid #eee; position: fixed;width: 90%;z-index: 3;background: #FFFFFF;bottom: 416px;">
+						<div class="fl" @click="handleDialogClose()" style="height:16px;line-height: 16px;">
+							<img style="height:16px;" src="images/speedBuy/del.png" alt=""> &nbsp;清空购物车
+						</div>
+						<div class="fr" @click="dialogFormVisible=false">
+							<i style="font-size: 18px;" class="el-dialog__close el-icon el-icon-close"></i>购物车
+						</div>
+					</div>
+					<div style="margin-top: 10px;border-bottom:1px solid #eee;padding-bottom: 10px;" v-for="(x, index) in cartList">
+						<div class="aui-content-padded fl" style="margin-left: 15px;">
+							<label><input class="aui-radio" type="checkbox" name="test" :value= "x.goods_id" :checked="x.checked" @click="single(index)"></label>
+						</div>
+						<div class="clearfix ">
+							<div class="fl ">
+								<el-image @click="dialogFormVisible = false" :src="x.thumb" height="100" width="129" alt=""></el-image>
+							</div>
+							<div class="fl" style="margin-left: 10px;width: 60vw">
+								<p>{{x.goods_name}}</p>
+								<div class="clearfix">
+									<span class="fl" style="">￥{{x.retail_price}}</span>
+									<span class="fr">
+										<!-- <img src="images/speedBuy/tianjia.png" alt="" v-if="x.number == 0 " width="25" @click="addG(index,x.goods_id)"> -->
+										<div class="clearfix">
+											<img src="./images/speedBuy/jian.png" alt="" class="fl" width="20px" @click="reduceChange(x.goods_id,index)">
+											<div class="fl" style="margin-left: 10px;margin-right: 10px">{{x.number}}</div>
+											<img src="./images/speedBuy/jia.png" alt="" class="fl" width="20px" @click="addChange(x.goods_id,)">
+										</div>
+									</span>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					
+					<div class="aui-bar-tab-item aui-active" tapmode>
+						<label><input class="aui-radio fl" type="checkbox" @click="AllCheck(1)" :checked="flag" style="margin-left: 10px;margin-right: 10px;margin-top: 0.24rem;" ></label>
+					
+						<div class="aui-bar-tab-label fl" style="margin-top: 0.26rem;">全选</div>
+					</div>
+
+				</el-dialog>
+
+				<div class="page-mask" v-show="loading">
+					<div class="page-mask-content">
+						<div class="el-loading-spinner"><i class="el-icon-loading"></i>
+							<p class="el-loading-text">拼命加载中</p>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="page-mask" v-show="addgoods">
+					<div class="page-mask-content">
+						<div class="el-loading-spinner"><i class="el-icon-s-goods"></i>
+							<p class="el-loading-text">请添加商品</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="message-page-mask" v-show="message.show==1">
+				<div class="message-page-mask-content">
+					<div class="el-loading-spinner">
+						<i v-show="message.type=='success' " class="el-icon-success"></i>
+						<i v-show="message.type=='error' " class="el-icon-error"></i>
+			
+						<p class="el-loading-text">{{message.text}}</p>
+					</div>
+				</div>
+			</div>
+			<!-- <div id="iframe">
+				<iframe :src="iframeUrl" width="100%" height="100%" style="border: none;"></iframe>
+			</div> -->
+		</div>
+		
+		
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					addgoods: 0,
+					tabPosition: 'left',
+					message:{
+						show:0,
+						type:'success',
+						text:'成功',
+					},
+					num: 1,
+					flag:0,
+					dialogFormVisible: false,
+					token: localStorage.getItem("token"),
+					form: {
+						name: '',
+						region: '',
+						date1: '',
+						date2: '',
+						delivery: false,
+						type: [],
+						resource: '',
+						desc: ''
+					},
+					formLabelWidth: '120px',
+					JumpUrl: {
+						cate: 'http://sy.xfd365.com/wx/cate/index',
+						list: 'http://sy.xfd365.com/wx/goods/goodsLists',
+						add: 'http://sy.xfd365.com/wx/cart/add',
+						delete: 'http://sy.xfd365.com/wx/cart/delete',
+						promotion: 'http://sy.xfd365.com/wx/index/promotion_goods',
+						checked:'http://sy.xfd365.com/wx/cart/checked',
+						index:'http://sy.xfd365.com/wx/cart/cart',
+					},
+					LeftNav: [],
+					item: {
+						token: localStorage.getItem("token"),
+
+					},
+					goods: {
+						token: localStorage.getItem("token"),
+						cate_id: '',
+					},
+					addGoods: {
+						goods_id: '',
+						number: 0,
+						token: localStorage.getItem("token"),
+					},
+
+					allGoods: [], //分类下所有商品
+					i: -1,
+					b: {
+						retail_price: '',
+						id: '',
+					},
+					count: 0, //共几件
+					amount: 0, //共多少钱
+					box: 1,
+					cartList: [], //获取购物车数据
+					cartID: {
+						goods_ids: '',
+						token: localStorage.getItem("token"),
+					},
+					page: 1,
+					loading: 0,
+					isDone: 0,
+					cate_id: '',
+					current_index: 1,
+					post_fee: 0,
+					cate_name: '全部',
+					promotion_goods: [],
+					checked:{
+						goods_ids:'',
+						isChecked:1,
+						token:localStorage.getItem("token"),
+					},
+					// isSpeed: true,
+					// iframeUrl: ''
+
+				},
+				watch: {
+					allGoods: {
+						handler: function(newVal, oldValue) {
+
+						},
+						deep: true
+					}
+				},
+				methods: {
+					hideDialog() {
+						this.dialogFormVisible = !this.dialogFormVisible
+					},
+					onScroll() {
+						if (this.isDone) {
+							return;
+						}
+
+						let that = this;
+						let ele = document.getElementById('pane-' + that.cate_name);
+						/*页面高度*/
+						var scrollTop = 0;
+						if (ele && ele.scrollTop) {
+							scrollTop = ele.scrollTop;
+						}
+						/*当前可视高度*/
+						let clientHeight = document.documentElement.clientHeight;
+						/*文档完整的高度*/
+						// let  scrollHeight=Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+						let scrollHeight = Math.max(ele.scrollHeight, ele.scrollHeight);
+						// let  scrollHeight=document.getElementById('pane-'+that.cate_name);
+						if ((scrollHeight - clientHeight - scrollTop) <= 100) {
+
+							if (that.loading == 1) {
+								return;
+							}
+							this.page += 1;
+							that.loading = 1;
+							that.sortGoods();
+						}
+
+					},
+					//跳转首页
+					JumpIndex() {
+						window.location.href = "index.html";
+					},
+					//返回上一页
+					returnLast() {
+						// window.history.go(-1);
+						window.location.href = "index.html";
+					},
+					//商品详情
+					details(id) {
+						var cate_id = localStorage.getItem('cate_id')
+						var tabIndex = localStorage.getItem('tabIndex')
+						if (cate_id) {
+							// this.isSpeed = false
+							window.location.href = "goodsDetails.html" + '?' + 'id=' + id + '&cate_id=' + cate_id + '&tabIndex=' + tabIndex
+							// this.iframeUrl = "goodsDetails.html" + '?' + 'id=' + id + '&cate_id=' + cate_id + '&tabIndex=' + tabIndex;
+							//  document.getElementsByTagName("body")[0].style.paddingTop = '0'
+							//  document.getElementsByTagName("body")[0].style.height = '100vh'
+							//  document.getElementById("iframe").style.display = 'block'
+							//  document.getElementById("speed").style.display = 'none'
+						} else {
+							window.location.href = "goodsDetails.html" + '?' + 'id=' + id
+						}
+
+					},
+					
+					//获取购物车内容
+					myCart(){
+						let that = this;
+						let form_data = new FormData();
+							makeFormData(that.addGoods,form_data);
+							axios({
+								method: 'post',
+								url: that.JumpUrl.index,
+								data:form_data
+							})
+							.then(function (resp) {
+							that.cartList = resp.data.data.cartList;
+							that.amount = resp.data.data.cartTotal.checkedGoodsAmount;
+							
+							for(var i = 0; i< that.cartList.length;i++){
+								if(that.cartList[i].checked == 0){
+									
+									that.checked.isChecked = 0
+								}else{
+									
+									that.checked.isChecked = 1
+								}
+							}
+					
+							that.checkedGoods();
+							}).catch(function (error) {
+								//请求失败
+								console.log('error', error);
+					
+							})
+					},
+					// 购物车商品选中或取消选中状态
+					checkedGoods(){
+						let that = this;
+							let length=that.cartList.length;
+							let checkedLength=0;
+					
+							for (var i = 0; i < that.cartList.length; i++) {
+								if(that.cartList[i].checked == 1){
+									checkedLength+=1;
+								}
+					
+							}
+					
+							if (length == checkedLength) {
+								that.flag = 1;
+							}else{
+								that.flag = 0;
+							}
+							if (length == 0 ) {
+								that.flag = 0;
+							}
+					
+					},
+					//单选
+					single(index){
+						let that=this;
+						let goods_checked=that.cartList[index].checked
+						if(goods_checked == 1){
+							goods_checked=0
+						}else{
+							goods_checked=1
+						}
+					
+						that.checked.goods_ids = that.cartList[index].goods_id;
+						that.checked.isChecked= goods_checked;
+					
+						that.calculation();
+						
+					
+					
+					
+					},
+					//全选
+					AllCheck(val){
+						var that = this;
+					
+						var idMuster = "";
+							that.checked.isChecked = !that.checked.isChecked
+						for (var i = 0; i < that.cartList.length; i++) {
+						
+							idMuster += that.cartList[i].goods_id+ ',';
+							// if (that.cartList[i].checked == 1) {
+							// 	that.checked.isChecked = 0;
+							// }else{
+							// 	that.checked.isChecked = 1;
+							// }
+						};
+						
+						
+						that.checked.goods_ids = idMuster;
+								
+						that.calculation();//调用结算接口
+					
+					
+					},
+					calculation(){
+						var that = this;
+						axios({
+								method: 'post',
+								url: that.JumpUrl.checked,
+								data:that.checked
+							})
+							.then(function (resp) {
+							// let shopInfo = JSON.parse(localStorage.getItem('shopInfo'))
+							that.cartList = resp.data.data.cartList;
+							that.amount = resp.data.data.cartTotal.checkedGoodsAmount;
+							that.count = resp.data.data.cartTotal.checkedGoodsCount;
+							that.checkedGoods();
+							}).catch(function (error) {
+								//请求失败
+								console.log('error', error);
+					
+							})
+					},
+					//去结算
+					settlement() {
+						var that = this;
+						if (that.cartList.length != 0) {
+							if(this.flag == 1){
+								window.location.href = "confirmOrder.html"
+							}else{
+								that.message={
+									show:1,
+									text:'请选择商品',
+									type:'error'
+								}
+								
+								setTimeout(function(){
+									that.message.show=0;
+								}, 2000)
+							}
+						} else {
+							that.addgoods = 1;
+
+						}
+						setTimeout(function() {
+							that.addgoods = 0;
+						}, 2000)
+
+					},
+					timing() {
+						this.addgoods = 0;
+					},
+					//增加商品
+					addChange(goods_id) {
+						var that = this;
+						that.addGoods.goods_id = goods_id
+						that.addGoods.number = 1;
+						that.addCart();
+					},
+					//减去商品
+					reduceChange(goods_id, index) {
+						var that = this;
+						that.addGoods.goods_id = goods_id;
+						that.addGoods.number = -1;
+
+						// let	num=that.allGoods[index].num
+						let num;
+						let num2;
+						let goods = that.allGoods
+						let goods2 = that.promotion_goods
+						goods.forEach(function(ele) {
+							if (ele.goods_id == goods_id) {
+								num = ele.num
+
+							}
+						})
+						goods2.forEach(function(ele) {
+							if (ele.goods_id == goods_id) {
+								num2 = ele.num
+
+							}
+						})
+						if (num < 1) {
+							return;
+							that.addGoods.number = 0
+						} else {
+							that.addCart(index);
+							that.addGoods.number = -1;
+						}
+
+						if (that.cartList = []) {
+							goods.forEach(function(ele) {
+								ele.num = 0
+							})
+						}
+						if (num2 < 1) {
+							return;
+							that.addGoods.number = 0
+						} else {
+							that.addCart(index);
+							that.addGoods.number = -1;
+						}
+
+						if (that.cartList = []) {
+							goods2.forEach(function(ele) {
+								ele.num = 0
+							})
+						}
+
+					},
+					//添加商品/wx/cart/add
+					addCart(index) {
+						let that = this;
+						if (that.box == 2) {
+							return
+						}
+						that.box = 2;
+
+
+						axios({
+								method: 'post',
+								url: that.JumpUrl.add,
+								data: that.addGoods
+							})
+							.then(function(resp) {
+								that.box = 1;
+								that.count = resp.data.data.cartTotal.checkedGoodsCount; //总共几件
+								that.amount = resp.data.data.cartTotal.checkedGoodsAmount
+
+								that.cartList = resp.data.data.cartList;
+								that.post_fee = resp.data.data.post_fee;
+
+								let is_goods_id = 0;
+								for (var p = 0; p < that.cartList.length; p++) {
+									if (that.cartList[p].goods_id == that.addGoods.goods_id) {
+
+										is_goods_id = 1;
+									}
+
+								}
+
+								if (index > -1 && is_goods_id == 0) {
+									that.allGoods[index].num = 0
+									// that.promotion_goods[index].num=0
+								}
+
+								for (var i = 0; i < that.cartList.length; i++) {
+
+									for (var j = 0; j < that.allGoods.length; j++) {
+
+										if (that.cartList[i].goods_id == that.allGoods[j].goods_id) {
+											that.allGoods[j].num = that.cartList[i].number;
+											if (that.allGoods[j].num < 0) {
+												that.allGoods[j].num = 0;
+
+											}
+										}
+									}
+
+									for (var j = 0; j < that.promotion_goods.length; j++) {
+
+										if (that.cartList[i].goods_id == that.promotion_goods[j].goods_id) {
+											that.promotion_goods[j].num = that.cartList[i].number;
+											if (that.promotion_goods[j].num < 0) {
+												that.promotion_goods[j].num = 0;
+
+											}
+										}
+									}
+								}
+
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					//tab切换
+					handleClick(tab, event) {
+						console.log(tab)
+						console.log(event)
+						let that = this;
+						that.goods.cate_id = tab.$attrs.cate_id; //获取分类下的商品左边导航的id
+						that.addGoods.goods_id = '';
+						that.allGoods = []
+						that.cate_id = tab.$attrs.cate_id
+						that.isDone = 0;
+						that.page = 1;
+						let index = tab.index
+						that.current_index = tab.index
+						that.sortGoods();
+						that.promotionGoods()
+						localStorage.setItem('cate_id', tab.$attrs.cate_id)
+						localStorage.setItem('tabIndex', tab.index)
+						// if(tab.$attrs.promotion_id == ''){
+						// }
+
+
+						// setTimeout(function(){
+						// document.getElementById("pane-"+index).addEventListener('scroll', that.onScroll);
+						// }, 1000)
+
+
+					},
+					//分类下的商品
+					sortGoods() {
+						let that = this;
+						let page = that.page
+
+						axios({
+								method: 'post',
+								url: that.JumpUrl.list,
+								data: {
+									token: that.token,
+									cate_id: that.cate_id,
+									page: that.page,
+								},
+							})
+							.then(function(resp) {
+								that.loading = 0;
+								if (resp.data.data.data.length == 0) {
+									that.isDone = 1;
+								}
+
+								for (let c of that.LeftNav) {
+									if (c.cate_id == that.cate_id) {
+										that.cate_name = c.cate_name
+									}
+								}
+
+								for (var i = 0; i < resp.data.data.data.length; i++) {
+									resp.data.data.data[i].num = 0;
+								};
+
+								if (that.page == 1) {
+									that.allGoods = resp.data.data.data;
+
+									setTimeout(function() {
+										document.getElementById("pane-" + that.cate_name).addEventListener('scroll', that.onScroll);
+									}, 1000)
+
+								} else {
+									for (let item of resp.data.data.data) {
+										that.allGoods.push(item);
+									}
+								}
+								that.addCart(-1);
+
+							}).catch(function(error) {
+								that.loading = 0;
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+					// 所有分类
+					classification() {
+						let that = this;
+
+						axios({
+								method: 'post',
+								url: that.JumpUrl.cate,
+								data: {
+									token: that.token
+								}
+							})
+							.then(function(resp) {
+								// that.LeftNav=[{
+								// 	cate_id:'',
+								// 	cate_name:'全部'
+								// }];
+
+								for (let item of resp.data.data) {
+									that.LeftNav.push(item);
+								}
+
+								that.loading = 1;
+								that.sortGoods()
+
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+
+					handleChange(goods_id) {
+						var that = this;
+						that.addGoods.goods_id = goods_id
+						that.addCart();
+					},
+					addG(index, goods_id) {
+						this.i = index;
+						this.addGoods.goods_id = goods_id;
+						this.addGoods.number = 1;
+						this.addCart(-1);
+					},
+					handleDialogClose() {
+						let that = this;
+						that.$confirm('确认清空购物车?', '提示', {
+							confirmButtonText: '清空',
+							cancelButtonText: '取消',
+							center: true
+
+						}).then(() => {
+							that.dialogFormVisible = false;
+							that.emptyCart();
+
+						})
+					},
+					//清空购物车
+					emptyCart() {
+						let that = this;
+						var idMuster = " ";
+						for (var i = 0; i < that.cartList.length; i++) {
+
+							idMuster += that.cartList[i].goods_id + ',';
+
+						};
+
+						that.cartID.goods_ids = idMuster;
+
+						axios({
+								method: 'post',
+								url: that.JumpUrl.delete,
+								data: that.cartID
+							})
+							.then(function(resp) {
+								that.addGoods.number = 0;
+								var goods = that.allGoods
+								goods.forEach(ele => {
+									ele.num = 0
+								})
+								that.allGoods = goods
+								that.sortGoods();
+
+
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+
+							})
+					},
+
+					promotionGoods() {
+						axios({
+							method: 'post',
+							url: this.JumpUrl.promotion,
+							data: {
+								token: this.token
+							}
+						}).then(res => {
+							if (res.data.errno === 0) {
+								var data = res.data.data
+								data.forEach(ele => {
+									ele.num = 0
+								})
+								this.promotion_goods = data
+							}
+						})
+						this.addCart(-1);
+					}
+				},
+				mounted: function() {
+					var that = this
+					axios({
+							method: 'post',
+							url: that.JumpUrl.cate,
+							data: {
+								token: that.token
+							}
+						})
+						.then(function(resp) {
+							// that.LeftNav=[{
+							// 	cate_id:'',
+							// 	cate_name:'全部'
+							// }];
+
+							for (let item of resp.data.data) {
+								that.LeftNav.push(item);
+							}
+
+							that.loading = 1;
+							that.$nextTick(function() {
+								this.cate_id = getQueryString('cate_id');
+								var cate_id = getQueryString('cate_id')
+								var tabIndex = getQueryString('tabIndex')
+								var LeftNav = this.LeftNav
+								if (cate_id) {
+									this.goods.cate_id = cate_id
+									this.current_index = tabIndex
+								}
+							that.sortGoods()
+							})
+
+						}).catch(function(error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+
+				},
+				created: function() {
+					// this.classification();	// 所有分类和分类下的商品
+					this.promotionGoods()
+					this.$nextTick(()=>{
+						this.myCart()
+					})
+					this.checkedGoods()
+				},
+			})
+		</script>
+	</body>
+
+</html>

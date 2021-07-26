@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>跳转app</title>
+		<script src="js/vue.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<script type="text/javascript" src="js/vconsole.min.js"></script>
+	</head>
+	<body>
+		<wx-open-launch-app id="launch-btn" appid="wx0d5a27f132a6d57e" extinfo="">
+			<template>
+				<style>
+					.btn {
+						padding: 80px;
+						font-size: 40px;
+					}
+				</style>
+				<button class="btn">App内查看</button>
+			</template>
+		</wx-open-launch-app>
+		<script>
+			var vConsole = new VConsole();
+			axios({
+				method: 'post',
+				url: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+				//data: form_data
+				data: {
+					token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTgzODQxNjcsImp0aSI6IjdjZDdmMzQ5NDZhNTk2ZDhjOGEwOTFiNjFmMDg3OTQxIiwiaXNzIjoiMzYuOTkuMzUuMjEwIiwibmJmIjoxNjE4Mzg0MTY3LCJleHAiOjE2MzE1MjQxNjcsImRhdGEiOnsidXNlcl9pZCI6NX19.wARzQd6MfhaJKk6RJ7ZE_qnmHzuuCBFesReLcdTytXk',
+					url: window.location.href
+				}
+			}).then(function(resp) {
+				// console.log(JSON.stringify(resp))
+				let data = resp.data
+				let sdkData = resp.data
+
+				wx.config({
+					debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+					appId: sdkData.appId, // 必填，公众号的唯一标识
+					timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+					nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+					signature: sdkData.signature, // 必填，签名
+					jsApiList: ['checkJsApi'],
+					openTagList: ['wx-open-launch-app']
+				});
+
+			})
+
+			wx.ready(function() {
+				wx.checkJsApi({
+					jsApiList: ['wx-open-launch-app'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+					success: function(res) {
+						console.log('可用')
+					},
+					fail: (err) => {
+						console.log(err, '不可用')
+					}
+				})
+				var launchBtn = document.getElementById('launch-btn');
+				if (launchBtn) {
+					launchBtn.addEventListener('launch', function(e) {
+						console.log('success');
+
+					});
+					launchBtn.addEventListener('error', function(e) {
+						console.log(e.detail)
+						// alert('fail', e);
+						// window.location.href = 'http://www.baidu.com'
+					});
+				}
+			})
+			wx.error(function(err) {
+				console.log(err)
+			})
+		</script>
+	</body>
+</html>

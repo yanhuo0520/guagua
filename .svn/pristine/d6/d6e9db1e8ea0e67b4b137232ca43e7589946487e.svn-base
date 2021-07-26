@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		html,body { font-size: 16px; height: 100%; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		#app { height: 100%; background: #f5f5f5; }
+		div { box-sizing: border-box; }
+        .head-con .banner { position: relative; width: 100%; display: block; }
+		/* .jbcDetail { display: flex; flex-direction: column; } */
+        /* 导航栏 */
+        .van-nav-bar { position: absolute; width: 100%; background: transparent; }
+        .van-nav-bar .van-icon { color: #fff; font-size: 1.1rem; }
+        .van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+        .van-nav-bar .van-nav-bar__right img { display: block; }
+        .van-nav-bar .van-nav-bar__title { font-weight: bold; color: #fff; }
+        .bg-white { background: #eeeeee; }
+
+		/* head */
+		.head-con { position: relative; }
+		.head-absolute-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-60%); width: 100%; align-items: center; justify-content: center; flex-direction: column; }
+		.head-absolute-center .desc { color: #ffffff; font-size: 1rem; text-align: center; }
+		.head-absolute-center .num { color: #fff; font-size: 2.3rem; font-weight: bold; text-align: center;}
+		.head-absolute-center .tip-con { display: flex; align-items: center; justify-content: center; padding: 0 16px; }
+		.head-absolute-center .tip-con .img { width: 1.2rem; height: 1.2rem; }
+		.head-absolute-center .tip-con .tip { color: #b0ffbd; flex: 1; padding-left: 8px; }
+		.head-absolute-center .tip-con .btn-con { border: 1px solid #b0ffbd; color: #b0ffbd; padding: 0 12px; border-radius: 1000px; }
+		.head-absolute-center .tip-con .btn-con:active { opacity: .6; }
+
+		.head-con .tit-con { position: absolute; left: 16px; bottom: 0; width: calc(100% - 32px); height: 45px; background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 20px; border-top-left-radius: 10px; border-top-right-radius: 10px; }
+		.head-con .tit-con .month { display: flex; align-items: center; }
+		.head-con .tit-con .month .icon { width: 10px; height: 10px; margin-left: 5px; }
+
+		.van-sticky--fixed .tit-con { position: relative; left: 0; width: 100%; border-radius: 0; box-shadow: 2px 2px 5px #ccc; }
+		/* 列表 */
+		.list-con { flex: 1; background: #fff; margin-left: 16px; margin-right: 16px; border-bottom-left-radius: 10px;border-bottom-right-radius: 10px; min-height: 350px; position: relative; }
+		.list-con .list-item-con { padding: 10px 15px; display: flex; }
+		.list-con .list-item-con .logo { width: 45px; height: 45px;  display: flex; }
+
+		.list-con .list-item-con .order-info { display: flex; flex-direction: column; word-wrap:break-word; word-break:break-all; max-width: calc(100% - 125px); min-height: 60px; justify-content: space-between; padding-left: 10px;}
+		.list-con .list-item-con .order-info .tit { color: #333333; }
+		.list-con .list-item-con .order-info .no { color: #888888; }
+		.list-con .list-item-con .order-info .date {color: #888888; }
+		/* .list-con .list-item-con:last-of-type.van-hairline--bottom { border-color: transparent;} */
+		.list-con .price { color: #444444; font-size: 1.2rem; word-wrap:break-word; word-break:break-all; flex: 1; min-width: 80px; text-align: right; display: flex; justify-content: flex-start; flex-direction: column;}
+		.list-con .price .status { color: red; font-size: 0.8rem; }
+		.list-con .price .add { color: #ff2814; }
+
+		/* 日期选择 */
+		.popup-tit { display: flex; align-items: center;justify-content: center; text-align: center; padding: 10px 0;}
+		.popup-tit .text { width: 100px; color: #999;}
+		.popup-tit .color-green { color: #03d769; } 
+		.popup-tit .tit { flex: 1; font-weight: bold; }
+
+		.date-type { border: 1px solid #02d267; color: #02d267; width:100px; height: 28px;line-height: 28px; text-align: center; border-radius: 1000px; margin-left: 30px; margin-top: 15px; margin-bottom: 10px; }
+		.select-date-con { display: flex; align-items: center; justify-content: center; }
+		.select-date-con .date { border-bottom: 1px solid #02d267; border-width: 110%; padding: 10px 20px; }
+		.select-date-con .border-color { border-color: #888888; }
+		.select-date-con .mask { padding: 0 15px; }
+		/* .van-picker__toolbar { display: none; } */
+
+		/* 无数据 */
+		.no-data { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;}
+		.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+		.no-data .no-data-con img { width: 100%; }
+		.no-data .no-data-con .no-title{ font-size: 1rem; font-weight:600;  color:rgba(0,0,0,1);  }
+		.no-data .no-data-con .no-desc { font-size: 0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+		.no-data .no-data-con .van-button { font-size: 0.75rem; font-weight:400; color:rgba(1,195,39,1); }
+	</style>  
+
+</head>
+
+<body>
+    <div id="app" class="jbcDetail" v-cloak>
+			<div class="head-con">
+				<van-nav-bar :border="false"  title="我的聚农宝" left-arrow @click-left="goBack"></van-nav-bar>
+				<img class="banner"  src="./images/my-jbc-bg.png" alt="">
+				<div class="head-absolute-center">
+					<div class="desc">聚农宝剩余/个</div>
+					<div class="num">{{myJbc}}</div>
+					<div class="tip-con">
+						<img class="img" src="./images/question-icon.png" alt="">
+						<span class="tip">1聚农宝等于1人民币</span>
+						<div class="btn-con" @click="jump('jbcWithdraw.html')">立即提现</div>
+					</div>
+				</div>
+				<van-sticky>
+					<div class="tit-con">
+						<div class="tit">余额明细</div>
+						<div class="month" @click="dateShow = true; dayType = 1">
+							<span class="text">{{curShowDate}}</span>
+							<img class="icon" src="./images/date-draw-icon.png" alt="">
+						</div>
+					</div>
+				</van-sticky>
+			</div>
+		<div class="list-con">
+			<van-list
+				v-model="loading"
+				:finished="finished"
+				:immediate-check = "false"
+				:finished-text="list && list.length > 0 ? '没有更多了' : ''"
+				@load="getDetail"
+			>
+				<div class="list-item-con" :class="{'van-hairline--bottom': (index+1 != list.length) }" v-for="(item,index) in list">
+					<img class="logo" :src="item.type == 3 ? './images/withdraw-icon.png' : (item.type == 1 ? './images/cdk-exchange-icon.png' : './images/shop.png')" alt="">
+					<div class="order-info">
+						<div class="tit">{{item.type == 3 ? '提现' : (item.type == 1 ? 'CDKEY兑换' : ('店铺消费-'+item.str))}}</div>
+						<div class="no" v-if="item.order_no && item.type == 2">订单号:{{item.order_no}}</div>
+						<div class="no" v-if="item.key && item.type == 1">券码:{{item.key}}</div>
+						<div class="date">{{item.add_time}}</div>
+					</div>
+					<div class="price">
+						<span :class="{'add': (item.type == 1)}">{{item.type == 1 ? '+' : ((item.type == 2 && item.status == 3) ? '' : (item.withdrawal_status == 0 && item.type == 3 ? '' : '-'))}}{{item.money}}</span>
+						<span class="status" v-if="item.withdrawal_status == 0 && item.type == 3">提现失败</span>
+						<span class="status" v-if="item.type == 2">{{item.status == 1 ? (item.order_status == 2 ? '待发货' : (item.order_status == 7 ? '待收货' : '')) : (item.status == 2 ? '未付款' : (item.status == 3 ? '订单退款' : ''))}}</span>
+					</div>
+				</div>
+			</van-list>
+			<template v-if="(!list || list.length == 0 || isErr) && !loading">
+				<div class="no-data">
+					<div class="no-data-con">
+						<img :src="isErr ? errImg : noDataImg" alt="">
+						<p class="no-title">{{ isErr ? '网络竟然崩溃了' : '暂无余额明细'}}</p>
+						<p class="no-desc">{{ isErr ? '别紧张,试试看刷新页面' : '请尝试切换搜索时间' }}</p>
+						<van-button size="small" plain round color="#01C327" v-if="isErr" @click="handleErr">刷新</van-button>
+					</div>
+				</div>
+			</template>
+		</div>
+		<div style="height: 25px;"></div>
+		<van-popup v-model="dateShow" position="bottom" style="height: 100%;">
+			<div class="popup-tit">
+				<div class="text" @click="dateShow = false">取消</div>
+				<div  class="tit">选择时间</div>
+				<div  class="text color-green" @click="dateConfirmByMonth">完成</div>
+			</div>
+			<div class="date-type" @click="changeDateType">按{{dateType == 1 ? '日' : '月'}}选择</div>
+			<div class="select-date-con">
+				<template v-if="dateType == 1">
+					<div class="date">{{selectMonth}}</div>
+					
+				</template>
+				<template v-if="dateType == 2">
+					<div class="date" :class="{'border-color': dayType == 2}" @click="dayType = 1">{{startDate}}</div>
+					<div class="mask">至</div>
+					<div class="date" :class="{'border-color': dayType == 1}"  @click="dayType = 2">{{endDate}}</div>
+				</template>
+			</div>
+			<template v-if="dateType == 1">
+				<van-datetime-picker ref="monthpicker" :min-date="minDate" :max-date="maxDate" v-model="curMonth" type="year-month" :show-toolbar="false" :formatter="formatter"@change="changeDateByMonth" @confirm="confirmByMonth"></van-datetime-picker>	
+			</template>		
+			<template v-if="dateType == 2">
+				<template v-if="dayType == 1">
+					<van-datetime-picker ref="datepickerByStart" :min-date="minDate" :max-date="maxDate" v-model="curStartDate" type="date" :show-toolbar="false" :formatter="formatterByDate" @change="changeDateByStart" @confirm="confirmByStart" ></van-datetime-picker>	
+				</template>
+				<template v-if="dayType == 2">
+					<van-datetime-picker ref="datepickerByEnd" :min-date="minDate" :max-date="maxDate" v-model="curEndDate" type="date" :show-toolbar="false" :formatter="formatterByDate" @change="changeDateByEnd" @confirm="confirmByEnd" ></van-datetime-picker>	
+				</template>
+			</template>	
+		</van-popup>
+	</div>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+                myJbc: 0,
+				loading: true,
+				finished: false,
+				type: '0', // 0-全部 1-兑换(加) 2-消费 3-提现
+				page: 0,
+				list: [],
+                noDataImg: './images/no-order-data.png',
+                errImg: './images/err.png',
+				JumpUrl: {
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk2/getSignPackage',
+					checkToken: 'http://sy.xfd365.com/wx/base/checkToken', //检查token
+					token: 'http://sy.xfd365.com/wx/wechat/login', //微信登录
+                    jbcDetail: baseUrl('/wx/jbc/jbc_detail'), //聚农宝明细
+					my_jbc: baseUrl('/wx/jbc/my_jbc'), //获取聚农宝余额
+				},
+				token: localStorage.getItem("token"),
+				code: '', // 微信登陆code
+
+				dateType: '1', // 1-按月 2-按日查询
+				dayType: '1', // 1-开始日期 2-结束日期
+
+				curMonth : '',
+				selectMonth: '',
+				minDate: new Date(2021, 0, 1),
+				maxDate: new Date(),
+				dateShow: false, //是都显示日期弹窗
+
+				curStartDate: '',
+				curEndDate: '',
+				startDate: '',
+				endDate: '',
+			},
+			methods: {
+				// 返回上一页
+				goBack() {
+					window.location.href = 'personal.html'
+				},
+				// 跳转页面
+				jump(url) {
+					window.location.href = url
+				},
+				// 获取聚农宝余额
+				getMyJbc() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.my_jbc,
+						data: { token: localStorage.getItem("token") }
+					})
+					.then(function (resp) { //返回数据
+						// resp.data = JSON.parse(resp.data)
+						if(resp.data.errno == 0) {
+							that.myJbc = Number(resp.data.data)
+						}
+					}).catch(function (error) {
+						console.log('error', error);
+
+					})
+				},
+				// 年月选择器展示
+				formatter(type, val) {
+					if (type === 'year') {
+						return `${val}年`;
+					} else if (type === 'month') {
+						return `${val}月`;
+					}
+					return val;
+				},
+				// 年月选择器展示
+				formatterByDate(type, val) {
+					if (type === 'year') {
+						return `${val}年`;
+					} else if (type === 'month') {
+						return `${val}月`;
+					} else if (type === 'day') {
+						return `${val}日`;
+					}
+					return val;
+				},
+				// 初始化
+				initData(){
+					this.curMonth = new Date()
+					this.curStartDate = new Date()
+					this.curEndDate = new Date()
+					this.selectMonth = this.fillZero(new Date().getFullYear())+ '-'+ this.fillZero((new Date().getMonth() + 1))
+					this.startDate = this.fillZero(new Date().getFullYear())+ '-' + this.fillZero(new Date().getMonth()+1) +'-'+this.fillZero(new Date().getDate())
+					this.endDate = this.startDate
+					this.curShowDate = '本月'
+				},
+				// 小于10补0
+				fillZero(val) {
+					if(Number(val) < 10) {
+						val = '0'+val
+					} 
+					return val
+				},
+				// 改变日期类型
+				changeDateType() {
+					if(this.dateType == 1) {
+						this.dateType = 2
+					} else {
+						this.dateType = 1
+					}
+				},
+				// 按月查询改变日期
+				changeDateByMonth(e) {
+					let valArr = e.getValues()
+					let year = valArr[0].replace('年','-')
+					let month = valArr[1].replace('月','')
+					this.selectMonth = year+month
+				},
+				// 选择月份确认
+				dateConfirmByMonth() {
+					if(this.dateType == 1) {
+						this.$refs.monthpicker.getPicker().confirm()
+					} else if(this.dateType == 2) {
+						if(this.dayType == 1) {
+							this.$refs.datepickerByStart.getPicker().confirm()
+						} else {
+							this.$refs.datepickerByEnd.getPicker().confirm()
+						}
+					}
+
+				},
+				// 触发月份确认
+				confirmByMonth(val) {
+					let curDate = new Date()
+					this.selectMonth = this.fillZero(val.getFullYear())+'-'+this.fillZero(val.getMonth()+1)
+					if(curDate.getFullYear() == val.getFullYear() && curDate.getMonth() == val.getMonth()) {
+						this.curShowDate = '本月'
+					} else {
+						this.curShowDate = this.selectMonth
+					}
+					this.dateShow = false
+					this.page = 0
+					this.loading = true
+					this.finished = false
+					this.list = []
+					this.getDetail()
+				},
+				// 按日查询 开始日期 改变日期
+				changeDateByStart(e) {
+					let valArr = e.getValues()
+					let year = valArr[0].replace('年','-')
+					let month = valArr[1].replace('月','-')
+					let day = valArr[2].replace('日','')
+					this.startDate = year+month+day
+				},
+				// 选择日 开始确认
+				dateConfirmByStart(val) {
+					this.$refs.datepickerByStart.getPicker().confirm()
+				},
+				// 触发日 开始确认
+				confirmByStart(val) {
+					this.startDate = this.fillZero(val.getFullYear())+'-'+this.fillZero(val.getMonth()+1)+ '-'+this.fillZero(val.getDate())
+					if(new Date(this.startDate).getTime() > new Date(this.endDate).getTime()) {
+						let tmpStart = JSON.parse(JSON.stringify(this.endDate))
+						let tmpEnd = JSON.parse(JSON.stringify(this.startDate))
+						this.startDate = tmpStart
+						this.endDate = tmpEnd
+						this.curStartDate = new Date(tmpStart)
+						this.curEndDate = new Date(tmpEnd)
+					}
+					if(this.startDate == this.endDate) {
+						this.curShowDate = this.startDate
+					} else {
+						this.curShowDate = this.startDate+ ' 至 ' + this.endDate
+					}
+					this.dateShow = false
+					this.page = 0
+					this.loading = true
+					this.finished = false
+					this.list = []
+					this.getDetail()
+				},
+				// 按日查询 结束日期 改变日期
+				changeDateByEnd(e) {
+					let valArr = e.getValues()
+					let year = valArr[0].replace('年','-')
+					let month = valArr[1].replace('月','-')
+					let day = valArr[2].replace('日','')
+					this.endDate = year+month+day
+				},
+				// 选择日 结束确认
+				dateConfirmByEnd(val) {
+					this.$refs.datepickerByEnd.getPicker().confirm()	
+				},
+				// 触发日 结束份确认
+				confirmByEnd(val) {
+					this.endDate = this.fillZero(val.getFullYear())+'-'+this.fillZero(val.getMonth()+1)+ '-'+this.fillZero(val.getDate())
+					if(new Date(this.startDate).getTime() > new Date(this.endDate).getTime()) {
+						let tmpStart = JSON.parse(JSON.stringify(this.endDate))
+						let tmpEnd = JSON.parse(JSON.stringify(this.startDate))
+						this.startDate = tmpStart
+						this.endDate = tmpEnd
+						this.curStartDate = new Date(tmpStart)
+						this.curEndDate = new Date(tmpEnd)
+					}
+					if(this.startDate == this.endDate) {
+						this.curShowDate = this.startDate
+					} else {
+						this.curShowDate = this.startDate+ ' 至 ' + this.endDate
+					}
+					this.dateShow = false
+					this.page = 0
+					this.loading = true
+					this.finished = false
+					this.list = []
+					this.getDetail()
+				},
+				// 处理请求错误
+				handleErr () {
+					this.page = 0
+					this.list = []
+					this.loading = true
+					this.finished = false
+					this.getDetail()
+				},
+				// 获取聚农宝余额详细
+                getDetail() {
+					let that = this;
+					let page = this.page + 1
+					that.isErr = false 
+					if (page !== 1) {
+						that.loading = true
+					}
+					axios({
+							method: 'post',
+							// url: 'https://api.xfd365.com/wx/wechat/get_jump_url',
+							url:  that.JumpUrl.jbcDetail,
+							data: {
+								type: that.type,
+								page: page,
+								size: 10,
+								start_date: that.dateType == 1 ? that.selectMonth : that.startDate,
+								end_date: that.dateType == 1 ? '' : that.endDate,
+								token: localStorage.getItem('token')
+							}
+						})
+						.then(function (resp) {
+							that.loading = false
+							if(resp.data.errno == 0) {
+								let data = resp.data.data;
+								if(data) {
+									that.list = that.list.concat(data)
+								}
+								that.page = page
+								if (that.page >= resp.data.totalPages) {
+									that.finished = true
+								} else {
+									that.finished = false
+								}
+ 							} else {
+								that.finished = true
+								// that.$toast(resp.data.errmsg ? resp.data.errmsg : '获取余额明细失败')
+							 }
+						}).catch(function (error) {
+							that.loading = false
+							that.finished = true
+							that.isErr = true
+							//请求失败
+							console.log('error', error);
+						})
+                },
+				wxSign() {
+					var that = this;
+					let back_url = 'http://sy.xfd365.com/mobile/cdkOrderDetail.html';
+					axios({
+							method: 'post',
+							// url: 'https://api.xfd365.com/wx/wechat/get_jump_url',
+							url: 'http://sy.xfd365.com/wx/wechat/get_jump_url',
+							data: {
+								back_url: back_url,
+							}
+						})
+						.then(function (resp) {
+							//返回数据
+							window.location.href = resp.data.url;
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+						})
+				},
+				wechatLogin() {
+					var that = this;
+					axios({
+							method: 'post',
+							url: that.JumpUrl.token,
+							//data: form_data
+							data: {
+								code: that.code
+							}
+						})
+						.then(function (resp) { //返回数据
+							that.token = resp.data.token;
+							localStorage.setItem('token', that.token);
+							if (that.token) {
+								that.getJssdk();
+							}
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+
+				},
+				//检查token是否过期
+				checkToken: function () {
+					var that = this;
+					axios({
+                        method: 'post',
+                        url: that.JumpUrl.checkToken,
+                        data: {
+                            token: that.token,
+                        }
+                    })
+                    .then(function (resp) {
+                        //返回数据
+                        if (resp.data.errno == 1) {
+                            //token过期调用跳转页面方法
+                            localStorage.removeItem('token')
+                            localStorage.removeItem('shoper_token')
+                            that.wxSign();
+                        } else {
+                            that.getJssdk();
+                        }
+                    }).catch(function (error) {
+                        //请求失败
+                        console.log('error', error);
+                    })
+				},
+				getJssdk() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function (resp) {
+						let data = resp.data
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'updateAppMessageShareData',
+								'updateTimelineShareData',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.getDetail()
+						that.getMyJbc()
+					})
+				},
+			
+			},
+			created(){
+                let code = getQueryString('code');
+                if (code) {
+                    this.code = code;
+                }
+                let token = localStorage.getItem('token')
+                if (this.code) {
+                    this.wechatLogin()
+                } else {
+                    if (token) {
+                        this.checkToken()
+                    } else {
+                        this.wxSign()
+                    }
+                }
+				this.initData()
+				
+			}
+		})
+	</script>
+</body>
+
+</html>

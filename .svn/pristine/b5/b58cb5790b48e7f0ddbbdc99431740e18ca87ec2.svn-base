@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<title>我的优惠券</title>
+		<link rel="stylesheet" href="css/public.css">
+		<script src="js/axios.min.js"></script>
+		<script src="js/code.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5/lib/index.css">
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant.min.js"></script>
+		
+		<style type="text/css">
+			[v-cloak] {
+				display: none;
+			}
+			html,body { font-size: 16px; height: 100%;}
+			@media all and (max-width:375px) {
+				body,html{
+					font-size: 14px;
+				}
+			}
+			@media only screen and (min-width: 414px) {
+				body,html {
+					font-size: 16px !important;
+				}
+			}
+			@media only screen and (min-width: 480px) {
+				body,html {
+					font-size: 22px !important;
+				}
+			}
+			/* 导航栏 */
+			.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+			.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+			.van-nav-bar .van-nav-bar__right img { display: block; }
+			.van-nav-bar .van-nav-bar__title { font-weight: bold; }
+			.van-cell{
+				padding: 0;
+				font-size: 0.75rem;
+				color: #999999;
+				background: transparent;
+			}
+			.van-cell__title,
+			.van-cell__value {
+			    flex: none;
+			}
+			.van-cell__value {
+			    flex: 1;
+			}
+			p{
+				margin: 0;
+			}
+			#app{
+				background: #F5F5F5;
+				min-height: 100%;
+			}
+			.van-tab__pane {
+				padding: 0 0.625rem;
+			}
+			.list{
+				width: 100%;
+				height: 114px;
+				margin: 0.625rem auto;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				color: #999999;
+			}
+			.list .left{
+				width: 23%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				height: 40px;
+			}
+			.list .left span{
+				font-size: 1.875rem;
+				font-weight: bold;
+			}
+			.list .left .juan-desc {
+				font-size: 0.875rem;
+			}
+			.list .right{
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-content: space-between;
+				padding: 0 0.875rem;
+			}
+			.list .right>div{
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.list .right>div>p{
+				display: flex;
+				flex-direction: column;
+				font-weight: bold;
+				font-size: 1rem;
+			}
+			.list .right>div>p span{
+				font-size: 0.875rem;
+				font-weight: normal;
+				margin-top: 8px;
+				margin-bottom: 15px;
+			}
+			
+			.unUsed .left{
+				color: #FF2814;
+			}
+			.unUsed .right>div>p{
+				color: #333333;
+			}
+			.list .right>div>p span{
+				color: #999999;
+			}
+			.unUsed button{
+				border: none;
+				font-size: 0.75rem;
+				color: #fff;
+				border-radius: 0.75rem;
+				background: -webkit-gradient(linear, 0 0, 0 100%, from(#02CF0A), to(#00BE34));
+				background: -webkit-linear-gradient(#02CF0A, #00BE34);
+				background: -moz-linear-gradient(#02CF0A, #00BE34);
+				background: -o-linear-gradient(#02CF0A, #00BE34);
+				background: linear-gradient(#02CF0A, #00BE34);
+				padding: 0.3rem 0.6rem;
+			}
+			
+			.van-popup{
+				width: 80%;
+				background: transparent;
+				margin-top: 23px;
+			}
+			.yhqUse{
+				background: url(img/yhqBg.png) no-repeat;
+				width: 100%;
+				margin: 0 auto;
+				height: 414px;
+				background-size: 100% 100%;
+				position: relative;
+			}
+			.yhqUse>img:first-of-type{
+				width: 18px;
+				height: 18px;
+				position: absolute;
+				right: 21px;
+				top: 24px;
+			}
+			.yhqUse>.top{
+				width: 90%;
+				margin: 0 auto;
+				text-align: center;
+				color: #ffffff;
+				height: 170px;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+			.yhqUse>.top>p{
+				/* margin-bottom: 5px; */
+			}
+			.yhqUse>.top>p:first-of-type{
+				font-size: 40px;
+				letter-spacing: -6px;
+			}
+			.yhqUse>.top>p:first-of-type span{
+				font-size: 60px;
+			}
+			.yhqUse>.top>p:nth-of-type(2){
+				font-size: 22px;
+			}
+			.yhqUse>.top>p:nth-of-type(3){
+				font-size: 14px;
+				opacity: 0.87;
+				margin-top: 10px;
+			}
+			
+			.yhqUse>.code{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: calc(100% - 170px);
+			}
+			.yhqUse>.code #code {
+				width: 15rem;
+				height: 7rem;
+			}
+			/* loading */
+			.full-loading { position: fixed; left: 0; top: 90px; right: 0; bottom: 0; background-color: #fff; z-index: 9999; }
+			.full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+			/* 无数据 */
+			.no-data { position: fixed; top: 90px; left: 0; right: 0; bottom: 0; z-index: 99;}
+			.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+			.no-data .no-data-con img { width: 100%; }
+			.no-data .no-data-con .no-title{ font-size: 1rem; font-weight:600;  color:rgba(0,0,0,1);  }
+			.no-data .no-data-con .no-desc { font-size: 0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+			.no-data .no-data-con .van-button { font-size: 0.75rem; font-weight:400; color:rgba(1,195,39,1); }
+		</style>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="我的优惠券" left-arrow @click-left="toRouter()" >
+                <template #right>
+                    <img src="images/icon/shouye.png" alt="" width="20"  @click="JumpIndex">
+                </template>
+            </van-nav-bar>
+			
+			<van-tabs v-model="active" background="#f5f5f5" color="#00B578" line-width="35px" line-height="2px" title-active-color="#00B578" @click="handleClick"  sticky :offset-top="46"	>
+			  <van-tab :title="item.isUsed==1?'已使用':item.isUsed==0?'未使用':item.isUsed==2?'已过期':''" v-for="(item,index) in totalList" :key="index">
+				  <div :class="item.isUsed==0?'unUsed list':'list'" :style="item.isUsed==1?'background: url(img/yhqSy.png) no-repeat;background-size:100% 100%':item.isUsed==0?'background: url(img/yhq.png) no-repeat;background-size:100% 100%':item.isUsed==2?'background: url(img/yhqGq.png) no-repeat;background-size:100% 100%':''" v-for="(itm,idx) in item.list"  v-if="item.list && item.list.length > 0">
+					<div class="left">
+						<p><span>{{itm.money ? itm.money : itm.discount}}</span>{{itm.money ? '元' : '折'}}</p>
+						<p class="juan-desc">{{itm.type_str}}</p>
+					</div>
+					<div class="right">
+						<div>
+							<p>{{itm.name}}<span>{{itm.target_str}}</span></p>
+							<button v-if="item.isUsed==0" @click="handleUse(itm.qrcode)">立即使用</button>
+						</div>
+						<van-cell :title="'有效期至' + itm.end_time_str" value="规则详情" is-link arrow-direction="down"  @click.stop="detail(itm.coupon_id)"></van-cell>
+					</div>
+				  </div>
+			  </van-tab>
+			</van-tabs>
+			
+			<van-popup v-model="show">
+				<div class="yhqUse">
+					<img src="img/close.png" alt="" @click="show=false;">
+					<div class="top">
+						<p>￥ <span>50</span></p>
+						<p>专属优惠券</p>
+						<p>日用百货满300-50元</p>
+					</div>
+					
+					<div class="code">
+						<img :src="qrcodeImg" id="code"></img>
+					</div>
+				</div>
+			</van-popup>
+			<div class="full-loading" v-if="isFullLoading">
+				<van-loading  color="#1989fa" /> 
+			</div>
+			<div class="no-data" v-if="(totalList[active].list.length === 0 || isErr) && !isFullLoading">
+				<div class="no-data-con">
+					<img :src="isErr ? errImg : noDataImg" alt="">
+					<p class="no-title">{{ isErr ? '网络竟然崩溃了' : '无优惠券' }}</p>
+					<p class="no-desc">{{ isErr ? '别紧张,试试看刷新页面' : '赶紧去优惠券中心领券吧' }}</p>
+					<van-button size="small" plain round color="#01C327" @click="handleErr">{{ isErr ? '刷新' : '去领取' }}</van-button>
+				</div>
+			</div>
+		</div>
+		
+		
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					active: 1,
+					totalList:[
+						{
+							isUsed: 1,
+							list:[],
+						},
+						{
+							isUsed: 0,
+							list:[],
+						},
+						{
+							isUsed: 2,
+							list:[]
+						}
+					],
+					JumpUrl:{
+						list:'http://sy.xfd365.com/wx/coupon/my_coupon', 
+						// list:'http://172.168.0.50/wx/coupon/my_coupon', 
+					},
+					qrcodeImg: '',
+					noDataImg: './images/icon/no-goods.png',
+					errImg: './images/err.png',
+					isFullLoading:true,
+					isErr: false,
+					show:false
+				},
+				methods:{
+					//跳转首页
+					JumpIndex(){
+						window.location.href = "index.html";
+					},
+					getListData(val) {
+						let that = this;
+						let curTab = that.totalList[that.active]
+						if(!val) {
+							that.isFullLoading = true
+							that.isErr = false
+							if(that.submit) return
+							that.submit = true
+						}
+						axios({
+							method: 'post',
+							url: that.JumpUrl.list,
+							data:{type: curTab.isUsed,token: localStorage.getItem("token")}
+						})
+						.then(function (resp) {
+							if(!val) {
+								that.isFullLoading = false
+								that.isErr = false
+								that.submit = false
+							}
+							let data=resp.data
+							if(data.code == 1){
+								if(data.data && data.data.length > 0) {
+									data.data.forEach(item =>{
+										item.end_time_str = item.user_coupon_age.split('-')[1]
+									})
+									curTab.list = data.data
+								} else {
+									curTab.list = []
+								}
+							}else{
+								that.$toast.fail(data.msg ? data.msg : '获取失败')
+							}
+						}).catch(function (error) {
+							that.isFullLoading = false
+							that.isErr = true
+							that.submit = false
+							//请求失败
+
+							that.$toast.fail('服务异常,请稍后重试!')
+							console.log('error', error);
+						})
+					},
+					handleErr() {
+						if(this.isErr) {
+							this.getListData()
+						}else {
+							window.location.href = "couponCenter.html";
+						}
+					},
+					// 切换tab状态
+					handleClick(name, title) {
+						this.$toast.clear()
+						this.getListData();
+					},
+					// 优惠券详情
+					detail(id) {
+						window.location.href = "couponDetail.html?id=" + id;
+					},
+					handleUse(qrcode){
+						this.show = true
+						this.qrcodeImg = qrcode
+						// setTimeout(() =>{
+						// 	let qrcode = new QRCode(document.getElementById("code"), {
+						// 		width : 150,
+						// 		height : 150
+						// 	})
+						// 	let url = 'www.baidu.com'
+						// 	qrcode.makeCode(url.replace("invitation","main"))
+						// })
+					},
+					toRouter() {
+						window.history.go(-1)
+					},
+				},
+				created: function() {
+					this.getListData();
+				}
+			})
+		</script>
+	</body>
+</html>

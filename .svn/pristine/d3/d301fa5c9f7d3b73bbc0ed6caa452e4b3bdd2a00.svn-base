@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>领取建行豫粮丰收卡</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<!-- <script src="js/vue.js" type="text/javascript" charset="utf-8"></script> -->
+		<script src="js/axios.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5/lib/index.css">
+
+		<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.9/lib/vant.min.js"></script>
+		<link rel="stylesheet" href="css/public.css">
+		<style type="text/css">
+			body,html,#app{
+				width: 100%;
+				height: 100%;
+			}
+			input,button{
+				border: none;
+			}
+			#app{
+				position: relative;
+				background: linear-gradient(#EF504A, #A70E08);
+			}
+			img{
+				display: block;
+				margin: 0 auto;
+			}
+			.main{
+				margin: 0 auto;
+				background: url(img/main.png) no-repeat;
+				width: 100%;
+				height: 110%;
+				background-size: 100% 100%;
+				position: absolute;
+				top: 210px;
+			}
+			@media only screen and (max-width: 320px) {
+				.main{
+					height: 130%;
+				}
+				
+			}
+			.main>img:first-of-type{
+				width: 40%;
+				padding-top: 30px;
+			}
+			.main>img:last-of-type{
+				position: absolute;
+				bottom: 0;
+				left: 0;
+			}
+			.main>.inputs{
+				margin: 10px auto 0;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+			}
+			.main>.inputs>input{
+				display: block;
+				width: 80%;
+				text-align: center;
+				height: 48px;
+				background: #f5f5f5;
+				border-radius: 4px;
+				margin-bottom: 12px;
+			}
+			
+			.van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after{
+				border-width: 0;
+			}
+			.van-cell:not(:last-child)::after{
+				border-bottom: 0;
+			}
+			.van-cell-group{
+				background: transparent;
+			}
+			.van-cell-group .van-cell{
+				height: 48px;
+				width: 80%;
+				margin: 0 auto;
+				background: transparent;
+				padding: 0;
+				line-height: 48px;
+				margin-bottom: 10px;
+			}
+			.van-cell-group .van-cell input{
+				height: 48px;
+				background: #f5f5f5;
+				border-radius: 4px;
+				text-align: center;
+				width: 90%;
+			}
+			
+			.van-button{
+				height: 48px;
+				width: 80%;
+				margin: 20px auto;
+				display: block;
+				background: #F84F4E;
+				border-radius: 8px;
+				color: #fff;
+			}
+			
+			.van-popup{
+				background: transparent;
+				width: 80%;
+				position: fixed;
+				top: 40%;
+			}
+			.van-popup>img:first-of-type{
+				width: 100%;
+			}
+			.van-popup>img:last-of-type{
+				width: 10%;
+				margin-top: 10px;
+			}
+			.van-popup>p{
+				position: absolute;
+				top: 55%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+				left: 50%;
+				/* margin-left: -80px; */
+				margin-left: -40px;
+			}
+			.van-popup>p img{
+				width: 92px;
+				height: 92px;
+				margin-top: 10px;
+			}
+			.van-popup--center{
+				/* top: 0; */
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app" :style="{ height: docmHeight + 'px' }">
+			<img src="img/top.png" alt="" width="100%">
+			<div class="main">
+				<img src="img/title.png" alt="">
+				<div class="inputs">
+					<input type="text" v-model="name" placeholder="请输入姓名" onfocus="this.placeholder=''" onblur="this.placeholder='请输入姓名'" />
+					<input type="text" v-model="mobile" placeholder="请输入电话" onfocus="this.placeholder=''" onblur="this.placeholder='请输入电话'" />
+					<input type="text" v-model="card_no" placeholder="请输入卡号" onfocus="this.placeholder=''" onblur="this.placeholder='请输入卡号'" />
+				</div>
+				
+				<van-cell-group>
+					<van-field v-model="own_land" label="自种耕地:" placeholder="请输入" onfocus="this.placeholder=''" onblur="this.placeholder='请输入'">
+						<span slot="extra">亩</span>
+					</van-field>
+					<van-field v-model="rent_land" label="外租耕地:" placeholder="请输入" onfocus="this.placeholder=''" onblur="this.placeholder='请输入'">
+						<span slot="extra">亩</span>
+					</van-field>
+					<van-field v-model="car" label="私家汽车:" placeholder="请输入" onfocus="this.placeholder=''" onblur="this.placeholder='请输入'">
+						<span slot="extra">辆</span>
+					</van-field>
+					<van-field v-model="work" label="外出务工:" placeholder="请输入" onfocus="this.placeholder=''" onblur="this.placeholder='请输入'">
+						<span slot="extra">人</span>
+					</van-field>
+					<van-field v-model="house" label="城镇购房:" placeholder="请输入" onfocus="this.placeholder=''" onblur="this.placeholder='请输入'">
+						<span slot="extra">套</span>
+					</van-field>
+				</van-cell-group>
+				
+				<van-button @click="submit">点击提交</van-button>
+				
+				<img src="img/bottom.png" alt="" width="100%">
+			</div>
+			
+			<van-popup v-model="isSuccess">
+				<img src="img/success.png" alt="">
+				<p>
+					<!-- <span>微信识别二维码领红包</span> -->
+					<span>提交成功！</span>
+					<!-- <img src="img/close2.png" alt=""> -->
+				</p>
+				<img src="img/close2.png" alt="" @click="isSuccess = false">
+			</van-popup>
+		</div>
+		
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					baseUrl: 'http://sy.xfd365.com',
+					docmHeight: document.documentElement.clientHeight, //默认屏幕高度
+					
+					isSuccess: false,
+					name:'',
+					mobile:'',
+					card_no: '',
+					own_land: '',
+					rent_land: '',
+					car: '',
+					work: '',
+					house:''
+				},
+				mounted(){
+					let code = this.getUrlParam('code')
+					if (code) {
+						this.weChatLogin(code)
+						
+					} else {
+						this.weSign()
+						
+					}
+					
+				},
+				methods:{
+					getUrlParam(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if (r != null) return unescape(r[2]);
+						return null;
+					},
+					weChatLogin(code) {
+						let that = this;
+						axios({
+								method: 'post',
+								url: this.baseUrl + '/wx/wechat/login',
+								data: {
+									code: code,
+									shop_id: 1,
+								}
+							})
+							.then(function(resp) { //返回数据
+								localStorage.setItem('token', resp.data.token);
+								// axios({
+								// 	method: 'post',
+								// 	url: that.baseUrl + '/wx/shop/user_info',
+								// 	data: {
+								// 		token: resp.data.token
+								// 	}
+								// }).then(res => {
+								// 	if(res.data.data){
+								// 		if (res.data.data.is_yn == 1) {
+								// 			that.isSuccess = true;
+								// 		}
+								// 	}
+									
+								// })
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+					
+							})
+					},
+					weSign() {
+						let back_url = 'http://sy.xfd365.com/mobile/fengshouCard.html'
+						axios({
+								method: 'post',
+								url: this.baseUrl + '/wx/wechat/get_jump_url',
+								data: {
+									back_url: back_url,
+								}
+							})
+							.then(function(resp) {
+								//返回数据
+								window.location.href = resp.data.url;
+					
+							}).catch(function(error) {
+								//请求失败
+								console.log('error', error);
+							})
+					},
+					
+					submit(){
+						let that = this;
+						let reg = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/;
+						let reg1 = /^([1-9]{1})(\d{15}|\d{18})$/
+						if (this.name == '') {
+							this.$toast('请输入姓名')
+						} else if (this.mobile == '') {
+							this.$toast('请输入手机号')
+						} else if (!reg.test(this.mobile)) {
+							this.$toast('请输入正确手机号')
+						} else if (this.card_no == '') {
+							this.$toast('请输入丰收卡卡号')
+						} else if (!reg1.test(this.card_no)) {
+							this.$toast('请输入正确丰收卡卡号')
+						} else if (this.own_land == '') {
+							this.$toast('请输入自种耕地')
+						} else if (this.rent_land == '') {
+							this.$toast('请输入外租耕地')
+						} else if (this.car == '') {
+							this.$toast('请输入私家汽车')
+						} else if (this.work == '') {
+							this.$toast('请输入外出务工')
+						} else if (this.house == '') {
+							this.$toast('城镇购房')
+						} else{
+							axios({
+								method: 'post',
+								url: this.baseUrl + '/wx/user/yl_card_add',
+								data: {
+									name: this.name,
+									mobile: this.mobile,
+									card_no: this.card_no,
+									own_land: this.own_land,
+									rent_land: this.rent_land,
+									car: this.car,
+									work: this.work,
+									house: this.house,
+									token: localStorage.getItem('token')
+								}
+							}).then(function(res) {
+								if (res.data.errno == 0) {
+									that.isSuccess = true;
+								} else {
+									that.$toast(res.data.errmsg)
+								}
+							}).catch(function(error) {
+								console.log('error', error)
+							})
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

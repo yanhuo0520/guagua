@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport"
+			content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<title>元农数联供应链追溯系统</title>
+		<link rel="stylesheet" href="css/reset.css?v=1">
+		<link rel="stylesheet" href="css/public.css?v=1">
+		<link rel="stylesheet" href="css/index.css?v=1">
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/publick.js?v=3"></script>
+		<script type="text/javascript" src="./js/api.js"></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+		<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+		<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=smZPCVTuah1zIemCZPgjrNvOlx074Ca0"></script>
+	</head>
+	<style>
+		body {
+			margin: 0;
+		}
+
+		.scanCode {
+			min-height: 100%;
+			background: #f5f5f5;
+		}
+
+		.scanCode>img {
+			width: 100%;
+		}
+
+		.van-cell-group {
+			margin-bottom: 10px;
+		}
+
+		.van-cell-group .van-cell__title,
+		.van-cell__value {
+			flex: none;
+		}
+
+		.van-cell__title {
+			width: 100px;
+		}
+
+		.van-field .van-field__label {
+			margin-right: 0;
+		}
+
+
+		.van-field input::placeholder {
+			color: #03d374;
+		}
+
+		.van-cell-group img {
+			width: 86px;
+			height: 86px;
+			object-fit: cover;
+		}
+
+		.scanCode>.van-button {
+			margin: 30px;
+			width: calc(100% - 60px);
+			background: #03d374;
+			border: none;
+			box-shadow: 0px 16px 21px 0px rgba(3, 211, 115, 0.26);
+		}
+
+		.scanCode>p {
+			text-align: center;
+			color: #9e9e9e;
+			margin-bottom: 20px;
+		}
+
+		.scanCode>.errCont {
+			width: 50%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			margin: 65px auto;
+		}
+
+		.errCont img {
+			width: 50%;
+		}
+
+		.errCont p {
+			text-align: center;
+			width: 65%;
+		}
+
+		.van-nav-bar {
+			background: #14B060 !important;
+		}
+
+		.van-nav-bar .van-nav-bar__title {
+			color: #fff !important;
+		}
+	</style>
+	<body>
+		<div id="app">
+			<div class="scanCode">
+				<template v-if="isInfo">
+					<img src="images/scanBanner.png" alt="" />
+
+					<van-cell-group>
+						<van-cell title="应用类型" :value="`${info.productUseClassify}(${info.productClassify})`"></van-cell>
+						<van-cell title="物资编码" :value="info.productQrNumber"></van-cell>
+						<van-cell title="注册地位置" :value="locationName"></van-cell>
+						<van-cell title="注册时间" :value="info.productDate"></van-cell>
+						<van-cell title="产品图片" value="生产物资（农药）">
+							<template #default>
+								<img :src="info.productImageUrl" alt="" />
+							</template>
+						</van-cell>
+						<van-cell title="简介" :value="info.productBriefs"></van-cell>
+						<van-cell title="生产厂家" :value="info.productManufacturers"></van-cell>
+						<van-cell title="服务商" :value="info.productFacilitators"></van-cell>
+					</van-cell-group>
+
+					<van-cell-group>
+						<van-field v-model="name" label="注册者姓名" placeholder="请填写"></van-field>
+						<van-field v-model="phone" label="手机号" placeholder="请填写"></van-field>
+						<van-field v-model="idCard" label="身份证号" placeholder="请填写"></van-field>
+					</van-cell-group>
+
+					<van-cell-group v-if="info.productGiftType != null">
+						<van-cell title="礼品类型" :value="
+			            info.productGiftType == 0
+			              ? '虚拟礼品'
+			              : info.productGiftType == 1
+			              ? '实体礼品'
+			              : ''
+			          "></van-cell>
+						<van-cell title="具体礼品" :value="info.productGiftDetails"></van-cell>
+						<van-field v-model="address" label="邮寄地址" placeholder="请填写" rows="1" autosize type="textarea"
+							v-if="info.productGiftType == 1" />
+					</van-cell-group>
+
+					<van-button round type="info" block @click="submit">提交</van-button>
+					<p>如实注册产品信息 享受增值售后服务</p>
+				</template>
+
+				<template v-if="isChongfu">
+					<van-nav-bar title="元农数联供应链追溯系统"></van-nav-bar>
+					<div class="errCont">
+						<img src="images/point.png" alt="" />
+						<p>该产品已被扫描注册不可重复注册</p>
+					</div>
+
+					<van-button round type="info" block>确定</van-button>
+				</template>
+				
+				<template v-if="isSuccess">
+					<van-nav-bar title="元农数联供应链追溯系统"></van-nav-bar>
+					<div class="errCont">
+						<img src="images/point.png" alt="" />
+						<p>提交成功</p>
+					</div>
+				
+					<van-button round type="info" block>确定</van-button>
+				</template>
+			</div>
+		</div>
+
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					name: "",
+					phone: "",
+					idCard: "",
+					address: "",
+					info: {},
+					
+					isInfo: true,
+					isChongfu: false,
+					isSuccess:false,
+
+					code: '',
+					uniconId: '',
+
+					lng: '',
+					lat: '',
+					locationName: ''
+				},
+				methods: {
+					// 正则验证手机号
+					verifyPhone: function(value) {
+						const reg = /^[1][3,4,5,7,8,9][0-9]{9}$/
+						if (value == '' || value == undefined || value == null) {
+							return '请输入手机号'
+						} else {
+							if ((!reg.test(value)) && value != '') {
+								return '请输入正确的手机号码'
+							} else {
+								return true
+							}
+						}
+					},
+					getUrlParam(name) { //a标签跳转获取参数
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+						var r = window.location.search.substr(1).match(reg);
+						if (r != null) return (r[2]);
+						return null;
+					},
+					submit() {
+						if (this.name == "") {
+							this.$toast.fail("请输入注册者姓名");
+							return;
+						}
+						if (this.verifyPhone(this.phone) != true) {
+							this.$toast.fail(this.verifyPhone(this.phone));
+							return;
+						}
+						if (this.idCard == "") {
+							this.$toast.fail("请输入身份证号");
+							return;
+						}
+						if (this.info.productGiftType == 1) {
+							if (this.address == "") {
+								this.$toast.fail("请输入邮寄地址");
+								return;
+							}
+						}
+						let fd = new FormData()
+						fd.append('productId', this.info.productId)//商品id
+						fd.append('profilesLocation', this.locationName)//位置
+						fd.append('profilesDate', this.info.productDate)//时间 yyyy-MM-dd HH:mm:ss
+						fd.append('profilesPhone', this.phone)//手机号
+						fd.append('profilesName', this.name) //姓名
+						fd.append('profilesIdentity', this.idCard)//身份证
+						fd.append('productGiftSite', this.address)//礼品邮寄地点
+						fd.append('profilesProductName', this.info.productName) //商品名称
+						fd.append('profilesType', this.info.productClassify)//应用分类
+						fd.append('profilesQrNumber', this.info.productQrNumber)//二维码编号
+						fd.append('userId', this.uniconId)
+
+						axios
+							.post("http://pay.xfd365.com/yuan/qr/insertUserProfiles",fd)
+							.then((res) => {
+								if (res.data.status == 1) {
+									this.$toast.success(res.data.message)
+									this.isChongfu = false;
+									this.isInfo = false;
+									this.isSuccess = true
+								}
+							});
+					},
+
+					getUrl() {
+						let number = this.getUrlParam('ids')
+						let fd = new FormData()
+						fd.append('back_url', 'http://sy.xfd365.com/mobile/yuannongScanCode.html?ids=' + number)
+						axios
+							.post("http://sy.xfd365.com/trade/wechat/new_get_jump_url", fd)
+							.then((res) => {
+								window.location.href = res.data.url
+							});
+					},
+					wxLogin() {
+						axios.post('http://sy.xfd365.com/trade/wechat/login', {
+							code: this.code
+						}).then(res => {
+							this.uniconId = res.data.unionid
+							
+							let fd = new FormData()
+							fd.append('userId', this.uniconId)
+							axios.post("http://pay.xfd365.com/yuan/qr/selectUserDate", fd).then(res => {
+								if (res.data.code === 0) {
+									this.name = res.data.data[0].profilesName
+									this.phone = res.data.data[0].profilesPhone
+									this.idCard = res.data.data[0].profilesIdentity
+								}
+							})
+						})
+					},
+					getJssdk() {
+						axios.post('http://sy.xfd365.com/trade/jssdk/getSignPackage', {
+							url: encodeURIComponent(location.href.split('#')[0])
+						}).then(res => {
+							let data = res.data
+							let sdkData = res.data
+							console.log(sdkData)
+							wx.config({
+								debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+								appId: sdkData.appId, // 必填，公众号的唯一标识
+								timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+								nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+								signature: sdkData.signature, // 必填，签名
+								jsApiList: [
+									'getLocation',
+								] // 必填，需要使用的JS接口列表
+							});
+						})
+					},
+
+					// 获取微信定位
+					getLocation(callBack) {
+						let that = this;
+						wx.ready(function() {
+							wx.getLocation({
+								type: 'gcj02',
+								success: function(res) {
+									var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+									var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+									var speed = res.speed; // 速度，以米/每秒计
+									var accuracy = res.accuracy; // 位置精度
+									that.lng = longitude
+									that.lat = latitude
+									that.geocoder(callBack)
+								},
+								fail: function(err) {
+									that.$toast('定位失败,请检查是否开启定位权限')
+								},
+								cancel: function(res) {
+									that.$toast('您已取消定位')
+								}
+							});
+
+						});
+					},
+					// 逆地址解析
+					geocoder(callBack) {
+						let that = this
+						let point = new BMap.Point(that.lng, that.lat);
+						let geoc = new BMap.Geocoder();
+						geoc.getLocation(point, function(res) {
+							var addComp = res.addressComponents;
+							that.locationName = addComp.province + addComp.city + addComp.district + res.business
+							callBack && typeof callBack == 'function' && callBack()
+						});
+
+					},
+
+					// 获取信息
+					getInfo() {
+						let number = this.getUrlParam('ids')
+						let fd = new FormData()
+						fd.append('productQrNumber', number)
+						axios
+							.post("http://pay.xfd365.com/yuan/qr/selectProductByNumber", fd)
+							.then((res) => {
+								if (res.data.code === 0) {
+									this.info = res.data.data[0];
+									this.isChongfu = false;
+									this.isInfo = true;
+									this.isSuccess = false
+								} else if (res.data.code === 1) {
+									this.isChongfu = true;
+									this.isInfo = false;
+									this.isSuccess = false
+								} else {
+									this.isChongfu = false;
+									this.isInfo = true;
+									this.isSuccess = false
+								}
+							});
+					}
+				},
+				mounted() {
+					let code = this.getUrlParam('code');
+					this.code = code
+					if (code) {
+						this.wxLogin()
+					} else {
+						this.getUrl()
+					}
+					this.getInfo()
+					
+					this.getJssdk()
+					this.getLocation(() => {
+						console.log(this.locationName)
+					})
+				},
+			})
+		</script>
+	</body>
+</html>

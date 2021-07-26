@@ -1,0 +1,502 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>聚农优享</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<!-- <script src="./js/rem.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/publick.js?v=3"></script>
+	<script type="text/javascript" src="js/api.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vant@2.8.7/lib/vant.min.js"></script>
+
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+		
+		html,body { font-size: 16px; height: 100%; }
+		@media all and (max-width:375px) {
+			body,html{
+				font-size: 14px;
+			}
+		}
+		@media only screen and (min-width: 414px) {
+			body,html {
+				font-size: 16px !important;
+			}
+		}
+		@media only screen and (min-width: 480px) {
+			body,html {
+				font-size: 22px !important;
+			}
+		}
+		#app { min-height: 100%; background: #f5f5f5; }
+		div { box-sizing: border-box; }
+		/* 导航栏 */
+		.van-nav-bar .van-icon { color: #333; font-size: 1.1rem; }
+		.van-nav-bar .van-nav-bar__right { position: absolute; top: 50%; transform: translateY(-50%); }
+		.van-nav-bar .van-nav-bar__right img { display: block; }
+		.van-nav-bar .van-nav-bar__title { font-weight: bold; }
+		.list .van-cell{
+				padding: 0;
+				font-size: 0.75rem;
+				color: #999999;
+				background: transparent;
+			}
+		.list .van-cell__title,
+		.list .van-cell__value {
+			flex: none;
+		}
+		.list .van-cell__value {
+			flex: 1;
+		}
+		p{
+			margin: 0;
+		}
+		.list{
+				width: 100%;
+				min-height: 114px;
+				margin: 0.625rem auto;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				color: #999999;
+				background: url(img/yhq2.png) no-repeat;background-size:100% 100%
+			}
+			.list .left{
+				width: 23%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				height: 40px;
+				color: #FF2814;
+			}
+			.list .left span{
+				font-size: 1.6rem;
+				font-weight: bold;
+			}
+			.list .left .juan-desc {
+				font-size: 0.875rem;
+			}
+			.list .right{
+				width: 77%;
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-content: space-between;
+				padding: 0 0.875rem;
+			}
+			.list .right>div{
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.list .right>div>p{
+				width: calc(100% - 4.5rem);
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				font-weight: bold;
+				font-size: 1rem;
+				color: #333333;
+			}
+			.list .right>div>p span{
+				font-size: 0.875rem;
+				font-weight: normal;
+				margin-top: 8px;
+				margin-bottom: 15px;
+			}
+			.list .right>div>p .tit {
+				font-weight: bold;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				margin-bottom: 0;
+			}
+			.unUsed{
+				background: url(img/yhq.png) no-repeat;background-size:100% 100%
+			}
+			
+			.unUsed .left{
+				color: #FF2814;
+			}
+			.unUsed .right>div>p{
+				color: #333333;
+			}
+			
+            .list button{
+				border: none;
+				font-size: 0.75rem;
+				color: #999;
+				border-radius: 0.75rem;
+				background: -webkit-gradient(linear, 0 0, 0 100%, from(#e1e1e1), to(#f4f4f4));
+				background: -webkit-linear-gradient(#e1e1e1, #f4f4f4);
+				background: -moz-linear-gradient(#e1e1e1, #f4f4f4);
+				background: -o-linear-gradient(#e1e1e1, #f4f4f4);
+                background: linear-gradient(#e1e1e1, #f4f4f4);
+                font-weight: 700;
+				padding: 0.3rem 0.6rem;
+				width: 4.5rem;
+            }
+            .unUsed button{
+				border: none;
+                font-size: 0.75rem;
+				color: #fff;
+				border-radius: 0.75rem;
+				background: -webkit-gradient(linear, 0 0, 0 100%, from(#02CF0A), to(#00BE34));
+				background: -webkit-linear-gradient(#02CF0A, #00BE34);
+				background: -moz-linear-gradient(#02CF0A, #00BE34);
+				background: -o-linear-gradient(#02CF0A, #00BE34);
+				background: linear-gradient(#02CF0A, #00BE34);
+				padding: 0.3rem 0.6rem;
+				width: 4.5rem
+            }
+		.bg-con { padding: 0.75rem; padding-bottom: 0.5rem; background-color: #fff; }
+		.bg-con img { width: 100%; }
+        /* tab导航栏 */
+        .tab2-con .van-tab .van-tab__text { color: #888; font-size: 0.875rem; }
+        .tab2-con .van-tab--active .van-tab__text { color: #333; font-size: 0.9rem; font-weight: bold; }
+        .tab2-con .van-tabs__line { background-color: #333; }
+		/* loading */
+		.full-loading { position: fixed; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.1); z-index: 9999; }
+		.full-loading .van-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) }
+		/* 无数据 */
+		.no-data { position: fixed; top: 16rem; left: 0; right: 0; bottom: 0; width: 100%; height: 300px; z-index: 99;}
+		.no-data .no-data-con { position: absolute;  width: 90%; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+		.no-data .no-data-con img { width: 100%; }
+		.no-data .no-data-con .no-title{ font-size: 1rem; font-weight:600;  color:rgba(0,0,0,1);  }
+		.no-data .no-data-con .no-desc { font-size: 0.75rem; font-weight:400; color:rgba(136,136,136,1); padding: 0.8rem 0; }
+		.no-data .no-data-con .van-button { font-size: 0.75rem; font-weight:400; color:rgba(1,195,39,1); }
+		
+	</style> 
+
+</head>
+
+<body>
+	<div id="app"  v-cloak>
+		<van-sticky>
+			<van-nav-bar :border="false"  title="平台优惠券" left-arrow @click-left="returnLast()" ></van-nav-bar>
+			<div class="bg-con" id="bg-con">
+               <img src="./images/pt-yhq-bg2.png"  alt="">
+            </div>
+            <van-tabs v-model="tabIndex" @change="handleTabClick" class="tab2-con" :border="false" title-inactive-color="#888888" title-active-color="#333333" line-width="30px" line-height="5px">
+                <van-tab title="可领取" name="3"></van-tab>
+				<van-tab title="审核中" name="0"></van-tab>
+				<van-tab title="审核通过" name="1"></van-tab>
+				<van-tab title="未通过" name="2"></van-tab>
+            </van-tabs> 
+        </van-sticky>
+
+
+		<div style="padding: 0 0.75rem;">
+            <div :class="itm.can_get == 1? 'unUsed list':'list'"  v-for="(itm,idx) in ShopCouponList"  v-if="ShopCouponList && ShopCouponList.length > 0" >
+                <div class="left">
+                    <p><span>{{itm.type == 0 ? itm.money : itm.discount}}</span>{{itm.type == 0 ? '元' : '折'}}</p>
+                    <p class="juan-desc">{{itm.type_str}}</p>
+                </div>
+                <div class="right">
+                    <div>
+                        <p><span class="tit">{{itm.name}}</span><span>{{itm.target_str}}</span></p>
+						<button  @click="receiveItem(itm,idx)" style="background: #fff; border: 1px solid #02CF0A; color: #00BE34;" v-if="tabIndex == 3">{{itm.can_get == 0 ? '已领完' : (itm.can_get == 1 ? '点击领券' : '领取上限')}}</button>
+						<button  @click="receiveItem(itm,idx,2)" style="background: #fff; border: 1px solid #02CF0A; color: #00BE34;" v-if="tabIndex == 2">再次申请</button>
+						<button  @click="paltCouponDetail(itm,idx)" style="background: #fff; border: 1px solid #02CF0A; color: #00BE34;" v-if="tabIndex != 3 && tabIndex != 2" >{{ tabIndex == 1 && itm.can_use == 1 ? '去发放' : '查看详情' }}</button>
+                    </div>
+                    <van-cell :title="'有效期至' + itm.end_time_str" :value="tabIndex == 3 ? '规则详情' : (itm.left_num+'张')" :is-link="tabIndex == 3" arrow-direction="down"  @click.stop="detail(itm.coupon_id,itm.shop_id)"></van-cell>
+                </div>
+            </div>
+		</div>
+		
+		<div class="full-loading" v-if="isFullLoading" style="z-index: 999;">
+			<van-loading  color="#1989fa" /> 
+		</div>
+		<div class="no-data" id="noData1" v-if="(ShopCouponList.length === 0 || isErr) && !isFullLoading">
+			<div class="no-data-con">
+				<img :src="isErr ? errImg : noDataImg" alt="">
+				<p class="no-title">{{ isErr ? '网络竟然崩溃了' : (tabIndex == 3 ? '暂无可领取优惠券' : (tabIndex == 0 ? '暂无领取审核中优惠券' : (tabIndex == 1 ? '暂无可发放优惠券' : '暂无未通过优惠券')))}}</p>
+				<p class="no-desc">{{ isErr ? '别紧张,试试看刷新页面' : ''}}</p>
+				<van-button size="small" plain round color="#01C327" @click="handleErr" v-if="isErr">{{ isErr ? '刷新' : '' }}</van-button>
+			</div>
+		</div>
+
+		<van-dialog v-model="show" title="领取平台优惠券" show-cancel-button @confirm="receiveConfirm">
+			<div style="padding: 20px 0;">
+				<van-field v-model="num" label="数量" placeholder="请输入要领取的优惠券数量" type="digit" ></van-field>
+				<div style="padding: 5px 16px; font-size: 0.75rem; color: #999;">当前可领取最大数量为<span style="color: #000;">【{{curMaxNum}}】</span>张</div>
+			</div>
+		</van-dialog>
+      
+	</div>
+
+	<script>
+		
+		var app = new Vue({
+			el: '#app',
+			data: {
+                tabIndex: '0',
+				JumpUrl: {
+					list: baseUrl('/wx/coupon/platform_coupon_lists'), 
+					// list:'http://172.168.0.50/wx/coupon/my_coupon', 
+					get_coupon: baseUrl('/wx/coupon/get_platform_coupon'),
+					// get_coupon:'http://172.168.0.50/wx/coupon/get_coupon',	
+					my_platform_coupon: baseUrl('/wx/coupon/my_platform_coupon'),
+
+				},
+				
+				token: localStorage.getItem("token"),
+				ShopCouponList: [],
+				num: 1,
+				curCouponId: '',
+				show: false,
+				curMaxNum: 0,
+			
+				noDataImg: './images/icon/no-goods.png',
+				errImg: './images/err.png',
+				isFullLoading: true,
+				isErr: false,
+			},
+			mounted() {
+				let tabIndex = getQueryString('tabIndex')
+				let source = getQueryString('source')
+				if(source == 'personal') {
+					localStorage.setItem('source2','personal')
+				}
+				if(tabIndex && (tabIndex == 0 || tabIndex == 1 || tabIndex == 2)) {
+					this.tabIndex = tabIndex
+					this.getCouponTypeList()
+				} else {
+					this.tabIndex = '3'
+					this.getListData()	
+				}
+				
+			},
+			methods: {	
+				//返回上一页
+				returnLast(){
+					let source = localStorage.getItem('source2')
+					if(source == 'personal') {
+						window.location.href = 'personal.html'
+					} else {
+						window.location.href = 'getShopCoupon.html'
+					}
+
+				},
+				// 切换全部优惠券与已领取优惠券
+				handleTabClick(name,title) {
+					this.tabIndex = name
+					this.ShopCouponList = []
+					if(this.tabIndex == 3) {
+						this.getListData()
+					} else {
+						this.getCouponTypeList()
+					}
+				},
+				// 优惠券详情
+				detail(id,shopId) {
+					if(this.tabIndex != 3) return
+					if(this.isAll) {
+						window.location.href = "couponDetail.html?id=" + id
+					} else {
+						window.location.href = "couponDetail.html?id=" + id + '&shopId=' + shopId;
+					}
+				},
+				// 获取可领取优惠券列表
+				getListData(val) {
+					let that = this;
+					if(!val) {
+						that.isFullLoading = true
+						that.isErr = false
+					
+					}
+					axios({
+						method: 'post',
+						url: that.JumpUrl.list,
+						data:{token: localStorage.getItem("token"),is_online: 3}
+					})
+					.then(function (resp) {
+						if(!val) {
+							that.isFullLoading = false
+							that.isErr = false
+						}
+						let data=resp.data
+						if(data.code == 1){
+							let tmpData = []
+							if(data.data && data.data.length > 0) {
+								data.data.forEach(item =>{
+									item.end_time_str = item.coupon_age.split('-')[1]
+									if(item.can_get == 1) {
+										tmpData.push(item)
+									}
+								})
+								that.ShopCouponList = tmpData
+							} else {
+								that.ShopCouponList = []
+							}
+							if(that.ShopCouponList.length == 0) {
+								that.$nextTick(function(){
+									let topH = document.getElementById('bg-con').clientHeight
+									let noData =  document.getElementById('noData1')
+									noData.style.top = topH + 90 + 'px'
+							     })   
+							}
+						}else{
+							// that.$toast.fail(data.msg ? data.msg : '获取失败')
+						}
+
+					}).catch(function (error) {
+						that.isFullLoading = false
+						that.isErr =true
+						that.$nextTick(function(){
+							let topH = document.getElementById('bg-con').clientHeight
+							let noData =  document.getElementById('noData1')
+							noData.style.top = topH + 90 + 'px'
+					     })   
+						//请求失败
+						that.$toast.fail('服务异常,请稍后重试!')
+						console.log('error', error);
+
+					})
+				},
+				// 获取审核中 可使用 已驳回优惠券列表
+				getCouponTypeList(val) {
+					let that = this;
+					if(!val) {
+						that.isFullLoading = true
+						that.isErr = false
+					
+					}
+					axios({
+						method: 'post',
+						url: that.JumpUrl.my_platform_coupon,
+						data:{type: that.tabIndex,token: localStorage.getItem("token"),is_online: 3}
+					})
+					.then(function (resp) {
+						if(!val) {
+							that.isFullLoading = false
+							that.isErr = false
+						}
+						let data=resp.data
+						if(data.code == 1){
+							let tmpData = []
+							if(data.data && data.data.length > 0) {
+								data.data.forEach(item =>{
+									item.end_time_str = item.user_coupon_age.split('-')[1]
+									// if(item.can_get == 1) {
+										tmpData.push(item)
+									// }
+								})
+								that.ShopCouponList = tmpData
+							} else {
+								that.ShopCouponList = []
+							}
+							if(that.ShopCouponList.length == 0) {
+								that.$nextTick(function(){
+									let topH = document.getElementById('bg-con').clientHeight
+									let noData =  document.getElementById('noData1')
+									noData.style.top = topH + 90 + 'px'
+							     })   
+							}
+						}else{
+							// that.$toast.fail(data.msg ? data.msg : '获取失败')
+						}
+
+					}).catch(function (error) {
+						that.isFullLoading = false
+						that.isErr =true
+						that.$nextTick(function(){
+							let topH = document.getElementById('bg-con').clientHeight
+							let noData =  document.getElementById('noData1')
+							noData.style.top = topH + 90 + 'px'
+					     })   
+						//请求失败
+						that.$toast.fail('服务异常,请稍后重试!')
+						console.log('error', error);
+
+					})
+				},
+					handleErr() {
+						if(this.isErr) {
+							if(this.tabIndex == 3) {
+								this.getListData()
+							} else {
+								this.getCouponTypeList()
+							}
+						}
+					},
+					// 点击领取优惠券
+					receiveItem(item,index,type) {
+						if(type == 2) {
+							this.show = true
+							this.curCouponId = item.coupon_id
+							this.curMaxNum = item.left_num 	
+							return
+						}
+						if(item.can_get == 0) return
+						if(item.can_get == 2) {
+							this.$toast('领取次数已达上限')
+							return
+						}
+						if(item.can_get == 1) {
+							this.show = true
+							this.curCouponId = item.coupon_id
+							this.curMaxNum = item.left_num 	
+							return
+							
+						}
+					},
+					// 查看详情按钮
+					paltCouponDetail(item) {
+						window.location.href = 'platCouponDetail.html?id='+item.id + '&tabIndex=' + this.tabIndex+ '&coupon_id=' + item.coupon_id
+
+					},
+					// 领取优惠券 确认
+					receiveConfirm() {
+						let that = this;
+						if(that.num == '') {
+							that.$toast('请先输入领取数量')
+							return
+						}
+						if(that.num == 0) {
+							that.$toast('领取数量要大于0')
+							return
+						}
+						axios({
+							method: 'post',
+							url: that.JumpUrl.get_coupon,
+							data:{coupon_id: that.curCouponId, num: that.num, token: localStorage.getItem("token")}
+						})
+						.then(function (resp) {
+							let data=resp.data
+							if(data.code == 1){
+								that.$toast('领取成功')
+								that.getListData(true)
+							}else{
+								that.$toast.fail(data.msg ? data.msg : '获取失败')
+							}
+
+						}).catch(function (error) {
+							that.$toast.fail('服务异常,请稍后重试!')
+							console.log('error', error);
+
+						})
+					},
+			},
+		
+		})
+	</script>
+</body>
+
+</html>

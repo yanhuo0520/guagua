@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>微商超</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<script src="./js/vue.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/vue-resource.js"></script>
+	<script type="text/javascript" src="js/publick.js"></script>
+	<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+	<style>
+		[v-cloak] {
+		  display: none;
+		}
+		img {
+			vertical-align: top;
+		}
+		.xz{
+			font-size:0.7rem;
+			margin-right:5px;
+		}
+		.pblh{
+			padding-bottom: 10px;
+			line-height: 20px;
+			position: relative;
+		}
+		.el-icon-circle-check{
+			font-size: 24px;
+			color:#ccc;
+			color: #f87269;
+		}
+		.el-button{
+			line-height: 0;
+		}
+		/*//弹窗样式*/
+		.el-message-box--center{
+			padding-bottom:0px;
+		}
+		.el-message-box{
+			padding-bottom:0px;
+			width: 260px;
+		}
+		.el-message-box__btns .el-button{
+			border: 0px solid #DCDFE6;
+			display: inline-block;
+		    line-height: 1;
+		    white-space: nowrap;
+		    cursor: pointer;
+		    background: #FFF;
+		    color: #606266;
+		    text-align: center;
+		    box-sizing: border-box;
+		    outline: 0;
+		    margin: 0;
+		    font-weight: 500;
+		   padding:20px;
+		    font-size: 14px;
+		    border-radius: 0px;
+		    line-height:0px;
+		}
+		.el-message-box__btns{
+			background-color: #fff;
+			padding: 0px;
+		}
+		.el-message-box__headerbtn i{
+			display:none;
+		}
+		.el-message-box__btns .el-button:nth-child(1){
+
+			width: 128px;
+			border-top:1px solid #ccc;
+
+		}
+		.el-message-box__btns .el-button:nth-child(2){
+			border-top:1px solid #ccc;
+			border-left:1px solid #ccc;
+			color: #fda06f;
+			width: 128px;
+			margin-left:0px;
+		}
+		
+		
+		input[type=checkbox]{
+			position: absolute;
+			right: 0;
+			top: 0;
+			width: 20px;
+			height: 20px;
+			opacity: 0;
+		}
+		.pblh label{
+		    display: block;
+		    width: 20px;
+		    height: 20px;
+		    cursor: pointer;
+		    position: absolute;
+		    top: 0;
+		    right: 0;
+		    /* border: 1px solid rgba(240, 84, 77, 1); */
+			/* background: rgba(240,84,77,1); */
+			/* border-radius: 50%; */
+		}
+		 
+		.pblh label:before {
+		    content: '';
+		    position: absolute;
+		    right: 0;
+		    top: 0;
+		    width: 20px;
+		    height: 20px;
+		    border: 1px solid rgba(240,84,77,1);
+		    border-radius: 50%;
+		    transition: all 0.3s ease;
+		    -webkit-transition: all 0.3s ease;
+		}
+		
+		.pblh label:after {
+		    content: '';
+		    position: absolute;
+		    right: 6px;
+		    top: 3px;
+		    width: 6px;
+		    height: 12px;
+		    border: 0;
+		    border-right: 1px solid #fff;
+		    border-bottom: 1px solid #fff;
+		    background: #fff;
+		    transform: rotate(45deg);
+		    -webkit-transform: rotate(45deg);
+		    transition: all 0.3s ease;
+		    -webkit-transition: all 0.3s ease;
+		}
+		.pblh input[type='checkbox']:checked + label:before {
+		    background: rgba(240,84,77,1);
+		    border-color: rgba(240,84,77,1);
+		}
+		.pblh input[type='checkbox']:checked + label:after {
+		    background: rgba(240,84,77,1);
+		}
+	</style>
+
+</head>
+<body>
+	<div id="app" v-cloak>
+		<el-row class="clearfix header" style="font-size: 18px;">
+				<el-col :span="8">
+					<i  style="font-size:26px" class="el-icon-arrow-left" @click="returnLast()"></i>
+				</el-col>
+				<el-col :span="8" style="text-align: center">
+					<div>支付订单</div>
+				</el-col>
+				<el-col  :span="8" style="position:relative;height: 100%">
+					<img src="images/icon/sy2.png" alt="" width="20"  style="margin-top:auto;margin-bottom:auto;top:0;bottom:5px;right: 5px;position:absolute" @click="JumpIndex"> 
+				</el-col>
+			
+			
+		</el-row>
+		<div style="margin: 10px 0px;padding:10px;background-color: #fff">
+			<el-row >
+				<el-col :span="24">
+					<span>订单编号：</span>
+					<span>&nbsp;&nbsp;&nbsp;{{order_id}}</span>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="24">
+					<span>订单金额：</span>
+					<span>￥{{real_price}}</span>
+				</el-col>
+			</el-row>
+		</div>
+		<!-- 支付方式 -->
+		<div style="padding:15px 30px 0px 30px;font-size: 16px;color: #444;border-bottom: 1px solid #eeeeee;background-color: #fff;">
+			<ul>
+				<li class="pblh">
+					<div class="clearfix">
+						<img src="images/speedBuy/wx.png" alt="" width="20" class="fl">
+						<span class="fl" style="margin-left: 10px;">微信支付</span>
+						
+						
+						<!-- <img src="images/speedBuy/yhk.png" alt="" width="26" class="fl">
+						<span class="fl" style="margin-left: 10px;">银联支付</span> -->
+						<!-- <i class="el-icon-circle-check fr"></i> -->
+						<input type="checkbox" class="fr" id="wechatChecked" checked="checked" />
+						<label for="wechatChecked"></label>
+					</div>
+				</li>
+				<!-- <li class="pblh">
+					<div class="clearfix">
+						<img src="images/speedBuy/huodaofukuan.png" alt="" width="20" class="fl">
+						<span class="fl" style="margin-left: 10px;">货到付款</span>
+						<!-- <i class="el-icon-circle-check fr"></i> 
+						<input type="checkbox" class="fr" id="huodaofukuanChecked" />
+						<label for="huodaofukuanChecked"></label>
+					</div>
+				</li> -->
+			</ul>
+		</div>
+
+		<!-- 立即支付 -->
+		<div style="font-size: 16px;background-color: #fff;position: fixed;bottom: 0px;width: 100%" >
+			<div class="clearfix" style="line-height: 50px;height:50px">
+				<span class="fl" style="margin-left: 30px">合计：</span>
+				<span style="color: #f36065;font-weight: 700;" class="fl">
+					￥&nbsp;{{real_price}}
+				</span>
+				<div style="width:100px;height:50px;line-height: 50px;text-align: center;font-size: 16px;background-color:#fb9c7c;color:#fff;"  @click="promptlyPay" class="fr">立即支付</div>
+
+			</div>
+		</div>
+
+
+
+		<div class="msg-page-mask" v-show="msg.show==1">
+			<div class="msg-page-mask-content">
+				<div class="el-loading-spinner">
+					<i v-show="msg.type=='success' " class="el-icon-success"></i>
+					<i v-show="msg.type=='error' " class="el-icon-error"></i>
+					{{msg.text}}
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+
+	<script>
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				msg:{
+					show:0,
+					type:'success',
+					text:'成功',
+				},
+				
+				JumpUrl:{
+					detail:'http://sy.xfd365.com/wx/order/detail',					//订单单号和金额
+					prepay:'http://sy.xfd365.com/wx/pay/prepay',
+					notify:'http://sy.xfd365.com/wx/pay/notify',
+					orderQuery:'http://sy.xfd365.com/wx/pay/orderQuery',
+					jssdkUrl: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+
+				},
+				order_id:'',			//订单编号
+				real_price:'',			//金额
+				wxjson:'',
+				order:{
+					order_id:'',
+					token:localStorage.getItem("token"),
+				},
+				token:localStorage.getItem('token')
+			},
+			methods: {
+				//跳转首页
+				JumpIndex(){
+					window.location.href = "index.html";
+				},
+				//返回上一页
+				returnLast(){
+					// window.history.go(-1);
+					window.location.href = "shoppingCart.html"
+					// window.location.href= 'confirmOrder.html';
+				},
+				//订单状态
+				orderState(){
+					let that = this;
+					axios({
+							method: 'post',
+							url: that.JumpUrl.orderQuery,
+							data:{
+								token:localStorage.getItem("token"),
+								order_id:that.order_id
+							}
+						})
+						.then(function (resp) {
+
+							window.location.href = "orderDetails.html" +'?'+that.order_id;
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+
+				},
+
+
+				//语音播报
+				broadcast(){
+					let that = this;
+					axios({
+							method: 'post',
+							url: that.JumpUrl.notify,
+							data:{
+								token:localStorage.getItem("token"),
+								order_id:that.order_id
+							}
+						})
+						.then(function (resp) {
+							that.orderState();
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+
+				},
+				//获取json数据
+				promptlyPay(){
+					let that = this;
+					let form_data = new FormData();
+						makeFormData(that.order,form_data);
+						axios({
+							method: 'post',
+							url: that.JumpUrl.prepay,
+							data:form_data
+						})
+						.then(function (resp) {
+							console.log(resp)
+							if(resp.data.pay_type == 'wx'){
+								var pay_params = resp.data.data;
+								jsApiCall();
+							}else if(resp.data.pay_type == 'union'){
+								let pay_url = resp.data.url;
+								console.log(pay_url);
+								window.location.href = pay_url;
+							}
+							
+						function jsApiCall(){
+
+								WeixinJSBridge.invoke(
+									'getBrandWCPayRequest',
+
+									pay_params,
+
+									function(resp){
+										console.log(resp);
+										if (resp.err_msg == "get_brand_wcpay_request:ok") {
+											that.broadcast();
+
+										}else
+										if (resp.err_msg == "get_brand_wcpay_request:cancel") {
+
+												that.msg={
+												show:1,
+												text:'支付已取消',
+												type:'success'
+											}
+
+											setTimeout(function(){that.msg.show = 0},3000);
+
+
+										}else{
+											that.$confirm('支付失败，是否继续支付?', '提示', {
+											confirmButtonText: '继续',
+											cancelButtonText: '取消',
+											center: true
+
+										}).then(() => {
+											that.promptlyPay();
+
+										})
+
+										}
+
+
+									}
+								);
+							}
+
+
+
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+
+				paymentOrder(){
+					let that = this;
+					let form_data = new FormData();
+						makeFormData(that.order,form_data);
+						axios({
+							method: 'post',
+							url: that.JumpUrl.detail,
+							data:form_data
+						})
+						.then(function (resp) {
+						that.order_id = resp.data.data.orderInfo.order_id;
+						that.real_price = resp.data.data.orderInfo.real_price;
+
+						}).catch(function (error) {
+							//请求失败
+							console.log('error', error);
+
+						})
+				},
+				setWx() {
+					let that = this;
+					let shopInfo=JSON.parse(localStorage.getItem('shopInfo'));
+					// console.log(shopInfo)
+					let shop_name = shopInfo.shop_name
+					let shop_id = shopInfo.id
+					let logo = shopInfo.logo
+					wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+						wx.onMenuShareTimeline({
+							title: shop_name, // 分享标题
+							desc: '村里面的超市', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function() {
+				
+							}
+						})
+				
+						wx.onMenuShareAppMessage({
+							title: shop_name, // 分享标题
+							desc: '村里面的超市', // 分享描述
+							// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: logo, // 分享图标
+							success: function() {
+							}
+						})
+				
+				
+					});
+				},
+				getJssdk: function() {
+					let that = this;
+					axios({
+						method: 'post',
+						url: that.JumpUrl.jssdkUrl,
+						//data: form_data
+						data: {
+							token: that.token,
+							url: window.location.href
+						}
+					}).then(function(resp) {
+						let data = resp.data
+					
+						let sdkData = resp.data
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: sdkData.appId, // 必填，公众号的唯一标识
+							timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+							nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+							signature: sdkData.signature, // 必填，签名
+							jsApiList: [
+								'onMenuShareTimeline',
+								'onMenuShareAppMessage',
+							] // 必填，需要使用的JS接口列表
+						});
+						that.share_url = sdkData.url;
+						that.setWx();
+				
+					})
+				},
+			},
+			created:function(){
+				this.getJssdk();
+				var url =location.href;
+				this.order.order_id = url.split("?")[1];
+				this.paymentOrder()
+
+			}
+	})
+</script>
+</body>
+
+</html>

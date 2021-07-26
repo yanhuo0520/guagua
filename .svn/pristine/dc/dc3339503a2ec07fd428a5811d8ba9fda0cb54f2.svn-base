@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<meta name="robots" content="all">
+		<title>音乐</title>
+		<script src="js/vue.js"></script>
+		<script src="js/jweixin-1.4.0.js"></script>
+		<script src="js/axios.min.js"></script>
+	</head>
+	<body>
+		<div>Love Yourself</div>
+		<!-- <audio src="https://music.163.com/song?id=36496695&userid=1463561038" controls="controls"></audio> -->
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+
+				},
+				methods: {
+					getJssdk() {
+						let that = this;
+						// console.log(window.location.href)
+						// http://sy.xfd365.com/mobile/index.html?shop_id=26
+						axios({
+							method: 'post',
+							url: 'http://sy.xfd365.com/wx/jssdk/getSignPackage',
+							//data: form_data
+							data: {
+								token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTI1MzM1MDgsImp0aSI6IjBlM2E1Yjg1ODgxY2RmMmMyM2VlOThiODg2ZTlhMjkwIiwiaXNzIjoiMzYuOTkuMzUuMjEwIiwibmJmIjoxNTkyNTMzNTA4LCJleHAiOjE2MDU2NzM1MDgsImRhdGEiOnsidXNlcl9pZCI6NX19.9yxpaQ7a-KELg4MOEssJNJw1zCOYNGWpQmILfpH5Am8',
+								url: window.location.href
+							}
+						}).then(function(resp) {
+							// console.log(JSON.stringify(resp))
+							let data = resp.data
+
+							let sdkData = resp.data
+							wx.config({
+								debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+								appId: sdkData.appId, // 必填，公众号的唯一标识
+								timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+								nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+								signature: sdkData.signature, // 必填，签名
+								jsApiList: [
+									'updateAppMessageShareData',
+								] // 必填，需要使用的JS接口列表
+							});
+							that.setWx();
+
+						})
+					},
+					setWx() {
+						wx.ready(function() { //需在用户可能点击分享按钮前就先调用
+
+							wx.updateAppMessageShareData({
+								title: 'Love Yourself', // 分享标题
+								desc: 'Love Yourself-Justin Bieber', // 分享描述
+								link: 'http://sy.xfd365.com/mobile/demo.html', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://sy.xfd365.com/images/yuyueicon.png', // 分享图标
+								type: 'music',
+								dataUrl: 'http://sy.xfd365.com/mobile/dengnixiake.mp3',
+								success: function() {
+									// 用户确认分享后执行的回调函数
+								},
+								cancel: function() {
+									// 用户取消分享后执行的回调函数
+								}
+							});
+
+
+						});
+					}
+				},
+				created() {
+					this.getJssdk()
+				}
+			})
+		</script>
+	</body>
+</html>

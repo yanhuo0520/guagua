@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>聚农优享</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+<script src="./js/vue.js"></script>
+<script src="js/axios.min.js"></script>
+<script type="text/javascript" src="js/publick.js?v=3"></script>
+<script type="text/javascript" src="./js/jweixin-1.4.0.js" ></script>
+<style>
+	/* CSS RESET */
+	* { padding: 0; margin: 0; }
+	html,body { font: 16px "微软雅黑", Arial; background: #efeff4; width: 100%; height: 100%; color: #000; }
+	@media all and (max-width:375px) {
+		body,html{
+			font-size: 14px;
+		}
+	}
+	@media only screen and (min-width: 414px) {
+		body,html {
+			font-size: 16px !important;
+		}
+	}
+	@media only screen and (min-width: 480px) {
+		body,html {
+			font-size: 22px !important;
+		}
+	}
+	div { box-sizing: border-box;  }
+	a { text-decoration: none; color: #666666; }
+
+	.icon { position: fixed; bottom: 55%; width: 50%; left: 25%;  }
+	.desc { width: 100%; text-align: center;position:fixed;bottom:35% }
+	.btn { border-radius: 3px; height: 45px; line-height: 45px; background: #44bf16; display: block; text-align: center; font-size: 1rem; margin-top: 14px; color: #fff;width:70%;margin:0 auto;position:fixed;bottom:16%; left:15%;}
+	.copy { text-align:center;font-size:12px;color:#999;position:fixed;bottom:3%;width:100%;} 
+</style>
+
+</head>
+<body>
+	<img class="icon" src="./images/pcLogin/pc-login-success.png" alt="">
+	<div class="desc" id="desc">登陆成功</div>
+    <a href="javascript:WeixinJSBridge.call('closeWindow');" class="btn">返回</a>
+	<div class="copy">河南信服达科技有限公司</div> 
+
+	<script type="text/javascript">
+		let type = getQueryString('type')
+		if(type == 0) {
+			document.getElementById('desc').textContent  = '登陆成功'
+		} else {
+			document.getElementById('desc').textContent  = '登陆失败'
+		}
+	</script>
+
+</body>
+</html>

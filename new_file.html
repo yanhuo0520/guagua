@@ -1,0 +1,22 @@
+<template>
+    <div class="wrap wrap-sku">
+        <div class="product-box">
+            <div class="product-content">
+                <div class="product-delcom" v-for="(ProductItem,n) in simulatedDATA.specifications">
+                    <p>{{ProductItem.name}}</p>
+                    <ul class="product-footerlist clearfix">
+                        <li v-for="(oItem,index) in ProductItem.item"
+                            v-on:click="specificationBtn(oItem.name,n,$event,index)"
+                            v-bind:class="[oItem.isShow?'':'noneActive',subIndex[n] == index?'productActive':'']">
+                            {{oItem.name}}
+                        </li>
+                    </ul>
+                </div>
+                <p v-if="price" class="price">¥{{price}}</p>
+            </div>
+            <div class="product-footer">
+                <a href="javascript:">立即购买</a>
+            </div>
+        </div>
+    </div>
+</template>

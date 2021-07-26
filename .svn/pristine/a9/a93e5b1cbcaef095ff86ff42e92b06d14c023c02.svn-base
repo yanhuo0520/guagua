@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<title>聚农优享</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="font/font_560087_tt31urijhi307ldi/iconfont.css">
+		<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" type="text/css" href="./css/aui.css" />
+		<!-- <script src="./js/rem.js"></script> -->
+		<script src="./js/vue.js"></script>
+		<script src="js/index.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript" src="js/publick.js?v=3"></script>
+		<script type="text/javascript" src="js/api.js"></script>
+		<script type="text/javascript" src="./js/jweixin-1.4.0.js"></script>
+		<script type="text/javascript" src="js/aui-actionsheet.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/index.css">
+		<script src="https://cdn.jsdelivr.net/npm/vant@2.5.9/lib/vant.min.js"></script>
+		<style>
+			#app>p{
+				padding: 10px;
+				font-size: 14px;
+				color: red;
+			}
+			.ebrecord {
+			    background: #fff;
+			    margin-bottom: 10px;
+			}
+			.ebrecord>.title{
+			    padding-left: 15px;
+			    border-bottom: 1px solid #eeeeee;
+			    height: 50px;
+				line-height: 50px;
+			}
+			.ebrecord .van-cell img{
+				width: 15px;
+				height: 15px;
+				margin-top: 5px;
+				margin-right: 5px;
+			}
+			
+			.van-nav-bar .van-icon{
+				color: #333;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 分销活动列表 -->
+		<div id="app">
+			<van-nav-bar :border="false" :fixed="true" :placeholder="true" z-index="9999" title="分销活动列表" left-arrow @click-left="returnLast()">
+				<template #right>
+					<img src="images/icon/shouye.png" alt="" width="20"  @click="JumpIndex">
+				</template>
+			</van-nav-bar>
+			<p v-if="str!=''">{{str}}</p>
+			<van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+				<div class="ebrecord" v-for="(item,index) in list" :key="index" @click="jump('distributorGoodsList.html?distribute_id=' + item.distribute_id)">
+					<div class="title">{{item.distribute_name}}</div>
+					<van-cell-group>
+						<van-cell title="开始时间" :value="item.start_date">
+							<template #icon>
+								<img src="images/time.png" alt="">
+							</template>
+						</van-cell>
+						<van-cell title="结束时间" :value="item.end_date">
+							<template #icon>
+								<img src="images/time.png" alt="">
+							</template>
+						</van-cell>
+						<van-cell title="分销商所得百分比" :value="item.first_per" v-if="item.distribute_type==1">
+							<template #icon>
+								<img src="images/percent.png" alt="">
+							</template>
+						</van-cell>
+						<van-cell title="分销商所得固定金额" :value="item.first_money + '元'" v-else>
+							<template #icon>
+								<img src="images/percent.png" alt="">
+							</template>
+						</van-cell>
+						<van-cell title="添加时间" :value="item.add_date">
+							<template #icon>
+								<img src="images/time.png" alt="">
+							</template>
+						</van-cell>
+					</van-cell-group>
+				</div>
+			</van-list>
+		</div>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app',
+				data: {
+					jumpUrl: {
+						distributeList: baseUrl('/wx/distribute/distribute_lists'),//分销活动列表
+						// distributeList: 'http://172.168.0.50/wx/distribute/distribute_lists',//分销活动列表
+						jssdkUrl: baseUrl('/wx/jssdk/getSignPackage'),
+					},
+					list: [],
+				    page: 1,
+				    loading: false,
+				    finished: false,
+					
+					str:'',
+					token: localStorage.getItem('token')
+				},
+				mounted() {
+					this.getJssdk()
+				},
+				methods: {
+					setWx() {
+						let that = this;
+						let shopInfo = JSON.parse(localStorage.getItem('shopInfo'))
+						// let shopInfo = that.shopInfo;
+						let share_title = shopInfo.share_title ? shopInfo.share_title : shopInfo.shop_name
+						let share_introduction = shopInfo.share_introduction
+						let shop_id = shopInfo.id
+						let logo = shopInfo.share_pic ? shopInfo.share_pic : shopInfo.logo
+						let lock_user_id = localStorage.getItem('lock_user_id')
+						wx.ready(function () { //需在用户可能点击分享按钮前就先调用
+							wx.updateAppMessageShareData({
+								title: share_title, // 分享标题
+								desc: share_introduction, // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function () {
+					
+								}
+							})
+					
+							wx.updateTimelineShareData({
+								title: share_title, // 分享标题
+								desc: share_introduction, // 分享描述
+								// link: that.share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								link: 'http://sy.xfd365.com/mobile/index.html?shop_id=' + shop_id + '&lock_user_id=' + lock_user_id +'&v=11', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: logo, // 分享图标
+								success: function () {},
+							})
+						});
+					},
+					getJssdk: function() {
+						let that = this;
+						axios({
+							method: 'post',
+							url: that.jumpUrl.jssdkUrl,
+							//data: form_data
+							data: {
+								token: that.token,
+								url: window.location.href
+							}
+						}).then(function(resp) {
+							let data = resp.data
+						
+							let sdkData = resp.data
+							wx.config({
+								debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+								appId: sdkData.appId, // 必填，公众号的唯一标识
+								timestamp: sdkData.timestamp, // 必填，生成签名的时间戳
+								nonceStr: sdkData.nonceStr, // 必填，生成签名的随机串
+								signature: sdkData.signature, // 必填，签名
+								jsApiList: [
+									'updateAppMessageShareData',
+									'updateTimelineShareData',
+								] // 必填，需要使用的JS接口列表
+							});
+							that.setWx();
+						})
+					},
+					// 跳转页面
+					jump(url) {
+						window.location.href = url;
+					},
+					//跳转首页
+					JumpIndex() {
+						window.location.href = "index.html?v=11";
+					},
+					//返回上一页
+					returnLast() {
+						window.history.go(-1);
+					},
+					onLoad(){
+						this.fenxiaoList()
+					},
+					// 分销活动列表
+					fenxiaoList(){
+						axios.post(this.jumpUrl.distributeList,{
+							page:this.page,
+							token: this.token
+						}).then(res=>{
+							console.log(res)
+							if(res.data.errno == 0){
+								this.str = res.data.str
+								if (res.data.data.length != 0) {
+								  var data = res.data.data;
+								  if (res.data.total_page == 1) {
+									this.list = data;
+								  } else {
+									this.list = this.list.concat(data);
+								  }
+								  if (this.page < res.data.total_page) {
+									this.page++;
+								  }
+								  this.loading = false;
+								} else {
+								  // this.$toast("暂无记录");
+								  // this.list = [];
+								  this.loading = false;
+								  this.finished = true;
+								}
+								// 数据全部加载完成
+								if (this.list.length == res.data.count) {
+								  this.finished = true;
+								}
+							}else{
+								this.$toast(res.data.errmsg)
+								this.loading = false
+								this.finished = true
+							}
+						})
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
